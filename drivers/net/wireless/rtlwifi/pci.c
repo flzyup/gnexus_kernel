@@ -701,8 +701,7 @@ static void _rtl_pci_rx_interrupt(struct ieee80211_hw *hw)
 					 rtlpci->rxbuffersize,
 					 PCI_DMA_FROMDEVICE);
 
-			if (!stats.crc || !stats.hwerror) {
->>>>>>> e11ec90... Merge branch 'master' of master.kernel.org:/pub/scm/linux/kernel/git/davem/net-2.6
+			if (!stats.crc && !stats.hwerror) {
 				memcpy(IEEE80211_SKB_RXCB(skb), &rx_status,
 				       sizeof(rx_status));
 
