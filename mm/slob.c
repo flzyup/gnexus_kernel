@@ -484,6 +484,8 @@ static void *__kmalloc_node_align(size_t size, gfp_t gfp, int node, int align)
 	slob_t *m;
 	void *ret;
 
+	gfp &= gfp_allowed_mask;
+
 	lockdep_trace_alloc(gfp);
 
 	if (size < PAGE_SIZE - align) {
@@ -701,6 +703,10 @@ EXPORT_SYMBOL(kmem_cache_destroy);
 void *kmem_cache_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
 {
 	void *b;
+
+	flags &= gfp_allowed_mask;
+
+	lockdep_trace_alloc(flags);
 
 #ifdef CONFIG_PAX_USERCOPY
 	b = __kmalloc_node_align(c->size, flags, node, c->align);
