@@ -187,8 +187,7 @@ typedef struct {
 #define PAX_DELTA_STACK_LEN	(test_thread_flag(TIF_32BIT) ? 15 : 29)
 #endif
 
-extern unsigned long sparc64_elf_hwcap;
-#define ELF_HWCAP	sparc64_elf_hwcap
+#define ELF_HWCAP	sparc64_elf_hwcap()
 
 /* This yields a string that ld.so will use to load implementation
    specific libraries for optimization.  This is more specific in
