@@ -445,12 +445,17 @@ void rcu_nmi_exit(void)
 /**
  * rcu_irq_enter - inform RCU of entry to hard irq context
  *
- * If the CPU was idle with dynamic ticks active, this updates the
- * rdtp->dynticks to let the RCU handling know that the CPU is active.
+ * If the current CPU is in its idle loop and is neither in an interrupt
+ * or NMI handler, return true.
  */
 void rcu_irq_enter(void)
 {
-	rcu_exit_nohz();
+	int ret;
+
+	preempt_disable();
+	ret = (atomic_read(&__get_cpu_var(rcu_dynticks).dynticks) & 0x1) == 0;
+	preempt_enable();
+	return ret;
 }
 
 /**
