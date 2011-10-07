@@ -457,6 +457,7 @@ void rcu_irq_enter(void)
 	preempt_enable();
 	return ret;
 }
+EXPORT_SYMBOL(rcu_is_cpu_idle);
 
 /**
  * rcu_irq_exit - inform RCU of exit from hard irq context
