@@ -482,3 +482,11 @@ service dumpstate /system/bin/dumpstate -s
     socket dumpstate stream 0660 shell log
     disabled
     oneshot
+
+# Execute files in /etc/init.d before booting
+service userinit /system/xbin/busybox run-parts /system/etc/init.d
+    oneshot
+    class late_start
+    user root
+    group root
+
