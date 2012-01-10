@@ -4,12 +4,7 @@
 #include <mach/tiler.h>
 #include <video/dsscomp.h>
 #include <plat/dsscomp.h>
-#include <linux/cpu.h>
 #include "dsscomp.h"
-
-static int hotplug_enabled = 0;
-module_param(hotplug_enabled, int, 0755);
-MODULE_PARM_DESC(hotplug_enabled, "Functionality to turn off cpu1 during screen_off");
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 #include <linux/earlysuspend.h>
@@ -447,19 +442,6 @@ skip_comp:
 static int blank_complete;
 static DECLARE_WAIT_QUEUE_HEAD(early_suspend_wq);
 
-static void cpu1_suspend(int suspend)
-{
-	if (suspend) {
-		cpu_down(1);
-		pr_info("CPU1 down\n");
-	}
-
-	else {
-		cpu_up(1);
-		pr_info("CPU1 up\n");
-	}
-}
-
 static void dsscomp_early_suspend_cb(void *data, int status)
 {
 	blank_complete = true;
@@ -472,9 +454,6 @@ static void dsscomp_early_suspend(struct early_suspend *h)
 		.num_mgrs = 0,
 	};
 	int err;
-
-	if(hotplug_enabled == 1)
-		cpu1_suspend(1);
 
 	pr_info("DSSCOMP: %s\n", __func__);
 
@@ -493,9 +472,6 @@ static void dsscomp_early_suspend(struct early_suspend *h)
 
 static void dsscomp_late_resume(struct early_suspend *h)
 {
-	if(hotplug_enabled == 1)
-		cpu1_suspend(0);
-
 	pr_info("DSSCOMP: %s\n", __func__);
 	blanked = false;
 }

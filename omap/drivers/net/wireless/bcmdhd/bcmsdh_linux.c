@@ -611,6 +611,13 @@ static irqreturn_t wlan_oob_irq(int irq, void *dev_id)
 	return IRQ_HANDLED;
 }
 
+void *bcmsdh_get_drvdata(void)
+{
+	if (!sdhcinfo)
+		return NULL;
+	return dev_get_drvdata(sdhcinfo->dev);
+}
+
 int bcmsdh_register_oob_intr(void * dhdp)
 {
 	int error = 0;
@@ -636,13 +643,6 @@ int bcmsdh_register_oob_intr(void * dhdp)
 	}
 
 	return 0;
-}
-
-void *bcmsdh_get_drvdata(void)
-{
-	if (!sdhcinfo)
-		return NULL;
-	return dev_get_drvdata(sdhcinfo->dev);
 }
 
 void bcmsdh_set_irq(int flag)
