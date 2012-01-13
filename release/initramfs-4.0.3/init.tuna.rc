@@ -39,8 +39,7 @@ on boot
 	setprop ro.crypto.keyfile.userdata /dev/block/platform/omap/omap_hsmmc.0/by-name/metadata
 
 # Lower maximum frequency when screen is off
-	write /sys/devices/system/cpu/cpu0/cpufreq/screen_off_max_freq 1200000
-	write /sys/devices/system/cpu/cpu1/cpufreq/screen_off_max_freq 1200000
+	write /sys/devices/system/cpu/cpu0/cpufreq/screen_off_max_freq 700000
 
 # cpufreq interactive governor: timer 20ms, min sample 20ms, hispeed 700MHz
 	write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 20000
@@ -53,11 +52,11 @@ on boot
 
 on fs
 	mkdir /factory 0775 radio radio
-	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/system /system wait ro noatime nodiratime noauto_da_alloc,barrier=0,data=writeback
+	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/system /system wait ro
 	setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
-	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/userdata /data wait noatime nodiratime nosuid nodev errors=panic,nomblk_io_submit,noauto_da_alloc,barrier=0,data=writeback
-	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/cache /cache wait noatime nodiratime nosuid nodev errors=panic,nomblk_io_submit,noauto_da_alloc,barrier=0,data=writeback
-	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/efs /factory wait ro noatime nodiratime noauto_da_alloc,barrier=0
+	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/userdata /data wait noatime nosuid nodev nomblk_io_submit,errors=panic
+	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/cache /cache wait noatime nosuid nodev nomblk_io_submit,errors=panic
+	mount ext4 /dev/block/platform/omap/omap_hsmmc.0/by-name/efs /factory wait ro
 	setprop ro.crypto.fuse_sdcard true
 
 # change permissions for mtd device
