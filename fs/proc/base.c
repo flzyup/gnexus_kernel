@@ -800,7 +800,6 @@ static ssize_t mem_rw(struct file *file, char __user *buf,
 			size_t count, loff_t *ppos, int write)
 {
 	struct mm_struct *mm = file->private_data;
-
 	unsigned long addr = *ppos;
 	ssize_t copied;
 	char *page;
@@ -855,11 +854,16 @@ static ssize_t mem_read(struct file *file, char __user *buf,
 	return mem_rw(file, buf, count, ppos, 0);
 }
 
+#define mem_write NULL
+
+#ifndef mem_write
+/* This is a security hazard */
 static ssize_t mem_write(struct file *file, const char __user *buf,
-		size_t count, loff_t *ppos)
+			 size_t count, loff_t *ppos)
 {
 	return mem_rw(file, (char __user*)buf, count, ppos, 1);
 }
+#endif
 
 loff_t mem_lseek(struct file *file, loff_t offset, int orig)
 {
@@ -2565,7 +2569,7 @@ static void *proc_self_follow_link(struct dentry *dentry, struct nameidata *nd)
 static void proc_self_put_link(struct dentry *dentry, struct nameidata *nd,
 				void *cookie)
 {
-	const char *s = nd_get_link(nd);
+	char *s = nd_get_link(nd);
 	if (!IS_ERR(s))
 		__putname(s);
 }
