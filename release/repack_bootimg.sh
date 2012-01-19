@@ -13,7 +13,13 @@ else
 	./mkbootimg --kernel ../arch/arm/boot/zImage --ramdisk new_initramfs.cpio.gz -o ../../public_html/galaxy_nexus/kernel${RELV}.img 
 	sha256sum ../../public_html/galaxy_nexus/kernel${RELV}.img > ../../public_html/galaxy_nexus/kernel${RELV}.sha256sum
 
-rm new_initramfs.cpio.gz
+	cd cwm
+	cp ../../../public_html/galaxy_nexus/kernel${RELV}.img boot.img
+        zip -q -r ../../../public_html/galaxy_nexus/kernel${RELV}.zip boot.img META-INF || exit 1
+        sha256sum ../../../public_html/galaxy_nexus/kernel${RELV}.zip > ../../../public_html/galaxy_nexus/kernel${RELV}.zip.sha256sum
+
+	cd ..
+	rm new_initramfs.cpio.gz cwm/boot.img
 
 fi
 
