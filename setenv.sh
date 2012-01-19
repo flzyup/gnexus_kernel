@@ -1,7 +1,7 @@
 #!/bin/sh
 export ARCH=arm 
-export TOOLCHAIN=~/arm-2010q1
-export TOOLPREFIX=arm-none-linux-gnueabi
+export TOOLCHAIN=~/x-tools/arm-unknown-linux-gnueabi
+export TOOLPREFIX=arm-unknown-linux-gnueabi
 export PATH=$PATH:${TOOLCHAIN}/bin:/usr/java/jdk1.6.0_21/bin
 export CROSS_COMPILE=${TOOLCHAIN}/bin/${TOOLPREFIX}-
 export CC=${TOOLCHAIN}/bin/${TOOLPREFIX}-gcc
