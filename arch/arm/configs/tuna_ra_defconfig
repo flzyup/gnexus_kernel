@@ -1,6 +1,6 @@
 #
 # Automatically generated make config: don't edit
-# Linux/arm 3.0.17 Kernel Configuration
+# Linux/arm 3.0.18 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -1737,6 +1737,7 @@ CONFIG_FB_OMAP2_NUM_FBS=3
 #
 CONFIG_PANEL_S6E8AA0=y
 # CONFIG_PANEL_TAAL is not set
+CONFIG_COLOR_GAMMA_HACK=y
 CONFIG_DSSCOMP=y
 CONFIG_DSSCOMP_DEBUG_LOG=y
 CONFIG_OMAP4_HDCP=y
