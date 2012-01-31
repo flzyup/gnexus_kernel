@@ -1158,7 +1158,7 @@ static int vidioc_querycap (struct file *file, void  *priv,
 	struct cx8800_dev *dev  = ((struct cx8800_fh *)priv)->dev;
 	struct cx88_core  *core = dev->core;
 
-	strlcpy(cap->driver,"cx8800",sizeof(cap->driver));
+	strcpy(cap->driver, "cx8800");
 	strlcpy(cap->card, core->board.name, sizeof(cap->card));
 	sprintf(cap->bus_info,"PCI:%s",pci_name(dev->pci));
 	cap->version = CX88_VERSION_CODE;
@@ -1281,7 +1281,7 @@ int cx88_enum_input (struct cx88_core  *core,struct v4l2_input *i)
 	if (0 == INPUT(n).type)
 		return -EINVAL;
 	i->type  = V4L2_INPUT_TYPE_CAMERA;
-	strlcpy(i->name,iname[INPUT(n,sizeof(i->name)).type]);
+	strcpy(i->name,iname[INPUT(n).type]);
 	if ((CX88_VMUX_TELEVISION == INPUT(n).type) ||
 	    (CX88_VMUX_CABLE      == INPUT(n).type)) {
 		i->type = V4L2_INPUT_TYPE_TUNER;
@@ -1360,7 +1360,7 @@ static int vidioc_g_tuner (struct file *file, void *priv,
 	if (0 != t->index)
 		return -EINVAL;
 
-	strlcpy(t->name,"Television",sizeof(t->name));
+	strcpy(t->name, "Television");
 	t->type       = V4L2_TUNER_ANALOG_TV;
 	t->capability = V4L2_TUNER_CAP_NORM;
 	t->rangehigh  = 0xffffffffUL;
@@ -1477,7 +1477,7 @@ static int radio_querycap (struct file *file, void  *priv,
 	struct cx8800_dev *dev  = ((struct cx8800_fh *)priv)->dev;
 	struct cx88_core  *core = dev->core;
 
-	strlcpy(cap->driver,"cx8800",sizeof(cap->driver));
+	strcpy(cap->driver, "cx8800");
 	strlcpy(cap->card, core->board.name, sizeof(cap->card));
 	sprintf(cap->bus_info,"PCI:%s", pci_name(dev->pci));
 	cap->version = CX88_VERSION_CODE;
@@ -1493,7 +1493,7 @@ static int radio_g_tuner (struct file *file, void *priv,
 	if (unlikely(t->index > 0))
 		return -EINVAL;
 
-	strlcpy(t->name,"Radio",sizeof(t->name));
+	strcpy(t->name, "Radio");
 	t->type = V4L2_TUNER_RADIO;
 
 	call_all(core, tuner, g_tuner, t);
@@ -1505,7 +1505,7 @@ static int radio_enum_input (struct file *file, void *priv,
 {
 	if (i->index != 0)
 		return -EINVAL;
-	strlcpy(i->name,"Radio",sizeof(i->name));
+	strcpy(i->name,"Radio");
 	i->type = V4L2_INPUT_TYPE_TUNER;
 
 	return 0;
@@ -1516,7 +1516,7 @@ static int radio_g_audio (struct file *file, void *priv, struct v4l2_audio *a)
 	if (unlikely(a->index))
 		return -EINVAL;
 
-	strlcpy(a->name,"Radio",sizeof(a->name));
+	strcpy(a->name,"Radio");
 	return 0;
 }
 
@@ -1850,7 +1850,7 @@ static int __devinit cx8800_initdev(struct pci_dev *pci_dev,
 	/* Initialize VBI template */
 	memcpy( &cx8800_vbi_template, &cx8800_video_template,
 		sizeof(cx8800_vbi_template) );
-	strlcpy(cx8800_vbi_template.name,"cx8800-vbi",sizeof(cx8800_vbi_template.name));
+	strcpy(cx8800_vbi_template.name,"cx8800-vbi");
 
 	/* initialize driver struct */
 	spin_lock_init(&dev->slock);

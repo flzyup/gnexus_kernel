@@ -1078,7 +1078,7 @@ snd_emu10k1_init_mono_control(struct snd_emu10k1_fx8010_control_gpr *ctl,
 			      const char *name, int gpr, int defval)
 {
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,name,sizeof(ctl->id.name));
+	strcpy(ctl->id.name, name);
 	ctl->vcount = ctl->count = 1;
 	ctl->gpr[0] = gpr + 0; ctl->value[0] = defval;
 	if (high_res_gpr_volume) {
@@ -1099,7 +1099,7 @@ snd_emu10k1_init_stereo_control(struct snd_emu10k1_fx8010_control_gpr *ctl,
 				const char *name, int gpr, int defval)
 {
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,name,sizeof(ctl->id.name));
+	strcpy(ctl->id.name, name);
 	ctl->vcount = ctl->count = 2;
 	ctl->gpr[0] = gpr + 0; ctl->value[0] = defval;
 	ctl->gpr[1] = gpr + 1; ctl->value[1] = defval;
@@ -1121,7 +1121,7 @@ snd_emu10k1_init_mono_onoff_control(struct snd_emu10k1_fx8010_control_gpr *ctl,
 				    const char *name, int gpr, int defval)
 {
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,name,sizeof(ctl->id.name));
+	strcpy(ctl->id.name, name);
 	ctl->vcount = ctl->count = 1;
 	ctl->gpr[0] = gpr + 0; ctl->value[0] = defval;
 	ctl->min = 0;
@@ -1134,7 +1134,7 @@ snd_emu10k1_init_stereo_onoff_control(struct snd_emu10k1_fx8010_control_gpr *ctl
 				      const char *name, int gpr, int defval)
 {
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,name,sizeof(ctl->id.name));
+	strcpy(ctl->id.name, name);
 	ctl->vcount = ctl->count = 2;
 	ctl->gpr[0] = gpr + 0; ctl->value[0] = defval;
 	ctl->gpr[1] = gpr + 1; ctl->value[1] = defval;
@@ -1205,7 +1205,7 @@ static int __devinit _snd_emu10k1_audigy_init_efx(struct snd_emu10k1 *emu)
 	for (i = 0; i < 256; i++)
 		set_bit(i, icode->tram_valid);
 
-	strlcpy(icode->name,"Audigy DSP code for ALSA",sizeof(icode->name));
+	strcpy(icode->name, "Audigy DSP code for ALSA");
 	ptr = 0;
 	nctl = 0;
 	gpr = stereo_mix + 10;
@@ -1447,7 +1447,7 @@ A_OP(icode, &ptr, iMAC0, A_GPR(var), A_GPR(var), A_GPR(vol), A_EXTIN(input))
 
 	ctl = &controls[nctl + 0];
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,"Tone Control - Bass",sizeof(ctl->id.name));
+	strcpy(ctl->id.name, "Tone Control - Bass");
 	ctl->vcount = 2;
 	ctl->count = 10;
 	ctl->min = 0;
@@ -1456,7 +1456,7 @@ A_OP(icode, &ptr, iMAC0, A_GPR(var), A_GPR(var), A_GPR(vol), A_EXTIN(input))
 	ctl->translation = EMU10K1_GPR_TRANSLATION_BASS;
 	ctl = &controls[nctl + 1];
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,"Tone Control - Treble",sizeof(ctl->id.name));
+	strcpy(ctl->id.name, "Tone Control - Treble");
 	ctl->vcount = 2;
 	ctl->count = 10;
 	ctl->min = 0;
@@ -1839,7 +1839,7 @@ static int __devinit _snd_emu10k1_init_efx(struct snd_emu10k1 *emu)
 	for (i = 0; i < 160; i++)
 		set_bit(i, icode->tram_valid);
 
-	strlcpy(icode->name,"SB Live! FX8010 code for ALSA v1.2 by Jaroslav Kysela",sizeof(icode->name));
+	strcpy(icode->name, "SB Live! FX8010 code for ALSA v1.2 by Jaroslav Kysela");
 	ptr = 0; i = 0;
 	/* we have 12 inputs */
 	playback = SND_EMU10K1_INPUTS;
@@ -2160,7 +2160,7 @@ static int __devinit _snd_emu10k1_init_efx(struct snd_emu10k1 *emu)
 
 	ctl = &controls[i + 0];
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,"Tone Control - Bass",sizeof(ctl->id.name));
+	strcpy(ctl->id.name, "Tone Control - Bass");
 	ctl->vcount = 2;
 	ctl->count = 10;
 	ctl->min = 0;
@@ -2170,7 +2170,7 @@ static int __devinit _snd_emu10k1_init_efx(struct snd_emu10k1 *emu)
 	ctl->translation = EMU10K1_GPR_TRANSLATION_BASS;
 	ctl = &controls[i + 1];
 	ctl->id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(ctl->id.name,"Tone Control - Treble",sizeof(ctl->id.name));
+	strcpy(ctl->id.name, "Tone Control - Treble");
 	ctl->vcount = 2;
 	ctl->count = 10;
 	ctl->min = 0;
@@ -2462,7 +2462,7 @@ static void copy_string(char *dst, char *src, char *null, int idx)
 	if (src == NULL)
 		sprintf(dst, "%s %02X", null, idx);
 	else
-		strlcpy(dst,src,sizeof(dst));
+		strcpy(dst, src);
 }
 
 static void snd_emu10k1_fx8010_info(struct snd_emu10k1 *emu,
@@ -2635,7 +2635,7 @@ int __devinit snd_emu10k1_fx8010_new(struct snd_emu10k1 *emu, int device, struct
 		*rhwdep = NULL;
 	if ((err = snd_hwdep_new(emu->card, "FX8010", device, &hw)) < 0)
 		return err;
-	strlcpy(hw->name,"EMU10K1 (FX8010,sizeof(hw->name))");
+	strcpy(hw->name, "EMU10K1 (FX8010)");
 	hw->iface = SNDRV_HWDEP_IFACE_EMU10K1;
 	hw->ops.open = snd_emu10k1_fx8010_open;
 	hw->ops.ioctl = snd_emu10k1_fx8010_ioctl;

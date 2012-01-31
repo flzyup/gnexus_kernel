@@ -360,7 +360,7 @@ static size_t jffs2_acl_access_listxattr(struct dentry *dentry, char *list,
 	const int retlen = sizeof(POSIX_ACL_XATTR_ACCESS);
 
 	if (list && retlen <= list_size)
-		strlcpy(list,POSIX_ACL_XATTR_ACCESS,sizeof(list));
+		strcpy(list, POSIX_ACL_XATTR_ACCESS);
 	return retlen;
 }
 
@@ -370,7 +370,7 @@ static size_t jffs2_acl_default_listxattr(struct dentry *dentry, char *list,
 	const int retlen = sizeof(POSIX_ACL_XATTR_DEFAULT);
 
 	if (list && retlen <= list_size)
-		strlcpy(list,POSIX_ACL_XATTR_DEFAULT,sizeof(list));
+		strcpy(list, POSIX_ACL_XATTR_DEFAULT);
 	return retlen;
 }
 

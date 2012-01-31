@@ -4128,7 +4128,7 @@ reshape_position_show(mddev_t *mddev, char *page)
 	if (mddev->reshape_position != MaxSector)
 		return sprintf(page, "%llu\n",
 			       (unsigned long long)mddev->reshape_position);
-	strlcpy(page,"none\n",sizeof(page));
+	strcpy(page, "none\n");
 	return 5;
 }
 
@@ -4371,7 +4371,7 @@ static int md_alloc(dev_t dev, char *name)
 	disk->major = MAJOR(mddev->unit);
 	disk->first_minor = unit << shift;
 	if (name)
-		strlcpy(disk->disk_name,name,sizeof(disk->disk_name));
+		strcpy(disk->disk_name, name);
 	else if (partitioned)
 		sprintf(disk->disk_name, "md_d%d", unit);
 	else
@@ -5129,7 +5129,7 @@ static int get_bitmap_file(mddev_t * mddev, void __user * arg)
 	if (IS_ERR(ptr))
 		goto out;
 
-	strlcpy(file->pathname,ptr,sizeof(file->pathname));
+	strcpy(file->pathname, ptr);
 
 copy_out:
 	err = 0;

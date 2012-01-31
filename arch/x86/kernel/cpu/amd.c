@@ -551,7 +551,7 @@ static void __cpuinit init_amd(struct cpuinfo_x86 *c)
 		case 0xf:
 			/* Should distinguish Models here, but this is only
 			   a fallback anyways. */
-			strlcpy(c->x86_model_id,"Hammer",sizeof(c->x86_model_id));
+			strcpy(c->x86_model_id, "Hammer");
 			break;
 		}
 	}

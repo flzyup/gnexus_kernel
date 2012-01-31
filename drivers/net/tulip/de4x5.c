@@ -3897,7 +3897,7 @@ EISA_signature(char *name, struct device *device)
     i = edev->id.driver_data;
 
     if (i >= 0 && i < siglen) {
-	    strlcpy(name,de4x5_signatures[i],sizeof(name));
+	    strcpy (name, de4x5_signatures[i]);
 	    status = 1;
     }
 
@@ -3913,7 +3913,7 @@ PCI_signature(char *name, struct de4x5_private *lp)
     int i, status = 0, siglen = ARRAY_SIZE(de4x5_signatures);
 
     if (lp->chipset == DC21040) {
-	strlcpy(name,"DE434/5",sizeof(name));
+	strcpy(name, "DE434/5");
 	return status;
     } else {                           /* Search for a DEC name in the SROM */
 	int tmp = *((char *)&lp->srom + 19) * 3;
@@ -3927,7 +3927,7 @@ PCI_signature(char *name, struct de4x5_private *lp)
 	if (dec_only) {
 	    *name = '\0';
 	} else {                        /* Use chip name to avoid confusion */
-	    strlcpy(name,(((lp->chipset == DC21040,sizeof(name)) ? "DC21040" :
+	    strcpy(name, (((lp->chipset == DC21040) ? "DC21040" :
 			   ((lp->chipset == DC21041) ? "DC21041" :
 			    ((lp->chipset == DC21140) ? "DC21140" :
 			     ((lp->chipset == DC21142) ? "DC21142" :

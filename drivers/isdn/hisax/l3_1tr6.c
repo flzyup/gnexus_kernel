@@ -940,6 +940,6 @@ setstack_1tr6(struct PStack *st)
 	st->l3.l3ml3 = man1tr6;
 	st->l3.N303 = 0;
 
-	strlcpy(tmp,l3_1tr6_revision,sizeof(tmp));
+	strcpy(tmp, l3_1tr6_revision);
 	printk(KERN_INFO "HiSax: 1TR6 Rev. %s\n", HiSax_getrev(tmp));
 }

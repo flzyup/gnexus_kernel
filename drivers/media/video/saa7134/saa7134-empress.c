@@ -168,7 +168,7 @@ static int empress_querycap(struct file *file, void  *priv,
 {
 	struct saa7134_dev *dev = file->private_data;
 
-	strlcpy(cap->driver,"saa7134",sizeof(cap->driver));
+	strcpy(cap->driver, "saa7134");
 	strlcpy(cap->card, saa7134_boards[dev->board].name,
 		sizeof(cap->card));
 	sprintf(cap->bus_info, "PCI:%s", pci_name(dev->pci));
@@ -187,7 +187,7 @@ static int empress_enum_input(struct file *file, void *priv,
 		return -EINVAL;
 
 	i->type = V4L2_INPUT_TYPE_CAMERA;
-	strlcpy(i->name,"CCIR656",sizeof(i->name));
+	strcpy(i->name, "CCIR656");
 
 	return 0;
 }

@@ -705,7 +705,7 @@ static int mousevsc_on_device_add(struct hv_device *device,
 	dev_info.vendor = input_dev->hid_dev_info.vendor;
 	dev_info.product = input_dev->hid_dev_info.product;
 	dev_info.version = input_dev->hid_dev_info.version;
-	strlcpy(dev_info.name,"Microsoft Vmbus HID-compliant Mouse",sizeof(dev_info.name));
+	strcpy(dev_info.name, "Microsoft Vmbus HID-compliant Mouse");
 
 	/* Send the device info back up */
 	deviceinfo_callback(device, &dev_info);

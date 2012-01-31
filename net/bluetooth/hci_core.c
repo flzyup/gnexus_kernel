@@ -860,7 +860,7 @@ int hci_get_dev_info(void __user *arg)
 	if (!test_bit(HCI_MGMT, &hdev->flags))
 		set_bit(HCI_PAIRABLE, &hdev->flags);
 
-	strlcpy(di.name,hdev->name,sizeof(di.name));
+	strcpy(di.name, hdev->name);
 	di.bdaddr   = hdev->bdaddr;
 	di.type     = (hdev->bus & 0x0f) | (hdev->dev_type << 4);
 	di.flags    = hdev->flags;

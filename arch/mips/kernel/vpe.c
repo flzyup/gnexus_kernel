@@ -851,7 +851,7 @@ static int vpe_elfload(struct vpe * v)
 	struct module mod;	// so we can re-use the relocations code
 
 	memset(&mod, 0, sizeof(struct module));
-	strlcpy(mod.name,"VPE loader",sizeof(mod.name));
+	strcpy(mod.name, "VPE loader");
 
 	hdr = (Elf_Ehdr *) v->pbuffer;
 	len = v->plen;

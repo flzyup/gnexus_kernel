@@ -214,7 +214,7 @@ setup_sportster(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strlcpy(tmp,sportster_revision,sizeof(tmp));
+	strcpy(tmp, sportster_revision);
 	printk(KERN_INFO "HiSax: USR Sportster driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_SPORTSTER)
 		return (0);

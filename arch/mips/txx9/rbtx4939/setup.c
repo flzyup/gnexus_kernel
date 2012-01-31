@@ -397,8 +397,8 @@ static void __init rbtx4939_mtd_init(void)
 	} else if (bdipsw == 0) {
 		/* BOOT Mode: Monitor ROM */
 		boot_pdata->nr_parts = 2;
-		strlcpy(names[0],"big",sizeof(names[0]));
-		strlcpy(names[1],"little",sizeof(names[1]));
+		strcpy(names[0], "big");
+		strcpy(names[1], "little");
 		for (i = 0; i < boot_pdata->nr_parts; i++) {
 			parts[i].name = names[i];
 			parts[i].size = 0x400000;

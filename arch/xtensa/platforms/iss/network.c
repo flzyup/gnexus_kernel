@@ -331,7 +331,7 @@ static int tuntap_probe(struct iss_net_private *lp, int index, char *init)
 			 sizeof lp->tp.info.tuntap.dev_name);
 		lp->tp.info.tuntap.fixed_config = 1;
 	} else
-		strlcpy(lp->tp.info.tuntap.dev_name,TRANSPORT_TUNTAP_NAME,sizeof(lp->tp.info.tuntap.dev_name));
+		strcpy(lp->tp.info.tuntap.dev_name, TRANSPORT_TUNTAP_NAME);
 
 
 #if 0

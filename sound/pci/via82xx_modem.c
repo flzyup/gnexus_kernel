@@ -853,7 +853,7 @@ static int __devinit snd_via686_pcm_new(struct via82xx_modem *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_via686_capture_ops);
 	pcm->dev_class = SNDRV_PCM_CLASS_MODEM;
 	pcm->private_data = chip;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	chip->pcms[0] = pcm;
 	init_viadev(chip, 0, VIA_REG_MO_STATUS, 0);
 	init_viadev(chip, 1, VIA_REG_MI_STATUS, 1);
@@ -1177,7 +1177,7 @@ static int __devinit snd_via82xx_probe(struct pci_dev *pci,
 	card_type = pci_id->driver_data;
 	switch (card_type) {
 	case TYPE_CARD_VIA82XX_MODEM:
-		strlcpy(card->driver,"VIA82XX-MODEM",sizeof(card->driver));
+		strcpy(card->driver, "VIA82XX-MODEM");
 		sprintf(card->shortname, "VIA 82XX modem");
 		break;
 	default:

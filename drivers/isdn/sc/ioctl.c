@@ -418,15 +418,15 @@ static int GetStatus(int card, boardInfo *bi)
 	 * Fill in some of the basic info about the board
 	 */
 	bi->modelid = sc_adapter[card]->model;
-	strlcpy(bi->serial_no,sc_adapter[card]->hwconfig.serial_no,sizeof(bi->serial_no));
-	strlcpy(bi->part_no,sc_adapter[card]->hwconfig.part_no,sizeof(bi->part_no));
+	strcpy(bi->serial_no, sc_adapter[card]->hwconfig.serial_no);
+	strcpy(bi->part_no, sc_adapter[card]->hwconfig.part_no);
 	bi->iobase = sc_adapter[card]->iobase;
 	bi->rambase = sc_adapter[card]->rambase;
 	bi->irq = sc_adapter[card]->interrupt;
 	bi->ramsize = sc_adapter[card]->hwconfig.ram_size;
 	bi->interface = sc_adapter[card]->hwconfig.st_u_sense;
-	strlcpy(bi->load_ver,sc_adapter[card]->load_ver,sizeof(bi->load_ver));
-	strlcpy(bi->proc_ver,sc_adapter[card]->proc_ver,sizeof(bi->proc_ver));
+	strcpy(bi->load_ver, sc_adapter[card]->load_ver);
+	strcpy(bi->proc_ver, sc_adapter[card]->proc_ver);
 
 	/*
 	 * Get the current PhyStats and LnkStats
@@ -565,7 +565,7 @@ static int GetStatus(int card, boardInfo *bi)
 		status = send_and_receive(card, CEPID, ceReqTypeCall, ceReqClass0,
 			ceReqCallGetSPID, i+1, 0, NULL, &rcvmsg, SAR_TIMEOUT);
 		if (!status)
-			strlcpy(bi->status.bristats[i].spid,rcvmsg.msg_data.byte_array,sizeof(bi->status.bristats[i].spid));
+			strcpy(bi->status.bristats[i].spid, rcvmsg.msg_data.byte_array);
 	}
 		
 	/*
@@ -575,7 +575,7 @@ static int GetStatus(int card, boardInfo *bi)
 		status = send_and_receive(card, CEPID, ceReqTypeCall, ceReqClass0,
 			ceReqCallGetMyNumber, i+1, 0, NULL, &rcvmsg, SAR_TIMEOUT);
 		if (!status)
-			strlcpy(bi->status.bristats[i].dn,rcvmsg.msg_data.byte_array,sizeof(bi->status.bristats[i].dn));
+			strcpy(bi->status.bristats[i].dn, rcvmsg.msg_data.byte_array);
 	}
 		
 	return 0;

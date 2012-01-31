@@ -1147,7 +1147,7 @@ static struct xfrm_state * pfkey_msg2xfrm_state(struct net *net,
 		x->aalg = kmalloc(sizeof(*x->aalg) + keysize, GFP_KERNEL);
 		if (!x->aalg)
 			goto out;
-		strlcpy(x->aalg->alg_name,a->name,sizeof(x->aalg->alg_name));
+		strcpy(x->aalg->alg_name, a->name);
 		x->aalg->alg_key_len = 0;
 		if (key) {
 			x->aalg->alg_key_len = key->sadb_key_bits;
@@ -1167,7 +1167,7 @@ static struct xfrm_state * pfkey_msg2xfrm_state(struct net *net,
 			x->calg = kmalloc(sizeof(*x->calg), GFP_KERNEL);
 			if (!x->calg)
 				goto out;
-			strlcpy(x->calg->alg_name,a->name,sizeof(x->calg->alg_name));
+			strcpy(x->calg->alg_name, a->name);
 			x->props.calgo = sa->sadb_sa_encrypt;
 		} else {
 			int keysize = 0;
@@ -1182,7 +1182,7 @@ static struct xfrm_state * pfkey_msg2xfrm_state(struct net *net,
 			x->ealg = kmalloc(sizeof(*x->ealg) + keysize, GFP_KERNEL);
 			if (!x->ealg)
 				goto out;
-			strlcpy(x->ealg->alg_name,a->name,sizeof(x->ealg->alg_name));
+			strcpy(x->ealg->alg_name, a->name);
 			x->ealg->alg_key_len = 0;
 			if (key) {
 				x->ealg->alg_key_len = key->sadb_key_bits;

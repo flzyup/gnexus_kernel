@@ -660,7 +660,7 @@ int __devinit epson1355fb_probe(struct platform_device *dev)
 	printk(KERN_INFO "epson1355fb: regs mapped at 0x%lx, fb %d KiB mapped at 0x%p\n",
 	       default_par->reg_addr, info->fix.smem_len / 1024, info->screen_base);
 
-	strlcpy(info->fix.id,"S1D13505",sizeof(info->fix.id));
+	strcpy(info->fix.id, "S1D13505");
 	info->par = default_par;
 	info->fbops = &epson1355fb_fbops;
 	info->flags = FBINFO_DEFAULT | FBINFO_HWACCEL_YPAN;

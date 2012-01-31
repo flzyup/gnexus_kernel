@@ -2928,12 +2928,12 @@ static void vortex_get_drvinfo(struct net_device *dev,
 {
 	struct vortex_private *vp = netdev_priv(dev);
 
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
+	strcpy(info->driver, DRV_NAME);
 	if (VORTEX_PCI(vp)) {
-		strlcpy(info->bus_info,pci_name(VORTEX_PCI(vp,sizeof(info->bus_info))));
+		strcpy(info->bus_info, pci_name(VORTEX_PCI(vp)));
 	} else {
 		if (VORTEX_EISA(vp))
-			strlcpy(info->bus_info,dev_name(vp->gendev,sizeof(info->bus_info)));
+			strcpy(info->bus_info, dev_name(vp->gendev));
 		else
 			sprintf(info->bus_info, "EISA 0x%lx %d",
 					dev->base_addr, dev->irq);

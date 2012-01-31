@@ -895,7 +895,7 @@ static int __devinit snd_ice1712_pcm(struct snd_ice1712 *ice, int device, struct
 
 	pcm->private_data = ice;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"ICE1712 consumer",sizeof(pcm->name));
+	strcpy(pcm->name, "ICE1712 consumer");
 	ice->pcm = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -924,7 +924,7 @@ static int __devinit snd_ice1712_pcm_ds(struct snd_ice1712 *ice, int device, str
 
 	pcm->private_data = ice;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"ICE1712 consumer (DS,sizeof(pcm->name))");
+	strcpy(pcm->name, "ICE1712 consumer (DS)");
 	ice->pcm_ds = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1270,7 +1270,7 @@ static int __devinit snd_ice1712_pcm_profi(struct snd_ice1712 *ice, int device, 
 
 	pcm->private_data = ice;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"ICE1712 multi",sizeof(pcm->name));
+	strcpy(pcm->name, "ICE1712 multi");
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					      snd_dma_pci_data(ice->pci), 256*1024, 256*1024);
@@ -1835,7 +1835,7 @@ static int snd_ice1712_pro_internal_clock_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 14;
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -1926,7 +1926,7 @@ static int snd_ice1712_pro_internal_clock_default_info(struct snd_kcontrol *kcon
 	uinfo->value.enumerated.items = 13;
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -2055,7 +2055,7 @@ static int snd_ice1712_pro_route_info(struct snd_kcontrol *kcontrol,
 		snd_ctl_get_ioffidx(kcontrol, &uinfo->id) < 2 ? 12 : 11;
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -2673,8 +2673,8 @@ static int __devinit snd_ice1712_probe(struct pci_dev *pci,
 	if (err < 0)
 		return err;
 
-	strlcpy(card->driver,"ICE1712",sizeof(card->driver));
-	strlcpy(card->shortname,"ICEnsemble ICE1712",sizeof(card->shortname));
+	strcpy(card->driver, "ICE1712");
+	strcpy(card->shortname, "ICEnsemble ICE1712");
 
 	err = snd_ice1712_create(card, pci, model[dev], omni[dev],
 		cs8427_timeout[dev], dxr_enable[dev], &ice);
@@ -2686,9 +2686,9 @@ static int __devinit snd_ice1712_probe(struct pci_dev *pci,
 	for (tbl = card_tables; *tbl; tbl++) {
 		for (c = *tbl; c->subvendor; c++) {
 			if (c->subvendor == ice->eeprom.subvendor) {
-				strlcpy(card->shortname,c->name,sizeof(card->shortname));
+				strcpy(card->shortname, c->name);
 				if (c->driver) /* specific driver? */
-					strlcpy(card->driver,c->driver,sizeof(card->driver));
+					strcpy(card->driver, c->driver);
 				if (c->chip_init) {
 					err = c->chip_init(ice);
 					if (err < 0) {

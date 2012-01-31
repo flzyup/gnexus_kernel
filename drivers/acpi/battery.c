@@ -968,8 +968,8 @@ static int acpi_battery_add(struct acpi_device *device)
 	if (!battery)
 		return -ENOMEM;
 	battery->device = device;
-	strlcpy(acpi_device_name(device),ACPI_BATTERY_DEVICE_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),ACPI_BATTERY_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_name(device), ACPI_BATTERY_DEVICE_NAME);
+	strcpy(acpi_device_class(device), ACPI_BATTERY_CLASS);
 	device->driver_data = battery;
 	mutex_init(&battery->lock);
 	if (ACPI_SUCCESS(acpi_get_handle(battery->device->handle,

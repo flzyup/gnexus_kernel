@@ -361,10 +361,10 @@ char * __init build_path_component(struct device_node *dp)
 	tmp_buf[0] = '\0';
 	__build_path_component(dp, tmp_buf);
 	if (tmp_buf[0] == '\0')
-		strlcpy(tmp_buf,dp->name,sizeof(tmp_buf));
+		strcpy(tmp_buf, dp->name);
 
 	n = prom_early_alloc(strlen(tmp_buf) + 1);
-	strlcpy(n,tmp_buf,sizeof(n));
+	strcpy(n, tmp_buf);
 
 	return n;
 }

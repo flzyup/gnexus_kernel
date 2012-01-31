@@ -181,8 +181,8 @@ static int __devinit snd_card_ad1816a_probe(int dev, struct pnp_card_link *pcard
 	if (clockfreq[dev] >= 5000 && clockfreq[dev] <= 100000)
 		chip->clock_freq = clockfreq[dev];
 
-	strlcpy(card->driver,"AD1816A",sizeof(card->driver));
-	strlcpy(card->shortname,"ADI SoundPort AD1816A",sizeof(card->shortname));
+	strcpy(card->driver, "AD1816A");
+	strcpy(card->shortname, "ADI SoundPort AD1816A");
 	sprintf(card->longname, "%s, SS at 0x%lx, irq %d, dma %d&%d",
 		card->shortname, chip->port, irq[dev], dma1[dev], dma2[dev]);
 

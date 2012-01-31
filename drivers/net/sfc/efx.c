@@ -1903,7 +1903,7 @@ static const struct net_device_ops efx_netdev_ops = {
 
 static void efx_update_name(struct efx_nic *efx)
 {
-	strlcpy(efx->name,efx->net_dev->name,sizeof(efx->name));
+	strcpy(efx->name, efx->net_dev->name);
 	efx_mtd_rename(efx);
 	efx_set_channel_names(efx);
 }

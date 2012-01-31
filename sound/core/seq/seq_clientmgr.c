@@ -1176,7 +1176,7 @@ static void get_client_info(struct snd_seq_client *cptr,
 
 	/* fill the info fields */
 	info->type = cptr->type;
-	strlcpy(info->name,cptr->name,sizeof(info->name));
+	strcpy(info->name, cptr->name);
 	info->filter = cptr->filter;
 	info->event_lost = cptr->event_lost;
 	memcpy(info->event_filter, cptr->event_filter, 32);

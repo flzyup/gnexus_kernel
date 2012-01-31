@@ -140,7 +140,7 @@ static int __init snd_hrtimer_init(void)
 		return err;
 
 	timer->module = THIS_MODULE;
-	strlcpy(timer->name,"HR timer",sizeof(timer->name));
+	strcpy(timer->name, "HR timer");
 	timer->hw = hrtimer_hw;
 	timer->hw.resolution = resolution;
 	timer->hw.ticks = NANO_SEC / resolution;

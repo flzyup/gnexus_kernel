@@ -326,7 +326,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
  */
 	retval = amradio_set_stereo(radio, WANT_STEREO);
 
-	strlcpy(v->name,"FM",sizeof(v->name));
+	strcpy(v->name, "FM");
 	v->type = V4L2_TUNER_RADIO;
 	v->rangelow = FREQ_MIN * FREQ_MUL;
 	v->rangehigh = FREQ_MAX * FREQ_MUL;
@@ -444,7 +444,7 @@ static int vidioc_g_audio(struct file *file, void *priv,
 	if (a->index > 1)
 		return -EINVAL;
 
-	strlcpy(a->name,"Radio",sizeof(a->name));
+	strcpy(a->name, "Radio");
 	a->capability = V4L2_AUDCAP_STEREO;
 	return 0;
 }

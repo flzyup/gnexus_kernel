@@ -1365,7 +1365,7 @@ static struct sa1100fb_info * __init sa1100fb_init_fbinfo(struct device *dev)
 	memset(fbi, 0, sizeof(struct sa1100fb_info));
 	fbi->dev = dev;
 
-	strlcpy(fbi->fb.fix.id,SA1100_NAME,sizeof(fbi->fb.fix.id));
+	strcpy(fbi->fb.fix.id, SA1100_NAME);
 
 	fbi->fb.fix.type	= FB_TYPE_PACKED_PIXELS;
 	fbi->fb.fix.type_aux	= 0;

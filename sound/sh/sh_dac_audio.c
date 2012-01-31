@@ -271,7 +271,7 @@ static int __devinit snd_sh_dac_pcm(struct snd_sh_dac *chip, int device)
 		return err;
 
 	pcm->private_data = chip;
-	strlcpy(pcm->name,"SH_DAC PCM",sizeof(pcm->name));
+	strcpy(pcm->name, "SH_DAC PCM");
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_sh_dac_pcm_ops);
 
 	/* buffer size=48K */
@@ -411,8 +411,8 @@ static int __devinit snd_sh_dac_probe(struct platform_device *devptr)
 	if (err < 0)
 		goto probe_error;
 
-	strlcpy(card->driver,"snd_sh_dac",sizeof(card->driver));
-	strlcpy(card->shortname,"SuperH DAC audio driver",sizeof(card->shortname));
+	strcpy(card->driver, "snd_sh_dac");
+	strcpy(card->shortname, "SuperH DAC audio driver");
 	printk(KERN_INFO "%s %s", card->longname, card->shortname);
 
 	err = snd_card_register(card);

@@ -473,7 +473,7 @@ static int isight_create_pcm(struct isight *isight)
 	if (err < 0)
 		return err;
 	pcm->private_data = isight;
-	strlcpy(pcm->name,"iSight",sizeof(pcm->name));
+	strcpy(pcm->name, "iSight");
 	isight->pcm = pcm->streams[SNDRV_PCM_STREAM_CAPTURE].substream;
 	isight->pcm->ops = &ops;
 
@@ -656,13 +656,13 @@ static int isight_probe(struct device *unit_dev)
 
 	card->private_free = isight_card_free;
 
-	strlcpy(card->driver,"iSight",sizeof(card->driver));
-	strlcpy(card->shortname,"Apple iSight",sizeof(card->shortname));
+	strcpy(card->driver, "iSight");
+	strcpy(card->shortname, "Apple iSight");
 	snprintf(card->longname, sizeof(card->longname),
 		 "Apple iSight (GUID %08x%08x) at %s, S%d",
 		 fw_dev->config_rom[3], fw_dev->config_rom[4],
 		 dev_name(&unit->device), 100 << fw_dev->max_speed);
-	strlcpy(card->mixername,"iSight",sizeof(card->mixername));
+	strcpy(card->mixername, "iSight");
 
 	err = isight_create_pcm(isight);
 	if (err < 0)

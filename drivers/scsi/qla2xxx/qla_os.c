@@ -403,7 +403,7 @@ qla2x00_pci_info_str(struct scsi_qla_host *vha, char *str)
 	};
 	uint16_t pci_bus;
 
-	strlcpy(str,"PCI",sizeof(str));
+	strcpy(str, "PCI");
 	pci_bus = (ha->pci_attr & (BIT_9 | BIT_10)) >> 9;
 	if (pci_bus) {
 		strcat(str, "-X (");
@@ -437,7 +437,7 @@ qla24xx_pci_info_str(struct scsi_qla_host *vha, char *str)
 		lwidth = (pcie_lstat &
 		    (BIT_4 | BIT_5 | BIT_6 | BIT_7 | BIT_8 | BIT_9)) >> 4;
 
-		strlcpy(str,"PCIe (",sizeof(str));
+		strcpy(str, "PCIe (");
 		if (lspeed == 1)
 			strcat(str, "2.5GT/s ");
 		else if (lspeed == 2)
@@ -450,7 +450,7 @@ qla24xx_pci_info_str(struct scsi_qla_host *vha, char *str)
 		return str;
 	}
 
-	strlcpy(str,"PCI",sizeof(str));
+	strcpy(str, "PCI");
 	pci_bus = (ha->pci_attr & CSRX_PCIX_BUS_MODE_MASK) >> 8;
 	if (pci_bus == 0 || pci_bus == 8) {
 		strcat(str, " (");
@@ -4162,7 +4162,7 @@ qla2x00_module_init(void)
 	}
 
 	/* Derive version string. */
-	strlcpy(qla2x00_version_str,QLA2XXX_VERSION,sizeof(qla2x00_version_str));
+	strcpy(qla2x00_version_str, QLA2XXX_VERSION);
 	if (ql2xextended_error_logging)
 		strcat(qla2x00_version_str, "-debug");
 

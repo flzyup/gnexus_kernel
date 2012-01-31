@@ -150,21 +150,21 @@ static int __devinit snd_gusmax_mixer(struct snd_wss *chip)
 	memset(&id2, 0, sizeof(id2));
 	id1.iface = id2.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	/* reassign AUXA to SYNTHESIZER */
-	strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name));
-	strlcpy(id2.name,"Synth Playback Switch",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Switch");
+	strcpy(id2.name, "Synth Playback Switch");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
-	strlcpy(id1.name,"Aux Playback Volume",sizeof(id1.name));
-	strlcpy(id2.name,"Synth Playback Volume",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Volume");
+	strcpy(id2.name, "Synth Playback Volume");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
 	/* reassign AUXB to CD */
-	strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name)); id1.index = 1;
-	strlcpy(id2.name,"CD Playback Switch",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Switch"); id1.index = 1;
+	strcpy(id2.name, "CD Playback Switch");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
-	strlcpy(id1.name,"Aux Playback Volume",sizeof(id1.name));
-	strlcpy(id2.name,"CD Playback Volume",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Volume");
+	strcpy(id2.name, "CD Playback Volume");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
 #if 0

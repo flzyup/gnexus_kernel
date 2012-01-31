@@ -248,7 +248,8 @@ snd_wavefront_new_synth (struct snd_card *card,
 
 	if (snd_hwdep_new(card, "WaveFront", hw_dev, &wavefront_synth) < 0)
 		return NULL;
-	strlcpy(wavefront_synth->name,,sizeof(wavefront_synth->name)		"WaveFront (ICS2115) wavetable synthesizer");
+	strcpy (wavefront_synth->name, 
+		"WaveFront (ICS2115) wavetable synthesizer");
 	wavefront_synth->ops.open = snd_wavefront_synth_open;
 	wavefront_synth->ops.release = snd_wavefront_synth_release;
 	wavefront_synth->ops.ioctl = snd_wavefront_synth_ioctl;
@@ -307,10 +308,10 @@ snd_wavefront_new_midi (struct snd_card *card,
 		return NULL;
 
 	if (mpu == internal_mpu) {
-		strlcpy(rmidi->name,"WaveFront MIDI (Internal,sizeof(rmidi->name))");
+		strcpy(rmidi->name, "WaveFront MIDI (Internal)");
 		rmidi->private_data = &internal_id;
 	} else {
-		strlcpy(rmidi->name,"WaveFront MIDI (External,sizeof(rmidi->name))");
+		strcpy(rmidi->name, "WaveFront MIDI (External)");
 		rmidi->private_data = &external_id;
 	}
 
@@ -431,7 +432,7 @@ snd_wavefront_probe (struct snd_card *card, int dev)
 		return -ENOMEM;
 	}
 
-	strlcpy(wavefront_synth->name,"ICS2115 Wavetable MIDI Synthesizer",sizeof(wavefront_synth->name));
+	strcpy (wavefront_synth->name, "ICS2115 Wavetable MIDI Synthesizer");
 	wavefront_synth->iface = SNDRV_HWDEP_IFACE_ICS2115;
 	hw_dev++;
 
@@ -503,12 +504,12 @@ snd_wavefront_probe (struct snd_card *card, int dev)
 
 		hw_dev++;
 
-		strlcpy(card->driver,"Tropez+",sizeof(card->driver));
-		strlcpy(card->shortname,"Turtle Beach Tropez+",sizeof(card->shortname));
+		strcpy(card->driver, "Tropez+");
+		strcpy(card->shortname, "Turtle Beach Tropez+");
 	} else {
 		/* Need a way to distinguish between Maui and Tropez */
-		strlcpy(card->driver,"WaveFront",sizeof(card->driver));
-		strlcpy(card->shortname,"Turtle Beach WaveFront",sizeof(card->shortname));
+		strcpy(card->driver, "WaveFront");
+		strcpy(card->shortname, "Turtle Beach WaveFront");
 	}
 
 	/* ----- Register the card --------- */

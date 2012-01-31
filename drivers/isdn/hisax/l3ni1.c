@@ -886,7 +886,7 @@ l3ni1_msg_with_uus(struct l3_process *pc, u_char cmd)
 	 { *p++ = IE_USER_USER; /* UUS info element */
            *p++ = strlen(pc->prot.ni1.uus1_data) + 1;
            *p++ = 0x04; /* IA5 chars */
-           strlcpy(p,pc->prot.ni1.uus1_data,sizeof(p));
+           strcpy(p,pc->prot.ni1.uus1_data);
            p += strlen(pc->prot.ni1.uus1_data);
            pc->prot.ni1.uus1_data[0] = '\0';   
          } 
@@ -1632,7 +1632,7 @@ l3ni1_disconnect_req(struct l3_process *pc, u_char pr, void *arg)
 	 { *p++ = IE_USER_USER; /* UUS info element */
            *p++ = strlen(pc->prot.ni1.uus1_data) + 1;
            *p++ = 0x04; /* IA5 chars */
-           strlcpy(p,pc->prot.ni1.uus1_data,sizeof(p));
+           strcpy(p,pc->prot.ni1.uus1_data);
            p += strlen(pc->prot.ni1.uus1_data);
            pc->prot.ni1.uus1_data[0] = '\0';   
          } 
@@ -1948,7 +1948,7 @@ static void l3ni1_redir_req(struct l3_process *pc, u_char pr, void *arg)
 	int l; 
 
 
-        strlcpy(pc->prot.ni1.uus1_data,pc->chan->setup.eazmsn,sizeof(pc->prot.ni1.uus1_data)); /* copy uus element if available */
+        strcpy(pc->prot.ni1.uus1_data,pc->chan->setup.eazmsn); /* copy uus element if available */
         if (!pc->chan->setup.phone[0])
           { pc->para.cause = -1;
             l3ni1_disconnect_req(pc,pr,arg); /* disconnect immediately */
@@ -3173,6 +3173,6 @@ setstack_ni1(struct PStack *st)
 
 		L3InitTimer(st->l3.global, &st->l3.global->timer);
 	}
-	strlcpy(tmp,ni1_revision,sizeof(tmp));
+	strcpy(tmp, ni1_revision);
 	printk(KERN_INFO "HiSax: National ISDN-1 Rev. %s\n", HiSax_getrev(tmp));
 }

@@ -424,12 +424,12 @@ static int cpia2_querycap(struct file *file, void *fh, struct v4l2_capability *v
 {
 	struct camera_data *cam = video_drvdata(file);
 
-	strlcpy(vc->driver,"cpia2",sizeof(vc->driver));
+	strcpy(vc->driver, "cpia2");
 
 	if (cam->params.pnp_id.product == 0x151)
-		strlcpy(vc->card,"QX5 Microscope",sizeof(vc->card));
+		strcpy(vc->card, "QX5 Microscope");
 	else
-		strlcpy(vc->card,"CPiA2 Camera",sizeof(vc->card));
+		strcpy(vc->card, "CPiA2 Camera");
 	switch (cam->params.pnp_id.device_type) {
 	case DEVICE_STV_672:
 		strcat(vc->card, " (672/");
@@ -487,7 +487,7 @@ static int cpia2_enum_input(struct file *file, void *fh, struct v4l2_input *i)
 {
 	if (i->index)
 		return -EINVAL;
-	strlcpy(i->name,"Camera",sizeof(i->name));
+	strcpy(i->name, "Camera");
 	i->type = V4L2_INPUT_TYPE_CAMERA;
 	return 0;
 }
@@ -525,11 +525,11 @@ static int cpia2_enum_fmt_vid_cap(struct file *file, void *fh,
 	f->flags = V4L2_FMT_FLAG_COMPRESSED;
 	switch(index) {
 	case 0:
-		strlcpy(f->description,"MJPEG",sizeof(f->description));
+		strcpy(f->description, "MJPEG");
 		f->pixelformat = V4L2_PIX_FMT_MJPEG;
 		break;
 	case 1:
-		strlcpy(f->description,"JPEG",sizeof(f->description));
+		strcpy(f->description, "JPEG");
 		f->pixelformat = V4L2_PIX_FMT_JPEG;
 		break;
 	default:
@@ -801,7 +801,7 @@ static int cpia2_querymenu(struct file *file, void *fh, struct v4l2_querymenu *m
 		if (m->index >= NUM_FLICKER_CONTROLS)
 			return -EINVAL;
 
-		strlcpy(m->name,flicker_controls[m->index].name,sizeof(m->name));
+		strcpy(m->name, flicker_controls[m->index].name);
 		break;
 	case CPIA2_CID_FRAMERATE:
 	    {
@@ -819,14 +819,14 @@ static int cpia2_querymenu(struct file *file, void *fh, struct v4l2_querymenu *m
 		if (m->index > maximum)
 			return -EINVAL;
 
-		strlcpy(m->name,framerate_controls[m->index].name,sizeof(m->name));
+		strcpy(m->name, framerate_controls[m->index].name);
 		break;
 	    }
 	case CPIA2_CID_LIGHTS:
 		if (m->index >= NUM_LIGHTS_CONTROLS)
 			return -EINVAL;
 
-		strlcpy(m->name,lights_controls[m->index].name,sizeof(m->name));
+		strcpy(m->name, lights_controls[m->index].name);
 		break;
 	default:
 		return -EINVAL;

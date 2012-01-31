@@ -357,7 +357,7 @@ support_registers sreg;
 /************** Prototypes for local library functions ***********************/
 
 /* Copy of strcpy from libc. */
-static char *gdb_cris_strlcpy(char *s1,const char *s2,sizeof(char *s1));
+static char *gdb_cris_strcpy(char *s1, const char *s2);
 
 /* Copy of strlen from libc. */
 static int gdb_cris_strlen(const char *s);
@@ -497,7 +497,7 @@ static int dynamic_bp = 0;
 
 /* Copy char s2[] to s1[]. */
 static char*
-gdb_cris_strlcpy(char *s1,const char *s2,sizeof(char *s1))
+gdb_cris_strcpy(char *s1, const char *s2)
 {
 	char *s = s1;
 
@@ -1144,7 +1144,7 @@ static void insert_watchpoint(char type, int addr, int len)
 		/* Bit 0 in BP_CTRL holds the configuration for I0. */
 		if (sreg.s0_3 & 0x1) {
 			/* Already in use. */
-			gdb_cris_strlcpy(output_buffer,error_message[E04],sizeof(output_buffer));
+			gdb_cris_strcpy(output_buffer, error_message[E04]);
 			return;
 		}
 		/* Configure. */
@@ -1174,7 +1174,7 @@ static void insert_watchpoint(char type, int addr, int len)
 
 		if (bp > 5) {
 			/* We're out of watchpoints. */
-			gdb_cris_strlcpy(output_buffer,error_message[E04],sizeof(output_buffer));
+			gdb_cris_strcpy(output_buffer, error_message[E04]);
 			return;
 		}
 
@@ -1195,7 +1195,7 @@ static void insert_watchpoint(char type, int addr, int len)
 
 	/* Set the S1 flag to enable watchpoints. */
 	reg.ccs |= (1 << (S_CCS_BITNR + CCS_SHIFT));
-	gdb_cris_strlcpy(output_buffer,"OK",sizeof(output_buffer));
+	gdb_cris_strcpy(output_buffer, "OK");
 }
 
 static void remove_watchpoint(char type, int addr, int len)
@@ -1222,7 +1222,7 @@ static void remove_watchpoint(char type, int addr, int len)
 		/* Bit 0 in BP_CTRL holds the configuration for I0. */
 		if (!(sreg.s0_3 & 0x1)) {
 			/* Not in use. */
-			gdb_cris_strlcpy(output_buffer,error_message[E04],sizeof(output_buffer));
+			gdb_cris_strcpy(output_buffer, error_message[E04]);
 			return;
 		}
 		/* Deconfigure. */
@@ -1260,7 +1260,7 @@ static void remove_watchpoint(char type, int addr, int len)
 
 		if (bp > 5) {
 			/* No watchpoint matched. */
-			gdb_cris_strlcpy(output_buffer,error_message[E04],sizeof(output_buffer));
+			gdb_cris_strcpy(output_buffer, error_message[E04]);
 			return;
 		}
 
@@ -1273,7 +1273,7 @@ static void remove_watchpoint(char type, int addr, int len)
 	}
 
 	/* Note that we don't clear the S1 flag here. It's done when continuing.  */
-	gdb_cris_strlcpy(output_buffer,"OK",sizeof(output_buffer));
+	gdb_cris_strcpy(output_buffer, "OK");
 }
 
 
@@ -1325,7 +1325,7 @@ handle_exception(int sigval)
 				hex2mem((char *)&sreg + (reg.srs * 16 * sizeof(unsigned int)),
 					&input_buffer[1] + sizeof(registers),
 					16 * sizeof(unsigned int));
-				gdb_cris_strlcpy(output_buffer,"OK",sizeof(output_buffer));
+				gdb_cris_strcpy(output_buffer, "OK");
 				break;
 
 			case 'P':
@@ -1346,15 +1346,15 @@ handle_exception(int sigval)
 					switch (status) {
 						case E02:
 							/* Do not support read-only registers. */
-							gdb_cris_strlcpy(output_buffer,error_message[E02],sizeof(output_buffer));
+							gdb_cris_strcpy(output_buffer, error_message[E02]);
 							break;
 						case E05:
 							/* Do not support non-existing registers. */
-							gdb_cris_strlcpy(output_buffer,error_message[E05],sizeof(output_buffer));
+							gdb_cris_strcpy(output_buffer, error_message[E05]);
 							break;
 						default:
 							/* Valid register number. */
-							gdb_cris_strlcpy(output_buffer,"OK",sizeof(output_buffer));
+							gdb_cris_strcpy(output_buffer, "OK");
 							break;
 					}
 				}
@@ -1407,10 +1407,10 @@ handle_exception(int sigval)
 						} else /* X */ {
 							bin2mem(addr, dataptr + 1, len);
 						}
-						gdb_cris_strlcpy(output_buffer,"OK",sizeof(output_buffer));
+						gdb_cris_strcpy(output_buffer, "OK");
 					}
 					else {
-						gdb_cris_strlcpy(output_buffer,error_message[E06],sizeof(output_buffer));
+						gdb_cris_strcpy(output_buffer, error_message[E06]);
 					}
 				}
 				break;
@@ -1424,7 +1424,7 @@ handle_exception(int sigval)
 
 				if (input_buffer[1] != '\0') {
 					/* FIXME: Doesn't handle address argument. */
-					gdb_cris_strlcpy(output_buffer,error_message[E04],sizeof(output_buffer));
+					gdb_cris_strcpy(output_buffer, error_message[E04]);
 					break;
 				}
 
@@ -1449,7 +1449,7 @@ handle_exception(int sigval)
 
 				if (input_buffer[1] != '\0') {
 					/* FIXME: Doesn't handle address argument. */
-					gdb_cris_strlcpy(output_buffer,error_message[E04],sizeof(output_buffer));
+					gdb_cris_strcpy(output_buffer, error_message[E04]);
 					break;
 				}
 
@@ -1534,7 +1534,7 @@ handle_exception(int sigval)
 
 				/* FIXME: What's the difference between not supported
 				   and ignored (below)? */
-				gdb_cris_strlcpy(output_buffer,error_message[E04],sizeof(output_buffer));
+				gdb_cris_strcpy(output_buffer, error_message[E04]);
 				break;
 
 			default:

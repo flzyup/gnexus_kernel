@@ -93,39 +93,39 @@ void PVRSRVDumpDebugPrintf	(
 			{
 				case DBGPRIV_FATAL:
 				{
-					strlcpy(szBuffer,"PVR_K:(Fatal,sizeof(szBuffer)): ");
+					strcpy (szBuffer, "PVR_K:(Fatal): ");
 					break;
 				}
 				case DBGPRIV_ERROR:
 				{
-					strlcpy(szBuffer,"PVR_K:(Error,sizeof(szBuffer)): ");
+					strcpy (szBuffer, "PVR_K:(Error): ");
 					break;
 				}
 				case DBGPRIV_WARNING:
 				{
-					strlcpy(szBuffer,"PVR_K:(Warning,sizeof(szBuffer)): ");
+					strcpy (szBuffer, "PVR_K:(Warning): ");
 					break;
 				}
 				case DBGPRIV_MESSAGE:
 				{
-					strlcpy(szBuffer,"PVR_K:(Message,sizeof(szBuffer)): ");
+					strcpy (szBuffer, "PVR_K:(Message): ");
 					break;
 				}
 				case DBGPRIV_VERBOSE:
 				{
-					strlcpy(szBuffer,"PVR_K:(Verbose,sizeof(szBuffer)): ");
+					strcpy (szBuffer, "PVR_K:(Verbose): ");
 					break;
 				}
 				default:
 				{
-					strlcpy(szBuffer,"PVR_K:(Unknown message level,sizeof(szBuffer))");
+					strcpy (szBuffer, "PVR_K:(Unknown message level)");
 					break;
 				}
 			}
 		}
 		else
 		{
-			strlcpy(szBuffer,"PVR_K: ",sizeof(szBuffer));
+			strcpy (szBuffer, "PVR_K: ");
 		}
 
 		vsprintf (&szBuffer[strlen(szBuffer)], pszFormat, vaArgs);

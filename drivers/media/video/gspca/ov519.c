@@ -4836,19 +4836,19 @@ static int sd_querymenu(struct gspca_dev *gspca_dev,
 	case V4L2_CID_POWER_LINE_FREQUENCY:
 		switch (menu->index) {
 		case 0:		/* V4L2_CID_POWER_LINE_FREQUENCY_DISABLED */
-			strlcpy((char *) menu->name,"NoFliker",sizeof((char *) menu->name));
+			strcpy((char *) menu->name, "NoFliker");
 			return 0;
 		case 1:		/* V4L2_CID_POWER_LINE_FREQUENCY_50HZ */
-			strlcpy((char *) menu->name,"50 Hz",sizeof((char *) menu->name));
+			strcpy((char *) menu->name, "50 Hz");
 			return 0;
 		case 2:		/* V4L2_CID_POWER_LINE_FREQUENCY_60HZ */
-			strlcpy((char *) menu->name,"60 Hz",sizeof((char *) menu->name));
+			strcpy((char *) menu->name, "60 Hz");
 			return 0;
 		case 3:
 			if (sd->sensor != SEN_OV7670)
 				return -EINVAL;
 
-			strlcpy((char *) menu->name,"Automatic",sizeof((char *) menu->name));
+			strcpy((char *) menu->name, "Automatic");
 			return 0;
 		}
 		break;

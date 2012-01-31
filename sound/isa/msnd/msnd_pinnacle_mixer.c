@@ -65,7 +65,8 @@ static int snd_msndmix_info_mux(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = items;
 	if (uinfo->value.enumerated.item >= items)
 		uinfo->value.enumerated.item = items - 1;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+		texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -309,7 +310,7 @@ int __devinit snd_msndmix_new(struct snd_card *card)
 	if (snd_BUG_ON(!chip))
 		return -EINVAL;
 	spin_lock_init(&chip->mixer_lock);
-	strlcpy(card->mixername,"MSND Pinnacle Mixer",sizeof(card->mixername));
+	strcpy(card->mixername, "MSND Pinnacle Mixer");
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_msnd_controls); idx++)
 		err = snd_ctl_add(card,

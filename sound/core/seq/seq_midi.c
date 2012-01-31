@@ -358,7 +358,7 @@ snd_seq_midisynth_register_port(struct snd_seq_device *dev)
 			info->stream = SNDRV_RAWMIDI_STREAM_INPUT;
 		info->subdevice = p;
 		if (snd_rawmidi_info_select(card, info) >= 0)
-			strlcpy(port->name,info->subname,sizeof(port->name));
+			strcpy(port->name, info->subname);
 		if (! port->name[0]) {
 			if (info->name[0]) {
 				if (ports > 1)

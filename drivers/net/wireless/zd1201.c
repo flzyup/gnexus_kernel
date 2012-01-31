@@ -898,7 +898,7 @@ static int zd1201_config_commit(struct net_device *dev,
 static int zd1201_get_name(struct net_device *dev,
     struct iw_request_info *info, char *name, char *extra)
 {
-	strlcpy(name,"IEEE 802.11b",sizeof(name));
+	strcpy(name, "IEEE 802.11b");
 	return 0;
 }
 
@@ -1230,7 +1230,7 @@ static int zd1201_get_essid(struct net_device *dev,
 static int zd1201_get_nick(struct net_device *dev, struct iw_request_info *info,
     struct iw_point *data, char *nick)
 {
-	strlcpy(nick,"zd1201",sizeof(nick));
+	strcpy(nick, "zd1201");
 	data->flags = 1;
 	data->length = strlen(nick);
 	return 0;
@@ -1783,7 +1783,7 @@ static int zd1201_probe(struct usb_interface *interface,
 	dev->netdev_ops = &zd1201_netdev_ops;
 	dev->wireless_handlers = &zd1201_iw_handlers;
 	dev->watchdog_timeo = ZD1201_TX_TIMEOUT;
-	strlcpy(dev->name,"wlan%d",sizeof(dev->name));
+	strcpy(dev->name, "wlan%d");
 
 	err = zd1201_getconfig(zd, ZD1201_RID_CNFOWNMACADDR, 
 	    dev->dev_addr, dev->addr_len);

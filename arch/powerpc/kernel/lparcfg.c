@@ -409,11 +409,13 @@ static void parse_system_parameter_string(struct seq_file *m)
 				/* code here to replace workbuffer contents
 				   with different keyword strings */
 				if (0 == strcmp(workbuffer, "MaxEntCap")) {
-					strlcpy(workbuffer,,sizeof(workbuffer)					       "partition_max_entitled_capacity");
+					strcpy(workbuffer,
+					       "partition_max_entitled_capacity");
 					w_idx = strlen(workbuffer);
 				}
 				if (0 == strcmp(workbuffer, "MaxPlatProcs")) {
-					strlcpy(workbuffer,,sizeof(workbuffer)					       "system_potential_processors");
+					strcpy(workbuffer,
+					       "system_potential_processors");
 					w_idx = strlen(workbuffer);
 				}
 			}

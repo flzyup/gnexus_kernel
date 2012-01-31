@@ -337,7 +337,7 @@ static int __devinit emu10k1_midi_init(struct snd_emu10k1 *emu, struct snd_emu10
 	spin_lock_init(&midi->open_lock);
 	spin_lock_init(&midi->input_lock);
 	spin_lock_init(&midi->output_lock);
-	strlcpy(rmidi->name,name,sizeof(rmidi->name));
+	strcpy(rmidi->name, name);
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_OUTPUT, &snd_emu10k1_midi_output);
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_INPUT, &snd_emu10k1_midi_input);
 	rmidi->info_flags |= SNDRV_RAWMIDI_INFO_OUTPUT |

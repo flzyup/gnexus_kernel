@@ -1682,7 +1682,7 @@ static int sony_nc_add(struct acpi_device *device)
 	pr_info("%s v%s\n", SONY_NC_DRIVER_NAME, SONY_LAPTOP_DRIVER_VERSION);
 
 	sony_nc_acpi_device = device;
-	strlcpy(acpi_device_class(device),"sony/hotkey",sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_class(device), "sony/hotkey");
 
 	sony_nc_acpi_handle = device->handle;
 
@@ -3218,7 +3218,7 @@ static int sony_pic_add(struct acpi_device *device)
 	pr_info("%s v%s\n", SONY_PIC_DRIVER_NAME, SONY_LAPTOP_DRIVER_VERSION);
 
 	spic_dev.acpi_dev = device;
-	strlcpy(acpi_device_class(device),"sony/hotkey",sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_class(device), "sony/hotkey");
 	sony_pic_detect_device_type(&spic_dev);
 	mutex_init(&spic_dev.lock);
 

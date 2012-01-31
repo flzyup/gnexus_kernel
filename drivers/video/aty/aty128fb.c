@@ -1881,7 +1881,7 @@ static int __devinit aty128_init(struct pci_dev *pdev, const struct pci_device_i
 	/* Get the chip revision */
 	chip_rev = (aty_ld_le32(CNFG_CNTL) >> 16) & 0x1F;
 
-	strlcpy(video_card,"Rage128 XX ",sizeof(video_card));
+	strcpy(video_card, "Rage128 XX ");
 	video_card[8] = ent->device >> 8;
 	video_card[9] = ent->device & 0xFF;
 

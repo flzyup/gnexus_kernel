@@ -116,7 +116,7 @@ put_log_buffer(hysdn_card * card, char *cp)
 
 	if (!(ib = kmalloc(sizeof(struct log_data) + strlen(cp), GFP_ATOMIC)))
 		 return;	/* no memory */
-	strlcpy(ib->log_start,cp,sizeof(ib->log_start));	/* set output string */
+	strcpy(ib->log_start, cp);	/* set output string */
 	ib->next = NULL;
 	ib->proc_ctrl = pd;	/* point to own control structure */
 	spin_lock_irqsave(&card->hysdn_lock, flags);

@@ -91,13 +91,13 @@ format_module_id(char *buffer, moduleid_t m, int fmt)
 	else if (fmt == MODULE_FORMAT_LONG) {
 		/* Fuller hwgraph format, eg. rack/002/bay/15 */
 
-		strlcpy(buffer,"rack" "/",sizeof(buffer));  buffer += strlen(buffer);
+		strcpy(buffer, "rack" "/");  buffer += strlen(buffer);
 
 		*buffer++ = '0' + RACK_GET_CLASS(rack);
 		*buffer++ = '0' + RACK_GET_GROUP(rack);
 		*buffer++ = '0' + RACK_GET_NUM(rack);
 
-		strlcpy(buffer,"/" "bay" "/",sizeof(buffer));  buffer += strlen(buffer);
+		strcpy(buffer, "/" "bay" "/");  buffer += strlen(buffer);
 	}
 
 	/* Add the bay position, using at least two digits */

@@ -1496,7 +1496,7 @@ static int __init EISA_signature(char *name, s32 eisa_id)
 
 	for (i = 0; (*signatures[i] != '\0') && (*name == '\0'); i++) {
 		if (strstr(ManCode, signatures[i]) != NULL) {
-			strlcpy(name,ManCode,sizeof(name));
+			strcpy(name, ManCode);
 			status = 1;
 		}
 	}
@@ -1508,10 +1508,10 @@ static void ewrk3_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *in
 {
 	int fwrev = Read_EEPROM(dev->base_addr, EEPROM_REVLVL);
 
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
 	sprintf(info->fw_version, "%d", fwrev);
-	strlcpy(info->bus_info,"N/A",sizeof(info->bus_info));
+	strcpy(info->bus_info, "N/A");
 	info->eedump_len = EEPROM_MAX;
 }
 

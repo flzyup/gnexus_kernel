@@ -2309,9 +2309,9 @@ jme_get_drvinfo(struct net_device *netdev,
 {
 	struct jme_adapter *jme = netdev_priv(netdev);
 
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
-	strlcpy(info->bus_info,pci_name(jme->pdev,sizeof(info->bus_info)));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
+	strcpy(info->bus_info, pci_name(jme->pdev));
 }
 
 static int

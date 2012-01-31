@@ -714,7 +714,7 @@ static void matroxfb_init_fix(struct matrox_fb_info *minfo)
 	struct fb_fix_screeninfo *fix = &minfo->fbcon.fix;
 	DBG(__func__)
 
-	strlcpy(fix->id,"MATROX",sizeof(fix->id));
+	strcpy(fix->id,"MATROX");
 
 	fix->xpanstep = 8;	/* 8 for 8bpp, 4 for 16bpp, 2 for 32bpp */
 	fix->ypanstep = 1;
@@ -1096,8 +1096,8 @@ static int matroxfb_ioctl(struct fb_info *info,
 				struct v4l2_capability r;
 
 				memset(&r, 0, sizeof(r));
-				strlcpy(r.driver,"matroxfb",sizeof(r.driver));
-				strlcpy(r.card,"Matrox",sizeof(r.card));
+				strcpy(r.driver, "matroxfb");
+				strcpy(r.card, "Matrox");
 				sprintf(r.bus_info, "PCI:%s", pci_name(minfo->pcidev));
 				r.version = KERNEL_VERSION(1,0,0);
 				r.capabilities = V4L2_CAP_VIDEO_OUTPUT;

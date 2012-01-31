@@ -1414,7 +1414,7 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 	{
 		ARG_DEF(struct pwc_probe, probe)
 
-		strlcpy(ARGR(probe).name,pdev->vdev.name,sizeof(ARGR(probe).name));
+		strcpy(ARGR(probe).name, pdev->vdev.name);
 		ARGR(probe).type = pdev->type;
 		ARG_OUT(probe)
 		break;
@@ -1424,7 +1424,7 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 	{
 		ARG_DEF(struct pwc_serial, serial)
 
-		strlcpy(ARGR(serial).serial,pdev->serial,sizeof(ARGR(serial).serial));
+		strcpy(ARGR(serial).serial, pdev->serial);
 		ARG_OUT(serial)
 		break;
 	}

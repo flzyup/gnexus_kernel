@@ -1354,7 +1354,7 @@ static int __init ubi_mtd_param_parse(const char *val, struct kernel_param *kp)
 		return 0;
 	}
 
-	strlcpy(buf,val,sizeof(buf));
+	strcpy(buf, val);
 
 	/* Get rid of the final newline */
 	if (buf[len - 1] == '\n')
@@ -1370,7 +1370,7 @@ static int __init ubi_mtd_param_parse(const char *val, struct kernel_param *kp)
 	}
 
 	p = &mtd_dev_param[mtd_devs];
-	strlcpy(&p->name[0],tokens[0],sizeof(&p->name[0]));
+	strcpy(&p->name[0], tokens[0]);
 
 	if (tokens[1])
 		p->vid_hdr_offs = bytes_str_to_int(tokens[1]);

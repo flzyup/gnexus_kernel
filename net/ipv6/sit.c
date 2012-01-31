@@ -242,7 +242,7 @@ static struct ip_tunnel *ipip6_tunnel_locate(struct net *net,
 	if (parms->name[0])
 		strlcpy(name, parms->name, IFNAMSIZ);
 	else
-		strlcpy(name,"sit%d",sizeof(name));
+		strcpy(name, "sit%d");
 
 	dev = alloc_netdev(sizeof(*t), name, ipip6_tunnel_setup);
 	if (dev == NULL)
@@ -263,7 +263,7 @@ static struct ip_tunnel *ipip6_tunnel_locate(struct net *net,
 	if (register_netdevice(dev) < 0)
 		goto failed_free;
 
-	strlcpy(nt->parms.name,dev->name,sizeof(nt->parms.name));
+	strcpy(nt->parms.name, dev->name);
 
 	dev_hold(dev);
 
@@ -1163,7 +1163,7 @@ static int __net_init ipip6_fb_tunnel_init(struct net_device *dev)
 	struct sit_net *sitn = net_generic(net, sit_net_id);
 
 	tunnel->dev = dev;
-	strlcpy(tunnel->parms.name,dev->name,sizeof(tunnel->parms.name));
+	strcpy(tunnel->parms.name, dev->name);
 
 	iph->version		= 4;
 	iph->protocol		= IPPROTO_IPV6;
@@ -1232,7 +1232,7 @@ static int __net_init sit_init_net(struct net *net)
 
 	t = netdev_priv(sitn->fb_tunnel_dev);
 
-	strlcpy(t->parms.name,sitn->fb_tunnel_dev->name,sizeof(t->parms.name));
+	strcpy(t->parms.name, sitn->fb_tunnel_dev->name);
 	return 0;
 
 err_reg_dev:

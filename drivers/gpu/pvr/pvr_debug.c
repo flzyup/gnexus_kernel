@@ -352,7 +352,7 @@ IMG_VOID PVRSRVDebugPrintf	(
 
 				if(strlen(szFileNameRewrite) == PVR_MAX_FILEPATH_LEN-1) {
 					IMG_CHAR szTruncateMassage[] = "FILENAME TRUNCATED";
-					strlcpy(szFileNameRewrite + (PVR_MAX_FILEPATH_LEN - 1 - strlen(szTruncateMassage)),szTruncateMassage,sizeof(szFileNameRewrite + (PVR_MAX_FILEPATH_LEN - 1 - strlen(szTruncateMassage))));
+					strcpy(szFileNameRewrite + (PVR_MAX_FILEPATH_LEN - 1 - strlen(szTruncateMassage)), szTruncateMassage);
 				}
 
 				pszTruncIter = szFileNameRewrite;

@@ -230,7 +230,7 @@ static int usu_set_bias(const char *bias_s, struct kernel_param *kp)
 
 static int usu_get_bias(char *buffer, struct kernel_param *kp)
 {
-	return strlen(strlcpy(buffer,bias_names[atomic_read(&usu_bias,sizeof(buffer))]));
+	return strlen(strcpy(buffer, bias_names[atomic_read(&usu_bias)]));
 }
 
 module_init(usb_usual_init);

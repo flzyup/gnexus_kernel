@@ -285,7 +285,7 @@ static int __devinit vt8500lcd_probe(struct platform_device *pdev)
 		goto failed;
 	}
 
-	strlcpy(fbi->fb.fix.id,"VT8500 LCD",sizeof(fbi->fb.fix.id));
+	strcpy(fbi->fb.fix.id, "VT8500 LCD");
 
 	fbi->fb.fix.type	= FB_TYPE_PACKED_PIXELS;
 	fbi->fb.fix.xpanstep	= 0;

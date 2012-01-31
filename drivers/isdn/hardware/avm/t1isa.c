@@ -431,7 +431,7 @@ static int t1isa_probe(struct pci_dev *pdev, int cardnr)
 	cinfo->capi_ctrl.reset_ctr     = t1isa_reset_ctr;
 	cinfo->capi_ctrl.procinfo      = t1isa_procinfo;
 	cinfo->capi_ctrl.proc_fops = &b1ctl_proc_fops;
-	strlcpy(cinfo->capi_ctrl.name,card->name,sizeof(cinfo->capi_ctrl.name));
+	strcpy(cinfo->capi_ctrl.name, card->name);
 
 	retval = attach_capi_ctr(&cinfo->capi_ctrl);
 	if (retval) {
@@ -557,7 +557,7 @@ static int __init t1isa_init(void)
 		if ((p = strchr(rev, '$')) != NULL && p > rev)
 		   *(p-1) = 0;
 	} else
-		strlcpy(rev,"1.0",sizeof(rev));
+		strcpy(rev, "1.0");
 
 	for (i = 0; i < MAX_CARDS; i++) {
 		if (!io[i])

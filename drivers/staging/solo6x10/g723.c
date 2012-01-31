@@ -314,7 +314,7 @@ static int solo_snd_pcm_init(struct solo_dev *solo_dev)
 
 	snd_pcm_chip(pcm) = solo_dev;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, card->shortname);
 
 	for (i = 0, ss = pcm->streams[SNDRV_PCM_STREAM_CAPTURE].substream;
 	     ss; ss = ss->next, i++)
@@ -352,8 +352,8 @@ int solo_g723_init(struct solo_dev *solo_dev)
 
 	card = solo_dev->snd_card;
 
-	strlcpy(card->driver,SOLO6X10_NAME,sizeof(card->driver));
-	strlcpy(card->shortname,"SOLO-6x10 Audio",sizeof(card->shortname));
+	strcpy(card->driver, SOLO6X10_NAME);
+	strcpy(card->shortname, "SOLO-6x10 Audio");
 	sprintf(card->longname, "%s on %s IRQ %d", card->shortname,
 		pci_name(solo_dev->pdev), solo_dev->pdev->irq);
 	snd_card_set_dev(card, &solo_dev->pdev->dev);
@@ -363,7 +363,7 @@ int solo_g723_init(struct solo_dev *solo_dev)
 		goto snd_error;
 
 	/* Mixer controls */
-	strlcpy(card->mixername,"SOLO-6x10",sizeof(card->mixername));
+	strcpy(card->mixername, "SOLO-6x10");
 	kctl = snd_solo_capture_volume;
 	kctl.count = solo_dev->nr_chans;
 	ret = snd_ctl_add(card, snd_ctl_new1(&kctl, solo_dev));

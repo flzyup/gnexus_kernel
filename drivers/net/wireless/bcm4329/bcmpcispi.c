@@ -510,7 +510,7 @@ hexdump(char *pfx, unsigned char *msg, int msglen)
 
 	for (i = 0; i < msglen; i++, col++) {
 		if (col % 16 == 0)
-			strlcpy(buf,pfx,sizeof(buf));
+			strcpy(buf, pfx);
 		sprintf(buf + strlen(buf), "%02x", msg[i]);
 		if ((col + 1) % 16 == 0)
 			printf("%s\n", buf);

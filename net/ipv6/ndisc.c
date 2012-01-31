@@ -1767,7 +1767,7 @@ static void ndisc_warn_deprecated_sysctl(struct ctl_table *ctl,
 	static char warncomm[TASK_COMM_LEN];
 	static int warned;
 	if (strcmp(warncomm, current->comm) && warned < 5) {
-		strlcpy(warncomm,current->comm,sizeof(warncomm));
+		strcpy(warncomm, current->comm);
 		printk(KERN_WARNING
 			"process `%s' is using deprecated sysctl (%s) "
 			"net.ipv6.neigh.%s.%s; "

@@ -341,7 +341,7 @@ setstack_l3dc(struct PStack *st, struct Channel *chanp)
 	st->l3.l3m.userint = 0;
 	st->l3.l3m.printdebug = l3m_debug;
         FsmInitTimer(&st->l3.l3m, &st->l3.l3m_timer);
-	strlcpy(st->l3.debug_id,"L3DC ",sizeof(st->l3.debug_id));
+	strcpy(st->l3.debug_id, "L3DC ");
 	st->lli.l4l3_proto = no_l3_proto_spec;
 
 #ifdef	CONFIG_HISAX_EURO
@@ -410,7 +410,7 @@ setstack_l3bc(struct PStack *st, struct Channel *chanp)
 	st->l3.l3m.userdata = st;
 	st->l3.l3m.userint = 0;
 	st->l3.l3m.printdebug = l3m_debug;
-	strlcpy(st->l3.debug_id,"L3BC ",sizeof(st->l3.debug_id));
+	strcpy(st->l3.debug_id, "L3BC ");
 	st->lli.l4l3 = isdnl3_trans;
 }
 

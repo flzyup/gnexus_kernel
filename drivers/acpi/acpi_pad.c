@@ -465,8 +465,8 @@ static int acpi_pad_add(struct acpi_device *device)
 {
 	acpi_status status;
 
-	strlcpy(acpi_device_name(device),ACPI_PROCESSOR_AGGREGATOR_DEVICE_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),ACPI_PROCESSOR_AGGREGATOR_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_name(device), ACPI_PROCESSOR_AGGREGATOR_DEVICE_NAME);
+	strcpy(acpi_device_class(device), ACPI_PROCESSOR_AGGREGATOR_CLASS);
 
 	if (acpi_pad_add_sysfs(device))
 		return -ENODEV;

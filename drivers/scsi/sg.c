@@ -634,7 +634,7 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
 			       old_hdr.reply_len - (int)SZ_SG_HEADER,
 			       input_size, (unsigned int) cmnd[0],
 			       current->comm);
-			strlcpy(cmd,current->comm,sizeof(cmd));
+			strcpy(cmd, current->comm);
 		}
 	}
 	k = sg_common_write(sfp, srp, cmnd, sfp->timeout, blocking);

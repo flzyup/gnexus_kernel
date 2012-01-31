@@ -558,8 +558,8 @@ ahd_linux_info(struct Scsi_Host *host)
 	bp = &buffer[0];
 	ahd = *(struct ahd_softc **)host->hostdata;
 	memset(bp, 0, sizeof(buffer));
-	strlcpy(bp, "Adaptec AIC79XX PCI-X SCSI HBA DRIVER,Rev " AIC79XX_DRIVER_VERSION "\n"
-,sizeof(bp, "Adaptec AIC79XX PCI-X SCSI HBA DRIVER)			"        <");
+	strcpy(bp, "Adaptec AIC79XX PCI-X SCSI HBA DRIVER, Rev " AIC79XX_DRIVER_VERSION "\n"
+			"        <");
 	strcat(bp, ahd->description);
 	strcat(bp, ">\n"
 			"        ");
@@ -1250,7 +1250,7 @@ ahd_linux_register_host(struct ahd_softc *ahd, struct scsi_host_template *templa
 	sprintf(buf, "scsi%d", host->host_no);
 	new_name = kmalloc(strlen(buf) + 1, GFP_ATOMIC);
 	if (new_name != NULL) {
-		strlcpy(new_name,buf,sizeof(new_name));
+		strcpy(new_name, buf);
 		ahd_set_name(ahd, new_name);
 	}
 	host->unique_id = ahd->unit;

@@ -87,9 +87,9 @@ static int output_type_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item) {
 		uinfo->value.enumerated.item = 1;
-		strlcpy(uinfo->value.enumerated.name,"HPLOUT/HPROUT",sizeof(uinfo->value.enumerated.name));
+		strcpy(uinfo->value.enumerated.name, "HPLOUT/HPROUT");
 	} else {
-		strlcpy(uinfo->value.enumerated.name,"HPLOUT/HPLCOM",sizeof(uinfo->value.enumerated.name));
+		strcpy(uinfo->value.enumerated.name, "HPLOUT/HPLCOM");
 	}
 	return 0;
 }

@@ -50,7 +50,7 @@ static void __init find_tempdir(void)
 			"errno = %d\n", errno);
 		return;
 	}
-	strlcpy(tempdir,dir,sizeof(tempdir));
+	strcpy(tempdir, dir);
 	strcat(tempdir, "/");
 }
 
@@ -179,7 +179,7 @@ static int __init make_tempfile(const char *template, char **out_tempname,
 		return -1;
 
 	if (template[0] != '/')
-		strlcpy(tempname,tempdir,sizeof(tempname));
+		strcpy(tempname, tempdir);
 	else
 		tempname[0] = '\0';
 	strncat(tempname, template, MAXPATHLEN-1-strlen(tempname));

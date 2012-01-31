@@ -543,7 +543,7 @@ static int __devinit snd_cx88_pcm(snd_cx88_card_t *chip, int device, const char 
 	if (err < 0)
 		return err;
 	pcm->private_data = chip;
-	strlcpy(pcm->name,name,sizeof(pcm->name));
+	strcpy(pcm->name, name);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_cx88_pcm_ops);
 
 	return 0;
@@ -918,11 +918,11 @@ static int __devinit cx88_audio_initdev(struct pci_dev *pci,
 	if (core->board.audio_chip == V4L2_IDENT_WM8775)
 		snd_ctl_add(card, snd_ctl_new1(&snd_cx88_alc_switch, chip));
 
-	strlcpy(card->driver,"CX88x",sizeof(card->driver));
+	strcpy (card->driver, "CX88x");
 	sprintf(card->shortname, "Conexant CX%x", pci->device);
 	sprintf(card->longname, "%s at %#llx",
 		card->shortname,(unsigned long long)pci_resource_start(pci, 0));
-	strlcpy(card->mixername,"CX88",sizeof(card->mixername));
+	strcpy (card->mixername, "CX88");
 
 	dprintk (0, "%s/%i: ALSA support for cx2388x boards\n",
 	       card->driver,devno);

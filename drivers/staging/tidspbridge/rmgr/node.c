@@ -972,7 +972,7 @@ int node_connect(struct node_object *node1, u32 stream1,
 		}
 		/* Copy "/dbpipe<pipId>" name to device names */
 		sprintf(output->sz_device, "%s%d", PIPEPREFIX, pipe_id);
-		strlcpy(input->sz_device,output->sz_device,sizeof(input->sz_device));
+		strcpy(input->sz_device, output->sz_device);
 	}
 	/* Connecting task node to host? */
 	if (node1_type == NODE_GPP || node2_type == NODE_GPP) {

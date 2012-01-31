@@ -103,7 +103,7 @@ static void hp300_pulse(int x)
 
 static void hp300_get_model(char *model)
 {
-	strlcpy(model,hp300_model_name,sizeof(model));
+	strcpy(model, hp300_model_name);
 }
 
 #define RTCBASE			0xf0420000

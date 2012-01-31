@@ -303,7 +303,7 @@ dcssblk_load_segment(char *name, struct segment_info **seg_info)
 	if (*seg_info == NULL)
 		return -ENOMEM;
 
-	strlcpy((*seg_info)->segment_name,name,sizeof((*seg_info)->segment_name));
+	strcpy((*seg_info)->segment_name, name);
 
 	/* load the segment */
 	rc = segment_load(name, SEGMENT_SHARED,
@@ -494,7 +494,7 @@ dcssblk_seglist_show(struct device *dev, struct device_attribute *attr,
 	i = 0;
 	buf[0] = '\0';
 	list_for_each_entry(entry, &dev_info->seg_list, lh) {
-		strlcpy(&buf[i],entry->segment_name,sizeof(&buf[i]));
+		strcpy(&buf[i], entry->segment_name);
 		i += strlen(entry->segment_name);
 		buf[i] = '\n';
 		i++;
@@ -562,7 +562,7 @@ dcssblk_add_store(struct device *dev, struct device_attribute *attr, const char 
 				rc = -ENOMEM;
 				goto out;
 			}
-			strlcpy(dev_info->segment_name,local_buf,sizeof(dev_info->segment_name));
+			strcpy(dev_info->segment_name, local_buf);
 			dev_info->segment_type = seg_info->segment_type;
 			INIT_LIST_HEAD(&dev_info->seg_list);
 		}

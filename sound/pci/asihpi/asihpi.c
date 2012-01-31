@@ -1273,7 +1273,7 @@ static int __devinit snd_card_asihpi_pcm_new(struct snd_card_asihpi *asihpi,
 
 	pcm->private_data = asihpi;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"Asihpi PCM",sizeof(pcm->name));
+	strcpy(pcm->name, "Asihpi PCM");
 
 	/*? do we want to emulate MMAP for non-BBM cards?
 	Jack doesn't work with ALSAs MMAP emulation - WHY NOT? */
@@ -1595,7 +1595,8 @@ static int snd_asihpi_aesebu_format_info(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
 
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		asihpi_aesebu_format_names[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+		asihpi_aesebu_format_names[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -1834,7 +1835,8 @@ static int snd_asihpi_tuner_band_info(struct snd_kcontrol *kcontrol,
 			uinfo->value.enumerated.item =
 				uinfo->value.enumerated.items - 1;
 
-		strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			asihpi_tuner_band_names[
+		strcpy(uinfo->value.enumerated.name,
+			asihpi_tuner_band_names[
 				tuner_bands[uinfo->value.enumerated.item]]);
 
 	}
@@ -2222,7 +2224,8 @@ static int snd_asihpi_cmode_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= valid_modes)
 		uinfo->value.enumerated.item = valid_modes - 1;
 
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       mode_names[mode_map[uinfo->value.enumerated.item]]);
+	strcpy(uinfo->value.enumerated.name,
+	       mode_names[mode_map[uinfo->value.enumerated.item]]);
 
 	return 0;
 }
@@ -2294,7 +2297,8 @@ static int snd_asihpi_clksrc_info(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 				uinfo->value.enumerated.items - 1;
 
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       clkcache->s[uinfo->value.enumerated.item].name);
+	strcpy(uinfo->value.enumerated.name,
+	       clkcache->s[uinfo->value.enumerated.item].name);
 	return 0;
 }
 
@@ -2509,7 +2513,7 @@ static int __devinit snd_card_asihpi_mixer_new(struct snd_card_asihpi *asihpi)
 
 	if (snd_BUG_ON(!asihpi))
 		return -EINVAL;
-	strlcpy(card->mixername,"Asihpi Mixer",sizeof(card->mixername));
+	strcpy(card->mixername, "Asihpi Mixer");
 
 	err =
 	    hpi_mixer_open(asihpi->adapter_index,
@@ -2720,7 +2724,7 @@ static int __devinit snd_asihpi_hpi_new(struct snd_card_asihpi *asihpi,
 	err = snd_hwdep_new(asihpi->card, "HPI", device, &hw);
 	if (err < 0)
 		return err;
-	strlcpy(hw->name,"asihpi (HPI,sizeof(hw->name))");
+	strcpy(hw->name, "asihpi (HPI)");
 	hw->iface = SNDRV_HWDEP_IFACE_LAST;
 	hw->ops.open = snd_asihpi_hpi_open;
 	hw->ops.ioctl = snd_asihpi_hpi_ioctl;
@@ -2879,7 +2883,7 @@ static int __devinit snd_asihpi_probe(struct pci_dev *pci_dev,
 	    by enable_hwdep  module param*/
 	snd_asihpi_hpi_new(asihpi, 0, NULL);
 
-	strlcpy(card->driver,"ASIHPI",sizeof(card->driver));
+	strcpy(card->driver, "ASIHPI");
 
 	sprintf(card->shortname, "AudioScience ASI%4X", asihpi->type);
 	sprintf(card->longname, "%s %i",

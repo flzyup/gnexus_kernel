@@ -873,9 +873,9 @@ static struct net_device_stats *tulip_get_stats(struct net_device *dev)
 static void tulip_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
 {
 	struct tulip_private *np = netdev_priv(dev);
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
-	strlcpy(info->bus_info,pci_name(np->pdev,sizeof(info->bus_info)));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
+	strcpy(info->bus_info, pci_name(np->pdev));
 }
 
 
@@ -1689,7 +1689,7 @@ static int __devinit tulip_init_one (struct pci_dev *pdev,
 	if (tp->flags & HAS_MEDIA_TABLE) {
 		sprintf(dev->name, DRV_NAME "%d", board_idx);	/* hack */
 		tulip_parse_eeprom(dev);
-		strlcpy(dev->name,"eth%d",sizeof(dev->name));			/* un-hack */
+		strcpy(dev->name, "eth%d");			/* un-hack */
 	}
 
 	if ((tp->flags & ALWAYS_CHECK_MII) ||

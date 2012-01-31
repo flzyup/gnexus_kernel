@@ -68,16 +68,16 @@ static int __devinit snd_pmac_probe(struct platform_device *devptr)
 
 	switch (chip->model) {
 	case PMAC_BURGUNDY:
-		strlcpy(card->driver,"PMac Burgundy",sizeof(card->driver));
-		strlcpy(card->shortname,"PowerMac Burgundy",sizeof(card->shortname));
+		strcpy(card->driver, "PMac Burgundy");
+		strcpy(card->shortname, "PowerMac Burgundy");
 		sprintf(card->longname, "%s (Dev %d) Sub-frame %d",
 			card->shortname, chip->device_id, chip->subframe);
 		if ((err = snd_pmac_burgundy_init(chip)) < 0)
 			goto __error;
 		break;
 	case PMAC_DACA:
-		strlcpy(card->driver,"PMac DACA",sizeof(card->driver));
-		strlcpy(card->shortname,"PowerMac DACA",sizeof(card->shortname));
+		strcpy(card->driver, "PMac DACA");
+		strcpy(card->shortname, "PowerMac DACA");
 		sprintf(card->longname, "%s (Dev %d) Sub-frame %d",
 			card->shortname, chip->device_id, chip->subframe);
 		if ((err = snd_pmac_daca_init(chip)) < 0)

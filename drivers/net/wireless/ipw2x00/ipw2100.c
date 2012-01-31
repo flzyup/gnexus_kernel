@@ -5979,8 +5979,8 @@ static void ipw_ethtool_get_drvinfo(struct net_device *dev,
 	struct ipw2100_priv *priv = libipw_priv(dev);
 	char fw_ver[64], ucode_ver[64];
 
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
 
 	ipw2100_get_fwversion(priv, fw_ver, sizeof(fw_ver));
 	ipw2100_get_ucodeversion(priv, ucode_ver, sizeof(ucode_ver));
@@ -5988,7 +5988,7 @@ static void ipw_ethtool_get_drvinfo(struct net_device *dev,
 	snprintf(info->fw_version, sizeof(info->fw_version), "%s:%d:%s",
 		 fw_ver, priv->eeprom_version, ucode_ver);
 
-	strlcpy(info->bus_info,pci_name(priv->pci_dev,sizeof(info->bus_info)));
+	strcpy(info->bus_info, pci_name(priv->pci_dev));
 }
 
 static u32 ipw2100_ethtool_get_link(struct net_device *dev)
@@ -6180,7 +6180,7 @@ static struct net_device *ipw2100_alloc_device(struct pci_dev *pci_dev,
 	priv->tx_power = IPW_TX_POWER_DEFAULT;
 	priv->tx_rates = DEFAULT_TX_RATES;
 
-	strlcpy(priv->nick,"ipw2100",sizeof(priv->nick));
+	strcpy(priv->nick, "ipw2100");
 
 	spin_lock_init(&priv->low_lock);
 	mutex_init(&priv->action_mutex);
@@ -6691,7 +6691,7 @@ static int ipw2100_wx_get_name(struct net_device *dev,
 
 	struct ipw2100_priv *priv = libipw_priv(dev);
 	if (!(priv->status & STATUS_ASSOCIATED))
-		strlcpy(wrqu->name,"unassociated",sizeof(wrqu->name));
+		strcpy(wrqu->name, "unassociated");
 	else
 		snprintf(wrqu->name, IFNAMSIZ, "IEEE 802.11b");
 

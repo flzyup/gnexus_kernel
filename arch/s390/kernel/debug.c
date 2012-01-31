@@ -1486,7 +1486,7 @@ debug_sprintf_format_fn(debug_info_t * id, struct debug_view *view,
 		goto out; /* bufsize of entry too small */
 	if(num_longs == 1) {
 		/* no args, we use only the string */
-		strlcpy(out_buf,curr_event->string,sizeof(out_buf));
+		strcpy(out_buf, curr_event->string);
 		rc = strlen(curr_event->string);
 		goto out;
 	}

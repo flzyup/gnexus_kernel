@@ -170,26 +170,26 @@ static void ebt_ulog_packet(unsigned int hooknr, const struct sk_buff *skb,
 	pm->mark = skb->mark;
 	pm->hook = hooknr;
 	if (uloginfo->prefix != NULL)
-		strlcpy(pm->prefix,uloginfo->prefix,sizeof(pm->prefix));
+		strcpy(pm->prefix, uloginfo->prefix);
 	else
 		*(pm->prefix) = '\0';
 
 	if (in) {
-		strlcpy(pm->physindev,in->name,sizeof(pm->physindev));
+		strcpy(pm->physindev, in->name);
 		/* If in isn't a bridge, then physindev==indev */
 		if (br_port_exists(in))
 			/* rcu_read_lock()ed by nf_hook_slow */
-			strlcpy(pm->indev,br_port_get_rcu(in,sizeof(pm->indev))->br->dev->name);
+			strcpy(pm->indev, br_port_get_rcu(in)->br->dev->name);
 		else
-			strlcpy(pm->indev,in->name,sizeof(pm->indev));
+			strcpy(pm->indev, in->name);
 	} else
 		pm->indev[0] = pm->physindev[0] = '\0';
 
 	if (out) {
 		/* If out exists, then out is a bridge port */
-		strlcpy(pm->physoutdev,out->name,sizeof(pm->physoutdev));
+		strcpy(pm->physoutdev, out->name);
 		/* rcu_read_lock()ed by nf_hook_slow */
-		strlcpy(pm->outdev,br_port_get_rcu(out,sizeof(pm->outdev))->br->dev->name);
+		strcpy(pm->outdev, br_port_get_rcu(out)->br->dev->name);
 	} else
 		pm->outdev[0] = pm->physoutdev[0] = '\0';
 

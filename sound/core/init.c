@@ -511,12 +511,12 @@ static void snd_card_set_id_no_lock(struct snd_card *card, const char *nid)
 	id = card->id;
 	
 	if (*id == '\0')
-		strlcpy(id,"Default",sizeof(id));
+		strcpy(id, "Default");
 
 	while (1) {
 	      	if (loops-- == 0) {
 			snd_printk(KERN_ERR "unable to set card id (%s)\n", id);
-      			strlcpy(card->id,card->proc_root->name,sizeof(card->id));
+      			strcpy(card->id, card->proc_root->name);
       			return;
       		}
 	      	if (!snd_info_check_reserved_words(id))
@@ -608,7 +608,7 @@ card_id_store_attr(struct device *dev, struct device_attribute *attr,
 				goto __exist;
 		}
 	}
-	strlcpy(card->id,buf1,sizeof(card->id));
+	strcpy(card->id, buf1);
 	snd_info_card_id_change(card);
 __ok:
 	mutex_unlock(&snd_card_mutex);

@@ -998,7 +998,7 @@ static int __must_check iwl_request_firmware(struct iwl_priv *priv, bool first)
 	if (first) {
 #ifdef CONFIG_IWLWIFI_DEBUG_EXPERIMENTAL_UCODE
 		priv->fw_index = UCODE_EXPERIMENTAL_INDEX;
-		strlcpy(tag,UCODE_EXPERIMENTAL_TAG,sizeof(tag));
+		strcpy(tag, UCODE_EXPERIMENTAL_TAG);
 	} else if (priv->fw_index == UCODE_EXPERIMENTAL_INDEX) {
 #endif
 		priv->fw_index = priv->cfg->ucode_api_max;

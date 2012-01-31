@@ -104,7 +104,7 @@ void __init prom_setup_cmdline(void)
 				mips_machtype = MACH_MIKROTIK_RB532;
 		}
 
-		strlcpy(cp,prom_argv[i],sizeof(cp));
+		strcpy(cp, prom_argv[i]);
 		cp += strlen(prom_argv[i]);
 	}
 	*(cp++) = ' ';
@@ -112,12 +112,12 @@ void __init prom_setup_cmdline(void)
 	i = strlen(arcs_cmdline);
 	if (i > 0) {
 		*(cp++) = ' ';
-		strlcpy(cp,arcs_cmdline,sizeof(cp));
+		strcpy(cp, arcs_cmdline);
 		cp += strlen(arcs_cmdline);
 	}
 	cmd_line[COMMAND_LINE_SIZE - 1] = '\0';
 
-	strlcpy(arcs_cmdline,cmd_line,sizeof(arcs_cmdline));
+	strcpy(arcs_cmdline, cmd_line);
 }
 
 void __init prom_init(void)

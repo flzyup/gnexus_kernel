@@ -498,7 +498,7 @@ static int __devinit vml_pci_probe(struct pci_dev *dev,
 	if (err)
 		goto out_err_3;
 
-	strlcpy(info->fix.id,"Vermilion Range",sizeof(info->fix.id));
+	strcpy(info->fix.id, "Vermilion Range");
 	info->fix.mmio_start = 0;
 	info->fix.mmio_len = 0;
 	info->fix.smem_start = vinfo->vram_start;

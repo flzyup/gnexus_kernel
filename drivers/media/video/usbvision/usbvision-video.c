@@ -543,9 +543,9 @@ static int vidioc_enum_input(struct file *file, void *priv,
 	switch (chan) {
 	case 0:
 		if (usbvision_device_data[usbvision->dev_model].video_channels == 4) {
-			strlcpy(vi->name,"White Video Input",sizeof(vi->name));
+			strcpy(vi->name, "White Video Input");
 		} else {
-			strlcpy(vi->name,"Television",sizeof(vi->name));
+			strcpy(vi->name, "Television");
 			vi->type = V4L2_INPUT_TYPE_TUNER;
 			vi->audioset = 1;
 			vi->tuner = chan;
@@ -555,22 +555,22 @@ static int vidioc_enum_input(struct file *file, void *priv,
 	case 1:
 		vi->type = V4L2_INPUT_TYPE_CAMERA;
 		if (usbvision_device_data[usbvision->dev_model].video_channels == 4)
-			strlcpy(vi->name,"Green Video Input",sizeof(vi->name));
+			strcpy(vi->name, "Green Video Input");
 		else
-			strlcpy(vi->name,"Composite Video Input",sizeof(vi->name));
+			strcpy(vi->name, "Composite Video Input");
 		vi->std = V4L2_STD_PAL;
 		break;
 	case 2:
 		vi->type = V4L2_INPUT_TYPE_CAMERA;
 		if (usbvision_device_data[usbvision->dev_model].video_channels == 4)
-			strlcpy(vi->name,"Yellow Video Input",sizeof(vi->name));
+			strcpy(vi->name, "Yellow Video Input");
 		else
-			strlcpy(vi->name,"S-Video Input",sizeof(vi->name));
+			strcpy(vi->name, "S-Video Input");
 		vi->std = V4L2_STD_PAL;
 		break;
 	case 3:
 		vi->type = V4L2_INPUT_TYPE_CAMERA;
-		strlcpy(vi->name,"Red Video Input",sizeof(vi->name));
+		strcpy(vi->name, "Red Video Input");
 		vi->std = V4L2_STD_PAL;
 		break;
 	}
@@ -621,10 +621,10 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 	if (!usbvision->have_tuner || vt->index)	/* Only tuner 0 */
 		return -EINVAL;
 	if (usbvision->radio) {
-		strlcpy(vt->name,"Radio",sizeof(vt->name));
+		strcpy(vt->name, "Radio");
 		vt->type = V4L2_TUNER_RADIO;
 	} else {
-		strlcpy(vt->name,"Television",sizeof(vt->name));
+		strcpy(vt->name, "Television");
 	}
 	/* Let clients fill in the remainder of this struct */
 	call_all(usbvision, tuner, g_tuner, vt);
@@ -681,9 +681,9 @@ static int vidioc_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 	struct usb_usbvision *usbvision = video_drvdata(file);
 
 	if (usbvision->radio)
-		strlcpy(a->name,"Radio",sizeof(a->name));
+		strcpy(a->name, "Radio");
 	else
-		strlcpy(a->name,"TV",sizeof(a->name));
+		strcpy(a->name, "TV");
 
 	return 0;
 }
@@ -891,7 +891,7 @@ static int vidioc_enum_fmt_vid_cap(struct file *file, void  *priv,
 {
 	if (vfd->index >= USBVISION_SUPPORTED_PALETTES - 1)
 		return -EINVAL;
-	strlcpy(vfd->description,usbvision_v4l2_format[vfd->index].desc,sizeof(vfd->description));
+	strcpy(vfd->description, usbvision_v4l2_format[vfd->index].desc);
 	vfd->pixelformat = usbvision_v4l2_format[vfd->index].format;
 	return 0;
 }

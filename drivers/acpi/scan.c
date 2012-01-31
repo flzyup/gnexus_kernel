@@ -486,7 +486,7 @@ static int acpi_device_register(struct acpi_device *device)
 	}
 	if (!found) {
 		acpi_device_bus_id = new_bus_id;
-		strlcpy(acpi_device_bus_id->bus_id,acpi_device_hid(device,sizeof(acpi_device_bus_id->bus_id)));
+		strcpy(acpi_device_bus_id->bus_id, acpi_device_hid(device));
 		acpi_device_bus_id->instance_no = 0;
 		list_add_tail(&acpi_device_bus_id->node, &acpi_bus_id_list);
 	}
@@ -972,16 +972,16 @@ static void acpi_device_get_busid(struct acpi_device *device)
 	 * TBD: Shouldn't this value be unique (within the ACPI namespace)?
 	 */
 	if (ACPI_IS_ROOT_DEVICE(device)) {
-		strlcpy(device->pnp.bus_id,"ACPI",sizeof(device->pnp.bus_id));
+		strcpy(device->pnp.bus_id, "ACPI");
 		return;
 	}
 
 	switch (device->device_type) {
 	case ACPI_BUS_TYPE_POWER_BUTTON:
-		strlcpy(device->pnp.bus_id,"PWRF",sizeof(device->pnp.bus_id));
+		strcpy(device->pnp.bus_id, "PWRF");
 		break;
 	case ACPI_BUS_TYPE_SLEEP_BUTTON:
-		strlcpy(device->pnp.bus_id,"SLPF",sizeof(device->pnp.bus_id));
+		strcpy(device->pnp.bus_id, "SLPF");
 		break;
 	default:
 		acpi_get_name(device->handle, ACPI_SINGLE_NAME, &buffer);
@@ -992,7 +992,7 @@ static void acpi_device_get_busid(struct acpi_device *device)
 			else
 				break;
 		}
-		strlcpy(device->pnp.bus_id,bus_id,sizeof(device->pnp.bus_id));
+		strcpy(device->pnp.bus_id, bus_id);
 		break;
 	}
 }
@@ -1068,7 +1068,7 @@ static void acpi_add_id(struct acpi_device *device, const char *dev_id)
 		return;
 	}
 
-	strlcpy(id->id,dev_id,sizeof(id->id));
+	strcpy(id->id, dev_id);
 	list_add_tail(&id->list, &device->pnp.ids);
 }
 
@@ -1156,8 +1156,8 @@ static void acpi_device_set_id(struct acpi_device *device)
 		else if (!acpi_device_hid(device) &&
 			 ACPI_IS_ROOT_DEVICE(device->parent)) {
 			acpi_add_id(device, ACPI_BUS_HID); /* \_SB, LNXSYBUS */
-			strlcpy(device->pnp.device_name,ACPI_BUS_DEVICE_NAME,sizeof(device->pnp.device_name));
-			strlcpy(device->pnp.device_class,ACPI_BUS_CLASS,sizeof(device->pnp.device_class));
+			strcpy(device->pnp.device_name, ACPI_BUS_DEVICE_NAME);
+			strcpy(device->pnp.device_class, ACPI_BUS_CLASS);
 		}
 
 		break;

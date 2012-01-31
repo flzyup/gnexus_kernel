@@ -833,7 +833,7 @@ struct lbs_private *lbs_add_card(void *card, struct device *dmdev)
 
 	priv->card = card;
 
-	strlcpy(dev->name,"wlan%d",sizeof(dev->name));
+	strcpy(dev->name, "wlan%d");
 
 	lbs_deb_thread("Starting main thread...\n");
 	init_waitqueue_head(&priv->waitq);

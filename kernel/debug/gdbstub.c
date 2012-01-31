@@ -539,7 +539,7 @@ static void gdb_cmd_setregs(struct kgdb_state *ks)
 		error_packet(remcom_out_buffer, -EINVAL);
 	} else {
 		gdb_regs_to_pt_regs(gdb_regs, ks->linux_regs);
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 	}
 }
 
@@ -569,7 +569,7 @@ static void gdb_cmd_memwrite(struct kgdb_state *ks)
 	if (err)
 		error_packet(remcom_out_buffer, err);
 	else
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 }
 
 #if DBG_MAX_REG_NUM > 0
@@ -622,7 +622,7 @@ static void gdb_cmd_reg_set(struct kgdb_state *ks)
 	i = i / 2;
 	kgdb_hex2mem(ptr, (char *)gdb_regs, i);
 	dbg_set_reg(regnum, gdb_regs, ks->linux_regs);
-	strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+	strcpy(remcom_out_buffer, "OK");
 }
 #endif /* DBG_MAX_REG_NUM > 0 */
 
@@ -634,7 +634,7 @@ static void gdb_cmd_binwrite(struct kgdb_state *ks)
 	if (err)
 		error_packet(remcom_out_buffer, err);
 	else
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 }
 
 /* Handle the 'D' or 'k', detach or kill packets */
@@ -648,7 +648,7 @@ static void gdb_cmd_detachkill(struct kgdb_state *ks)
 		if (error < 0) {
 			error_packet(remcom_out_buffer, error);
 		} else {
-			strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+			strcpy(remcom_out_buffer, "OK");
 			kgdb_connected = 0;
 		}
 		put_packet(remcom_out_buffer);
@@ -668,7 +668,7 @@ static int gdb_cmd_reboot(struct kgdb_state *ks)
 	/* For now, only honor R0 */
 	if (strcmp(remcom_in_buffer, "R0") == 0) {
 		printk(KERN_CRIT "Executing emergency reboot\n");
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 		put_packet(remcom_out_buffer);
 
 		/*
@@ -731,7 +731,7 @@ static void gdb_cmd_query(struct kgdb_state *ks)
 
 	case 'C':
 		/* Current thread id */
-		strlcpy(remcom_out_buffer,"QC",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "QC");
 		ks->threadid = shadow_pid(current->pid);
 		int_to_threadref(thref, ks->threadid);
 		pack_threadid(remcom_out_buffer + 2, thref);
@@ -765,7 +765,7 @@ static void gdb_cmd_query(struct kgdb_state *ks)
 			int len = strlen(remcom_in_buffer + 6);
 
 			if ((len % 2) != 0) {
-				strlcpy(remcom_out_buffer,"E01",sizeof(remcom_out_buffer));
+				strcpy(remcom_out_buffer, "E01");
 				break;
 			}
 			kgdb_hex2mem(remcom_in_buffer + 6,
@@ -774,7 +774,7 @@ static void gdb_cmd_query(struct kgdb_state *ks)
 			remcom_out_buffer[len++] = 0;
 
 			kdb_parse(remcom_out_buffer);
-			strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+			strcpy(remcom_out_buffer, "OK");
 		}
 		break;
 #endif
@@ -798,7 +798,7 @@ static void gdb_cmd_task(struct kgdb_state *ks)
 		}
 		kgdb_usethread = thread;
 		ks->kgdb_usethreadid = ks->threadid;
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 		break;
 	case 'c':
 		ptr = &remcom_in_buffer[2];
@@ -813,7 +813,7 @@ static void gdb_cmd_task(struct kgdb_state *ks)
 			}
 			kgdb_contthread = thread;
 		}
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 		break;
 	}
 }
@@ -827,7 +827,7 @@ static void gdb_cmd_thread(struct kgdb_state *ks)
 	kgdb_hex2long(&ptr, &ks->threadid);
 	thread = getthread(ks->linux_regs, ks->threadid);
 	if (thread)
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 	else
 		error_packet(remcom_out_buffer, -EINVAL);
 }
@@ -889,7 +889,7 @@ static void gdb_cmd_break(struct kgdb_state *ks)
 			(int) length, *bpt_type - '0');
 
 	if (error == 0)
-		strlcpy(remcom_out_buffer,"OK",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "OK");
 	else
 		error_packet(remcom_out_buffer, error);
 }
@@ -946,7 +946,7 @@ int gdb_serial_stub(struct kgdb_state *ks)
 		ptr = remcom_out_buffer;
 		*ptr++ = 'T';
 		ptr = pack_hex_byte(ptr, ks->signo);
-		ptr += strlen(strlcpy(ptr,"thread:",sizeof(ptr)));
+		ptr += strlen(strcpy(ptr, "thread:"));
 		int_to_threadref(thref, shadow_pid(current->pid));
 		ptr = pack_threadid(ptr, thref);
 		*ptr++ = ';';
@@ -1080,13 +1080,13 @@ int gdbstub_state(struct kgdb_state *ks, char *cmd)
 		return error;
 	case 's':
 	case 'c':
-		strlcpy(remcom_in_buffer,cmd,sizeof(remcom_in_buffer));
+		strcpy(remcom_in_buffer, cmd);
 		return 0;
 	case '?':
 		gdb_cmd_status(ks);
 		break;
 	case '\0':
-		strlcpy(remcom_out_buffer,"",sizeof(remcom_out_buffer));
+		strcpy(remcom_out_buffer, "");
 		break;
 	}
 	dbg_io_ops->write_char('+');

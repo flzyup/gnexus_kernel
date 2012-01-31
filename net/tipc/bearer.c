@@ -160,7 +160,7 @@ int  tipc_register_media(u32 media_type,
 	m_ptr->disable_bearer = disable;
 	m_ptr->addr2str = addr2str;
 	memcpy(&m_ptr->bcast_addr, bcast_addr, sizeof(*bcast_addr));
-	strlcpy(m_ptr->name,name,sizeof(m_ptr->name));
+	strcpy(m_ptr->name, name);
 	m_ptr->priority = bearer_priority;
 	m_ptr->tolerance = link_tolerance;
 	m_ptr->window = send_window_limit;
@@ -269,8 +269,8 @@ static int bearer_name_validate(const char *name,
 	/* return bearer name components, if necessary */
 
 	if (name_parts) {
-		strlcpy(name_parts->media_name,media_name,sizeof(name_parts->media_name));
-		strlcpy(name_parts->if_name,if_name,sizeof(name_parts->if_name));
+		strcpy(name_parts->media_name, media_name);
+		strcpy(name_parts->if_name, if_name);
 	}
 	return 1;
 }
@@ -557,7 +557,7 @@ restart:
 	}
 
 	b_ptr = &tipc_bearers[bearer_id];
-	strlcpy(b_ptr->name,name,sizeof(b_ptr->name));
+	strcpy(b_ptr->name, name);
 	res = m_ptr->enable_bearer(b_ptr);
 	if (res) {
 		warn("Bearer <%s> rejected, enable failure (%d)\n", name, -res);

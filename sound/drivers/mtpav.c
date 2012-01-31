@@ -626,11 +626,11 @@ static void __devinit snd_mtpav_set_name(struct mtpav *chip,
 	else if (substream->number >= 8 && substream->number < chip->num_ports * 2)
 		sprintf(substream->name, "MTP remote %d", (substream->number % chip->num_ports) + 1);
 	else if (substream->number == chip->num_ports * 2)
-		strlcpy(substream->name,"MTP computer",sizeof(substream->name));
+		strcpy(substream->name, "MTP computer");
 	else if (substream->number == chip->num_ports * 2 + 1)
-		strlcpy(substream->name,"MTP ADAT",sizeof(substream->name));
+		strcpy(substream->name, "MTP ADAT");
 	else
-		strlcpy(substream->name,"MTP broadcast",sizeof(substream->name));
+		strcpy(substream->name, "MTP broadcast");
 }
 
 static int __devinit snd_mtpav_get_RAWMIDI(struct mtpav *mcard)
@@ -724,8 +724,8 @@ static int __devinit snd_mtpav_probe(struct platform_device *dev)
 	if (err < 0)
 		goto __error;
 
-	strlcpy(card->driver,"MTPAV",sizeof(card->driver));
-	strlcpy(card->shortname,"MTPAV on parallel port",sizeof(card->shortname));
+	strcpy(card->driver, "MTPAV");
+	strcpy(card->shortname, "MTPAV on parallel port");
 	snprintf(card->longname, sizeof(card->longname),
 		 "MTPAV on parallel port at 0x%lx", port);
 

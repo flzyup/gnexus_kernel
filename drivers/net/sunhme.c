@@ -2470,11 +2470,11 @@ static void hme_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info
 {
 	struct happy_meal *hp = netdev_priv(dev);
 
-	strlcpy(info->driver,"sunhme",sizeof(info->driver));
-	strlcpy(info->version,"2.02",sizeof(info->version));
+	strcpy(info->driver, "sunhme");
+	strcpy(info->version, "2.02");
 	if (hp->happy_flags & HFLAG_PCI) {
 		struct pci_dev *pdev = hp->happy_dev;
-		strlcpy(info->bus_info,pci_name(pdev,sizeof(info->bus_info)));
+		strcpy(info->bus_info, pci_name(pdev));
 	}
 #ifdef CONFIG_SBUS
 	else {
@@ -2965,12 +2965,12 @@ static int __devinit happy_meal_pci_probe(struct pci_dev *pdev,
 	/* Now make sure pci_dev cookie is there. */
 #ifdef CONFIG_SPARC
 	dp = pci_device_to_OF_node(pdev);
-	strlcpy(prom_name,dp->name,sizeof(prom_name));
+	strcpy(prom_name, dp->name);
 #else
 	if (is_quattro_p(pdev))
-		strlcpy(prom_name, "SUNW,qfe",sizeof(prom_name, "SUNW));
+		strcpy(prom_name, "SUNW,qfe");
 	else
-		strlcpy(prom_name, "SUNW,hme",sizeof(prom_name, "SUNW));
+		strcpy(prom_name, "SUNW,hme");
 #endif
 
 	err = -ENODEV;

@@ -958,7 +958,7 @@ static void ecryptfs_set_default_crypt_stat_vals(
 	ecryptfs_copy_mount_wide_flags_to_inode_flags(crypt_stat,
 						      mount_crypt_stat);
 	ecryptfs_set_default_sizes(crypt_stat);
-	strlcpy(crypt_stat->cipher,ECRYPTFS_DEFAULT_CIPHER,sizeof(crypt_stat->cipher));
+	strcpy(crypt_stat->cipher, ECRYPTFS_DEFAULT_CIPHER);
 	crypt_stat->key_size = ECRYPTFS_DEFAULT_KEY_BYTES;
 	crypt_stat->flags &= ~(ECRYPTFS_KEY_VALID);
 	crypt_stat->file_version = ECRYPTFS_FILE_VERSION;
@@ -1192,7 +1192,7 @@ int ecryptfs_cipher_code_to_string(char *str, u8 cipher_code)
 	str[0] = '\0';
 	for (i = 0; i < ARRAY_SIZE(ecryptfs_cipher_code_str_map); i++)
 		if (cipher_code == ecryptfs_cipher_code_str_map[i].cipher_code)
-			strlcpy(str,ecryptfs_cipher_code_str_map[i].cipher_str,sizeof(str));
+			strcpy(str, ecryptfs_cipher_code_str_map[i].cipher_str);
 	if (str[0] == '\0') {
 		ecryptfs_printk(KERN_WARNING, "Cipher code not recognized: "
 				"[%d]\n", cipher_code);

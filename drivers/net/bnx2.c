@@ -6185,7 +6185,7 @@ bnx2_setup_int_mode(struct bnx2 *bp, int dis_msi)
 	int msix_vecs = min(cpus + 1, RX_MAX_RINGS);
 
 	bp->irq_tbl[0].handler = bnx2_interrupt;
-	strlcpy(bp->irq_tbl[0].name,bp->dev->name,sizeof(bp->irq_tbl[0].name));
+	strcpy(bp->irq_tbl[0].name, bp->dev->name);
 	bp->irq_nvecs = 1;
 	bp->irq_tbl[0].vector = bp->pdev->irq;
 
@@ -6802,10 +6802,10 @@ bnx2_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
 {
 	struct bnx2 *bp = netdev_priv(dev);
 
-	strlcpy(info->driver,DRV_MODULE_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_MODULE_VERSION,sizeof(info->version));
-	strlcpy(info->bus_info,pci_name(bp->pdev,sizeof(info->bus_info)));
-	strlcpy(info->fw_version,bp->fw_version,sizeof(info->fw_version));
+	strcpy(info->driver, DRV_MODULE_NAME);
+	strcpy(info->version, DRV_MODULE_VERSION);
+	strcpy(info->bus_info, pci_name(bp->pdev));
+	strcpy(info->fw_version, bp->fw_version);
 }
 
 #define BNX2_REGDUMP_LEN		(32 * 1024)

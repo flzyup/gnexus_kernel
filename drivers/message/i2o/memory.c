@@ -273,7 +273,7 @@ int i2o_pool_alloc(struct i2o_pool *pool, const char *name,
 	pool->name = kmalloc(strlen(name) + 1, GFP_KERNEL);
 	if (!pool->name)
 		goto exit;
-	strlcpy(pool->name,name,sizeof(pool->name));
+	strcpy(pool->name, name);
 
 	pool->slab =
 	    kmem_cache_create(pool->name, size, 0, SLAB_HWCACHE_ALIGN, NULL);

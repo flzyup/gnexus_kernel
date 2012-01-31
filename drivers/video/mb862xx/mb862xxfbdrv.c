@@ -428,7 +428,7 @@ static int mb862xxfb_init_fbinfo(struct fb_info *fbi)
 	fbi->screen_base = par->fb_base;
 	fbi->screen_size = par->mapped_vram;
 
-	strlcpy(fbi->fix.id,DRV_NAME,sizeof(fbi->fix.id));
+	strcpy(fbi->fix.id, DRV_NAME);
 	fbi->fix.smem_start = (unsigned long)par->fb_base_phys;
 	fbi->fix.mmio_start = (unsigned long)par->mmio_base_phys;
 	fbi->fix.mmio_len = par->mmio_len;

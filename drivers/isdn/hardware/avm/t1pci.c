@@ -120,7 +120,7 @@ static int t1pci_add_card(struct capicardparams *p, struct pci_dev *pdev)
 	cinfo->capi_ctrl.reset_ctr     = b1dma_reset_ctr;
 	cinfo->capi_ctrl.procinfo      = t1pci_procinfo;
 	cinfo->capi_ctrl.proc_fops = &b1dmactl_proc_fops;
-	strlcpy(cinfo->capi_ctrl.name,card->name,sizeof(cinfo->capi_ctrl.name));
+	strcpy(cinfo->capi_ctrl.name, card->name);
 
 	retval = attach_capi_ctr(&cinfo->capi_ctrl);
 	if (retval) {
@@ -239,7 +239,7 @@ static int __init t1pci_init(void)
 		if ((p = strchr(rev, '$')) != NULL && p > rev)
 		   *(p-1) = 0;
 	} else
-		strlcpy(rev,"1.0",sizeof(rev));
+		strcpy(rev, "1.0");
 
 	err = pci_register_driver(&t1pci_pci_driver);
 	if (!err) {

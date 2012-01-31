@@ -313,7 +313,7 @@ void  __init prom_init_cmdline(void)
 
 	cp = &(arcs_cmdline[0]);
 	while (actr < prom_argc) {
-		strlcpy(cp,prom_argv[actr],sizeof(cp));
+		strcpy(cp, prom_argv[actr]);
 		cp += strlen(prom_argv[actr]);
 		*cp++ = ' ';
 		actr++;
@@ -380,7 +380,7 @@ void __init prom_free_prom_memory(void)
 
 	for (argc = 0; argc < prom_argc; argc++) {
 		argv[argc] = ptr;
-		strlcpy(ptr,prom_argv[argc],sizeof(ptr));
+		strcpy(ptr, prom_argv[argc]);
 		ptr += strlen(prom_argv[argc]) + 1;
 	}
 	argv[prom_argc] = NULL;		/* end array with null pointer */
@@ -401,7 +401,7 @@ void __init prom_free_prom_memory(void)
 
 	for (argc = 0; argc < i; argc++) {
 		envp[argc] = ptr;
-		strlcpy(ptr,prom_envp[argc],sizeof(ptr));
+		strcpy(ptr, prom_envp[argc]);
 		ptr += strlen(prom_envp[argc]) + 1;
 	}
 	envp[i] = NULL;			/* end array with null pointer */

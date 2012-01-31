@@ -727,7 +727,7 @@ static int vidioc_querycap (struct file *file, void  *priv,
 	struct cx8802_dev *dev  = ((struct cx8802_fh *)priv)->dev;
 	struct cx88_core  *core = dev->core;
 
-	strlcpy(cap->driver,"cx88_blackbird",sizeof(cap->driver));
+	strcpy(cap->driver, "cx88_blackbird");
 	strlcpy(cap->card, core->board.name, sizeof(cap->card));
 	sprintf(cap->bus_info,"PCI:%s",pci_name(dev->pci));
 	cap->version = CX88_VERSION_CODE;
@@ -1009,7 +1009,7 @@ static int vidioc_g_tuner (struct file *file, void *priv,
 	if (0 != t->index)
 		return -EINVAL;
 
-	strlcpy(t->name,"Television",sizeof(t->name));
+	strcpy(t->name, "Television");
 	t->type       = V4L2_TUNER_ANALOG_TV;
 	t->capability = V4L2_TUNER_CAP_NORM;
 	t->rangehigh  = 0xffffffffUL;

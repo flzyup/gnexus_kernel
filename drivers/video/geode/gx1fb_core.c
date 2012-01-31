@@ -280,7 +280,7 @@ static struct fb_info * __devinit gx1fb_init_fbinfo(struct device *dev)
 
 	par = info->par;
 
-	strlcpy(info->fix.id,"GX1",sizeof(info->fix.id));
+	strcpy(info->fix.id, "GX1");
 
 	info->fix.type		= FB_TYPE_PACKED_PIXELS;
 	info->fix.type_aux	= 0;

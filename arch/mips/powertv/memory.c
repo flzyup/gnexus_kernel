@@ -167,7 +167,7 @@ static phys_addr_t get_memsize(void)
 	char *ptr;
 
 	/* Check the command line first for a memsize directive */
-	strlcpy(cmdline,arcs_cmdline,sizeof(cmdline));
+	strcpy(cmdline, arcs_cmdline);
 	ptr = strstr(cmdline, "memsize=");
 	if (ptr && (ptr != cmdline) && (*(ptr - 1) != ' '))
 		ptr = strstr(ptr, " memsize=");

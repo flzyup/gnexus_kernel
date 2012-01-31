@@ -155,7 +155,7 @@ static void init_hardware(char *command, int size)
 		p[0], p[1], p[2], p[3], p[4], p[5]);
 	p = getbenv("APPEND");
 	if (p)
-		strlcpy(p,command,sizeof(p));
+		strcpy(p, command);
 	else
 		command[0] = 0;
 }

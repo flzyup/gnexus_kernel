@@ -860,7 +860,7 @@ static int daqp_attach(struct comedi_device *dev, struct comedi_devconfig *it)
 	 * it doesn't work, who cares, just leave it as "DAQP".
 	 */
 
-	strlcpy(local->board_name,"DAQP",sizeof(local->board_name));
+	strcpy(local->board_name, "DAQP");
 	dev->board_name = local->board_name;
 	if (local->link->prod_id[2]) {
 		if (strncmp(local->link->prod_id[2], "DAQP", 4) == 0) {

@@ -743,7 +743,7 @@ static int __devinit hal2_pcm_create(struct snd_hal2 *hal2)
 		return err;
 
 	pcm->private_data = hal2;
-	strlcpy(pcm->name,"SGI HAL2",sizeof(pcm->name));
+	strcpy(pcm->name, "SGI HAL2");
 
 	/* set operators */
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,
@@ -901,8 +901,8 @@ static int __devinit hal2_probe(struct platform_device *pdev)
 		return err;
 	}
 
-	strlcpy(card->driver,"SGI HAL2 Audio",sizeof(card->driver));
-	strlcpy(card->shortname,"SGI HAL2 Audio",sizeof(card->shortname));
+	strcpy(card->driver, "SGI HAL2 Audio");
+	strcpy(card->shortname, "SGI HAL2 Audio");
 	sprintf(card->longname, "%s irq %i",
 		card->shortname,
 		SGI_HPCDMA_IRQ);

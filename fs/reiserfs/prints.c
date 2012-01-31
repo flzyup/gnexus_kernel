@@ -112,7 +112,8 @@ static void sprintf_de_head(char *buf, struct reiserfs_de_head *deh)
 static void sprintf_item_head(char *buf, struct item_head *ih)
 {
 	if (ih) {
-		strlcpy(buf,,sizeof(buf)		       (ih_version(ih) == KEY_FORMAT_3_6) ? "*3.6* " : "*3.5*");
+		strcpy(buf,
+		       (ih_version(ih) == KEY_FORMAT_3_6) ? "*3.6* " : "*3.5*");
 		sprintf_le_key(buf + strlen(buf), &(ih->ih_key));
 		sprintf(buf + strlen(buf), ", item_len %d, item_location %d, "
 			"free_space(entry_count) %d",
@@ -193,7 +194,7 @@ static void prepare_error_buf(const char *fmt, va_list args)
 
 	spin_lock(&error_lock);
 
-	strlcpy(fmt1,fmt,sizeof(fmt1));
+	strcpy(fmt1, fmt);
 
 	while ((k = is_there_reiserfs_struct(fmt1, &what)) != NULL) {
 		*k = 0;

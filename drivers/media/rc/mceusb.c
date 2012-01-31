@@ -491,9 +491,9 @@ static void mceusb_dev_printdata(struct mceusb_dev *ir, char *buf,
 		 (out ? "t" : "r"), codes, len);
 
 	if (out)
-		strlcpy(inout,"Request\0",sizeof(inout));
+		strcpy(inout, "Request\0");
 	else
-		strlcpy(inout,"Got\0",sizeof(inout));
+		strcpy(inout, "Got\0");
 
 	start  = offset + skip;
 	cmd    = buf[start] & 0xff;

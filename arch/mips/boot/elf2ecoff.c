@@ -440,13 +440,13 @@ int main(int argc, char *argv[])
 	efh.f_flags = 0x100f;	/* Stripped, not sharable. */
 
 	memset(esecs, 0, sizeof esecs);
-	strlcpy(esecs[0].s_name,".text",sizeof(esecs[0].s_name));
-	strlcpy(esecs[1].s_name,".data",sizeof(esecs[1].s_name));
-	strlcpy(esecs[2].s_name,".bss",sizeof(esecs[2].s_name));
+	strcpy(esecs[0].s_name, ".text");
+	strcpy(esecs[1].s_name, ".data");
+	strcpy(esecs[2].s_name, ".bss");
 	if (addflag) {
-		strlcpy(esecs[3].s_name,".rdata",sizeof(esecs[3].s_name));
-		strlcpy(esecs[4].s_name,".sdata",sizeof(esecs[4].s_name));
-		strlcpy(esecs[5].s_name,".sbss",sizeof(esecs[5].s_name));
+		strcpy(esecs[3].s_name, ".rdata");
+		strcpy(esecs[4].s_name, ".sdata");
+		strcpy(esecs[5].s_name, ".sbss");
 	}
 	esecs[0].s_paddr = esecs[0].s_vaddr = eah.text_start;
 	esecs[1].s_paddr = esecs[1].s_vaddr = eah.data_start;

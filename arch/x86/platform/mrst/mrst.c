@@ -418,13 +418,13 @@ static void __init *max7315_platform_data(void *info)
 	/* we have several max7315 on the board, we only need load several
 	 * instances of the same pca953x driver to cover them
 	 */
-	strlcpy(i2c_info->type,"max7315",sizeof(i2c_info->type));
+	strcpy(i2c_info->type, "max7315");
 	if (nr++) {
 		sprintf(base_pin_name, "max7315_%d_base", nr);
 		sprintf(intr_pin_name, "max7315_%d_int", nr);
 	} else {
-		strlcpy(base_pin_name,"max7315_base",sizeof(base_pin_name));
-		strlcpy(intr_pin_name,"max7315_int",sizeof(intr_pin_name));
+		strcpy(base_pin_name, "max7315_base");
+		strcpy(intr_pin_name, "max7315_int");
 	}
 
 	gpio_base = get_gpio_by_name(base_pin_name);

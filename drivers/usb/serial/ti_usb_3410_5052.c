@@ -1713,29 +1713,29 @@ static int ti_download_firmware(struct ti_device *tdev)
 		if (dev->descriptor.idVendor == MTS_VENDOR_ID) {
 			switch (dev->descriptor.idProduct) {
 			case MTS_CDMA_PRODUCT_ID:
-				strlcpy(buf,"mts_cdma.fw",sizeof(buf));
+				strcpy(buf, "mts_cdma.fw");
 				break;
 			case MTS_GSM_PRODUCT_ID:
-				strlcpy(buf,"mts_gsm.fw",sizeof(buf));
+				strcpy(buf, "mts_gsm.fw");
 				break;
 			case MTS_EDGE_PRODUCT_ID:
-				strlcpy(buf,"mts_edge.fw",sizeof(buf));
+				strcpy(buf, "mts_edge.fw");
 				break;
 			case MTS_MT9234MU_PRODUCT_ID:
-				strlcpy(buf,"mts_mt9234mu.fw",sizeof(buf));
+				strcpy(buf, "mts_mt9234mu.fw");
 				break;
 			case MTS_MT9234ZBA_PRODUCT_ID:
-				strlcpy(buf,"mts_mt9234zba.fw",sizeof(buf));
+				strcpy(buf, "mts_mt9234zba.fw");
 				break;
 			case MTS_MT9234ZBAOLD_PRODUCT_ID:
-				strlcpy(buf,"mts_mt9234zba.fw",sizeof(buf));
+				strcpy(buf, "mts_mt9234zba.fw");
 				break;			}
 		}
 		if (buf[0] == '\0') {
 			if (tdev->td_is_3410)
-				strlcpy(buf,"ti_3410.fw",sizeof(buf));
+				strcpy(buf, "ti_3410.fw");
 			else
-				strlcpy(buf,"ti_5052.fw",sizeof(buf));
+				strcpy(buf, "ti_5052.fw");
 		}
 		status = request_firmware(&fw_p, buf, &dev->dev);
 	}

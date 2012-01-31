@@ -1750,7 +1750,7 @@ static int saa7134_enum_input(struct file *file, void *priv,
 		return -EINVAL;
 	i->index = n;
 	i->type  = V4L2_INPUT_TYPE_CAMERA;
-	strlcpy(i->name, card_in(dev,n,sizeof(i->name, card_in(dev)).name);
+	strcpy(i->name, card_in(dev, n).name);
 	if (card_in(dev, n).tv)
 		i->type = V4L2_INPUT_TYPE_TUNER;
 	i->audioset = 1;
@@ -1806,7 +1806,7 @@ static int saa7134_querycap(struct file *file, void  *priv,
 
 	unsigned int tuner_type = dev->tuner_type;
 
-	strlcpy(cap->driver,"saa7134",sizeof(cap->driver));
+	strcpy(cap->driver, "saa7134");
 	strlcpy(cap->card, saa7134_boards[dev->board].name,
 		sizeof(cap->card));
 	sprintf(cap->bus_info, "PCI:%s", pci_name(dev->pci));
@@ -2006,7 +2006,7 @@ static int saa7134_g_tuner(struct file *file, void *priv,
 	if (n == SAA7134_INPUT_MAX)
 		return -EINVAL;
 	if (NULL != card_in(dev, n).name) {
-		strlcpy(t->name,"Television",sizeof(t->name));
+		strcpy(t->name, "Television");
 		t->type = V4L2_TUNER_ANALOG_TV;
 		t->capability = V4L2_TUNER_CAP_NORM |
 			V4L2_TUNER_CAP_STEREO |
@@ -2084,7 +2084,7 @@ static int saa7134_s_frequency(struct file *file, void *priv,
 
 static int saa7134_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 {
-	strlcpy(a->name,"audio",sizeof(a->name));
+	strcpy(a->name, "audio");
 	return 0;
 }
 
@@ -2304,7 +2304,7 @@ static int radio_querycap(struct file *file, void *priv,
 	struct saa7134_fh *fh = file->private_data;
 	struct saa7134_dev *dev = fh->dev;
 
-	strlcpy(cap->driver,"saa7134",sizeof(cap->driver));
+	strcpy(cap->driver, "saa7134");
 	strlcpy(cap->card, saa7134_boards[dev->board].name, sizeof(cap->card));
 	sprintf(cap->bus_info, "PCI:%s", pci_name(dev->pci));
 	cap->version = SAA7134_VERSION_CODE;
@@ -2322,7 +2322,7 @@ static int radio_g_tuner(struct file *file, void *priv,
 		return -EINVAL;
 
 	memset(t, 0, sizeof(*t));
-	strlcpy(t->name,"Radio",sizeof(t->name));
+	strcpy(t->name, "Radio");
 	t->type = V4L2_TUNER_RADIO;
 
 	saa_call_all(dev, tuner, g_tuner, t);
@@ -2352,7 +2352,7 @@ static int radio_enum_input(struct file *file, void *priv,
 	if (i->index != 0)
 		return -EINVAL;
 
-	strlcpy(i->name,"Radio",sizeof(i->name));
+	strcpy(i->name, "Radio");
 	i->type = V4L2_INPUT_TYPE_TUNER;
 
 	return 0;
@@ -2368,7 +2368,7 @@ static int radio_g_audio(struct file *file, void *priv,
 					struct v4l2_audio *a)
 {
 	memset(a, 0, sizeof(*a));
-	strlcpy(a->name,"Radio",sizeof(a->name));
+	strcpy(a->name, "Radio");
 	return 0;
 }
 

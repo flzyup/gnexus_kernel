@@ -998,9 +998,9 @@ static int acpi_thermal_add(struct acpi_device *device)
 		return -ENOMEM;
 
 	tz->device = device;
-	strlcpy(tz->name,device->pnp.bus_id,sizeof(tz->name));
-	strlcpy(acpi_device_name(device),ACPI_THERMAL_DEVICE_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),ACPI_THERMAL_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(tz->name, device->pnp.bus_id);
+	strcpy(acpi_device_name(device), ACPI_THERMAL_DEVICE_NAME);
+	strcpy(acpi_device_class(device), ACPI_THERMAL_CLASS);
 	device->driver_data = tz;
 	mutex_init(&tz->lock);
 

@@ -271,7 +271,7 @@ acpi_rs_set_resource_header(u8 descriptor_type,
  *
  ******************************************************************************/
 
-static u16 acpi_rs_strlcpy(char *destination,char *source,sizeof(char *destination))
+static u16 acpi_rs_strcpy(char *destination, char *source)
 {
 	u16 i;
 
@@ -363,7 +363,8 @@ acpi_rs_get_resource_source(acpi_rs_length resource_length,
 		/* Copy the resource_source string to the destination */
 
 		resource_source->string_length =
-		    acpi_rs_strlcpy(resource_source->string_ptr,,sizeof(resource_source->string_ptr)				   ACPI_CAST_PTR(char,
+		    acpi_rs_strcpy(resource_source->string_ptr,
+				   ACPI_CAST_PTR(char,
 						 &aml_resource_source[1]));
 
 		return ((acpi_rs_length) total_length);

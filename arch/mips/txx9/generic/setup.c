@@ -299,7 +299,7 @@ static void __init preprocess_cmdline(void)
 	static char cmdline[COMMAND_LINE_SIZE] __initdata;
 	char *s;
 
-	strlcpy(cmdline,arcs_cmdline,sizeof(cmdline));
+	strcpy(cmdline, arcs_cmdline);
 	s = cmdline;
 	arcs_cmdline[0] = '\0';
 	while (s && *s) {
@@ -382,7 +382,7 @@ void __init prom_init(void)
 	preprocess_cmdline();
 	select_board();
 
-	strlcpy(txx9_system_type,txx9_board_vec->system,sizeof(txx9_system_type));
+	strcpy(txx9_system_type, txx9_board_vec->system);
 
 	txx9_board_vec->prom_init();
 }

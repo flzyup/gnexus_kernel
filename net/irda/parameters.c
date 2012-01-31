@@ -389,7 +389,7 @@ int irda_param_pack(__u8 *buf, char *fmt, ...)
 #if 0
 		case 'c': /* \0 terminated string */
 			arg.c = va_arg(args, char *);
-			strlcpy(buf+n,arg.c,sizeof(buf+n));
+			strcpy(buf+n, arg.c);
 			n += strlen(arg.c) + 1;
 			break;
 #endif
@@ -433,7 +433,7 @@ static int irda_param_unpack(__u8 *buf, char *fmt, ...)
 #if 0
 		case 'c':   /* \0 terminated string */
 			arg.c = va_arg(args, char *);
-			strlcpy(arg.c,buf+n,sizeof(arg.c));
+			strcpy(arg.c, buf+n);
 			n += strlen(arg.c) + 1;
 			break;
 #endif

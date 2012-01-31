@@ -184,7 +184,7 @@ setup_avm_a1(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strlcpy(tmp,avm_revision,sizeof(tmp));
+	strcpy(tmp, avm_revision);
 	printk(KERN_INFO "HiSax: AVM driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_A1)
 		return (0);

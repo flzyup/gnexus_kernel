@@ -441,7 +441,7 @@ asmlinkage void do_double_fault(struct pt_regs *regs)
 {
 	struct task_struct *tsk = current;
 
-	strlcpy(tsk->comm,"emergency tsk",sizeof(tsk->comm));
+	strcpy(tsk->comm, "emergency tsk");
 	tsk->pid = 0;
 	console_verbose();
 	printk(KERN_EMERG "--- double fault ---\n");

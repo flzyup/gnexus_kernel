@@ -507,7 +507,7 @@ static int diva_add_card(DESCRIPTOR * d)
 	card->d.request((ENTITY *) & sync_req);
 	strlcpy(card->name, sync_req.GetName.name, sizeof(card->name));
 	ctrl = &card->capi_ctrl;
-	strlcpy(ctrl->name,card->name,sizeof(ctrl->name));
+	strcpy(ctrl->name, card->name);
 	ctrl->register_appl = diva_register_appl;
 	ctrl->release_appl = diva_release_appl;
 	ctrl->send_message = diva_send_message;

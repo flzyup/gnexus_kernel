@@ -131,8 +131,8 @@ static int __devinit usb6fire_chip_probe(struct usb_interface *intf,
 		snd_printk(KERN_ERR PREFIX "cannot create alsa card.\n");
 		return ret;
 	}
-	strlcpy(card->driver,"6FireUSB",sizeof(card->driver));
-	strlcpy(card->shortname,"TerraTec DMX6FireUSB",sizeof(card->shortname));
+	strcpy(card->driver, "6FireUSB");
+	strcpy(card->shortname, "TerraTec DMX6FireUSB");
 	sprintf(card->longname, "%s at %d:%d", card->shortname,
 			device->bus->busnum, device->devnum);
 	snd_card_set_dev(card, &intf->dev);

@@ -88,7 +88,7 @@ aic7770_probe(struct device *dev)
 	name = kmalloc(strlen(buf) + 1, GFP_ATOMIC);
 	if (name == NULL)
 		return (ENOMEM);
-	strlcpy(name,buf,sizeof(name));
+	strcpy(name, buf);
 	ahc = ahc_alloc(&aic7xxx_driver_template, name);
 	if (ahc == NULL)
 		return (ENOMEM);

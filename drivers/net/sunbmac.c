@@ -1051,8 +1051,8 @@ static void bigmac_set_multicast(struct net_device *dev)
 /* Ethtool support... */
 static void bigmac_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
 {
-	strlcpy(info->driver,"sunbmac",sizeof(info->driver));
-	strlcpy(info->version,"2.0",sizeof(info->version));
+	strcpy(info->driver, "sunbmac");
+	strcpy(info->version, "2.0");
 }
 
 static u32 bigmac_get_link(struct net_device *dev)

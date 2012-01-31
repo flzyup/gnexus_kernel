@@ -508,16 +508,16 @@ static ssize_t taos_gain_show(struct device *dev,
 
 	switch (chip->taos_settings.als_gain) {
 	case 0:
-		strlcpy(gain,"001",sizeof(gain));
+		strcpy(gain, "001");
 		break;
 	case 1:
-		strlcpy(gain,"008",sizeof(gain));
+		strcpy(gain, "008");
 		break;
 	case 2:
-		strlcpy(gain,"016",sizeof(gain));
+		strcpy(gain, "016");
 		break;
 	case 3:
-		strlcpy(gain,"111",sizeof(gain));
+		strcpy(gain, "111");
 		break;
 	}
 

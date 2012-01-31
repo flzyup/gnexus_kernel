@@ -306,7 +306,7 @@ lli_go_active(struct FsmInst *fi, int event, void *arg)
 	FsmChangeState(fi, ST_ACTIVE);
 	chanp->data_open = !0;
 	if (chanp->bcs->conmsg)
-		strlcpy(ic.parm.num,chanp->bcs->conmsg,sizeof(ic.parm.num));
+		strcpy(ic.parm.num, chanp->bcs->conmsg);
 	else
 		ic.parm.num[0] = 0;
 	if (chanp->debug & 1)

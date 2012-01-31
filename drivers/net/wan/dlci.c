@@ -356,7 +356,7 @@ static int dlci_add(struct dlci_add *dlci)
 	if (err < 0) 
 		goto err2;
 
-	strlcpy(dlci->devname,master->name,sizeof(dlci->devname));
+	strcpy(dlci->devname, master->name);
 
 	list_add(&dlp->list, &dlci_devs);
 	rtnl_unlock();

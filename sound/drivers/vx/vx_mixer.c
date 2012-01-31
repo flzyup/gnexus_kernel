@@ -489,12 +489,14 @@ static int vx_audio_src_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_
 		uinfo->value.enumerated.items = 3;
 		if (uinfo->value.enumerated.item > 2)
 			uinfo->value.enumerated.item = 2;
-		strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		       texts_mic[uinfo->value.enumerated.item]);
+		strcpy(uinfo->value.enumerated.name,
+		       texts_mic[uinfo->value.enumerated.item]);
 	} else {
 		uinfo->value.enumerated.items = 2;
 		if (uinfo->value.enumerated.item > 1)
 			uinfo->value.enumerated.item = 1;
-		strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		       texts_vx2[uinfo->value.enumerated.item]);
+		strcpy(uinfo->value.enumerated.name,
+		       texts_vx2[uinfo->value.enumerated.item]);
 	}
 	return 0;
 }
@@ -550,7 +552,8 @@ static int vx_clock_mode_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -936,7 +939,7 @@ int snd_vx_mixer_new(struct vx_core *chip)
 	struct snd_card *card = chip->card;
 	char name[32];
 
-	strlcpy(card->mixername,card->driver,sizeof(card->mixername));
+	strcpy(card->mixername, card->driver);
 
 	/* output level controls */
 	for (i = 0; i < chip->hw->num_outs; i++) {

@@ -8804,7 +8804,7 @@ static int __init set_ibm_param(const char *val, struct kernel_param *kp)
 		if (strcmp(ibm->name, kp->name) == 0 && ibm->write) {
 			if (strlen(val) > sizeof(ibms_init[i].param) - 2)
 				return -ENOSPC;
-			strlcpy(ibms_init[i].param,val,sizeof(ibms_init[i].param));
+			strcpy(ibms_init[i].param, val);
 			strcat(ibms_init[i].param, ",");
 			return 0;
 		}

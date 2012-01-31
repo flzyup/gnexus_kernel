@@ -720,7 +720,7 @@ static int vpif_enum_fmt_vid_out(struct file *file, void  *priv,
 
 	/* Fill in the information about format */
 	fmt->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
-	strlcpy(fmt->description,"YCbCr4:2:2 YC Planar",sizeof(fmt->description));
+	strcpy(fmt->description, "YCbCr4:2:2 YC Planar");
 	fmt->pixelformat = V4L2_PIX_FMT_YUV422P;
 
 	return 0;
@@ -1221,7 +1221,7 @@ static int vpif_enum_output(struct file *file, void *fh,
 		return -EINVAL;
 	}
 
-	strlcpy(output->name,config->output[output->index],sizeof(output->name));
+	strcpy(output->name, config->output[output->index]);
 	output->type = V4L2_OUTPUT_TYPE_ANALOG;
 	output->std = DM646X_V4L2_STD;
 

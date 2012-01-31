@@ -189,7 +189,7 @@ static void smt_init_mib(struct s_smc *smc, int level)
 	mib->fddiSMTLoVersionId = 2 ;
 	memcpy((char *) mib->fddiSMTManufacturerData,man_data,32) ;
 	if (level == 0) {
-		strlcpy(mib->fddiSMTUserData,OEM_USER_DATA,sizeof(mib->fddiSMTUserData)) ;
+		strcpy(mib->fddiSMTUserData,OEM_USER_DATA) ;
 	}
 	mib->fddiSMTMIBVersionId = 1 ;
 	mib->fddiSMTMac_Ct = NUMMACS ;

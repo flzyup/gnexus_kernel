@@ -423,7 +423,7 @@ static int fd_mcs_detect(struct scsi_host_template * tpnt)
 
 
 				/* save name */
-				strlcpy(adapter_name,fd_mcs_adapters[loop].name,sizeof(adapter_name));
+				strcpy(adapter_name, fd_mcs_adapters[loop].name);
 
 				/* chip/fifo */
 				chip = fd_mcs_adapters[loop].fd_chip;

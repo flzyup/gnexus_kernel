@@ -316,7 +316,7 @@ static void efx_fill_test(unsigned int test_index,
 			snprintf(unit_str.name, sizeof(unit_str.name),
 				 unit_format, unit_id);
 		else
-			strlcpy(unit_str.name,unit_format,sizeof(unit_str.name));
+			strcpy(unit_str.name, unit_format);
 		snprintf(test_str.name, sizeof(test_str.name),
 			 test_format, test_id);
 		snprintf(strings[test_index].name,

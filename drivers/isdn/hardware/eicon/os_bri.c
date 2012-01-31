@@ -205,7 +205,7 @@ int diva_bri_init_card(diva_os_xdi_adapter_t * a)
 		return (-1);
 	}
 
-	strlcpy(a->xdi_adapter.req_soft_isr.dpc_thread_name,"kdivasbrid",sizeof(a->xdi_adapter.req_soft_isr.dpc_thread_name));
+	strcpy(a->xdi_adapter.req_soft_isr.dpc_thread_name, "kdivasbrid");
 
 	if (diva_os_initialize_soft_isr(&a->xdi_adapter.req_soft_isr,
 					DIDpcRoutine, &a->xdi_adapter)) {

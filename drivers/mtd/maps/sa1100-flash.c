@@ -310,7 +310,7 @@ sa1100_setup_mtd(struct platform_device *pdev, struct flash_platform_data *plat)
 	 * otherwise fail.  Either way, it'll be called "sa1100".
 	 */
 	if (info->num_subdev == 1) {
-		strlcpy(info->subdev[0].name,plat->name,sizeof(info->subdev[0].name));
+		strcpy(info->subdev[0].name, plat->name);
 		info->mtd = info->subdev[0].mtd;
 		ret = 0;
 	} else if (info->num_subdev > 1) {

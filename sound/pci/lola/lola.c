@@ -684,12 +684,12 @@ static int __devinit lola_create(struct snd_card *card, struct pci_dev *pci,
 		goto errout;
 	}
 
-	strlcpy(card->driver,"Lola",sizeof(card->driver));
+	strcpy(card->driver, "Lola");
 	strlcpy(card->shortname, "Digigram Lola", sizeof(card->shortname));
 	snprintf(card->longname, sizeof(card->longname),
 		 "%s at 0x%lx irq %i",
 		 card->shortname, chip->bar[0].addr, chip->irq);
-	strlcpy(card->mixername,card->shortname,sizeof(card->mixername));
+	strcpy(card->mixername, card->shortname);
 
 	lola_irq_enable(chip);
 

@@ -284,7 +284,7 @@ static int __devinit snd_interwave_detect(struct snd_interwave *iwcard,
 	    (rev1 & 0x0f) != (rev2 & 0x0f)) {
 		snd_printdd("[0x%lx] InterWave check - passed\n", gus->gf1.port);
 		gus->interwave = 1;
-		strlcpy(gus->card->shortname,"AMD InterWave",sizeof(gus->card->shortname));
+		strcpy(gus->card->shortname, "AMD InterWave");
 		gus->revision = rev1 >> 4;
 #ifndef SNDRV_STB
 		return 0;	/* ok.. We have an InterWave board */
@@ -521,10 +521,10 @@ static int __devinit snd_interwave_mixer(struct snd_wss *chip)
 	id1.iface = id2.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 #if 0
 	/* remove mono microphone controls */
-	strlcpy(id1.name,"Mic Playback Switch",sizeof(id1.name));
+	strcpy(id1.name, "Mic Playback Switch");
 	if ((err = snd_ctl_remove_id(card, &id1)) < 0)
 		return err;
-	strlcpy(id1.name,"Mic Playback Volume",sizeof(id1.name));
+	strcpy(id1.name, "Mic Playback Volume");
 	if ((err = snd_ctl_remove_id(card, &id1)) < 0)
 		return err;
 #endif
@@ -537,21 +537,21 @@ static int __devinit snd_interwave_mixer(struct snd_wss *chip)
 	snd_wss_out(chip, CS4231_LEFT_MIC_INPUT, 0x9f);
 	snd_wss_out(chip, CS4231_RIGHT_MIC_INPUT, 0x9f);
 	/* reassign AUXA to SYNTHESIZER */
-	strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name));
-	strlcpy(id2.name,"Synth Playback Switch",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Switch");
+	strcpy(id2.name, "Synth Playback Switch");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
-	strlcpy(id1.name,"Aux Playback Volume",sizeof(id1.name));
-	strlcpy(id2.name,"Synth Playback Volume",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Volume");
+	strcpy(id2.name, "Synth Playback Volume");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
 	/* reassign AUXB to CD */
-	strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name)); id1.index = 1;
-	strlcpy(id2.name,"CD Playback Switch",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Switch"); id1.index = 1;
+	strcpy(id2.name, "CD Playback Switch");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
-	strlcpy(id1.name,"Aux Playback Volume",sizeof(id1.name));
-	strlcpy(id2.name,"CD Playback Volume",sizeof(id2.name));
+	strcpy(id1.name, "Aux Playback Volume");
+	strcpy(id2.name, "CD Playback Volume");
 	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 		return err;
 	return 0;
@@ -732,13 +732,13 @@ static int __devinit snd_interwave_probe(struct snd_card *card, int dev)
 		memset(&id1, 0, sizeof(id1));
 		memset(&id2, 0, sizeof(id2));
 		id1.iface = id2.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-		strlcpy(id1.name,"Master Playback Switch",sizeof(id1.name));
-		strlcpy(id2.name,id1.name,sizeof(id2.name));
+		strcpy(id1.name, "Master Playback Switch");
+		strcpy(id2.name, id1.name);
 		id2.index = 1;
 		if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 			return err;
-		strlcpy(id1.name,"Master Playback Volume",sizeof(id1.name));
-		strlcpy(id2.name,id1.name,sizeof(id2.name));
+		strcpy(id1.name, "Master Playback Volume");
+		strcpy(id2.name, id1.name);
 		if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0)
 			return err;
 		if ((err = snd_tea6330t_update_mixer(card, i2c_bus, 0, 1)) < 0)
@@ -757,8 +757,8 @@ static int __devinit snd_interwave_probe(struct snd_card *card, int dev)
 #else
 	str = "InterWave STB";
 #endif
-	strlcpy(card->driver,str,sizeof(card->driver));
-	strlcpy(card->shortname,str,sizeof(card->shortname));
+	strcpy(card->driver, str);
+	strcpy(card->shortname, str);
 	sprintf(card->longname, "%s at 0x%lx, irq %i, dma %d",
 		str,
 		gus->gf1.port,

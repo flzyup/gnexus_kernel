@@ -271,8 +271,8 @@ bnad_get_drvinfo(struct net_device *netdev, struct ethtool_drvinfo *drvinfo)
 	struct bfa_ioc_attr *ioc_attr;
 	unsigned long flags;
 
-	strlcpy(drvinfo->driver,BNAD_NAME,sizeof(drvinfo->driver));
-	strlcpy(drvinfo->version,BNAD_VERSION,sizeof(drvinfo->version));
+	strcpy(drvinfo->driver, BNAD_NAME);
+	strcpy(drvinfo->version, BNAD_VERSION);
 
 	ioc_attr = kzalloc(sizeof(*ioc_attr), GFP_KERNEL);
 	if (ioc_attr) {

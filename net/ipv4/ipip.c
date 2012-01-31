@@ -268,7 +268,7 @@ static struct ip_tunnel * ipip_tunnel_locate(struct net *net,
 	if (parms->name[0])
 		strlcpy(name, parms->name, IFNAMSIZ);
 	else
-		strlcpy(name,"tunl%d",sizeof(name));
+		strcpy(name, "tunl%d");
 
 	dev = alloc_netdev(sizeof(*t), name, ipip_tunnel_setup);
 	if (dev == NULL)
@@ -285,7 +285,7 @@ static struct ip_tunnel * ipip_tunnel_locate(struct net *net,
 	if (register_netdevice(dev) < 0)
 		goto failed_free;
 
-	strlcpy(nt->parms.name,dev->name,sizeof(nt->parms.name));
+	strcpy(nt->parms.name, dev->name);
 
 	dev_hold(dev);
 	ipip_tunnel_link(ipn, nt);
@@ -781,7 +781,7 @@ static int __net_init ipip_fb_tunnel_init(struct net_device *dev)
 	struct ipip_net *ipn = net_generic(dev_net(dev), ipip_net_id);
 
 	tunnel->dev = dev;
-	strlcpy(tunnel->parms.name,dev->name,sizeof(tunnel->parms.name));
+	strcpy(tunnel->parms.name, dev->name);
 
 	iph->version		= 4;
 	iph->protocol		= IPPROTO_IPIP;
@@ -852,7 +852,7 @@ static int __net_init ipip_init_net(struct net *net)
 
 	t = netdev_priv(ipn->fb_tunnel_dev);
 
-	strlcpy(t->parms.name,ipn->fb_tunnel_dev->name,sizeof(t->parms.name));
+	strcpy(t->parms.name, ipn->fb_tunnel_dev->name);
 	return 0;
 
 err_reg_dev:

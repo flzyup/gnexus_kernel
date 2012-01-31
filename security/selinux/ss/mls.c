@@ -102,7 +102,8 @@ void mls_sid_to_context(struct context *context,
 	scontextp++;
 
 	for (l = 0; l < 2; l++) {
-		strlcpy(scontextp, sym_name(&policydb, SYM_LEVELS,,sizeof(scontextp, sym_name(&policydb, SYM_LEVELS)					   context->range.level[l].sens - 1));
+		strcpy(scontextp, sym_name(&policydb, SYM_LEVELS,
+					   context->range.level[l].sens - 1));
 		scontextp += strlen(scontextp);
 
 		/* categories */
@@ -118,7 +119,7 @@ void mls_sid_to_context(struct context *context,
 					else
 						*scontextp++ = ',';
 					nm = sym_name(&policydb, SYM_CATS, prev);
-					strlcpy(scontextp,nm,sizeof(scontextp));
+					strcpy(scontextp, nm);
 					scontextp += strlen(nm);
 				}
 				if (prev < 0)
@@ -126,7 +127,7 @@ void mls_sid_to_context(struct context *context,
 				else
 					*scontextp++ = ',';
 				nm = sym_name(&policydb, SYM_CATS, i);
-				strlcpy(scontextp,nm,sizeof(scontextp));
+				strcpy(scontextp, nm);
 				scontextp += strlen(nm);
 				head = i;
 			}
@@ -139,7 +140,7 @@ void mls_sid_to_context(struct context *context,
 			else
 				*scontextp++ = ',';
 			nm = sym_name(&policydb, SYM_CATS, prev);
-			strlcpy(scontextp,nm,sizeof(scontextp));
+			strcpy(scontextp, nm);
 			scontextp += strlen(nm);
 		}
 

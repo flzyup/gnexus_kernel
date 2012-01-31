@@ -194,7 +194,7 @@ static int snd_ca0106_capture_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 6;
 	if (uinfo->value.enumerated.item > 5)
                 uinfo->value.enumerated.item = 5;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -237,7 +237,7 @@ static int snd_ca0106_i2c_capture_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item > 3)
                 uinfo->value.enumerated.item = 3;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -280,7 +280,7 @@ static int snd_ca0106_capture_line_in_side_out_info(struct snd_kcontrol *kcontro
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item > 1)
                 uinfo->value.enumerated.item = 1;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -294,7 +294,7 @@ static int snd_ca0106_capture_mic_line_in_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item > 1)
                 uinfo->value.enumerated.item = 1;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -739,7 +739,7 @@ static int __devinit remove_ctl(struct snd_card *card, const char *name)
 {
 	struct snd_ctl_elem_id id;
 	memset(&id, 0, sizeof(id));
-	strlcpy(id.name,name,sizeof(id.name));
+	strcpy(id.name, name);
 	id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	return snd_ctl_remove_id(card, &id);
 }
@@ -749,7 +749,7 @@ static struct snd_kcontrol __devinit *ctl_find(struct snd_card *card, const char
 	struct snd_ctl_elem_id sid;
 	memset(&sid, 0, sizeof(sid));
 	/* FIXME: strcpy is bad. */
-	strlcpy(sid.name,name,sizeof(sid.name));
+	strcpy(sid.name, name);
 	sid.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	return snd_ctl_find_id(card, &sid);
 }
@@ -758,7 +758,7 @@ static int __devinit rename_ctl(struct snd_card *card, const char *src, const ch
 {
 	struct snd_kcontrol *kctl = ctl_find(card, src);
 	if (kctl) {
-		strlcpy(kctl->id.name,dst,sizeof(kctl->id.name));
+		strcpy(kctl->id.name, dst);
 		return 0;
 	}
 	return -ENOENT;
@@ -903,7 +903,7 @@ int __devinit snd_ca0106_mixer(struct snd_ca0106 *emu)
 		add_slaves(card, vmaster, slave_sws);
 	}
 
-	strlcpy(card->mixername,"CA0106",sizeof(card->mixername));
+	strcpy(card->mixername, "CA0106");
         return 0;
 }
 

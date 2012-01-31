@@ -614,7 +614,8 @@ static int snd_mts64_ctl_smpte_fps_info(struct snd_kcontrol *kctl,
 	uinfo->value.enumerated.items = 5;
 	if (uinfo->value.enumerated.item > 4)
 		uinfo->value.enumerated.item = 4;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+	       texts[uinfo->value.enumerated.item]);
 	
 	return 0;
 }
@@ -788,7 +789,7 @@ static int __devinit snd_mts64_rawmidi_create(struct snd_card *card)
 		return err;
 
 	rmidi->private_data = mts;
-	strlcpy(rmidi->name,CARD_NAME,sizeof(rmidi->name));
+	strcpy(rmidi->name, CARD_NAME);
 	rmidi->info_flags = SNDRV_RAWMIDI_INFO_OUTPUT |
 		            SNDRV_RAWMIDI_INFO_INPUT |
                             SNDRV_RAWMIDI_INFO_DUPLEX;
@@ -816,7 +817,7 @@ static int __devinit snd_mts64_rawmidi_create(struct snd_card *card)
 		mts->midi_input_substream[substream->number] = substream;
 		switch(substream->number) {
 		case MTS64_SMPTE_SUBSTREAM:
-			strlcpy(substream->name,"Miditerminal SMPTE",sizeof(substream->name));
+			strcpy(substream->name, "Miditerminal SMPTE");
 			break;
 		default:
 			sprintf(substream->name,
@@ -962,8 +963,8 @@ static int __devinit snd_mts64_probe(struct platform_device *pdev)
 		snd_printd("Cannot create card\n");
 		return err;
 	}
-	strlcpy(card->driver,DRIVER_NAME,sizeof(card->driver));
-	strlcpy(card->shortname,"ESI " CARD_NAME,sizeof(card->shortname));
+	strcpy(card->driver, DRIVER_NAME);
+	strcpy(card->shortname, "ESI " CARD_NAME);
 	sprintf(card->longname,  "%s at 0x%lx, irq %i", 
 		card->shortname, p->base, p->irq);
 

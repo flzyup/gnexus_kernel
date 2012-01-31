@@ -666,7 +666,7 @@ isdn_net_dial(void)
                                                 cmd.parm.setup.si1 = 7;
 					}
 
-					strlcpy(cmd.parm.setup.phone,phone_number,sizeof(cmd.parm.setup.phone));
+					strcpy(cmd.parm.setup.phone, phone_number);
 					/*
 					 * Switch to next number or back to start if at end of list.
 					 */
@@ -688,7 +688,7 @@ isdn_net_dial(void)
 						isdn_map_eaz2msn(lp->msn, cmd.driver));
 					i = isdn_dc2minor(lp->isdn_device, lp->isdn_channel);
 					if (i >= 0) {
-						strlcpy(dev->num[i],cmd.parm.setup.phone,sizeof(dev->num[i]));
+						strcpy(dev->num[i], cmd.parm.setup.phone);
 						dev->usage[i] |= ISDN_USAGE_OUTGOING;
 						isdn_info_update();
 					}
@@ -918,13 +918,13 @@ isdn_net_log_skb(struct sk_buff * skb, isdn_net_local * lp)
 		case ETH_P_IP:
 			switch (p[9]) {
 				case 1:
-					strlcpy(addinfo," ICMP",sizeof(addinfo));
+					strcpy(addinfo, " ICMP");
 					break;
 				case 2:
-					strlcpy(addinfo," IGMP",sizeof(addinfo));
+					strcpy(addinfo, " IGMP");
 					break;
 				case 4:
-					strlcpy(addinfo," IPIP",sizeof(addinfo));
+					strcpy(addinfo, " IPIP");
 					break;
 				case 6:
 					ipp = (ip_ports *) (&p[data_ofs]);
@@ -932,10 +932,10 @@ isdn_net_log_skb(struct sk_buff * skb, isdn_net_local * lp)
 						ntohs(ipp->dest));
 					break;
 				case 8:
-					strlcpy(addinfo," EGP",sizeof(addinfo));
+					strcpy(addinfo, " EGP");
 					break;
 				case 12:
-					strlcpy(addinfo," PUP",sizeof(addinfo));
+					strcpy(addinfo, " PUP");
 					break;
 				case 17:
 					ipp = (ip_ports *) (&p[data_ofs]);
@@ -943,7 +943,7 @@ isdn_net_log_skb(struct sk_buff * skb, isdn_net_local * lp)
 						ntohs(ipp->dest));
 					break;
 				case 22:
-					strlcpy(addinfo," IDP",sizeof(addinfo));
+					strcpy(addinfo, " IDP");
 					break;
 			}
 			printk(KERN_INFO "OPEN: %pI4 -> %pI4%s\n",
@@ -2381,7 +2381,7 @@ isdn_net_find_icall(int di, int ch, int idx, setup_parm *setup)
 					spin_lock_irqsave(&dev->lock, flags);
 					dev->usage[idx] &= ISDN_USAGE_EXCLUSIVE;
 					dev->usage[idx] |= ISDN_USAGE_NET;
-					strlcpy(dev->num[idx],nr,sizeof(dev->num[idx]));
+					strcpy(dev->num[idx], nr);
 					isdn_info_update();
 					dev->st_netdev[idx] = lp->netdev;
 					lp->isdn_device = di;
@@ -2645,7 +2645,7 @@ isdn_net_newslave(char *parm)
 		/* Slave-Name MUST not be empty */
 		if (!strlen(p + 1))
 			return NULL;
-		strlcpy(newname,p + 1,sizeof(newname));
+		strcpy(newname, p + 1);
 		*p = 0;
 		/* Master must already exist */
 		if (!(n = isdn_net_findif(parm)))
@@ -2757,7 +2757,7 @@ isdn_net_setcfg(isdn_net_ioctl_cfg * cfg)
 
 			drvidx = -1;
 			chidx = -1;
-			strlcpy(drvid,cfg->drvid,sizeof(drvid));
+			strcpy(drvid, cfg->drvid);
 			if ((c = strchr(drvid, ','))) {
 				/* The channel-number is appended to the driver-Id with a comma */
 				chidx = (int) simple_strtoul(c + 1, &e, 10);
@@ -2893,7 +2893,7 @@ isdn_net_getcfg(isdn_net_ioctl_cfg * cfg)
 	if (p) {
 		isdn_net_local *lp = p->local;
 
-		strlcpy(cfg->eaz,lp->msn,sizeof(cfg->eaz));
+		strcpy(cfg->eaz, lp->msn);
 		cfg->exclusive = lp->exclusive;
 		if (lp->pre_device >= 0) {
 			sprintf(cfg->drvid, "%s,%d", dev->drvid[lp->pre_device],
@@ -2926,16 +2926,16 @@ isdn_net_getcfg(isdn_net_ioctl_cfg * cfg)
 		cfg->dialwait = lp->dialwait / HZ;
 		if (lp->slave) {
 			if (strlen(lp->slave->name) >= 10)
-				strlcpy(cfg->slave,"too-long",sizeof(cfg->slave));
+				strcpy(cfg->slave, "too-long");
 			else
-				strlcpy(cfg->slave,lp->slave->name,sizeof(cfg->slave));
+				strcpy(cfg->slave, lp->slave->name);
 		} else
 			cfg->slave[0] = '\0';
 		if (lp->master) {
 			if (strlen(lp->master->name) >= 10)
-				strlcpy(cfg->master,"too-long",sizeof(cfg->master));
+				strcpy(cfg->master, "too-long");
 			else
-				strlcpy(cfg->master,lp->master->name,sizeof(cfg->master));
+				strcpy(cfg->master, lp->master->name);
 		} else
 			cfg->master[0] = '\0';
 		return 0;

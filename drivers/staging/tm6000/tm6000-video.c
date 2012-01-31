@@ -1115,7 +1115,7 @@ static int vidioc_enum_input(struct file *file, void *priv,
 	else
 		i->type = V4L2_INPUT_TYPE_CAMERA;
 
-	strlcpy(i->name,iname[dev->vinput[n].type],sizeof(i->name));
+	strcpy(i->name, iname[dev->vinput[n].type]);
 
 	i->std = TM6000_STD;
 
@@ -1247,7 +1247,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 	if (0 != t->index)
 		return -EINVAL;
 
-	strlcpy(t->name,"Television",sizeof(t->name));
+	strcpy(t->name, "Television");
 	t->type       = V4L2_TUNER_ANALOG_TV;
 	t->capability = V4L2_TUNER_CAP_NORM;
 	t->rangehigh  = 0xffffffffUL;
@@ -1323,7 +1323,7 @@ static int radio_querycap(struct file *file, void *priv,
 	struct tm6000_fh *fh = file->private_data;
 	struct tm6000_core *dev = fh->dev;
 
-	strlcpy(cap->driver,"tm6000",sizeof(cap->driver));
+	strcpy(cap->driver, "tm6000");
 	strlcpy(cap->card, dev->name, sizeof(dev->name));
 	sprintf(cap->bus_info, "USB%04x:%04x",
 		le16_to_cpu(dev->udev->descriptor.idVendor),
@@ -1348,7 +1348,7 @@ static int radio_g_tuner(struct file *file, void *priv,
 		return -EINVAL;
 
 	memset(t, 0, sizeof(*t));
-	strlcpy(t->name,"Radio",sizeof(t->name));
+	strcpy(t->name, "Radio");
 	t->type = V4L2_TUNER_RADIO;
 	t->rxsubchans = V4L2_TUNER_SUB_STEREO;
 
@@ -1383,7 +1383,7 @@ static int radio_enum_input(struct file *file, void *priv,
 	if (!dev->rinput.type)
 		return -EINVAL;
 
-	strlcpy(i->name,"Radio",sizeof(i->name));
+	strcpy(i->name, "Radio");
 	i->type = V4L2_INPUT_TYPE_TUNER;
 
 	return 0;
@@ -1406,7 +1406,7 @@ static int radio_g_audio(struct file *file, void *priv,
 					struct v4l2_audio *a)
 {
 	memset(a, 0, sizeof(*a));
-	strlcpy(a->name,"Radio",sizeof(a->name));
+	strcpy(a->name, "Radio");
 	return 0;
 }
 

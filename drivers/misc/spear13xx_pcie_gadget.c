@@ -282,7 +282,7 @@ static ssize_t pcie_gadget_store_int_type(
 	} else
 		return -EINVAL;
 
-	strlcpy(config->int_type,buf,sizeof(config->int_type));
+	strcpy(config->int_type, buf);
 
 	return count;
 }

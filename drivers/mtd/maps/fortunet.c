@@ -121,7 +121,7 @@ static int __init MTD_New_Region(char *line)
         map_regions[params[1]].altbankwidth = 2;
         map_regions[params[1]].mymtd = NULL;
 	map_regions[params[1]].map_info.name = map_regions[params[1]].map_name;
-	strlcpy(map_regions[params[1]].map_info.name,string,sizeof(map_regions[params[1]].map_info.name));
+	strcpy(map_regions[params[1]].map_info.name,string);
 	if(params[0]>1)
 	{
 		map_regions[params[1]].window_addr_physical = params[2];
@@ -165,7 +165,7 @@ static int __init MTD_New_Partition(char *line)
 	}
 	map_regions[params[1]].parts[map_regions_parts[params[1]]].name =
 		map_regions[params[1]].	parts_name[map_regions_parts[params[1]]];
-	strlcpy(map_regions[params[1]].parts[map_regions_parts[params[1]]].name,string,sizeof(map_regions[params[1]].parts[map_regions_parts[params[1]]].name));
+	strcpy(map_regions[params[1]].parts[map_regions_parts[params[1]]].name,string);
 	map_regions[params[1]].parts[map_regions_parts[params[1]]].size =
 		params[2];
 	map_regions[params[1]].parts[map_regions_parts[params[1]]].offset =
@@ -198,7 +198,7 @@ static int __init init_fortunet(void)
 			map_regions[ix].altbankwidth = 2;
 			map_regions[ix].mymtd = NULL;
 			map_regions[ix].map_info.name = map_regions[ix].map_name;
-			strlcpy(map_regions[ix].map_info.name,"FORTUNET",sizeof(map_regions[ix].map_info.name));
+			strcpy(map_regions[ix].map_info.name,"FORTUNET");
 		}
 		if(map_regions_set[ix])
 		{

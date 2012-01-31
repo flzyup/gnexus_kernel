@@ -913,7 +913,7 @@ static int r8180_wx_get_iwmode(struct net_device *dev,
 
 	ieee = priv->ieee80211;
 
-	strlcpy(extra,"802.11",sizeof(extra));
+	strcpy(extra, "802.11");
 	if (ieee->modulation & IEEE80211_CCK_MODULATION) {
 		strcat(extra, "b");
 		if (ieee->modulation & IEEE80211_OFDM_MODULATION)
@@ -1184,7 +1184,7 @@ static int r8180_wx_get_version(struct net_device *dev,
 	/* struct ieee80211_device *ieee; */
 
 	down(&priv->wx_sem);
-	strlcpy(extra,"1020.0808",sizeof(extra));
+	strcpy(extra, "1020.0808");
 	up(&priv->wx_sem);
 
 	return 0;

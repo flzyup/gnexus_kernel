@@ -1174,7 +1174,7 @@ void dn_dev_up(struct net_device *dev)
 	ifa->ifa_local = ifa->ifa_address = addr;
 	ifa->ifa_flags = 0;
 	ifa->ifa_scope = RT_SCOPE_UNIVERSE;
-	strlcpy(ifa->ifa_label,dev->name,sizeof(ifa->ifa_label));
+	strcpy(ifa->ifa_label, dev->name);
 
 	dn_dev_set_ifa(dev, ifa);
 

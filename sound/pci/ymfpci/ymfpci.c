@@ -272,7 +272,7 @@ static int __devinit snd_card_ymfpci_probe(struct pci_dev *pci,
 	chip->mpu_res = mpu_res;
 	card->private_data = chip;
 
-	strlcpy(card->driver,str,sizeof(card->driver));
+	strcpy(card->driver, str);
 	sprintf(card->shortname, "Yamaha %s (%s)", model, str);
 	sprintf(card->longname, "%s at 0x%lx, irq %i",
 		card->shortname,

@@ -515,7 +515,7 @@ static int __init i2c_imx_probe(struct platform_device *pdev)
 	}
 
 	/* Setup i2c_imx driver structure */
-	strlcpy(i2c_imx->adapter.name,pdev->name,sizeof(i2c_imx->adapter.name));
+	strcpy(i2c_imx->adapter.name, pdev->name);
 	i2c_imx->adapter.owner		= THIS_MODULE;
 	i2c_imx->adapter.algo		= &i2c_imx_algo;
 	i2c_imx->adapter.dev.parent	= &pdev->dev;

@@ -450,7 +450,7 @@ static int __devinit bfin_t350mcqb_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, fbinfo);
 
-	strlcpy(fbinfo->fix.id,driver_name,sizeof(fbinfo->fix.id));
+	strcpy(fbinfo->fix.id, driver_name);
 
 	fbinfo->fix.type = FB_TYPE_PACKED_PIXELS;
 	fbinfo->fix.type_aux = 0;

@@ -191,7 +191,7 @@ void divas_get_version(char *p)
 {
 	char tmprev[32];
 
-	strlcpy(tmprev,main_revision,sizeof(tmprev));
+	strcpy(tmprev, main_revision);
 	sprintf(p, "%s: %s(%s) %s(%s) major=%d\n", DRIVERLNAME, DRIVERRELEASE_DIVAS,
 		getrev(tmprev), diva_xdi_common_code_build, DIVA_BUILD, major);
 }
@@ -774,7 +774,7 @@ static int DIVA_INIT_FUNCTION divas_init(void)
 
 	printk(KERN_INFO "%s\n", DRIVERNAME);
 	printk(KERN_INFO "%s: Rel:%s  Rev:", DRIVERLNAME, DRIVERRELEASE_DIVAS);
-	strlcpy(tmprev,main_revision,sizeof(tmprev));
+	strcpy(tmprev, main_revision);
 	printk("%s  Build: %s(%s)\n", getrev(tmprev),
 	       diva_xdi_common_code_build, DIVA_BUILD);
 	printk(KERN_INFO "%s: support for: ", DRIVERLNAME);

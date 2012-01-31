@@ -446,14 +446,14 @@ void b1_parse_version(avmctrl_info *cinfo)
 	flag = ((u8 *)(profp->manu))[1];
 	switch (flag) {
 	case 0: if (cinfo->version[VER_CARDTYPE])
-	           strlcpy(cinfo->cardname,cinfo->version[VER_CARDTYPE],sizeof(cinfo->cardname));
-	        else strlcpy(cinfo->cardname,"B1",sizeof(cinfo->cardname));
+	           strcpy(cinfo->cardname, cinfo->version[VER_CARDTYPE]);
+	        else strcpy(cinfo->cardname, "B1");
 		break;
-	case 3: strlcpy(cinfo->cardname,"PCMCIA B",sizeof(cinfo->cardname)); break;
-	case 4: strlcpy(cinfo->cardname,"PCMCIA M1",sizeof(cinfo->cardname)); break;
-	case 5: strlcpy(cinfo->cardname,"PCMCIA M2",sizeof(cinfo->cardname)); break;
-	case 6: strlcpy(cinfo->cardname,"B1 V3.0",sizeof(cinfo->cardname)); break;
-	case 7: strlcpy(cinfo->cardname,"B1 PCI",sizeof(cinfo->cardname)); break;
+	case 3: strcpy(cinfo->cardname,"PCMCIA B"); break;
+	case 4: strcpy(cinfo->cardname,"PCMCIA M1"); break;
+	case 5: strcpy(cinfo->cardname,"PCMCIA M2"); break;
+	case 6: strcpy(cinfo->cardname,"B1 V3.0"); break;
+	case 7: strcpy(cinfo->cardname,"B1 PCI"); break;
 	default: sprintf(cinfo->cardname, "AVM?%u", (unsigned int)flag); break;
         }
         printk(KERN_NOTICE "%s: card %d \"%s\" ready.\n",
@@ -802,7 +802,7 @@ static int __init b1_init(void)
 		if ((p = strchr(rev, '$')) != NULL && p > rev)
 		   *(p-1) = 0;
 	} else
-		strlcpy(rev,"1.0",sizeof(rev));
+		strcpy(rev, "1.0");
 
 	printk(KERN_INFO "b1: revision %s\n", rev);
 

@@ -2412,7 +2412,7 @@ wl_iw_parse_ssid_list(char** list_str, wlc_ssid_t* ssid, int idx, int max)
 			ssid[idx].SSID_len = 0;
 
 		if (idx < max) {
-			strlcpy((char*)ssid[idx].SSID,str,sizeof((char*)ssid[idx].SSID));
+			strcpy((char*)ssid[idx].SSID, str);
 			ssid[idx].SSID_len = strlen(str);
 		}
 		idx++;

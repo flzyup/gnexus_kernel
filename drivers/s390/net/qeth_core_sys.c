@@ -196,7 +196,7 @@ static ssize_t qeth_dev_portname_store(struct device *dev,
 	/* for beauty reasons */
 	for (i = 1; i < 9; i++)
 		card->info.portname[i] = ' ';
-	strlcpy(card->info.portname + 1,tmp,sizeof(card->info.portname + 1));
+	strcpy(card->info.portname + 1, tmp);
 	ASCEBC(card->info.portname + 1, 8);
 out:
 	mutex_unlock(&card->conf_mutex);

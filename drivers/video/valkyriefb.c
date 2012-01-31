@@ -517,7 +517,7 @@ static int valkyrie_var_to_par(struct fb_var_screeninfo *var,
 static void valkyrie_init_fix(struct fb_fix_screeninfo *fix, struct fb_info_valkyrie *p)
 {
 	memset(fix, 0, sizeof(*fix));
-	strlcpy(fix->id,"valkyrie",sizeof(fix->id));
+	strcpy(fix->id, "valkyrie");
 	fix->mmio_start = p->valkyrie_regs_phys;
 	fix->mmio_len = sizeof(struct valkyrie_regs);
 	fix->type = FB_TYPE_PACKED_PIXELS;

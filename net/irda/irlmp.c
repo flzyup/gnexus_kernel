@@ -101,7 +101,7 @@ int __init irlmp_init(void)
 	spin_lock_init(&irlmp->cachelog->hb_spinlock);
 
 	irlmp->last_lsap_sel = 0x0f; /* Reserved 0x00-0x0f */
-	strlcpy(sysctl_devname,"Linux",sizeof(sysctl_devname));
+	strcpy(sysctl_devname, "Linux");
 
 	init_timer(&irlmp->discovery_timer);
 

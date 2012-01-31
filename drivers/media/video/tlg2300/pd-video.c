@@ -147,8 +147,8 @@ static int vidioc_querycap(struct file *file, void *fh,
 
 	logs(front);
 
-	strlcpy(cap->driver,"tele-video",sizeof(cap->driver));
-	strlcpy(cap->card,"Telegent Poseidon",sizeof(cap->card));
+	strcpy(cap->driver, "tele-video");
+	strcpy(cap->card, "Telegent Poseidon");
 	usb_make_path(p->udev, cap->bus_info, sizeof(cap->bus_info));
 	cap->version = KERNEL_VERSION(0, 0, 1);
 	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_TUNER |
@@ -710,7 +710,7 @@ static int vidioc_enum_fmt(struct file *file, void *fh,
 	f->type		= V4L2_BUF_TYPE_VIDEO_CAPTURE;
 	f->flags	= 0;
 	f->pixelformat	= poseidon_formats[f->index].fourcc;
-	strlcpy(f->description,poseidon_formats[f->index].name,sizeof(f->description));
+	strcpy(f->description, poseidon_formats[f->index].name);
 	return 0;
 }
 
@@ -891,7 +891,7 @@ static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *in)
 
 	if (in->index < 0 || in->index >= POSEIDON_INPUTS)
 		return -EINVAL;
-	strlcpy(in->name,pd_inputs[in->index].name,sizeof(in->name));
+	strcpy(in->name, pd_inputs[in->index].name);
 	in->type  = V4L2_INPUT_TYPE_TUNER;
 
 	/*
@@ -1015,7 +1015,7 @@ static int vidioc_enumaudio(struct file *file, void *fh, struct v4l2_audio *a)
 	if (0 != a->index)
 		return -EINVAL;
 	a->capability = V4L2_AUDCAP_STEREO;
-	strlcpy(a->name,"USB audio in",sizeof(a->name));
+	strcpy(a->name, "USB audio in");
 	/*Poseidon have no AVL function.*/
 	a->mode = 0;
 	return 0;
@@ -1025,7 +1025,7 @@ static int vidioc_g_audio(struct file *file, void *fh, struct v4l2_audio *a)
 {
 	a->index = 0;
 	a->capability = V4L2_AUDCAP_STEREO;
-	strlcpy(a->name,"USB audio in",sizeof(a->name));
+	strcpy(a->name, "USB audio in");
 	a->mode = 0;
 	return 0;
 }
@@ -1070,7 +1070,7 @@ static int vidioc_g_tuner(struct file *file, void *fh, struct v4l2_tuner *tuner)
 	else
 		tuner->signal = (atv_stat.sig_strength * 255 / 10) << 8;
 
-	strlcpy(tuner->name,"Telegent Systems",sizeof(tuner->name));
+	strcpy(tuner->name, "Telegent Systems");
 	tuner->type = V4L2_TUNER_ANALOG_TV;
 	tuner->rangelow = TUNER_FREQ_MIN / 62500;
 	tuner->rangehigh = TUNER_FREQ_MAX / 62500;

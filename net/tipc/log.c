@@ -199,7 +199,7 @@ static void tipc_printbuf_move(struct print_buf *pb_to,
 	}
 
 	if (pb_to->size < pb_from->size) {
-		strlcpy(pb_to->buf,"*** PRINT BUFFER MOVE ERROR ***",sizeof(pb_to->buf));
+		strcpy(pb_to->buf, "*** PRINT BUFFER MOVE ERROR ***");
 		pb_to->buf[pb_to->size - 1] = ~0;
 		pb_to->crs = strchr(pb_to->buf, 0);
 		return;
@@ -209,7 +209,7 @@ static void tipc_printbuf_move(struct print_buf *pb_to,
 
 	len = pb_from->buf + pb_from->size - pb_from->crs - 2;
 	if ((pb_from->buf[pb_from->size - 1] == 0) && (len > 0)) {
-		strlcpy(pb_to->buf,pb_from->crs + 1,sizeof(pb_to->buf));
+		strcpy(pb_to->buf, pb_from->crs + 1);
 		pb_to->crs = pb_to->buf + len;
 	} else
 		pb_to->crs = pb_to->buf;
@@ -217,7 +217,7 @@ static void tipc_printbuf_move(struct print_buf *pb_to,
 	/* Copy data from start to cursor (always) */
 
 	len = pb_from->crs - pb_from->buf;
-	strlcpy(pb_to->crs,pb_from->buf,sizeof(pb_to->crs));
+	strcpy(pb_to->crs, pb_from->buf);
 	pb_to->crs += len;
 
 	tipc_printbuf_reset(pb_from);
@@ -239,22 +239,22 @@ void tipc_printf(struct print_buf *pb, const char *fmt, ...)
 
 	FORMAT(print_string, chars_to_add, fmt);
 	if (chars_to_add >= TIPC_PB_MAX_STR)
-		strlcpy(print_string,"*** PRINT BUFFER STRING TOO LONG ***",sizeof(print_string));
+		strcpy(print_string, "*** PRINT BUFFER STRING TOO LONG ***");
 
 	if (pb->buf) {
 		chars_left = pb->buf + pb->size - pb->crs - 1;
 		if (chars_to_add <= chars_left) {
-			strlcpy(pb->crs,print_string,sizeof(pb->crs));
+			strcpy(pb->crs, print_string);
 			pb->crs += chars_to_add;
 		} else if (chars_to_add >= (pb->size - 1)) {
-			strlcpy(pb->buf,print_string + chars_to_add + 1
-,sizeof(pb->buf)			       - pb->size);
+			strcpy(pb->buf, print_string + chars_to_add + 1
+			       - pb->size);
 			pb->crs = pb->buf + pb->size - 1;
 		} else {
-			strlcpy(pb->buf,print_string + chars_left,sizeof(pb->buf));
+			strcpy(pb->buf, print_string + chars_left);
 			save_char = print_string[chars_left];
 			print_string[chars_left] = 0;
-			strlcpy(pb->crs,print_string,sizeof(pb->crs));
+			strcpy(pb->crs, print_string);
 			print_string[chars_left] = save_char;
 			pb->crs = pb->buf + chars_to_add - chars_left;
 		}

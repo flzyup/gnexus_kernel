@@ -74,7 +74,7 @@ irnet_post_event(irnet_socket *	ap,
   irnet_events.log[index].saddr = saddr;
   /* Try to copy IrDA nickname */
   if(name)
-    strlcpy(irnet_events.log[index].name,name,sizeof(irnet_events.log[index].name));
+    strcpy(irnet_events.log[index].name, name);
   else
     irnet_events.log[index].name[0] = '\0';
   /* Copy hints */

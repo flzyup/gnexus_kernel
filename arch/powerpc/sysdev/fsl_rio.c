@@ -1517,7 +1517,7 @@ int fsl_rio_setup(struct platform_device *dev)
 	rio_init_dbell_res(&port->riores[RIO_DOORBELL_RESOURCE], 0, 0xffff);
 	rio_init_mbox_res(&port->riores[RIO_INB_MBOX_RESOURCE], 0, 0);
 	rio_init_mbox_res(&port->riores[RIO_OUTB_MBOX_RESOURCE], 0, 0);
-	strlcpy(port->name,"RIO0 mport",sizeof(port->name));
+	strcpy(port->name, "RIO0 mport");
 
 	priv->dev = &dev->dev;
 

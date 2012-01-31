@@ -183,7 +183,7 @@ static void set_adapter_info(struct ibmvscsi_host_data *hostdata)
 			sizeof(hostdata->madapter_info));
 
 	dev_info(hostdata->dev, "SRP_VERSION: %s\n", SRP_VERSION);
-	strlcpy(hostdata->madapter_info.srp_version,SRP_VERSION,sizeof(hostdata->madapter_info.srp_version));
+	strcpy(hostdata->madapter_info.srp_version, SRP_VERSION);
 
 	strncpy(hostdata->madapter_info.partition_name, partition_name,
 			sizeof(hostdata->madapter_info.partition_name));

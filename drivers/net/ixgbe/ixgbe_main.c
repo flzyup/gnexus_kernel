@@ -7658,7 +7658,7 @@ static int __devinit ixgbe_probe(struct pci_dev *pdev,
 			   "representative who provided you with this "
 			   "hardware.\n");
 	}
-	strlcpy(netdev->name,"eth%d",sizeof(netdev->name));
+	strcpy(netdev->name, "eth%d");
 	err = register_netdev(netdev);
 	if (err)
 		goto err_register;

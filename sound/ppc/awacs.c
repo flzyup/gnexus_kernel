@@ -968,7 +968,7 @@ snd_pmac_awacs_init(struct snd_pmac *chip)
 	/*
 	 * build mixers
 	 */
-	strlcpy(chip->card->mixername,"PowerMac AWACS",sizeof(chip->card->mixername));
+	strcpy(chip->card->mixername, "PowerMac AWACS");
 
 	err = build_mixers(chip, ARRAY_SIZE(snd_pmac_awacs_mixers),
 				snd_pmac_awacs_mixers);

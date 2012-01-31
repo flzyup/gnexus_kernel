@@ -203,7 +203,7 @@ static unsigned long unflatten_dt_node(struct boot_param_header *blob,
 			char *fn = np->full_name;
 			/* rebuild full path for new format */
 			if (dad && dad->parent) {
-				strlcpy(fn,dad->full_name,sizeof(fn));
+				strcpy(fn, dad->full_name);
 #ifdef DEBUG
 				if ((strlen(fn) + l + 1) != allocl) {
 					pr_debug("%s: p: %d, l: %d, a: %d\n",

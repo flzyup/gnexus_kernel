@@ -673,7 +673,7 @@ int p9dirent_read(char *buf, int len, struct p9_dirent *dirent,
 		goto out;
 	}
 
-	strlcpy(dirent->d_name,nameptr,sizeof(dirent->d_name));
+	strcpy(dirent->d_name, nameptr);
 	kfree(nameptr);
 
 out:

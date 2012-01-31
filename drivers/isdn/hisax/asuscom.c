@@ -323,7 +323,7 @@ setup_asuscom(struct IsdnCard *card)
 	u_char val;
 	char tmp[64];
 
-	strlcpy(tmp,Asuscom_revision,sizeof(tmp));
+	strcpy(tmp, Asuscom_revision);
 	printk(KERN_INFO "HiSax: Asuscom ISDNLink driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_ASUSCOM)
 		return (0);

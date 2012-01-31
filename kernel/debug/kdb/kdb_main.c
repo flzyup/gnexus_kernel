@@ -698,11 +698,11 @@ static int kdb_defcmd(int argc, const char **argv)
 	s->usage = kdb_strdup(argv[2], GFP_KDB);
 	s->help = kdb_strdup(argv[3], GFP_KDB);
 	if (s->usage[0] == '"') {
-		strlcpy(s->usage,s->usage+1,sizeof(s->usage));
+		strcpy(s->usage, s->usage+1);
 		s->usage[strlen(s->usage)-1] = '\0';
 	}
 	if (s->help[0] == '"') {
-		strlcpy(s->help,s->help+1,sizeof(s->help));
+		strcpy(s->help, s->help+1);
 		s->help[strlen(s->help)-1] = '\0';
 	}
 	++defcmd_set_count;
@@ -814,7 +814,7 @@ static void parse_grep(const char *str)
 		kdb_printf("search string too long\n");
 		return;
 	}
-	strlcpy(kdb_grep_string,cp,sizeof(kdb_grep_string));
+	strcpy(kdb_grep_string, cp);
 	kdb_grepping_flag++;
 	return;
 }

@@ -3372,7 +3372,7 @@ static int udc_probe(struct udc *dev)
 		"irq %s, pci mem %08lx, chip rev %02x(Geode5536 %s)\n",
 		tmp, dev->phys_addr, dev->chiprev,
 		(dev->chiprev == UDC_HSA0_REV) ? "A0" : "B1");
-	strlcpy(tmp,UDC_DRIVER_VERSION_STRING,sizeof(tmp));
+	strcpy(tmp, UDC_DRIVER_VERSION_STRING);
 	if (dev->chiprev == UDC_HSA0_REV) {
 		dev_err(&dev->pdev->dev, "chip revision is A0; too old\n");
 		retval = -ENODEV;

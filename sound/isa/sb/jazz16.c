@@ -291,8 +291,8 @@ static int __devinit snd_jazz16_probe(struct device *devptr, unsigned int dev)
 
 	jazz16->chip = chip;
 
-	strlcpy(card->driver,"jazz16",sizeof(card->driver));
-	strlcpy(card->shortname,"Media Vision Jazz16",sizeof(card->shortname));
+	strcpy(card->driver, "jazz16");
+	strcpy(card->shortname, "Media Vision Jazz16");
 	sprintf(card->longname,
 		"Media Vision Jazz16 at 0x%lx, irq %d, dma8 %d, dma16 %d",
 		port[dev], xirq, xdma8, xdma16);

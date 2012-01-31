@@ -190,7 +190,7 @@ EXPORT_SYMBOL_GPL(enclosure_unregister);
 
 static void enclosure_link_name(struct enclosure_component *cdev, char *name)
 {
-	strlcpy(name,"enclosure_device:",sizeof(name));
+	strcpy(name, "enclosure_device:");
 	strcat(name, dev_name(&cdev->cdev));
 }
 

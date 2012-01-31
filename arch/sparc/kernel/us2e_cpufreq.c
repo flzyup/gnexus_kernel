@@ -372,7 +372,7 @@ static int __init us2e_freq_init(void)
 		driver->get = us2e_freq_get;
 		driver->exit = us2e_freq_cpu_exit;
 		driver->owner = THIS_MODULE,
-		strlcpy(driver->name,"UltraSPARC-IIe",sizeof(driver->name));
+		strcpy(driver->name, "UltraSPARC-IIe");
 
 		cpufreq_us2e_driver = driver;
 		ret = cpufreq_register_driver(driver);

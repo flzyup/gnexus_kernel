@@ -728,7 +728,7 @@ static struct smtcfb_info *smtc_alloc_fb_info(struct pci_dev *dev,
 	sfb->fb.var = smtcfb_var;
 	sfb->fb.fix = smtcfb_fix;
 
-	strlcpy(sfb->fb.fix.id,name,sizeof(sfb->fb.fix.id));
+	strcpy(sfb->fb.fix.id, name);
 
 	sfb->fb.fix.type = FB_TYPE_PACKED_PIXELS;
 	sfb->fb.fix.type_aux = 0;

@@ -1228,7 +1228,7 @@ static int __devinit s3_pci_probe(struct pci_dev *dev, const struct pci_device_i
 	vga_wcrt(par->state.vgabase, 0x38, cr38);
 	vga_wcrt(par->state.vgabase, 0x39, cr39);
 
-	strlcpy(info->fix.id,s3_names [par->chip],sizeof(info->fix.id));
+	strcpy(info->fix.id, s3_names [par->chip]);
 	info->fix.mmio_start = 0;
 	info->fix.mmio_len = 0;
 	info->fix.type = FB_TYPE_PACKED_PIXELS;

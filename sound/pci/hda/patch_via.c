@@ -1623,7 +1623,7 @@ static void via_hp_automute(struct hda_codec *codec)
 		/* notify change */
 		memset(&id, 0, sizeof(id));
 		id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-		strlcpy(id.name,"Front Playback Switch",sizeof(id.name));
+		strcpy(id.name, "Front Playback Switch");
 		snd_ctl_notify(codec->bus->card, SNDRV_CTL_EVENT_MASK_VALUE,
 			       &id);
 	}
@@ -1723,7 +1723,7 @@ static void via_speaker_automute(struct hda_codec *codec)
 		/* notify change */
 		memset(&id, 0, sizeof(id));
 		id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-		strlcpy(id.name,"Speaker Playback Switch",sizeof(id.name));
+		strcpy(id.name, "Speaker Playback Switch");
 		snd_ctl_notify(codec->bus->card, SNDRV_CTL_EVENT_MASK_VALUE,
 			       &id);
 	}

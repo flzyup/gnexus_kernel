@@ -560,8 +560,8 @@ static int __devinit snd_galaxy_probe(struct device *dev, unsigned int n)
 		goto error;
 	}
 
-	strlcpy(card->driver,DRV_NAME,sizeof(card->driver));
-	strlcpy(card->shortname,DRV_NAME,sizeof(card->shortname));
+	strcpy(card->driver, DRV_NAME);
+	strcpy(card->shortname, DRV_NAME);
 	sprintf(card->longname, "%s at %#lx/%#lx, irq %d, dma %d/%d",
 		card->shortname, port[n], wss_port[n], irq[n], dma1[n],
 		dma2[n]);

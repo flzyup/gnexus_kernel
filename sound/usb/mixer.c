@@ -606,13 +606,13 @@ static int get_term_name(struct mixer_build *state, struct usb_audio_term *iterm
 			return 0;
 		switch (iterm->type >> 16) {
 		case UAC_SELECTOR_UNIT:
-			strlcpy(name,"Selector",sizeof(name)); return 8;
+			strcpy(name, "Selector"); return 8;
 		case UAC1_PROCESSING_UNIT:
-			strlcpy(name,"Process Unit",sizeof(name)); return 12;
+			strcpy(name, "Process Unit"); return 12;
 		case UAC1_EXTENSION_UNIT:
-			strlcpy(name,"Ext Unit",sizeof(name)); return 8;
+			strcpy(name, "Ext Unit"); return 8;
 		case UAC_MIXER_UNIT:
-			strlcpy(name,"Mixer",sizeof(name)); return 5;
+			strcpy(name, "Mixer"); return 5;
 		default:
 			return sprintf(name, "Unit %d", iterm->id);
 		}
@@ -620,18 +620,18 @@ static int get_term_name(struct mixer_build *state, struct usb_audio_term *iterm
 
 	switch (iterm->type & 0xff00) {
 	case 0x0100:
-		strlcpy(name,"PCM",sizeof(name)); return 3;
+		strcpy(name, "PCM"); return 3;
 	case 0x0200:
-		strlcpy(name,"Mic",sizeof(name)); return 3;
+		strcpy(name, "Mic"); return 3;
 	case 0x0400:
-		strlcpy(name,"Headset",sizeof(name)); return 7;
+		strcpy(name, "Headset"); return 7;
 	case 0x0500:
-		strlcpy(name,"Phone",sizeof(name)); return 5;
+		strcpy(name, "Phone"); return 5;
 	}
 
 	for (names = iterm_names; names->type; names++)
 		if (names->type == iterm->type) {
-			strlcpy(name,names->name,sizeof(name));
+			strcpy(name, names->name);
 			return strlen(names->name);
 		}
 	return 0;
@@ -2225,7 +2225,7 @@ int snd_usb_create_mixer(struct snd_usb_audio *chip, int ctrlif,
 	struct snd_info_entry *entry;
 	int err;
 
-	strlcpy(chip->card->mixername,"USB Mixer",sizeof(chip->card->mixername));
+	strcpy(chip->card->mixername, "USB Mixer");
 
 	mixer = kzalloc(sizeof(*mixer), GFP_KERNEL);
 	if (!mixer)

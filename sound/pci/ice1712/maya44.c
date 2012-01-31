@@ -366,7 +366,8 @@ static int maya_rec_src_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -417,7 +418,8 @@ static int maya_pb_route_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 

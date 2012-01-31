@@ -768,7 +768,7 @@ static int __devinit loopback_pcm_new(struct loopback *loopback,
 
 	pcm->private_data = loopback;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"Loopback PCM",sizeof(pcm->name));
+	strcpy(pcm->name, "Loopback PCM");
 
 	loopback->pcm[device] = pcm;
 
@@ -989,7 +989,7 @@ static int __devinit loopback_mixer_new(struct loopback *loopback, int notify)
 	struct loopback_setup *setup;
 	int err, dev, substr, substr_count, idx;
 
-	strlcpy(card->mixername,"Loopback Mixer",sizeof(card->mixername));
+	strcpy(card->mixername, "Loopback Mixer");
 	for (dev = 0; dev < 2; dev++) {
 		pcm = loopback->pcm[dev];
 		substr_count =
@@ -1147,8 +1147,8 @@ static int __devinit loopback_probe(struct platform_device *devptr)
 		goto __nodev;
 	loopback_proc_new(loopback, 0);
 	loopback_proc_new(loopback, 1);
-	strlcpy(card->driver,"Loopback",sizeof(card->driver));
-	strlcpy(card->shortname,"Loopback",sizeof(card->shortname));
+	strcpy(card->driver, "Loopback");
+	strcpy(card->shortname, "Loopback");
 	sprintf(card->longname, "Loopback %i", dev + 1);
 	err = snd_card_register(card);
 	if (!err) {

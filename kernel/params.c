@@ -267,7 +267,7 @@ int param_set_charp(const char *val, const struct kernel_param *kp)
 		*(char **)kp->arg = kmalloc_parameter(strlen(val)+1);
 		if (!*(char **)kp->arg)
 			return -ENOMEM;
-		strlcpy(*(char **)kp->arg,val,sizeof(*(char **)kp->arg));
+		strcpy(*(char **)kp->arg, val);
 	} else
 		*(const char **)kp->arg = val;
 
@@ -470,7 +470,7 @@ int param_set_copystring(const char *val, const struct kernel_param *kp)
 		       kp->name, kps->maxlen-1);
 		return -ENOSPC;
 	}
-	strlcpy(kps->string,val,sizeof(kps->string));
+	strcpy(kps->string, val);
 	return 0;
 }
 EXPORT_SYMBOL(param_set_copystring);
@@ -796,7 +796,7 @@ static void __init param_sysfs_builtin(void)
 		dot = strchr(kp->name, '.');
 		if (!dot) {
 			/* This happens for core_param() */
-			strlcpy(modname,"kernel",sizeof(modname));
+			strcpy(modname, "kernel");
 			name_len = 0;
 		} else {
 			name_len = dot - kp->name + 1;

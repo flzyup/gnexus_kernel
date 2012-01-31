@@ -210,7 +210,7 @@ static struct vfsmount *afs_mntpt_do_automount(struct dentry *mntpt)
 	/* work out what options we want */
 	super = AFS_FS_S(mntpt->d_sb);
 	memcpy(options, "cell=", 5);
-	strlcpy(options + 5,super->volume->cell->name,sizeof(options + 5));
+	strcpy(options + 5, super->volume->cell->name);
 	if (super->volume->type == AFSVL_RWVOL || rwpath)
 		strcat(options, ",rwpath");
 

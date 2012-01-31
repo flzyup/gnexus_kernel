@@ -225,7 +225,7 @@ int diva_maint_init (byte* base, unsigned long length, int do_init) {
   base   += sizeof(dword);
   length -= sizeof(dword);
 
-  strlcpy(base,"KERNEL MODE BUFFER\n",sizeof(base));
+  strcpy (base, "KERNEL MODE BUFFER\n");
   base   += 2048;
   length -= 2048;
 
@@ -428,7 +428,7 @@ static void DI_register (void *arg) {
     clients[free_id].hDbg = hDbg;
     clients[free_id].sec  = sec;
     clients[free_id].usec = usec;
-    strlcpy(clients[free_id].drvName,hDbg->drvName,sizeof(clients[free_id].drvName));
+    strcpy (clients[free_id].drvName, hDbg->drvName);
 
     clients[free_id].dbgMask = hDbg->dbgMask;
     if (best_id) {
@@ -923,8 +923,8 @@ void diva_mnt_add_xdi_adapter (const DESCRIPTOR* d) {
   clients[id].hDbg     = &clients[id].Dbg;
   clients[id].sec      = sec;
   clients[id].usec     = usec;
-  strlcpy(clients[id].drvName,tmp,sizeof(clients[id].drvName));
-  strlcpy(clients[id].Dbg.drvName,tmp,sizeof(clients[id].Dbg.drvName));
+  strcpy (clients[id].drvName,     tmp);
+  strcpy (clients[id].Dbg.drvName, tmp);
   clients[id].Dbg.drvTag[0] = 0;
   clients[id].logical  = (int)logical;
   clients[id].channels = (int)d->channels;
@@ -1414,7 +1414,7 @@ static void print_ie (diva_trace_ie_t* ie, char* buffer, int length) {
       buffer += 2;
       length -= 2;
       if (i < (ie->length-1)) {
-        strlcpy(buffer," ",sizeof(buffer));
+        strcpy (buffer, " ");
         buffer++;
         length--;
       }

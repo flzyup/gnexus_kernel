@@ -610,8 +610,8 @@ static void bnx2x_get_drvinfo(struct net_device *dev,
 	struct bnx2x *bp = netdev_priv(dev);
 	u8 phy_fw_ver[PHY_FW_VER_LEN];
 
-	strlcpy(info->driver,DRV_MODULE_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_MODULE_VERSION,sizeof(info->version));
+	strcpy(info->driver, DRV_MODULE_NAME);
+	strcpy(info->version, DRV_MODULE_VERSION);
 
 	phy_fw_ver[0] = '\0';
 	if (bp->port.pmf) {
@@ -629,7 +629,7 @@ static void bnx2x_get_drvinfo(struct net_device *dev,
 		 (bp->common.bc_ver & 0xff00) >> 8,
 		 (bp->common.bc_ver & 0xff),
 		 ((phy_fw_ver[0] != '\0') ? " phy " : ""), phy_fw_ver);
-	strlcpy(info->bus_info,pci_name(bp->pdev,sizeof(info->bus_info)));
+	strcpy(info->bus_info, pci_name(bp->pdev));
 	info->n_stats = BNX2X_NUM_STATS;
 	info->testinfo_len = BNX2X_NUM_TESTS;
 	info->eedump_len = bp->common.flash_size;
@@ -1923,12 +1923,14 @@ static void bnx2x_get_strings(struct net_device *dev, u32 stringset, u8 *buf)
 			if (IS_MF_MODE_STAT(bp))
 				break;
 			for (j = 0; j < BNX2X_NUM_STATS; j++)
-				strlcpy(buf + (k + j)*ETH_GSTRING_LEN,,sizeof(buf + (k + j)*ETH_GSTRING_LEN)				       bnx2x_stats_arr[j].string);
+				strcpy(buf + (k + j)*ETH_GSTRING_LEN,
+				       bnx2x_stats_arr[j].string);
 		} else {
 			for (i = 0, j = 0; i < BNX2X_NUM_STATS; i++) {
 				if (IS_MF_MODE_STAT(bp) && IS_PORT_STAT(i))
 					continue;
-				strlcpy(buf + j*ETH_GSTRING_LEN,,sizeof(buf + j*ETH_GSTRING_LEN)				       bnx2x_stats_arr[i].string);
+				strcpy(buf + j*ETH_GSTRING_LEN,
+				       bnx2x_stats_arr[i].string);
 				j++;
 			}
 		}

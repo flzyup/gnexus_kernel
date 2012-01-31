@@ -72,7 +72,7 @@ EXPORT_SYMBOL(strnlen);
  *
  * returns a pointer to @dest
  */
-char *strlcpy(char *dest,const char *src,sizeof(char *dest))
+char *strcpy(char *dest, const char *src)
 {
 #if __GNUC__ < 4
 	register int r0 asm("0") = 0;
@@ -84,7 +84,7 @@ char *strlcpy(char *dest,const char *src,sizeof(char *dest))
 		      : "cc", "memory" );
 	return ret;
 #else
-	return __builtin_strlcpy(dest,src,sizeof(dest));
+	return __builtin_strcpy(dest, src);
 #endif
 }
 EXPORT_SYMBOL(strcpy);

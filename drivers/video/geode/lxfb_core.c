@@ -427,7 +427,7 @@ static struct fb_info * __devinit lxfb_init_fbinfo(struct device *dev)
 
 	par = info->par;
 
-	strlcpy(info->fix.id,"Geode LX",sizeof(info->fix.id));
+	strcpy(info->fix.id, "Geode LX");
 
 	info->fix.type		= FB_TYPE_PACKED_PIXELS;
 	info->fix.type_aux	= 0;

@@ -170,7 +170,7 @@ static int get_name_to_buffer(struct path *path, int flags, char *buffer,
 		 * Append "/" to the pathname.  The root directory is a special
 		 * case; it already ends in slash.
 		 */
-		strlcpy(&buffer[size - 2],"/",sizeof(&buffer[size - 2]));
+		strcpy(&buffer[size - 2], "/");
 
 	return error;
 }

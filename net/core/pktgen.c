@@ -3013,10 +3013,10 @@ static void pktgen_run(struct pktgen_thread *t)
 
 			set_pkt_overhead(pkt_dev);
 
-			strlcpy(pkt_dev->result,"Starting",sizeof(pkt_dev->result));
+			strcpy(pkt_dev->result, "Starting");
 			started++;
 		} else
-			strlcpy(pkt_dev->result,"Error starting",sizeof(pkt_dev->result));
+			strcpy(pkt_dev->result, "Error starting");
 	}
 	if_unlock(t);
 	if (started)
@@ -3545,7 +3545,7 @@ static int pktgen_add_device(struct pktgen_thread *t, const char *ifname)
 	if (!pkt_dev)
 		return -ENOMEM;
 
-	strlcpy(pkt_dev->odevname,ifname,sizeof(pkt_dev->odevname));
+	strcpy(pkt_dev->odevname, ifname);
 	pkt_dev->flows = vzalloc_node(MAX_CFLOWS * sizeof(struct flow_state),
 				      node);
 	if (pkt_dev->flows == NULL) {

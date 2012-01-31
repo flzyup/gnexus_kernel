@@ -264,12 +264,12 @@ static void ascii_ssetup_strings(char **pbcc_area, struct cifs_ses *ses,
 
 	/* BB check for overflow here */
 
-	strlcpy(bcc_ptr,"Linux version ",sizeof(bcc_ptr));
+	strcpy(bcc_ptr, "Linux version ");
 	bcc_ptr += strlen("Linux version ");
-	strlcpy(bcc_ptr,init_utsname()->release,sizeof(bcc_ptr));
+	strcpy(bcc_ptr, init_utsname()->release);
 	bcc_ptr += strlen(init_utsname()->release) + 1;
 
-	strlcpy(bcc_ptr,CIFS_NETWORK_OPSYS,sizeof(bcc_ptr));
+	strcpy(bcc_ptr, CIFS_NETWORK_OPSYS);
 	bcc_ptr += strlen(CIFS_NETWORK_OPSYS) + 1;
 
 	*pbcc_area = bcc_ptr;

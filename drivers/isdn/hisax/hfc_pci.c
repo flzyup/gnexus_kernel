@@ -1647,7 +1647,7 @@ setup_hfcpci(struct IsdnCard *card)
 #error "not running on big endian machines now"
 #endif
 
-	strlcpy(tmp,hfcpci_revision,sizeof(tmp));
+	strcpy(tmp, hfcpci_revision);
 	printk(KERN_INFO "HiSax: HFC-PCI driver Rev. %s\n", HiSax_getrev(tmp));
 
 	cs->hw.hfcpci.int_s1 = 0;

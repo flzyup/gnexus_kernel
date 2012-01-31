@@ -1165,7 +1165,7 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
 	if (netif_running(tun->dev))
 		netif_wake_queue(tun->dev);
 
-	strlcpy(ifr->ifr_name,tun->dev->name,sizeof(ifr->ifr_name));
+	strcpy(ifr->ifr_name, tun->dev->name);
 	return 0;
 
  err_free_sk:
@@ -1181,7 +1181,7 @@ static int tun_get_iff(struct net *net, struct tun_struct *tun,
 {
 	tun_debug(KERN_INFO, tun, "tun_get_iff\n");
 
-	strlcpy(ifr->ifr_name,tun->dev->name,sizeof(ifr->ifr_name));
+	strcpy(ifr->ifr_name, tun->dev->name);
 
 	ifr->ifr_flags = tun_flags(tun);
 
@@ -1591,16 +1591,16 @@ static void tun_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info
 {
 	struct tun_struct *tun = netdev_priv(dev);
 
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
-	strlcpy(info->fw_version,"N/A",sizeof(info->fw_version));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
+	strcpy(info->fw_version, "N/A");
 
 	switch (tun->flags & TUN_TYPE_MASK) {
 	case TUN_TUN_DEV:
-		strlcpy(info->bus_info,"tun",sizeof(info->bus_info));
+		strcpy(info->bus_info, "tun");
 		break;
 	case TUN_TAP_DEV:
-		strlcpy(info->bus_info,"tap",sizeof(info->bus_info));
+		strcpy(info->bus_info, "tap");
 		break;
 	}
 }

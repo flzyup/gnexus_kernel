@@ -300,9 +300,9 @@ ltq_etop_hw_init(struct net_device *dev)
 static void
 ltq_etop_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
 {
-	strlcpy(info->driver,"Lantiq ETOP",sizeof(info->driver));
-	strlcpy(info->bus_info,"internal",sizeof(info->bus_info));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
+	strcpy(info->driver, "Lantiq ETOP");
+	strcpy(info->bus_info, "internal");
+	strcpy(info->version, DRV_VERSION);
 }
 
 static int
@@ -727,7 +727,7 @@ ltq_etop_probe(struct platform_device *pdev)
 	}
 
 	dev = alloc_etherdev_mq(sizeof(struct ltq_etop_priv), 4);
-	strlcpy(dev->name,"eth%d",sizeof(dev->name));
+	strcpy(dev->name, "eth%d");
 	dev->netdev_ops = &ltq_eth_netdev_ops;
 	dev->ethtool_ops = &ltq_etop_ethtool_ops;
 	priv = netdev_priv(dev);

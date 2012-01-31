@@ -923,7 +923,7 @@ static int __devinit snd_echo_new_pcm(struct echoaudio *chip)
 		return err;
 	pcm->private_data = chip;
 	chip->analog_pcm = pcm;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &analog_playback_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &analog_capture_ops);
 	if ((err = snd_echo_preallocate_pages(pcm, snd_dma_pci_data(chip->pci))) < 0)
@@ -937,7 +937,7 @@ static int __devinit snd_echo_new_pcm(struct echoaudio *chip)
 		return err;
 	pcm->private_data = chip;
 	chip->digital_pcm = pcm;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &digital_capture_ops);
 	if ((err = snd_echo_preallocate_pages(pcm, snd_dma_pci_data(chip->pci))) < 0)
 		return err;
@@ -958,7 +958,7 @@ static int __devinit snd_echo_new_pcm(struct echoaudio *chip)
 		return err;
 	pcm->private_data = chip;
 	chip->analog_pcm = pcm;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &analog_playback_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &analog_capture_ops);
 	if ((err = snd_echo_preallocate_pages(pcm, snd_dma_pci_data(chip->pci))) < 0)
@@ -973,7 +973,7 @@ static int __devinit snd_echo_new_pcm(struct echoaudio *chip)
 		return err;
 	pcm->private_data = chip;
 	chip->digital_pcm = pcm;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &digital_playback_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &digital_capture_ops);
 	if ((err = snd_echo_preallocate_pages(pcm, snd_dma_pci_data(chip->pci))) < 0)
@@ -1425,8 +1425,8 @@ static int snd_echo_digital_mode_info(struct snd_kcontrol *kcontrol,
 	uinfo->count = 1;
 	if (uinfo->value.enumerated.item >= chip->num_digital_modes)
 		uinfo->value.enumerated.item = chip->num_digital_modes - 1;
-	strlcpy(uinfo->value.enumerated.name,names[
-,sizeof(uinfo->value.enumerated.name)			chip->digital_mode_list[uinfo->value.enumerated.item]]);
+	strcpy(uinfo->value.enumerated.name, names[
+			chip->digital_mode_list[uinfo->value.enumerated.item]]);
 	return 0;
 }
 
@@ -1513,7 +1513,8 @@ static int snd_echo_spdif_mode_info(struct snd_kcontrol *kcontrol,
 	uinfo->count = 1;
 	if (uinfo->value.enumerated.item)
 		uinfo->value.enumerated.item = 1;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       names[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+	       names[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -1574,8 +1575,8 @@ static int snd_echo_clock_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->count = 1;
 	if (uinfo->value.enumerated.item >= chip->num_clock_sources)
 		uinfo->value.enumerated.item = chip->num_clock_sources - 1;
-	strlcpy(uinfo->value.enumerated.name,names[
-,sizeof(uinfo->value.enumerated.name)			chip->clock_source_list[uinfo->value.enumerated.item]]);
+	strcpy(uinfo->value.enumerated.name, names[
+			chip->clock_source_list[uinfo->value.enumerated.item]]);
 	return 0;
 }
 
@@ -2067,8 +2068,8 @@ static int __devinit snd_echo_probe(struct pci_dev *pci,
 		return err;
 	}
 
-	strlcpy(card->driver,"Echo_" ECHOCARD_NAME,sizeof(card->driver));
-	strlcpy(card->shortname,chip->card_name,sizeof(card->shortname));
+	strcpy(card->driver, "Echo_" ECHOCARD_NAME);
+	strcpy(card->shortname, chip->card_name);
 
 	dsp = "56301";
 	if (pci_id->device == 0x3410)

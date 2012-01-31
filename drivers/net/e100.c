@@ -2374,10 +2374,10 @@ static void e100_get_drvinfo(struct net_device *netdev,
 	struct ethtool_drvinfo *info)
 {
 	struct nic *nic = netdev_priv(netdev);
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
-	strlcpy(info->fw_version,"N/A",sizeof(info->fw_version));
-	strlcpy(info->bus_info,pci_name(nic->pdev,sizeof(info->bus_info)));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
+	strcpy(info->fw_version, "N/A");
+	strcpy(info->bus_info, pci_name(nic->pdev));
 }
 
 #define E100_PHY_REGS 0x1C
@@ -2862,7 +2862,7 @@ static int __devinit e100_probe(struct pci_dev *pdev,
 	/* ack any pending wake events, disable PME */
 	pci_pme_active(pdev, false);
 
-	strlcpy(netdev->name,"eth%d",sizeof(netdev->name));
+	strcpy(netdev->name, "eth%d");
 	if ((err = register_netdev(netdev))) {
 		netif_err(nic, probe, nic->netdev, "Cannot register net device, aborting\n");
 		goto err_out_free;

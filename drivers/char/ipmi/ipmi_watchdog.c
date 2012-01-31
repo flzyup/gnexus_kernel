@@ -1210,7 +1210,7 @@ static struct ipmi_smi_watcher smi_watcher = {
 static int action_op(const char *inval, char *outval)
 {
 	if (outval)
-		strlcpy(outval,action,sizeof(outval));
+		strcpy(outval, action);
 
 	if (!inval)
 		return 0;
@@ -1225,14 +1225,14 @@ static int action_op(const char *inval, char *outval)
 		action_val = WDOG_TIMEOUT_POWER_DOWN;
 	else
 		return -EINVAL;
-	strlcpy(action,inval,sizeof(action));
+	strcpy(action, inval);
 	return 0;
 }
 
 static int preaction_op(const char *inval, char *outval)
 {
 	if (outval)
-		strlcpy(outval,preaction,sizeof(outval));
+		strcpy(outval, preaction);
 
 	if (!inval)
 		return 0;
@@ -1249,14 +1249,14 @@ static int preaction_op(const char *inval, char *outval)
 		preaction_val = WDOG_PRETIMEOUT_MSG_INT;
 	else
 		return -EINVAL;
-	strlcpy(preaction,inval,sizeof(preaction));
+	strcpy(preaction, inval);
 	return 0;
 }
 
 static int preop_op(const char *inval, char *outval)
 {
 	if (outval)
-		strlcpy(outval,preop,sizeof(outval));
+		strcpy(outval, preop);
 
 	if (!inval)
 		return 0;
@@ -1269,7 +1269,7 @@ static int preop_op(const char *inval, char *outval)
 		preop_val = WDOG_PREOP_GIVE_DATA;
 	else
 		return -EINVAL;
-	strlcpy(preop,inval,sizeof(preop));
+	strcpy(preop, inval);
 	return 0;
 }
 

@@ -470,7 +470,7 @@ dino_card_setup(struct pci_bus *bus, void __iomem *base_addr)
 			 dev_name(bus->bridge));
 	res->name = kmalloc(size+1, GFP_KERNEL);
 	if(res->name)
-		strlcpy((char *)res->name,name,sizeof((char *)res->name));
+		strcpy((char *)res->name, name);
 	else
 		res->name = dino_dev->hba.lmmio_space.name;
 	

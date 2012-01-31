@@ -1317,11 +1317,11 @@ icn_command(isdn_ctrl * c, icn_card * card)
 				if (*p == 's' || *p == 'S') {
 					/* Dial for SPV */
 					p++;
-					strlcpy(dcode,"SCA",sizeof(dcode));
+					strcpy(dcode, "SCA");
 				} else
 					/* Normal Dial */
-					strlcpy(dcode,"CAL",sizeof(dcode));
-				strlcpy(dial,p,sizeof(dial));
+					strcpy(dcode, "CAL");
+				strcpy(dial, p);
 				sprintf(cbuf, "%02d;D%s_R%s,%02d,%02d,%s\n", (int) (a + 1),
 					dcode, dial, c->parm.setup.si1,
 				c->parm.setup.si2, c->parm.setup.eazmsn);
@@ -1611,11 +1611,11 @@ icn_setup(char *line)
 	if (ints[0] > 1)
 		membase = (unsigned long)ints[2];
 	if (str && *str) {
-		strlcpy(sid,str,sizeof(sid));
+		strcpy(sid, str);
 		icn_id = sid;
 		if ((p = strchr(sid, ','))) {
 			*p++ = 0;
-			strlcpy(sid2,p,sizeof(sid2));
+			strcpy(sid2, p);
 			icn_id2 = sid2;
 		}
 	}
@@ -1643,7 +1643,7 @@ static int __init icn_init(void)
 		if (p)
 			*p = 0;
 	} else
-		strlcpy(rev," ??? ",sizeof(rev));
+		strcpy(rev, " ??? ");
 	printk(KERN_NOTICE "ICN-ISDN-driver Rev%smem=0x%08lx\n", rev,
 	       dev.memaddr);
 	return (icn_addcard(portbase, icn_id, icn_id2));

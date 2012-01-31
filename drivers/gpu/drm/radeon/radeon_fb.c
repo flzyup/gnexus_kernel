@@ -226,7 +226,7 @@ static int radeonfb_create(struct radeon_fbdev *rfbdev,
 
 	memset_io(rbo->kptr, 0x0, radeon_bo_size(rbo));
 
-	strlcpy(info->fix.id,"radeondrmfb",sizeof(info->fix.id));
+	strcpy(info->fix.id, "radeondrmfb");
 
 	drm_fb_helper_fill_fix(info, fb->pitch, fb->depth);
 

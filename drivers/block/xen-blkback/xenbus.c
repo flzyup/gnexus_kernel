@@ -716,7 +716,7 @@ static int connect_ring(struct backend_info *be)
 	err = xenbus_gather(XBT_NIL, dev->otherend, "protocol",
 			    "%63s", protocol, NULL);
 	if (err)
-		strlcpy(protocol, "unspecified,assuming native",sizeof(protocol, "unspecified));
+		strcpy(protocol, "unspecified, assuming native");
 	else if (0 == strcmp(protocol, XEN_IO_PROTO_ABI_NATIVE))
 		be->blkif->blk_protocol = BLKIF_PROTOCOL_NATIVE;
 	else if (0 == strcmp(protocol, XEN_IO_PROTO_ABI_X86_32))

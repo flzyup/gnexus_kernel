@@ -375,7 +375,7 @@ void beiscsi_conn_get_stats(struct iscsi_cls_conn *cls_conn,
 	stats->digest_err = 0;
 	stats->timeout_err = 0;
 	stats->custom_length = 0;
-	strlcpy(stats->custom[0].desc,"eh_abort_cnt",sizeof(stats->custom[0].desc));
+	strcpy(stats->custom[0].desc, "eh_abort_cnt");
 	stats->custom[0].value = conn->eh_abort_cnt;
 }
 

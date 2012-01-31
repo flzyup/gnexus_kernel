@@ -2034,7 +2034,7 @@ static int __devinit igb_probe(struct pci_dev *pdev,
 	 * driver. */
 	igb_get_hw_control(adapter);
 
-	strlcpy(netdev->name,"eth%d",sizeof(netdev->name));
+	strcpy(netdev->name, "eth%d");
 	err = register_netdev(netdev);
 	if (err)
 		goto err_register;
@@ -2068,7 +2068,7 @@ static int __devinit igb_probe(struct pci_dev *pdev,
 
 	ret_val = igb_read_part_string(hw, part_str, E1000_PBANUM_LENGTH);
 	if (ret_val)
-		strlcpy(part_str,"Unknown",sizeof(part_str));
+		strcpy(part_str, "Unknown");
 	dev_info(&pdev->dev, "%s: PBA No: %s\n", netdev->name, part_str);
 	dev_info(&pdev->dev,
 		"Using %s interrupts. %d rx queue(s), %d tx queue(s)\n",

@@ -362,7 +362,7 @@ static int fwspk_create_pcm(struct fwspk *fwspk)
 	if (err < 0)
 		return err;
 	pcm->private_data = fwspk;
-	strlcpy(pcm->name,fwspk->device_info->short_name,sizeof(pcm->name));
+	strcpy(pcm->name, fwspk->device_info->short_name);
 	fwspk->pcm = pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream;
 	fwspk->pcm->ops = &ops;
 	return 0;
@@ -736,8 +736,8 @@ static int __devinit fwspk_probe(struct device *unit_dev)
 
 	card->private_free = fwspk_card_free;
 
-	strlcpy(card->driver,fwspk->device_info->driver_name,sizeof(card->driver));
-	strlcpy(card->shortname,fwspk->device_info->short_name,sizeof(card->shortname));
+	strcpy(card->driver, fwspk->device_info->driver_name);
+	strcpy(card->shortname, fwspk->device_info->short_name);
 	firmware = fwspk_read_firmware_version(unit);
 	snprintf(card->longname, sizeof(card->longname),
 		 "%s (OXFW%x %04x), GUID %08x%08x at %s, S%d",
@@ -745,7 +745,7 @@ static int __devinit fwspk_probe(struct device *unit_dev)
 		 firmware >> 20, firmware & 0xffff,
 		 fw_dev->config_rom[3], fw_dev->config_rom[4],
 		 dev_name(&unit->device), 100 << fw_dev->max_speed);
-	strlcpy(card->mixername,"OXFW970",sizeof(card->mixername));
+	strcpy(card->mixername, "OXFW970");
 
 	err = fwspk_create_pcm(fwspk);
 	if (err < 0)

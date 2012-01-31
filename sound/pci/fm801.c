@@ -699,7 +699,7 @@ static int __devinit snd_fm801_pcm(struct fm801 *chip, int device, struct snd_pc
 
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"FM801",sizeof(pcm->name));
+	strcpy(pcm->name, "FM801");
 	chip->pcm = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -932,7 +932,7 @@ static int snd_fm801_info_mux(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 5;
 	if (uinfo->value.enumerated.item > 4)
 		uinfo->value.enumerated.item = 4;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -1292,8 +1292,8 @@ static int __devinit snd_card_fm801_probe(struct pci_dev *pci,
 	}
 	card->private_data = chip;
 
-	strlcpy(card->driver,"FM801",sizeof(card->driver));
-	strlcpy(card->shortname,"ForteMedia FM801-",sizeof(card->shortname));
+	strcpy(card->driver, "FM801");
+	strcpy(card->shortname, "ForteMedia FM801-");
 	strcat(card->shortname, chip->multichannel ? "AU" : "AS");
 	sprintf(card->longname, "%s at 0x%lx, irq %i",
 		card->shortname, chip->port, chip->irq);

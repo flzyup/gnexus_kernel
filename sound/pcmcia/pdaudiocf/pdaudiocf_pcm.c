@@ -296,7 +296,7 @@ int snd_pdacf_pcm_new(struct snd_pdacf *chip)
 
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	chip->pcm = pcm;
 	
 	err = snd_ak4117_build(chip->ak4117, pcm->streams[SNDRV_PCM_STREAM_CAPTURE].substream);

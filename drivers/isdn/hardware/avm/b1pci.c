@@ -113,7 +113,7 @@ static int b1pci_probe(struct capicardparams *p, struct pci_dev *pdev)
 	cinfo->capi_ctrl.reset_ctr     = b1_reset_ctr;
 	cinfo->capi_ctrl.procinfo      = b1pci_procinfo;
 	cinfo->capi_ctrl.proc_fops = &b1ctl_proc_fops;
-	strlcpy(cinfo->capi_ctrl.name,card->name,sizeof(cinfo->capi_ctrl.name));
+	strcpy(cinfo->capi_ctrl.name, card->name);
 	cinfo->capi_ctrl.owner         = THIS_MODULE;
 
 	retval = attach_capi_ctr(&cinfo->capi_ctrl);
@@ -252,7 +252,7 @@ static int b1pciv4_probe(struct capicardparams *p, struct pci_dev *pdev)
 	cinfo->capi_ctrl.reset_ctr     = b1dma_reset_ctr;
 	cinfo->capi_ctrl.procinfo      = b1pciv4_procinfo;
 	cinfo->capi_ctrl.proc_fops = &b1dmactl_proc_fops;
-	strlcpy(cinfo->capi_ctrl.name,card->name,sizeof(cinfo->capi_ctrl.name));
+	strcpy(cinfo->capi_ctrl.name, card->name);
 
 	retval = attach_capi_ctr(&cinfo->capi_ctrl);
 	if (retval) {
@@ -387,7 +387,7 @@ static int __init b1pci_init(void)
 		if ((p = strchr(rev, '$')) != NULL && p > rev)
 		   *(p-1) = 0;
 	} else
-		strlcpy(rev,"1.0",sizeof(rev));
+		strcpy(rev, "1.0");
 
 
 	err = pci_register_driver(&b1pci_pci_driver);

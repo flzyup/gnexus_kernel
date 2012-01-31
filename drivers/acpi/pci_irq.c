@@ -179,7 +179,7 @@ static void do_prt_fixups(struct acpi_prt_entry *entry,
 				entry->id.segment, entry->id.bus,
 				entry->id.device, pin_name(entry->pin),
 				prt->source, quirk->actual_source);
-			strlcpy(prt->source,quirk->actual_source,sizeof(prt->source));
+			strcpy(prt->source, quirk->actual_source);
 		}
 	}
 }

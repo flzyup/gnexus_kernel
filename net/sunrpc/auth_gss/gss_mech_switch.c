@@ -73,7 +73,7 @@ make_auth_domain_name(char *name)
 
 	new = kmalloc(strlen(name) + strlen(prefix) + 1, GFP_KERNEL);
 	if (new) {
-		strlcpy(new,prefix,sizeof(new));
+		strcpy(new, prefix);
 		strcat(new, name);
 	}
 	return new;

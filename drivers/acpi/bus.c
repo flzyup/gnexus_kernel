@@ -573,8 +573,8 @@ int acpi_bus_generate_proc_event4(const char *device_class, const char *bus_id, 
 	if (!event)
 		return -ENOMEM;
 
-	strlcpy(event->device_class,device_class,sizeof(event->device_class));
-	strlcpy(event->bus_id,bus_id,sizeof(event->bus_id));
+	strcpy(event->device_class, device_class);
+	strcpy(event->bus_id, bus_id);
 	event->type = type;
 	event->data = data;
 

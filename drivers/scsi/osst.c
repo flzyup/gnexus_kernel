@@ -622,7 +622,7 @@ static int osst_verify_frame(struct osst_tape * STp, int frame_seq_number, int q
 			for (i=0; i < STp->buffer->sg_segs; i++)
 				memset(page_address(sg_page(&STp->buffer->sg[i])),
 				       0, STp->buffer->sg[i].length);
-			strlcpy(STp->buffer->b_data,"READ ERROR ON FRAME",sizeof(STp->buffer->b_data));
+			strcpy(STp->buffer->b_data, "READ ERROR ON FRAME");
                 } else
 			STp->buffer->buffer_bytes = OS_FRAME_SIZE;
 		return 1;
@@ -2309,7 +2309,7 @@ static int osst_write_header(struct osst_tape * STp, struct osst_request ** aSRp
 	else                STp->update_frame_cntr = 0;
 
 	header = STp->header_cache;
-	strlcpy(header->ident_str,"ADR_SEQ",sizeof(header->ident_str));
+	strcpy(header->ident_str, "ADR_SEQ");
 	header->major_rev      = 1;
 	header->minor_rev      = 4;
 	header->ext_trk_tb_off = htons(17192);

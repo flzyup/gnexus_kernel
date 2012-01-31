@@ -342,18 +342,18 @@ int minix_make_empty(struct inode *inode, struct inode *dir)
 		minix3_dirent *de3 = (minix3_dirent *)kaddr;
 
 		de3->inode = inode->i_ino;
-		strlcpy(de3->name,".",sizeof(de3->name));
+		strcpy(de3->name, ".");
 		de3 = minix_next_entry(de3, sbi);
 		de3->inode = dir->i_ino;
-		strlcpy(de3->name,"..",sizeof(de3->name));
+		strcpy(de3->name, "..");
 	} else {
 		minix_dirent *de = (minix_dirent *)kaddr;
 
 		de->inode = inode->i_ino;
-		strlcpy(de->name,".",sizeof(de->name));
+		strcpy(de->name, ".");
 		de = minix_next_entry(de, sbi);
 		de->inode = dir->i_ino;
-		strlcpy(de->name,"..",sizeof(de->name));
+		strcpy(de->name, "..");
 	}
 	kunmap_atomic(kaddr, KM_USER0);
 

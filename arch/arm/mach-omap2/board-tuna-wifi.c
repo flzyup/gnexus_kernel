@@ -265,7 +265,7 @@ static int __init tuna_mac_addr_setup(char *str)
 	pr_debug("wlan MAC = %s\n", str);
 	if (strlen(str) >= sizeof(macstr))
 		return 0;
-	strlcpy(macstr,str,sizeof(macstr));
+	strcpy(macstr, str);
 
 	while ((token = strsep(&macptr, ":")) != NULL) {
 		unsigned long val;

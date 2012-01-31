@@ -134,7 +134,7 @@ static int vx_hwdep_dsp_status(struct snd_hwdep *hw,
 
 	if (snd_BUG_ON(!type_ids[vx->type]))
 		return -EINVAL;
-	strlcpy(info->id,type_ids[vx->type],sizeof(info->id));
+	strcpy(info->id, type_ids[vx->type]);
 	if (vx_is_pcmcia(vx))
 		info->num_dsps = 4;
 	else

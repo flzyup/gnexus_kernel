@@ -1383,7 +1383,7 @@ static int sd_querymenu(struct gspca_dev *gspca_dev,
 	case V4L2_CID_POWER_LINE_FREQUENCY:
 		if ((unsigned) menu->index >= ARRAY_SIZE(freq_nm))
 			break;
-		strlcpy((char *) menu->name,freq_nm[menu->index],sizeof((char *) menu->name));
+		strcpy((char *) menu->name, freq_nm[menu->index]);
 		return 0;
 	case V4L2_CID_EFFECTS:
 		if ((unsigned) menu->index < ARRAY_SIZE(effects_control)) {

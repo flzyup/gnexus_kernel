@@ -1142,7 +1142,7 @@ int ct_alsa_mix_create(struct ct_atc *atc,
 	if (err)
 		return err;
 
-	strlcpy(atc->card->mixername,device_name,sizeof(atc->card->mixername));
+	strcpy(atc->card->mixername, device_name);
 
 	return 0;
 }

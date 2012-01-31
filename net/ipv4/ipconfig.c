@@ -355,7 +355,7 @@ static int __init ic_setup_if(void)
 	int err;
 
 	memset(&ir, 0, sizeof(ir));
-	strlcpy(ir.ifr_ifrn.ifrn_name,ic_dev->name,sizeof(ir.ifr_ifrn.ifrn_name));
+	strcpy(ir.ifr_ifrn.ifrn_name, ic_dev->name);
 	set_sockaddr(sin, ic_myaddr, 0);
 	if ((err = ic_devinet_ioctl(SIOCSIFADDR, &ir)) < 0) {
 		printk(KERN_ERR "IP-Config: Unable to set interface address (%d).\n", err);
@@ -376,7 +376,7 @@ static int __init ic_setup_if(void)
 	 * out, we'll try to muddle along.
 	 */
 	if (ic_dev_mtu != 0) {
-		strlcpy(ir.ifr_name,ic_dev->name,sizeof(ir.ifr_name));
+		strcpy(ir.ifr_name, ic_dev->name);
 		ir.ifr_mtu = ic_dev_mtu;
 		if ((err = ic_dev_ioctl(SIOCSIFMTU, &ir)) < 0)
 			printk(KERN_ERR "IP-Config: Unable to set interface mtu to %d (%d).\n",

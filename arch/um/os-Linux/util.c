@@ -54,17 +54,17 @@ void setup_machinename(char *machine_out)
 #ifdef UML_CONFIG_UML_X86
 # ifndef UML_CONFIG_64BIT
 	if (!strcmp(host.machine, "x86_64")) {
-		strlcpy(machine_out,"i686",sizeof(machine_out));
+		strcpy(machine_out, "i686");
 		return;
 	}
 # else
 	if (!strcmp(host.machine, "i686")) {
-		strlcpy(machine_out,"x86_64",sizeof(machine_out));
+		strcpy(machine_out, "x86_64");
 		return;
 	}
 # endif
 #endif
-	strlcpy(machine_out,host.machine,sizeof(machine_out));
+	strcpy(machine_out, host.machine);
 }
 
 void setup_hostinfo(char *buf, int len)

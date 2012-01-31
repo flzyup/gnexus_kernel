@@ -937,10 +937,10 @@ ath5k_debug_dump_bands(struct ath5k_softc *sc)
 		char bname[6];
 		switch (band->band) {
 		case IEEE80211_BAND_2GHZ:
-			strlcpy(bname,"2 GHz",sizeof(bname));
+			strcpy(bname, "2 GHz");
 			break;
 		case IEEE80211_BAND_5GHZ:
-			strlcpy(bname,"5 GHz",sizeof(bname));
+			strcpy(bname, "5 GHz");
 			break;
 		default:
 			printk(KERN_DEBUG "Band not supported: %d\n",

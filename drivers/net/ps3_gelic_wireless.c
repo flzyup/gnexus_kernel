@@ -277,7 +277,7 @@ static int gelic_wl_get_name(struct net_device *dev,
 			     struct iw_request_info *info,
 			     union iwreq_data *iwreq, char *extra)
 {
-	strlcpy(iwreq->name,"IEEE 802.11bg",sizeof(iwreq->name));
+	strcpy(iwreq->name, "IEEE 802.11bg");
 	return 0;
 }
 
@@ -1394,7 +1394,7 @@ static int gelic_wl_get_nick(struct net_device *net_dev,
 				  struct iw_request_info *info,
 				  union iwreq_data *data, char *extra)
 {
-	strlcpy(extra,"gelic_wl",sizeof(extra));
+	strcpy(extra, "gelic_wl");
 	data->data.length = strlen(extra);
 	data->data.flags = 1;
 	return 0;
@@ -2320,7 +2320,7 @@ static struct net_device * __devinit gelic_wl_alloc(struct gelic_card *card)
 	if (!netdev)
 		return NULL;
 
-	strlcpy(netdev->name,"wlan%d",sizeof(netdev->name));
+	strcpy(netdev->name, "wlan%d");
 
 	port = netdev_priv(netdev);
 	port->netdev = netdev;

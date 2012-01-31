@@ -256,7 +256,7 @@ void hpfs_set_ea(struct inode *inode, struct fnode *fnode, const char *key,
 		ea->namelen = strlen(key);
 		ea->valuelen_lo = size;
 		ea->valuelen_hi = size >> 8;
-		strlcpy(ea->name,key,sizeof(ea->name));
+		strcpy(ea->name, key);
 		memcpy(ea_data(ea), data, size);
 		fnode->ea_size_s = cpu_to_le16(le16_to_cpu(fnode->ea_size_s) + strlen(key) + size + 5);
 		goto ret;

@@ -523,7 +523,7 @@ static int __ocfs2_mknod_locked(struct inode *dir,
 	ocfs2_set_links_count(fe, inode->i_nlink);
 
 	fe->i_last_eb_blk = 0;
-	strlcpy(fe->i_signature,OCFS2_INODE_SIGNATURE,sizeof(fe->i_signature));
+	strcpy(fe->i_signature, OCFS2_INODE_SIGNATURE);
 	le32_add_cpu(&fe->i_flags, OCFS2_VALID_FL);
 	fe->i_atime = fe->i_ctime = fe->i_mtime =
 		cpu_to_le64(CURRENT_TIME.tv_sec);

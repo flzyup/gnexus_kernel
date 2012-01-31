@@ -1201,7 +1201,7 @@ FKS_test (devc);
 
 		sprintf(name,"ESS %s AudioDrive (rev %d)", chip, ess_minor & 0x0f);
 	} else {
-		strlcpy(name,"Jazz16",sizeof(name));
+		strcpy(name, "Jazz16");
 	}
 
 	/* AAS: info stolen from ALSA: these boards have different clocks */

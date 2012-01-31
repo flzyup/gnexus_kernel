@@ -296,8 +296,8 @@ static int lis3lv02d_add(struct acpi_device *device)
 	lis3_dev.init = lis3lv02d_acpi_init;
 	lis3_dev.read = lis3lv02d_acpi_read;
 	lis3_dev.write = lis3lv02d_acpi_write;
-	strlcpy(acpi_device_name(device),DRIVER_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),ACPI_MDPS_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_name(device), DRIVER_NAME);
+	strcpy(acpi_device_class(device), ACPI_MDPS_CLASS);
 	device->driver_data = &lis3_dev;
 
 	/* obtain IRQ number of our device from ACPI */

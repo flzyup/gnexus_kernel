@@ -237,7 +237,7 @@ static int parse_redboot_partitions(struct mtd_info *master,
 	nullname = (char *)&parts[nrparts];
 #ifdef CONFIG_MTD_REDBOOT_PARTS_UNALLOCATED
 	if (nulllen > 0) {
-		strlcpy(nullname,nullstring,sizeof(nullname));
+		strcpy(nullname, nullstring);
 	}
 #endif
 	names = nullname + nulllen;
@@ -257,7 +257,7 @@ static int parse_redboot_partitions(struct mtd_info *master,
 		parts[i].offset = fl->img->flash_base;
 		parts[i].name = names;
 
-		strlcpy(names,fl->img->name,sizeof(names));
+		strcpy(names, fl->img->name);
 #ifdef CONFIG_MTD_REDBOOT_PARTS_READONLY
 		if (!memcmp(names, "RedBoot", 8) ||
 				!memcmp(names, "RedBoot config", 15) ||

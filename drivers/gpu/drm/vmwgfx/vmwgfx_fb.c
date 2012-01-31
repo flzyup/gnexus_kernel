@@ -467,7 +467,7 @@ int vmw_fb_init(struct vmw_private *vmw_priv)
 	/*
 	 * Fixed and var
 	 */
-	strlcpy(info->fix.id,"svgadrmfb",sizeof(info->fix.id));
+	strcpy(info->fix.id, "svgadrmfb");
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
 	info->fix.visual = FB_VISUAL_TRUECOLOR;
 	info->fix.type_aux = 0;

@@ -279,13 +279,13 @@ static ssize_t ad7150_store_threshold_mode(struct device *dev,
 	ad7150_i2c_read(chip, AD7150_CFG, &cfg, 1);
 
 	if (strncmp(buf, "fixed", 5) == 0) {
-		strlcpy(chip->threshold_mode,"fixed",sizeof(chip->threshold_mode));
+		strcpy(chip->threshold_mode, "fixed");
 		cfg |= AD7150_CFG_FIX;
 		ad7150_i2c_write(chip, AD7150_CFG, cfg);
 
 		return len;
 	} else if (strncmp(buf, "adaptive", 8) == 0) {
-		strlcpy(chip->threshold_mode,"adaptive",sizeof(chip->threshold_mode));
+		strcpy(chip->threshold_mode, "adaptive");
 		cfg &= ~AD7150_CFG_FIX;
 		ad7150_i2c_write(chip, AD7150_CFG, cfg);
 

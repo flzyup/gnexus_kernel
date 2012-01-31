@@ -1273,7 +1273,7 @@ static int vidioc_enum_fmt_vid_cap(struct file *file, void  *priv,
 		return -EINVAL;
 
 	f->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-	strlcpy(f->description,"Packed YUV2",sizeof(f->description));
+	strcpy(f->description, "Packed YUV2");
 
 	f->flags = 0;
 	f->pixelformat = V4L2_PIX_FMT_UYVY;
@@ -1369,7 +1369,7 @@ static int vidioc_enum_input(struct file *file, void *priv,
 		return -EINVAL;
 
 	input->index = tmp;
-	strlcpy(input->name,inames[AUVI_INPUT(tmp,sizeof(input->name)).type]);
+	strcpy(input->name, inames[AUVI_INPUT(tmp).type]);
 	if ((AUVI_INPUT(tmp).type == AU0828_VMUX_TELEVISION) ||
 	    (AUVI_INPUT(tmp).type == AU0828_VMUX_CABLE))
 		input->type |= V4L2_INPUT_TYPE_TUNER;
@@ -1459,9 +1459,9 @@ static int vidioc_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 
 	index = dev->ctrl_ainput;
 	if (index == 0)
-		strlcpy(a->name,"Television",sizeof(a->name));
+		strcpy(a->name, "Television");
 	else
-		strlcpy(a->name,"Line in",sizeof(a->name));
+		strcpy(a->name, "Line in");
 
 	a->capability = V4L2_AUDCAP_STEREO;
 	a->index = index;
@@ -1505,7 +1505,7 @@ static int vidioc_g_tuner(struct file *file, void *priv, struct v4l2_tuner *t)
 	if (t->index != 0)
 		return -EINVAL;
 
-	strlcpy(t->name,"Auvitek tuner",sizeof(t->name));
+	strcpy(t->name, "Auvitek tuner");
 	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, g_tuner, t);
 	return 0;
 }
@@ -1963,12 +1963,12 @@ int au0828_analog_register(struct au0828_dev *dev,
 	/* Fill the video capture device struct */
 	*dev->vdev = au0828_video_template;
 	dev->vdev->parent = &dev->usbdev->dev;
-	strlcpy(dev->vdev->name,"au0828a video",sizeof(dev->vdev->name));
+	strcpy(dev->vdev->name, "au0828a video");
 
 	/* Setup the VBI device */
 	*dev->vbi_dev = au0828_video_template;
 	dev->vbi_dev->parent = &dev->usbdev->dev;
-	strlcpy(dev->vbi_dev->name,"au0828a vbi",sizeof(dev->vbi_dev->name));
+	strcpy(dev->vbi_dev->name, "au0828a vbi");
 
 	/* Register the v4l2 device */
 	video_set_drvdata(dev->vdev, dev);

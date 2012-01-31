@@ -1447,7 +1447,7 @@ static int __devinit snd_via8233_pcm_new(struct via82xx *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_via8233_playback_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_via8233_capture_ops);
 	pcm->private_data = chip;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	chip->pcms[0] = pcm;
 	/* set up playbacks */
 	for (i = 0; i < 4; i++)
@@ -1466,7 +1466,7 @@ static int __devinit snd_via8233_pcm_new(struct via82xx *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_via8233_multi_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_via8233_capture_ops);
 	pcm->private_data = chip;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	chip->pcms[1] = pcm;
 	/* set up playback */
 	init_viadev(chip, chip->multi_devno, VIA_REG_MULTPLAY_STATUS, 4, 0);
@@ -1500,7 +1500,7 @@ static int __devinit snd_via8233a_pcm_new(struct via82xx *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_via8233_multi_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_via8233_capture_ops);
 	pcm->private_data = chip;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	chip->pcms[0] = pcm;
 	/* set up playback */
 	init_viadev(chip, chip->multi_devno, VIA_REG_MULTPLAY_STATUS, 4, 0);
@@ -1521,7 +1521,7 @@ static int __devinit snd_via8233a_pcm_new(struct via82xx *chip)
 		return err;
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_via8233_playback_ops);
 	pcm->private_data = chip;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	chip->pcms[1] = pcm;
 	/* set up playback */
 	init_viadev(chip, chip->playback_devno, 0x30, 3, 0);
@@ -1551,7 +1551,7 @@ static int __devinit snd_via686_pcm_new(struct via82xx *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_via686_playback_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_via686_capture_ops);
 	pcm->private_data = chip;
-	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, chip->card->shortname);
 	chip->pcms[0] = pcm;
 	init_viadev(chip, 0, VIA_REG_PLAYBACK_STATUS, 0, 0);
 	init_viadev(chip, 1, VIA_REG_CAPTURE_STATUS, 0, 1);
@@ -1581,7 +1581,7 @@ static int snd_via8233_capture_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item >= 2)
 		uinfo->value.enumerated.item = 1;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -1982,7 +1982,7 @@ static int __devinit snd_via8233_init_misc(struct via82xx *chip)
 		 */
 		struct snd_ctl_elem_id sid;
 		memset(&sid, 0, sizeof(sid));
-		strlcpy(sid.name,"PCM Playback Volume",sizeof(sid.name));
+		strcpy(sid.name, "PCM Playback Volume");
 		sid.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 		if (! snd_ctl_find_id(chip->card, &sid)) {
 			snd_printd(KERN_INFO "Using DXS as PCM Playback\n");
@@ -2512,7 +2512,7 @@ static int __devinit snd_via82xx_probe(struct pci_dev *pci,
 	card_type = pci_id->driver_data;
 	switch (card_type) {
 	case TYPE_CARD_VIA686:
-		strlcpy(card->driver,"VIA686A",sizeof(card->driver));
+		strcpy(card->driver, "VIA686A");
 		sprintf(card->shortname, "VIA 82C686A/B rev%x", pci->revision);
 		chip_type = TYPE_VIA686;
 		break;
@@ -2522,7 +2522,7 @@ static int __devinit snd_via82xx_probe(struct pci_dev *pci,
 		for (i = 0; i < ARRAY_SIZE(via823x_cards); i++) {
 			if (pci->revision == via823x_cards[i].revision) {
 				chip_type = via823x_cards[i].type;
-				strlcpy(card->shortname,via823x_cards[i].name,sizeof(card->shortname));
+				strcpy(card->shortname, via823x_cards[i].name);
 				break;
 			}
 		}
@@ -2538,11 +2538,11 @@ static int __devinit snd_via82xx_probe(struct pci_dev *pci,
 				chip_type = TYPE_VIA8233;
 		}
 		if (chip_type == TYPE_VIA8233A)
-			strlcpy(card->driver,"VIA8233A",sizeof(card->driver));
+			strcpy(card->driver, "VIA8233A");
 		else if (pci->revision >= VIA_REV_8237)
-			strlcpy(card->driver,"VIA8237",sizeof(card->driver)); /* no slog assignment */
+			strcpy(card->driver, "VIA8237"); /* no slog assignment */
 		else
-			strlcpy(card->driver,"VIA8233",sizeof(card->driver));
+			strcpy(card->driver, "VIA8233");
 		break;
 	default:
 		snd_printk(KERN_ERR "invalid card type %d\n", card_type);

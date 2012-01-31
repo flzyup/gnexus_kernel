@@ -1940,9 +1940,9 @@ int drbd_send_sync_param(struct drbd_conf *mdev, struct syncer_conf *sc)
 		p->c_max_rate = cpu_to_be32(sc->c_max_rate);
 
 		if (apv >= 88)
-			strlcpy(p->verify_alg,mdev->sync_conf.verify_alg,sizeof(p->verify_alg));
+			strcpy(p->verify_alg, mdev->sync_conf.verify_alg);
 		if (apv >= 89)
-			strlcpy(p->csums_alg,mdev->sync_conf.csums_alg,sizeof(p->csums_alg));
+			strcpy(p->csums_alg, mdev->sync_conf.csums_alg);
 
 		rv = _drbd_send_cmd(mdev, sock, cmd, &p->head, size, 0);
 	} else
@@ -1990,7 +1990,7 @@ int drbd_send_protocol(struct drbd_conf *mdev)
 	p->conn_flags    = cpu_to_be32(cf);
 
 	if (mdev->agreed_pro_version >= 87)
-		strlcpy(p->integrity_alg,mdev->net_conf->integrity_alg,sizeof(p->integrity_alg));
+		strcpy(p->integrity_alg, mdev->net_conf->integrity_alg);
 
 	rv = drbd_send_cmd(mdev, USE_DATA_SOCKET, P_PROTOCOL,
 			   (struct p_header80 *)p, size);

@@ -355,7 +355,7 @@ static int usX2Y_create_card(struct usb_device *device, struct snd_card **cardp)
 	init_waitqueue_head(&usX2Y(card)->prepare_wait_queue);
 	mutex_init(&usX2Y(card)->prepare_mutex);
 	INIT_LIST_HEAD(&usX2Y(card)->midi_list);
-	strlcpy(card->driver,"USB "NAME_ALLCAPS"",sizeof(card->driver));
+	strcpy(card->driver, "USB "NAME_ALLCAPS"");
 	sprintf(card->shortname, "TASCAM "NAME_ALLCAPS"");
 	sprintf(card->longname, "%s (%x:%x if %d at %03d/%03d)",
 		card->shortname, 

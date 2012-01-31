@@ -334,7 +334,7 @@ static int erasecrosstest(void)
 
 	printk(PRINT_PREF "writing 1st page of block %d\n", ebnum);
 	set_random_data(writebuf, pgsize);
-	strlcpy(writebuf,"There is no data like this!",sizeof(writebuf));
+	strcpy(writebuf, "There is no data like this!");
 	err = mtd->write(mtd, addr0, pgsize, &written, writebuf);
 	if (err || written != pgsize) {
 		printk(PRINT_PREF "error: write failed at %#llx\n",
@@ -367,7 +367,7 @@ static int erasecrosstest(void)
 
 	printk(PRINT_PREF "writing 1st page of block %d\n", ebnum);
 	set_random_data(writebuf, pgsize);
-	strlcpy(writebuf,"There is no data like this!",sizeof(writebuf));
+	strcpy(writebuf, "There is no data like this!");
 	err = mtd->write(mtd, addr0, pgsize, &written, writebuf);
 	if (err || written != pgsize) {
 		printk(PRINT_PREF "error: write failed at %#llx\n",

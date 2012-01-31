@@ -537,7 +537,7 @@ static int cafe_smbus_setup(struct cafe_camera *cam)
 	cafe_smbus_enable_irq(cam);
 	adap->owner = THIS_MODULE;
 	adap->algo = &cafe_smbus_algo;
-	strlcpy(adap->name,"cafe_ccic",sizeof(adap->name));
+	strcpy(adap->name, "cafe_ccic");
 	adap->dev.parent = &cam->pdev->dev;
 	i2c_set_adapdata(adap, &cam->v4l2_dev);
 	ret = i2c_add_adapter(adap);
@@ -1511,8 +1511,8 @@ static int cafe_vidioc_s_ctrl(struct file *filp, void *priv,
 static int cafe_vidioc_querycap(struct file *file, void *priv,
 		struct v4l2_capability *cap)
 {
-	strlcpy(cap->driver,"cafe_ccic",sizeof(cap->driver));
-	strlcpy(cap->card,"cafe_ccic",sizeof(cap->card));
+	strcpy(cap->driver, "cafe_ccic");
+	strcpy(cap->card, "cafe_ccic");
 	cap->version = CAFE_VERSION;
 	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE |
 		V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
@@ -1643,7 +1643,7 @@ static int cafe_vidioc_enum_input(struct file *filp, void *priv,
 
 	input->type = V4L2_INPUT_TYPE_CAMERA;
 	input->std = V4L2_STD_ALL; /* Not sure what should go here */
-	strlcpy(input->name,"Camera",sizeof(input->name));
+	strcpy(input->name, "Camera");
 	return 0;
 }
 

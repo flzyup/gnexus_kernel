@@ -463,7 +463,7 @@ static __init int ddebug_setup_query(char *str)
 		pr_warning("ddebug boot param string too large\n");
 		return 0;
 	}
-	strlcpy(ddebug_setup_string,str,sizeof(ddebug_setup_string));
+	strcpy(ddebug_setup_string, str);
 	return 1;
 }
 

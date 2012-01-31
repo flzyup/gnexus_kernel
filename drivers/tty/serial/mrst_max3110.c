@@ -805,7 +805,7 @@ static int __devinit serial_m3110_probe(struct spi_device *spi)
 	max->port.uartclk = 115200;
 
 	max->spi = spi;
-	strlcpy(max->name,spi->modalias,sizeof(max->name));
+	strcpy(max->name, spi->modalias);
 	max->irq = (u16)spi->irq;
 
 	mutex_init(&max->thread_mutex);

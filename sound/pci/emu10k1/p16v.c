@@ -660,7 +660,7 @@ int __devinit snd_p16v_pcm(struct snd_emu10k1 *emu, int device, struct snd_pcm *
 
 	pcm->info_flags = 0;
 	pcm->dev_subclass = SNDRV_PCM_SUBCLASS_GENERIC_MIX;
-	strlcpy(pcm->name,"p16v",sizeof(pcm->name));
+	strcpy(pcm->name, "p16v");
 	emu->pcm_p16v = pcm;
 
 	for(substream = pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream; 
@@ -764,7 +764,7 @@ static int snd_p16v_capture_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 8;
 	if (uinfo->value.enumerated.item > 7)
                 uinfo->value.enumerated.item = 7;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -809,7 +809,7 @@ static int snd_p16v_capture_channel_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item > 3)
                 uinfo->value.enumerated.item = 3;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 

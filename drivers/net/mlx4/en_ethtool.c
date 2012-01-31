@@ -219,18 +219,19 @@ static void mlx4_en_get_strings(struct net_device *dev,
 	switch (stringset) {
 	case ETH_SS_TEST:
 		for (i = 0; i < MLX4_EN_NUM_SELF_TEST - 2; i++)
-			strlcpy(data + i * ETH_GSTRING_LEN,mlx4_en_test_names[i],sizeof(data + i * ETH_GSTRING_LEN));
+			strcpy(data + i * ETH_GSTRING_LEN, mlx4_en_test_names[i]);
 		if (priv->mdev->dev->caps.loopback_support)
 			for (; i < MLX4_EN_NUM_SELF_TEST; i++)
-				strlcpy(data + i * ETH_GSTRING_LEN,mlx4_en_test_names[i],sizeof(data + i * ETH_GSTRING_LEN));
+				strcpy(data + i * ETH_GSTRING_LEN, mlx4_en_test_names[i]);
 		break;
 
 	case ETH_SS_STATS:
 		/* Add main counters */
 		for (i = 0; i < NUM_MAIN_STATS; i++)
-			strlcpy(data + (index++) * ETH_GSTRING_LEN,main_strings[i],sizeof(data + (index++) * ETH_GSTRING_LEN));
+			strcpy(data + (index++) * ETH_GSTRING_LEN, main_strings[i]);
 		for (i = 0; i< NUM_PORT_STATS; i++)
-			strlcpy(data + (index++) * ETH_GSTRING_LEN,,sizeof(data + (index++) * ETH_GSTRING_LEN)			main_strings[i + NUM_MAIN_STATS]);
+			strcpy(data + (index++) * ETH_GSTRING_LEN,
+			main_strings[i + NUM_MAIN_STATS]);
 		for (i = 0; i < priv->tx_ring_num; i++) {
 			sprintf(data + (index++) * ETH_GSTRING_LEN,
 				"tx%d_packets", i);
@@ -244,7 +245,8 @@ static void mlx4_en_get_strings(struct net_device *dev,
 				"rx%d_bytes", i);
 		}
 		for (i = 0; i< NUM_PKT_STATS; i++)
-			strlcpy(data + (index++) * ETH_GSTRING_LEN,,sizeof(data + (index++) * ETH_GSTRING_LEN)			main_strings[i + NUM_MAIN_STATS + NUM_PORT_STATS]);
+			strcpy(data + (index++) * ETH_GSTRING_LEN,
+			main_strings[i + NUM_MAIN_STATS + NUM_PORT_STATS]);
 		break;
 	}
 }

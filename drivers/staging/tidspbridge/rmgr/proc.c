@@ -409,7 +409,7 @@ static int get_exec_file(struct cfg_devnode *dev_node_obj,
 		if (strlen(drv_datap->base_img) > size)
 			return -EINVAL;
 
-		strlcpy(exec_file,drv_datap->base_img,sizeof(exec_file));
+		strcpy(exec_file, drv_datap->base_img);
 	} else if (dev_type == IVA_UNIT && iva_img) {
 		len = strlen(iva_img);
 		strncpy(exec_file, iva_img, len + 1);

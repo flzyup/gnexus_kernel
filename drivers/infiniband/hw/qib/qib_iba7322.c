@@ -5744,7 +5744,7 @@ static int setup_txselect(const char *str, struct kernel_param *kp)
 			TXDDS_TABLE_SZ + TXDDS_EXTRA_SZ + TXDDS_MFG_SZ);
 		return -EINVAL;
 	}
-	strlcpy(txselect_list,str,sizeof(txselect_list));
+	strcpy(txselect_list, str);
 
 	list_for_each_entry(dd, &qib_dev_list, list)
 		if (dd->deviceid == PCI_DEVICE_ID_QLOGIC_IB_7322)

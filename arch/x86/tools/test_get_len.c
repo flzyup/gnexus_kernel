@@ -125,13 +125,13 @@ int main(int argc, char **argv)
 
 		if (line[0] == '<') {
 			/* Symbol line */
-			strlcpy(sym,line,sizeof(sym));
+			strcpy(sym, line);
 			continue;
 		}
 
 		insns++;
 		memset(insn_buf, 0, 16);
-		strlcpy(copy,line,sizeof(copy));
+		strcpy(copy, line);
 		tab1 = strchr(copy, '\t');
 		if (!tab1)
 			malformed_line(line, insns);

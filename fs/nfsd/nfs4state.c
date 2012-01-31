@@ -4459,7 +4459,7 @@ nfs4_state_shutdown(void)
 static void
 nfs4_set_recdir(char *recdir)
 {
-	strlcpy(user_recovery_dirname,recdir,sizeof(user_recovery_dirname));
+	strcpy(user_recovery_dirname, recdir);
 }
 
 /*

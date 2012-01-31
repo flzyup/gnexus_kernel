@@ -2074,7 +2074,7 @@ static void __init flatten_device_tree(void)
 
 	/* Add "linux,phandle" in there, we'll need it */
 	namep = make_room(&mem_start, &mem_end, 16, 1);
-	strlcpy(namep, RELOC("linux,phandle",sizeof(namep, RELOC("linux)));
+	strcpy(namep, RELOC("linux,phandle"));
 	mem_start = (unsigned long)namep + strlen(namep) + 1;
 
 	/* Build string array */

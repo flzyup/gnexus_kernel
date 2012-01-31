@@ -903,8 +903,8 @@ static int cpmac_set_ringparam(struct net_device *dev,
 static void cpmac_get_drvinfo(struct net_device *dev,
 			      struct ethtool_drvinfo *info)
 {
-	strlcpy(info->driver,"cpmac",sizeof(info->driver));
-	strlcpy(info->version,CPMAC_VERSION,sizeof(info->version));
+	strcpy(info->driver, "cpmac");
+	strcpy(info->version, CPMAC_VERSION);
 	info->fw_version[0] = '\0';
 	sprintf(info->bus_info, "%s", "cpmac");
 	info->regdump_len = 0;

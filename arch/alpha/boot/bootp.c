@@ -205,7 +205,7 @@ start_kernel(void)
         load(START_ADDR, START_ADDR+(4*KERNEL_SIZE), KERNEL_SIZE);
 
 	memset((char*)ZERO_PGE, 0, PAGE_SIZE);
-	strlcpy((char*)ZERO_PGE,envval,sizeof((char*)ZERO_PGE));
+	strcpy((char*)ZERO_PGE, envval);
 #ifdef INITRD_IMAGE_SIZE
 	((long *)(ZERO_PGE+256))[0] = initrd_start;
 	((long *)(ZERO_PGE+256))[1] = INITRD_IMAGE_SIZE;

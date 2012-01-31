@@ -691,8 +691,8 @@ static void qe_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
 	struct sunqe *qep = netdev_priv(dev);
 	struct platform_device *op;
 
-	strlcpy(info->driver,"sunqe",sizeof(info->driver));
-	strlcpy(info->version,"3.0",sizeof(info->version));
+	strcpy(info->driver, "sunqe");
+	strcpy(info->version, "3.0");
 
 	op = qep->op;
 	regs = of_get_property(op->dev.of_node, "reg", NULL);

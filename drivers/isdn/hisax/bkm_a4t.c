@@ -333,7 +333,7 @@ setup_bkm_a4t(struct IsdnCard *card)
 	u_int pci_memaddr = 0, found = 0;
 	int ret;
 
-	strlcpy(tmp,bkm_a4t_revision,sizeof(tmp));
+	strcpy(tmp, bkm_a4t_revision);
 	printk(KERN_INFO "HiSax: T-Berkom driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ == ISDN_CTYPE_BKM_A4T) {
 		cs->subtyp = BKM_A4T;

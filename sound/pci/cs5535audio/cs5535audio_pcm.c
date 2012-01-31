@@ -442,7 +442,7 @@ int __devinit snd_cs5535audio_pcm(struct cs5535audio *cs5535au)
 
 	pcm->private_data = cs5535au;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"CS5535 Audio",sizeof(pcm->name));
+	strcpy(pcm->name, "CS5535 Audio");
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					snd_dma_pci_data(cs5535au->pci),

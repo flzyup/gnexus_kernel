@@ -191,7 +191,7 @@ static int snd_dt019x_input_sw_info(struct snd_kcontrol *kcontrol, struct snd_ct
 	uinfo->value.enumerated.items = 5;
 	if (uinfo->value.enumerated.item > 4)
 		uinfo->value.enumerated.item = 4;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -284,7 +284,8 @@ static int snd_als4k_mono_capture_route_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -343,7 +344,7 @@ static int snd_sb8mixer_info_mux(struct snd_kcontrol *kcontrol, struct snd_ctl_e
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -750,7 +751,7 @@ static int snd_sbmixer_init(struct snd_sb *chip,
 			return err;
 	}
 	snd_component_add(card, name);
-	strlcpy(card->mixername,name,sizeof(card->mixername));
+	strcpy(card->mixername, name);
 	return 0;
 }
 
@@ -825,7 +826,7 @@ int snd_sbmixer_new(struct snd_sb *chip)
 					    "DT019X")) < 0)
 		break;
 	default:
-		strlcpy(card->mixername,"???",sizeof(card->mixername));
+		strcpy(card->mixername, "???");
 	}
 	return 0;
 }

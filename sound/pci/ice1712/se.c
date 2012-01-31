@@ -458,7 +458,8 @@ static int se200pci_cont_enum_info(struct snd_kcontrol *kc,
 	uinfo->value.enumerated.items = c;
 	if (uinfo->value.enumerated.item >= c)
 		uinfo->value.enumerated.item = c - 1;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       se200pci_cont[n].member[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+	       se200pci_cont[n].member[uinfo->value.enumerated.item]);
 	return 0;
 }
 

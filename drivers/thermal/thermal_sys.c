@@ -852,7 +852,7 @@ struct thermal_cooling_device *thermal_cooling_device_register(
 		return ERR_PTR(result);
 	}
 
-	strlcpy(cdev->type,type,sizeof(cdev->type));
+	strcpy(cdev->type, type);
 	cdev->ops = ops;
 	cdev->device.class = &thermal_class;
 	cdev->devdata = devdata;
@@ -1083,7 +1083,7 @@ struct thermal_zone_device *thermal_zone_device_register(char *type,
 		return ERR_PTR(result);
 	}
 
-	strlcpy(tz->type,type,sizeof(tz->type));
+	strcpy(tz->type, type);
 	tz->ops = ops;
 	tz->device.class = &thermal_class;
 	tz->devdata = devdata;

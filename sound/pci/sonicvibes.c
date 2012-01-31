@@ -892,7 +892,7 @@ static int __devinit snd_sonicvibes_pcm(struct sonicvibes * sonic, int device, s
 
 	pcm->private_data = sonic;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"S3 SonicVibes",sizeof(pcm->name));
+	strcpy(pcm->name, "S3 SonicVibes");
 	sonic->pcm = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -923,7 +923,7 @@ static int snd_sonicvibes_info_mux(struct snd_kcontrol *kcontrol, struct snd_ctl
 	uinfo->value.enumerated.items = 7;
 	if (uinfo->value.enumerated.item >= 7)
 		uinfo->value.enumerated.item = 6;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -1128,7 +1128,7 @@ static int __devinit snd_sonicvibes_mixer(struct sonicvibes * sonic)
 	if (snd_BUG_ON(!sonic || !sonic->card))
 		return -EINVAL;
 	card = sonic->card;
-	strlcpy(card->mixername,"S3 SonicVibes",sizeof(card->mixername));
+	strcpy(card->mixername, "S3 SonicVibes");
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_sonicvibes_controls); idx++) {
 		if ((err = snd_ctl_add(card, kctl = snd_ctl_new1(&snd_sonicvibes_controls[idx], sonic))) < 0)
@@ -1476,8 +1476,8 @@ static int __devinit snd_sonic_probe(struct pci_dev *pci,
 		return err;
 	}
 
-	strlcpy(card->driver,"SonicVibes",sizeof(card->driver));
-	strlcpy(card->shortname,"S3 SonicVibes",sizeof(card->shortname));
+	strcpy(card->driver, "SonicVibes");
+	strcpy(card->shortname, "S3 SonicVibes");
 	sprintf(card->longname, "%s rev %i at 0x%llx, irq %i",
 		card->shortname,
 		sonic->revision,

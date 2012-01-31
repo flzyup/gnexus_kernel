@@ -1265,7 +1265,7 @@ static void plip_attach (struct parport *port)
 			return;
 		}
 
-		strlcpy(dev->name,name,sizeof(dev->name));
+		strcpy(dev->name, name);
 
 		dev->irq = port->irq;
 		dev->base_addr = port->base;

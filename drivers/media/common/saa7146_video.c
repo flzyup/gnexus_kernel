@@ -501,7 +501,7 @@ static int vidioc_querycap(struct file *file, void *fh, struct v4l2_capability *
 {
 	struct saa7146_dev *dev = ((struct saa7146_fh *)fh)->dev;
 
-	strlcpy((char *)cap->driver,"saa7146 v4l2",sizeof((char *)cap->driver));
+	strcpy((char *)cap->driver, "saa7146 v4l2");
 	strlcpy((char *)cap->card, dev->ext->name, sizeof(cap->card));
 	sprintf((char *)cap->bus_info, "PCI:%s", pci_name(dev->pci));
 	cap->version = SAA7146_VERSION_CODE;

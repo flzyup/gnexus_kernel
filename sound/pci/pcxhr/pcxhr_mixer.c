@@ -663,7 +663,8 @@ static int pcxhr_audio_src_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = i;
 	if (uinfo->value.enumerated.item > (i-1))
 		uinfo->value.enumerated.item = i-1;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+		texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -758,7 +759,8 @@ static int pcxhr_clock_type_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = clock_items;
 	if (uinfo->value.enumerated.item >= clock_items)
 		uinfo->value.enumerated.item = clock_items-1;
-	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		texts[uinfo->value.enumerated.item]);
+	strcpy(uinfo->value.enumerated.name,
+		texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 

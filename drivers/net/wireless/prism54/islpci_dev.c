@@ -792,8 +792,8 @@ islpci_set_multicast_list(struct net_device *dev)
 static void islpci_ethtool_get_drvinfo(struct net_device *dev,
                                        struct ethtool_drvinfo *info)
 {
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
 }
 
 static const struct ethtool_ops islpci_ethtool_ops = {
@@ -888,15 +888,15 @@ islpci_setup(struct pci_dev *pdev)
 	/* select the firmware file depending on the device id */
 	switch (pdev->device) {
 	case 0x3877:
-		strlcpy(priv->firmware,ISL3877_IMAGE_FILE,sizeof(priv->firmware));
+		strcpy(priv->firmware, ISL3877_IMAGE_FILE);
 		break;
 
 	case 0x3886:
-		strlcpy(priv->firmware,ISL3886_IMAGE_FILE,sizeof(priv->firmware));
+		strcpy(priv->firmware, ISL3886_IMAGE_FILE);
 		break;
 
 	default:
-		strlcpy(priv->firmware,ISL3890_IMAGE_FILE,sizeof(priv->firmware));
+		strcpy(priv->firmware, ISL3890_IMAGE_FILE);
 		break;
 	}
 

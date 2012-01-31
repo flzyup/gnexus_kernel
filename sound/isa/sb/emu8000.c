@@ -1132,7 +1132,7 @@ snd_emu8000_new(struct snd_card *card, int index, long port, int seq_ports,
 #if defined(CONFIG_SND_SEQUENCER) || (defined(MODULE) && defined(CONFIG_SND_SEQUENCER_MODULE))
 	if (snd_seq_device_new(card, index, SNDRV_SEQ_DEV_ID_EMU8000,
 			       sizeof(struct snd_emu8000*), &awe) >= 0) {
-		strlcpy(awe->name,"EMU-8000",sizeof(awe->name));
+		strcpy(awe->name, "EMU-8000");
 		*(struct snd_emu8000 **)SNDRV_SEQ_DEVICE_ARGPTR(awe) = hw;
 	}
 #else

@@ -887,7 +887,7 @@ static int __devinit snd_uart16550_rmidi(struct snd_uart16550 *uart, int device,
 			    &snd_uart16550_input);
 	snd_rawmidi_set_ops(rrawmidi, SNDRV_RAWMIDI_STREAM_OUTPUT,
 			    &snd_uart16550_output);
-	strlcpy(rrawmidi->name,"Serial MIDI",sizeof(rrawmidi->name));
+	strcpy(rrawmidi->name, "Serial MIDI");
 	snd_uart16550_substreams(&rrawmidi->streams[SNDRV_RAWMIDI_STREAM_OUTPUT]);
 	snd_uart16550_substreams(&rrawmidi->streams[SNDRV_RAWMIDI_STREAM_INPUT]);
 	rrawmidi->info_flags = SNDRV_RAWMIDI_INFO_OUTPUT |
@@ -946,8 +946,8 @@ static int __devinit snd_serial_probe(struct platform_device *devptr)
 	if (err < 0)
 		return err;
 
-	strlcpy(card->driver,"Serial",sizeof(card->driver));
-	strlcpy(card->shortname,"Serial MIDI (UART16550A,sizeof(card->shortname))");
+	strcpy(card->driver, "Serial");
+	strcpy(card->shortname, "Serial MIDI (UART16550A)");
 
 	if ((err = snd_uart16550_create(card,
 					port[dev],

@@ -55,7 +55,7 @@ static int __init make_uml_dir(void)
 		printf("make_uml_dir : malloc failed, errno = %d\n", errno);
 		goto err;
 	}
-	strlcpy(uml_dir,dir,sizeof(uml_dir));
+	strcpy(uml_dir, dir);
 
 	if ((mkdir(uml_dir, 0777) < 0) && (errno != EEXIST)) {
 	        printf("Failed to mkdir '%s': %s\n", uml_dir, strerror(errno));

@@ -234,8 +234,8 @@ static int __devinit snd_msnd_probe(struct snd_card *card)
 	}
 
 #ifdef MSND_CLASSIC
-	strlcpy(card->shortname,"Classic/Tahiti/Monterey",sizeof(card->shortname));
-	strlcpy(card->longname,"Turtle Beach Multisound",sizeof(card->longname));
+	strcpy(card->shortname, "Classic/Tahiti/Monterey");
+	strcpy(card->longname, "Turtle Beach Multisound");
 	printk(KERN_INFO LOGNAME ": %s, "
 	       "I/O 0x%lx-0x%lx, IRQ %d, memory mapped to 0x%lX-0x%lX\n",
 	       card->shortname,
@@ -264,38 +264,38 @@ static int __devinit snd_msnd_probe(struct snd_card *card)
 	switch (info & 0x7) {
 	case 0x0:
 		rev = "I";
-		strlcpy(card->shortname,pin,sizeof(card->shortname));
+		strcpy(card->shortname, pin);
 		break;
 	case 0x1:
 		rev = "F";
-		strlcpy(card->shortname,pin,sizeof(card->shortname));
+		strcpy(card->shortname, pin);
 		break;
 	case 0x2:
 		rev = "G";
-		strlcpy(card->shortname,pin,sizeof(card->shortname));
+		strcpy(card->shortname, pin);
 		break;
 	case 0x3:
 		rev = "H";
-		strlcpy(card->shortname,pin,sizeof(card->shortname));
+		strcpy(card->shortname, pin);
 		break;
 	case 0x4:
 		rev = "E";
-		strlcpy(card->shortname,fiji,sizeof(card->shortname));
+		strcpy(card->shortname, fiji);
 		break;
 	case 0x5:
 		rev = "C";
-		strlcpy(card->shortname,fiji,sizeof(card->shortname));
+		strcpy(card->shortname, fiji);
 		break;
 	case 0x6:
 		rev = "D";
-		strlcpy(card->shortname,fiji,sizeof(card->shortname));
+		strcpy(card->shortname, fiji);
 		break;
 	case 0x7:
 		rev = "A-B (Fiji) or A-E (Pinnacle)";
-		strlcpy(card->shortname,pinfiji,sizeof(card->shortname));
+		strcpy(card->shortname, pinfiji);
 		break;
 	}
-	strlcpy(card->longname,"Turtle Beach Multisound Pinnacle",sizeof(card->longname));
+	strcpy(card->longname, "Turtle Beach Multisound Pinnacle");
 	printk(KERN_INFO LOGNAME ": %s revision %s, Xilinx version %s, "
 	       "I/O 0x%lx-0x%lx, IRQ %d, memory mapped to 0x%lX-0x%lX\n",
 	       card->shortname,

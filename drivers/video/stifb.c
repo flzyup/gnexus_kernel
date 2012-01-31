@@ -1254,7 +1254,7 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 	var->yres = var->yres_virtual = yres;
 	var->bits_per_pixel = bpp;
 
-	strlcpy(fix->id,"stifb",sizeof(fix->id));
+	strcpy(fix->id, "stifb");
 	info->fbops = &stifb_ops;
 	info->screen_base = ioremap_nocache(REGION_BASE(fb,1), fix->smem_len);
 	info->screen_size = fix->smem_len;

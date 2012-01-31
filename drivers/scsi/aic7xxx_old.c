@@ -1844,7 +1844,7 @@ aic7xxx_info(struct Scsi_Host *dooh)
   bp = &buffer[0];
   p = (struct aic7xxx_host *)dooh->hostdata;
   memset(bp, 0, sizeof(buffer));
-  strlcpy(bp,"Adaptec AHA274x/284x/294x (EISA/VLB/PCI-Fast SCSI,sizeof(bp)) ");
+  strcpy(bp, "Adaptec AHA274x/284x/294x (EISA/VLB/PCI-Fast SCSI) ");
   strcat(bp, AIC7XXX_C_VERSION);
   strcat(bp, "/");
   strcat(bp, AIC7XXX_H_VERSION);

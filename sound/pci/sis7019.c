@@ -907,7 +907,7 @@ static int __devinit sis_pcm_create(struct sis7019 *sis)
 		return rc;
 
 	pcm->private_data = sis;
-	strlcpy(pcm->name,"SiS7019",sizeof(pcm->name));
+	strcpy(pcm->name, "SiS7019");
 	sis->pcm = pcm;
 
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &sis_playback_ops);
@@ -1436,8 +1436,8 @@ static int __devinit snd_sis7019_probe(struct pci_dev *pci,
 	if (rc < 0)
 		goto error_out;
 
-	strlcpy(card->driver,"SiS7019",sizeof(card->driver));
-	strlcpy(card->shortname,"SiS7019",sizeof(card->shortname));
+	strcpy(card->driver, "SiS7019");
+	strcpy(card->shortname, "SiS7019");
 	rc = sis_chip_create(card, pci);
 	if (rc)
 		goto card_error_out;

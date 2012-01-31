@@ -1638,7 +1638,7 @@ struct wl_timer *wl_init_timer(struct wl_info *wl, void (*fn) (void *arg),
 #ifdef BCMDBG
 	t->name = kmalloc(strlen(name) + 1, GFP_ATOMIC);
 	if (t->name)
-		strlcpy(t->name,name,sizeof(t->name));
+		strcpy(t->name, name);
 #endif
 
 	return t;

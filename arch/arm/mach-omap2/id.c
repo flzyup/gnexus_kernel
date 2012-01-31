@@ -462,81 +462,81 @@ static void __init omap3_cpuinfo(void)
 	 * and CPU class bits.
 	 */
 	if (cpu_is_omap3630()) {
-		strlcpy(cpu_name,"OMAP3630",sizeof(cpu_name));
+		strcpy(cpu_name, "OMAP3630");
 	} else if (cpu_is_omap3505()) {
 		/*
 		 * AM35xx devices
 		 */
 		if (omap3_has_sgx()) {
 			omap_revision = OMAP3517_REV(rev);
-			strlcpy(cpu_name,"AM3517",sizeof(cpu_name));
+			strcpy(cpu_name, "AM3517");
 		} else {
 			/* Already set in omap3_check_revision() */
-			strlcpy(cpu_name,"AM3505",sizeof(cpu_name));
+			strcpy(cpu_name, "AM3505");
 		}
 	} else if (cpu_is_ti816x()) {
-		strlcpy(cpu_name,"TI816X",sizeof(cpu_name));
+		strcpy(cpu_name, "TI816X");
 	} else if (omap3_has_iva() && omap3_has_sgx()) {
 		/* OMAP3430, OMAP3525, OMAP3515, OMAP3503 devices */
-		strlcpy(cpu_name,"OMAP3430/3530",sizeof(cpu_name));
+		strcpy(cpu_name, "OMAP3430/3530");
 	} else if (omap3_has_iva()) {
 		omap_revision = OMAP3525_REV(rev);
-		strlcpy(cpu_name,"OMAP3525",sizeof(cpu_name));
+		strcpy(cpu_name, "OMAP3525");
 	} else if (omap3_has_sgx()) {
 		omap_revision = OMAP3515_REV(rev);
-		strlcpy(cpu_name,"OMAP3515",sizeof(cpu_name));
+		strcpy(cpu_name, "OMAP3515");
 	} else {
 		omap_revision = OMAP3503_REV(rev);
-		strlcpy(cpu_name,"OMAP3503",sizeof(cpu_name));
+		strcpy(cpu_name, "OMAP3503");
 	}
 
 	if (cpu_is_omap3630() || cpu_is_ti816x()) {
 		switch (rev) {
 		case OMAP_REVBITS_00:
-			strlcpy(cpu_rev,"1.0",sizeof(cpu_rev));
+			strcpy(cpu_rev, "1.0");
 			break;
 		case OMAP_REVBITS_01:
-			strlcpy(cpu_rev,"1.1",sizeof(cpu_rev));
+			strcpy(cpu_rev, "1.1");
 			break;
 		case OMAP_REVBITS_02:
 			/* FALLTHROUGH */
 		default:
 			/* Use the latest known revision as default */
-			strlcpy(cpu_rev,"1.2",sizeof(cpu_rev));
+			strcpy(cpu_rev, "1.2");
 		}
 	} else if (cpu_is_omap3505() || cpu_is_omap3517()) {
 		switch (rev) {
 		case OMAP_REVBITS_00:
-			strlcpy(cpu_rev,"1.0",sizeof(cpu_rev));
+			strcpy(cpu_rev, "1.0");
 			break;
 		case OMAP_REVBITS_01:
 			/* FALLTHROUGH */
 		default:
 			/* Use the latest known revision as default */
-			strlcpy(cpu_rev,"1.1",sizeof(cpu_rev));
+			strcpy(cpu_rev, "1.1");
 		}
 	} else {
 		switch (rev) {
 		case OMAP_REVBITS_00:
-			strlcpy(cpu_rev,"1.0",sizeof(cpu_rev));
+			strcpy(cpu_rev, "1.0");
 			break;
 		case OMAP_REVBITS_01:
-			strlcpy(cpu_rev,"2.0",sizeof(cpu_rev));
+			strcpy(cpu_rev, "2.0");
 			break;
 		case OMAP_REVBITS_02:
-			strlcpy(cpu_rev,"2.1",sizeof(cpu_rev));
+			strcpy(cpu_rev, "2.1");
 			break;
 		case OMAP_REVBITS_03:
-			strlcpy(cpu_rev,"3.0",sizeof(cpu_rev));
+			strcpy(cpu_rev, "3.0");
 			break;
 		case OMAP_REVBITS_04:
-			strlcpy(cpu_rev,"3.1",sizeof(cpu_rev));
+			strcpy(cpu_rev, "3.1");
 			break;
 		case OMAP_REVBITS_05:
 			/* FALLTHROUGH */
 		default:
 			/* Use the latest known revision as default */
-			strlcpy(cpu_rev,"3.1.2",sizeof(cpu_rev));
+			strcpy(cpu_rev, "3.1.2");
 		}
 	}
 

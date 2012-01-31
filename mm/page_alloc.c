@@ -2833,7 +2833,7 @@ int numa_zonelist_order_handler(ctl_table *table, int write,
 
 	mutex_lock(&zl_order_mutex);
 	if (write)
-		strlcpy(saved_string,(char*,sizeof(saved_string))table->data);
+		strcpy(saved_string, (char*)table->data);
 	ret = proc_dostring(table, write, buffer, length, ppos);
 	if (ret)
 		goto out;

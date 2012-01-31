@@ -2931,9 +2931,9 @@ static int vino_querycap(struct file *file, void *__fh,
 {
 	memset(cap, 0, sizeof(struct v4l2_capability));
 
-	strlcpy(cap->driver,vino_driver_name,sizeof(cap->driver));
-	strlcpy(cap->card,vino_driver_description,sizeof(cap->card));
-	strlcpy(cap->bus_info,vino_bus_name,sizeof(cap->bus_info));
+	strcpy(cap->driver, vino_driver_name);
+	strcpy(cap->card, vino_driver_description);
+	strcpy(cap->bus_info, vino_bus_name);
 	cap->version = VINO_VERSION_CODE;
 	cap->capabilities =
 		V4L2_CAP_VIDEO_CAPTURE |
@@ -2956,7 +2956,7 @@ static int vino_enum_input(struct file *file, void *__fh,
 
 	i->type = V4L2_INPUT_TYPE_CAMERA;
 	i->std = vino_inputs[input].std;
-	strlcpy(i->name,vino_inputs[input].name,sizeof(i->name));
+	strcpy(i->name, vino_inputs[input].name);
 
 	if (input == VINO_INPUT_COMPOSITE || input == VINO_INPUT_SVIDEO)
 		decoder_call(video, g_input_status, &i->status);
@@ -3104,7 +3104,7 @@ static int vino_enum_fmt_vid_cap(struct file *file, void *__fh,
 	dprintk("format name = %s\n", vino_data_formats[fd->index].description);
 
 	fd->pixelformat = vino_data_formats[fd->index].pixelformat;
-	strlcpy(fd->description,vino_data_formats[fd->index].description,sizeof(fd->description));
+	strcpy(fd->description, vino_data_formats[fd->index].description);
 	return 0;
 }
 
@@ -4249,7 +4249,7 @@ static int vino_init_channel_settings(struct vino_channel_settings *vcs,
 
 	memcpy(vcs->vdev, &vdev_template,
 	       sizeof(struct video_device));
-	strlcpy(vcs->vdev->name,name,sizeof(vcs->vdev->name));
+	strcpy(vcs->vdev->name, name);
 	vcs->vdev->release = video_device_release;
 	vcs->vdev->v4l2_dev = &vino_drvdata->v4l2_dev;
 

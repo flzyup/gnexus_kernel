@@ -86,7 +86,7 @@ void sun3_get_model(unsigned char* model)
 
 	for (i = 0; i < NUM_SUN_MACHINES; i++) {
 		if(Sun_Machines[i].id_machtype == idprom->id_machtype) {
-		        strlcpy(model,Sun_Machines[i].name,sizeof(model));
+		        strcpy(model, Sun_Machines[i].name);
 			return;
 		}
 	}

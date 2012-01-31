@@ -948,9 +948,9 @@ static int inet_gifconf(struct net_device *dev, char __user *buf, int len)
 			break;
 		memset(&ifr, 0, sizeof(struct ifreq));
 		if (ifa->ifa_label)
-			strlcpy(ifr.ifr_name,ifa->ifa_label,sizeof(ifr.ifr_name));
+			strcpy(ifr.ifr_name, ifa->ifa_label);
 		else
-			strlcpy(ifr.ifr_name,dev->name,sizeof(ifr.ifr_name));
+			strcpy(ifr.ifr_name, dev->name);
 
 		(*(struct sockaddr_in *)&ifr.ifr_addr).sin_family = AF_INET;
 		(*(struct sockaddr_in *)&ifr.ifr_addr).sin_addr.s_addr =
@@ -1125,7 +1125,7 @@ static void inetdev_changename(struct net_device *dev, struct in_device *in_dev)
 		if (strlen(dot) + strlen(dev->name) < IFNAMSIZ)
 			strcat(ifa->ifa_label, dot);
 		else
-			strlcpy(ifa->ifa_label + (IFNAMSIZ - strlen(dot) - 1),dot,sizeof(ifa->ifa_label + (IFNAMSIZ - strlen(dot) - 1)));
+			strcpy(ifa->ifa_label + (IFNAMSIZ - strlen(dot) - 1), dot);
 skip:
 		rtmsg_ifa(RTM_NEWADDR, ifa, NULL, 0);
 	}

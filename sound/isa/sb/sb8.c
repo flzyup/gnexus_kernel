@@ -185,8 +185,8 @@ static int __devinit snd_sb8_probe(struct device *pdev, unsigned int dev)
 	if ((err = snd_sb8dsp_midi(chip, 0, NULL)) < 0)
 		goto _err;
 
-	strlcpy(card->driver,chip->hardware == SB_HW_PRO ? "SB Pro" : "SB8",sizeof(card->driver));
-	strlcpy(card->shortname,chip->name,sizeof(card->shortname));
+	strcpy(card->driver, chip->hardware == SB_HW_PRO ? "SB Pro" : "SB8");
+	strcpy(card->shortname, chip->name);
 	sprintf(card->longname, "%s at 0x%lx, irq %d, dma %d",
 		chip->name,
 		chip->port,

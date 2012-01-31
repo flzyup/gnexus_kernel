@@ -1136,7 +1136,7 @@ static int __devinit intelfb_set_fbinfo(struct intelfb_info *dinfo)
 		return 1;
 
 	info->pixmap.scan_align = 1;
-	strlcpy(info->fix.id,dinfo->name,sizeof(info->fix.id));
+	strcpy(info->fix.id, dinfo->name);
 	info->fix.smem_start = dinfo->fb.physical;
 	info->fix.smem_len = dinfo->fb.size;
 	info->fix.type = FB_TYPE_PACKED_PIXELS;

@@ -401,7 +401,7 @@ static void elf_kcore_store_hdr(char *bufp, int nphdr, int dataoff)
 	prpsinfo.pr_sname	= 'R';
 	prpsinfo.pr_zomb	= 0;
 
-	strlcpy(prpsinfo.pr_fname,"vmlinux",sizeof(prpsinfo.pr_fname));
+	strcpy(prpsinfo.pr_fname, "vmlinux");
 	strncpy(prpsinfo.pr_psargs, saved_command_line, ELF_PRARGSZ);
 
 	nhdr->p_filesz	+= notesize(&notes[1]);

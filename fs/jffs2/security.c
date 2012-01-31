@@ -71,8 +71,8 @@ static size_t jffs2_security_listxattr(struct dentry *dentry, char *list,
 	size_t retlen = XATTR_SECURITY_PREFIX_LEN + name_len + 1;
 
 	if (list && retlen <= list_size) {
-		strlcpy(list,XATTR_SECURITY_PREFIX,sizeof(list));
-		strlcpy(list + XATTR_SECURITY_PREFIX_LEN,name,sizeof(list + XATTR_SECURITY_PREFIX_LEN));
+		strcpy(list, XATTR_SECURITY_PREFIX);
+		strcpy(list + XATTR_SECURITY_PREFIX_LEN, name);
 	}
 
 	return retlen;

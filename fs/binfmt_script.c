@@ -57,7 +57,7 @@ static int load_script(struct linux_binprm *bprm,struct pt_regs *regs)
 		*cp++ = '\0';
 	if (*cp)
 		i_arg = cp;
-	strlcpy(interp,i_name,sizeof(interp));
+	strcpy (interp, i_name);
 	/*
 	 * OK, we've parsed out the interpreter name and
 	 * (optional) argument.

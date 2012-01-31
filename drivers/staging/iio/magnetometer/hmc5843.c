@@ -474,7 +474,7 @@ static ssize_t show_scale(struct device *dev,
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
 	struct hmc5843_data *data = indio_dev->dev_data;
-	return strlen(strlcpy(buf,regval_to_scale[data->range],sizeof(buf)));
+	return strlen(strcpy(buf, regval_to_scale[data->range]));
 }
 static IIO_DEVICE_ATTR(magn_scale,
 			S_IRUGO,

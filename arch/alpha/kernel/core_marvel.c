@@ -83,7 +83,7 @@ mk_resource_name(int pe, int port, char *str)
 	
 	sprintf(tmp, "PCI %s PE %d PORT %d", str, pe, port);
 	name = alloc_bootmem(strlen(tmp) + 1);
-	strlcpy(name,tmp,sizeof(name));
+	strcpy(name, tmp);
 
 	return name;
 }

@@ -48,7 +48,7 @@ struct fscache_cache_tag *__fscache_lookup_cache_tag(const char *name)
 		return ERR_PTR(-ENOMEM);
 
 	atomic_set(&xtag->usage, 1);
-	strlcpy(xtag->name,name,sizeof(xtag->name));
+	strcpy(xtag->name, name);
 
 	/* write lock, search again and add if still not present */
 	down_write(&fscache_addremove_sem);

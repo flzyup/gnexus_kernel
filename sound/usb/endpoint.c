@@ -138,7 +138,7 @@ int snd_usb_add_audio_endpoint(struct snd_usb_audio *chip, int stream, struct au
 	if (chip->pcm_devs > 0)
 		sprintf(pcm->name, "USB Audio #%d", chip->pcm_devs);
 	else
-		strlcpy(pcm->name,"USB Audio",sizeof(pcm->name));
+		strcpy(pcm->name, "USB Audio");
 
 	snd_usb_init_substream(as, stream, fp);
 

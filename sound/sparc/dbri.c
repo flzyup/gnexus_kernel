@@ -2233,7 +2233,7 @@ static int __devinit snd_dbri_pcm(struct snd_card *card)
 
 	pcm->private_data = card->private_data;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,card->shortname,sizeof(pcm->name));
+	strcpy(pcm->name, card->shortname);
 
 	if ((err = snd_pcm_lib_preallocate_pages_for_all(pcm,
 			SNDRV_DMA_TYPE_CONTINUOUS,
@@ -2444,7 +2444,7 @@ static int __devinit snd_dbri_mixer(struct snd_card *card)
 		return -EINVAL;
 	dbri = card->private_data;
 
-	strlcpy(card->mixername,card->shortname,sizeof(card->mixername));
+	strcpy(card->mixername, card->shortname);
 
 	for (idx = 0; idx < ARRAY_SIZE(dbri_controls); idx++) {
 		err = snd_ctl_add(card,
@@ -2619,8 +2619,8 @@ static int __devinit dbri_probe(struct platform_device *op)
 	if (err < 0)
 		return err;
 
-	strlcpy(card->driver,"DBRI",sizeof(card->driver));
-	strlcpy(card->shortname,"Sun DBRI",sizeof(card->shortname));
+	strcpy(card->driver, "DBRI");
+	strcpy(card->shortname, "Sun DBRI");
 	rp = &op->resource[0];
 	sprintf(card->longname, "%s at 0x%02lx:0x%016Lx, irq %d",
 		card->shortname,

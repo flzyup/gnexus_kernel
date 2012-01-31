@@ -127,7 +127,7 @@ int init_module(void)
 	if (!atir_init_start())
 		return 1;
 
-	strlcpy(atir_driver.name,"ATIR",sizeof(atir_driver.name));
+	strcpy(atir_driver.name, "ATIR");
 	atir_driver.minor       = -1;
 	atir_driver.code_length = 8;
 	atir_driver.sample_rate = 10;

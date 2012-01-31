@@ -1420,8 +1420,8 @@ static int __devinit eeepc_acpi_add(struct acpi_device *device)
 	if (!eeepc)
 		return -ENOMEM;
 	eeepc->handle = device->handle;
-	strlcpy(acpi_device_name(device),EEEPC_ACPI_DEVICE_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),EEEPC_ACPI_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_name(device), EEEPC_ACPI_DEVICE_NAME);
+	strcpy(acpi_device_class(device), EEEPC_ACPI_CLASS);
 	device->driver_data = eeepc;
 	eeepc->device = device;
 

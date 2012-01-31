@@ -505,7 +505,7 @@ static const char *debugfs_find_mountpoint(void)
 	ptr = debugfs_known_mountpoints;
 	while (*ptr) {
 		if (debugfs_valid_mountpoint(*ptr) == 0) {
-			strlcpy(hwpoison_debug_fs,*ptr,sizeof(hwpoison_debug_fs));
+			strcpy(hwpoison_debug_fs, *ptr);
 			return hwpoison_debug_fs;
 		}
 		ptr++;
@@ -545,7 +545,7 @@ static void debugfs_mount(void)
 	while (*ptr) {
 		if (mount(NULL, *ptr, "debugfs", 0, NULL) == 0) {
 			/* save the mountpoint */
-			strlcpy(hwpoison_debug_fs,*ptr,sizeof(hwpoison_debug_fs));
+			strcpy(hwpoison_debug_fs, *ptr);
 			break;
 		}
 		ptr++;

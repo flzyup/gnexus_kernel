@@ -188,7 +188,7 @@ static int __init pvc_proc_init(void)
 		goto error;
 
 	for (i = 0; i < PVC_NLINES; i++) {
-		strlcpy(pvc_lines[i],"",sizeof(pvc_lines[i]));
+		strcpy(pvc_lines[i], "");
 		pvc_linedata[i] = i;
 	}
 	for (i = 0; i < PVC_NLINES; i++) {

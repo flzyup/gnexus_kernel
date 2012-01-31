@@ -816,7 +816,7 @@ _dhd_set_multicast_list(dhd_info_t *dhd, int ifidx)
 		return;
 	}
 
-	strlcpy(bufp,"mcast_list",sizeof(bufp));
+	strcpy(bufp, "mcast_list");
 	bufp += strlen("mcast_list") + 1;
 
 	cnt = htol32(cnt);
@@ -1835,7 +1835,7 @@ dhd_toe_get(dhd_info_t *dhd, int ifidx, uint32 *toe_ol)
 	ioc.len = (uint)sizeof(buf);
 	ioc.set = FALSE;
 
-	strlcpy(buf,"toe_ol",sizeof(buf));
+	strcpy(buf, "toe_ol");
 	if ((ret = dhd_wl_ioctl(&dhd->pub, ifidx, &ioc, ioc.buf, ioc.len)) < 0) {
 		/* Check for older dongle image that doesn't support toe_ol */
 		if (ret == -EIO) {
@@ -1869,7 +1869,7 @@ dhd_toe_set(dhd_info_t *dhd, int ifidx, uint32 toe_ol)
 
 	/* Set toe_ol as requested */
 
-	strlcpy(buf,"toe_ol",sizeof(buf));
+	strcpy(buf, "toe_ol");
 	memcpy(&buf[sizeof("toe_ol")], &toe_ol, sizeof(uint32));
 
 	if ((ret = dhd_wl_ioctl(&dhd->pub, ifidx, &ioc, ioc.buf, ioc.len)) < 0) {
@@ -1882,7 +1882,7 @@ dhd_toe_set(dhd_info_t *dhd, int ifidx, uint32 toe_ol)
 
 	toe = (toe_ol != 0);
 
-	strlcpy(buf,"toe",sizeof(buf));
+	strcpy(buf, "toe");
 	memcpy(&buf[sizeof("toe")], &toe, sizeof(uint32));
 
 	if ((ret = dhd_wl_ioctl(&dhd->pub, ifidx, &ioc, ioc.buf, ioc.len)) < 0) {
@@ -1944,7 +1944,7 @@ dhd_ethtool(dhd_info_t *dhd, void *uaddr)
 		/* if dhd requested, identify ourselves */
 		if (strcmp(drvname, "?dhd") == 0) {
 			sprintf(info.driver, "dhd");
-			strlcpy(info.version,EPI_VERSION_STR,sizeof(info.version));
+			strcpy(info.version, EPI_VERSION_STR);
 		}
 
 		/* otherwise, require dongle to be up */
@@ -2346,7 +2346,7 @@ dhd_open(struct net_device *net)
 	if ((firmware_path != NULL) && (firmware_path[0] != '\0')) {
 		if (firmware_path[strlen(firmware_path)-1] == '\n')
 			firmware_path[strlen(firmware_path)-1] = '\0';
-		strlcpy(fw_path,firmware_path,sizeof(fw_path));
+		strcpy(fw_path, firmware_path);
 		firmware_path[0] = '\0';
 	}
 
@@ -2567,9 +2567,9 @@ dhd_attach(osl_t *osh, struct dhd_bus *bus, uint bus_hdrlen)
 
 	/* updates firmware nvram path if it was provided as module parameters */
 	if ((firmware_path != NULL) && (firmware_path[0] != '\0'))
-		strlcpy(fw_path,firmware_path,sizeof(fw_path));
+		strcpy(fw_path, firmware_path);
 	if ((nvram_path != NULL) && (nvram_path[0] != '\0'))
-		strlcpy(nv_path,nvram_path,sizeof(nv_path));
+		strcpy(nv_path, nvram_path);
 
 	/* Allocate etherdev, including space for private structure */
 	if (!(net = alloc_etherdev(sizeof(dhd)))) {
@@ -5092,7 +5092,7 @@ dhd_ioctl_htsf_get(dhd_info_t *dhd, int ifidx)
 	ioc.len = (uint)sizeof(buf);
 	ioc.set = FALSE;
 
-	strlcpy(buf,"tsf",sizeof(buf));
+	strcpy(buf, "tsf");
 	s1 = dhd_get_htsf(dhd, 0);
 	if ((ret = dhd_wl_ioctl(&dhd->pub, ifidx, &ioc, ioc.buf, ioc.len)) < 0) {
 		if (ret == -EIO) {

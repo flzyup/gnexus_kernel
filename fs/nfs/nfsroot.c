@@ -224,7 +224,7 @@ static int __init root_nfs_data(char *cmdline)
 	tmp = kzalloc(tmplen, GFP_KERNEL);
 	if (tmp == NULL)
 		goto out_nomem;
-	strlcpy(tmp,NFS_ROOT,sizeof(tmp));
+	strcpy(tmp, NFS_ROOT);
 
 	if (root_server_path[0] != '\0') {
 		dprintk("Root-NFS: DHCPv4 option 17: %s\n",

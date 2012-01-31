@@ -398,7 +398,7 @@ setup_enternow_pci(struct IsdnCard *card)
 #error "not running on big endian machines now"
 #endif
 
-        strlcpy(tmp,enternow_pci_rev,sizeof(tmp));
+        strcpy(tmp, enternow_pci_rev);
 	printk(KERN_INFO "HiSax: Formula-n Europe AG enter:now ISDN PCI driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_ENTERNOW)
 		return(0);

@@ -99,7 +99,7 @@ static struct ctrl sd_ctrls_ov9655[GL860_NCTRLS];
 	if (sd->vmax.thename != 0) {\
 		sd_ctrls[nCtrls].qctrl.id   = theid;\
 		sd_ctrls[nCtrls].qctrl.type = thetype;\
-		strlcpy(sd_ctrls[nCtrls].qctrl.name,thelabel,sizeof(sd_ctrls[nCtrls].qctrl.name));\
+		strcpy(sd_ctrls[nCtrls].qctrl.name, thelabel);\
 		sd_ctrls[nCtrls].qctrl.minimum = 0;\
 		sd_ctrls[nCtrls].qctrl.maximum = sd->vmax.thename;\
 		sd_ctrls[nCtrls].qctrl.default_value = sd->vcur.thename;\

@@ -1850,7 +1850,7 @@ static int snd_korg1212_control_route_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item > kAudioChannels-1) {
 		uinfo->value.enumerated.item = kAudioChannels-1;
 	}
-	strlcpy(uinfo->value.enumerated.name,channelName[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, channelName[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -1967,7 +1967,7 @@ static int snd_korg1212_control_sync_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item > 2) {
 		uinfo->value.enumerated.item = 2;
 	}
-	strlcpy(uinfo->value.enumerated.name,clockSourceTypeName[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, clockSourceTypeName[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -2402,7 +2402,7 @@ static int __devinit snd_korg1212_create(struct snd_card *card, struct pci_dev *
 
 	korg1212->pcm->private_data = korg1212;
         korg1212->pcm->private_free = snd_korg1212_free_pcm;
-        strlcpy(korg1212->pcm->name,"korg1212",sizeof(korg1212->pcm->name));
+        strcpy(korg1212->pcm->name, "korg1212");
 
         snd_pcm_set_ops(korg1212->pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_korg1212_playback_ops);
         
@@ -2454,8 +2454,8 @@ snd_korg1212_probe(struct pci_dev *pci,
 		return err;
 	}
 
-	strlcpy(card->driver,"korg1212",sizeof(card->driver));
-	strlcpy(card->shortname,"korg1212",sizeof(card->shortname));
+	strcpy(card->driver, "korg1212");
+	strcpy(card->shortname, "korg1212");
 	sprintf(card->longname, "%s at 0x%lx, irq %d", card->shortname,
 		korg1212->iomem, korg1212->irq);
 

@@ -259,9 +259,9 @@ int set_string_var(const char *page, struct st_var_header *var, int len)
 		if (!var->p_val)
 			var->p_val = var_data->u.s.default_val;
 		if (var->p_val != var_data->u.s.default_val)
-			strlcpy((char *)var->p_val,var_data->u.s.default_val,sizeof((char *)var->p_val));
+			strcpy((char *)var->p_val, var_data->u.s.default_val);
 	} else if (var->p_val)
-		strlcpy((char *)var->p_val,page,sizeof((char *)var->p_val));
+		strcpy((char *)var->p_val, page);
 	else
 		return -E_TOOLONG;
 	return ret;

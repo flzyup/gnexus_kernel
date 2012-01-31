@@ -135,7 +135,7 @@ int __init snd_seq_system_client_init(void)
 	sysclient = snd_seq_create_kernel_client(NULL, 0, "System");
 
 	/* register timer */
-	strlcpy(port->name,"Timer",sizeof(port->name));
+	strcpy(port->name, "Timer");
 	port->capability = SNDRV_SEQ_PORT_CAP_WRITE; /* accept queue control */
 	port->capability |= SNDRV_SEQ_PORT_CAP_READ|SNDRV_SEQ_PORT_CAP_SUBS_READ; /* for broadcast */
 	port->kernel = &pcallbacks;
@@ -146,7 +146,7 @@ int __init snd_seq_system_client_init(void)
 	snd_seq_kernel_client_ctl(sysclient, SNDRV_SEQ_IOCTL_CREATE_PORT, port);
 
 	/* register announcement port */
-	strlcpy(port->name,"Announce",sizeof(port->name));
+	strcpy(port->name, "Announce");
 	port->capability = SNDRV_SEQ_PORT_CAP_READ|SNDRV_SEQ_PORT_CAP_SUBS_READ; /* for broadcast only */
 	port->kernel = NULL;
 	port->type = 0;

@@ -315,7 +315,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 		return -EINVAL;
 
 	memset(v, 0, sizeof(*v));
-	strlcpy(v->name,"FM",sizeof(v->name));
+	strcpy(v->name, "FM");
 	v->type = V4L2_TUNER_RADIO;
 	tea5764_i2c_read(radio);
 	v->rangelow   = FREQ_MIN * FREQ_MUL;
@@ -443,7 +443,7 @@ static int vidioc_g_audio(struct file *file, void *priv,
 	if (a->index > 1)
 		return -EINVAL;
 
-	strlcpy(a->name,"Radio",sizeof(a->name));
+	strcpy(a->name, "Radio");
 	a->capability = V4L2_AUDCAP_STEREO;
 	return 0;
 }

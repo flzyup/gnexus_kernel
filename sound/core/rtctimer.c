@@ -143,7 +143,7 @@ static int __init rtctimer_init(void)
 		return err;
 
 	timer->module = THIS_MODULE;
-	strlcpy(timer->name,"RTC timer",sizeof(timer->name));
+	strcpy(timer->name, "RTC timer");
 	timer->hw = rtc_hw;
 	timer->hw.resolution = NANO_SEC / rtctimer_freq;
 

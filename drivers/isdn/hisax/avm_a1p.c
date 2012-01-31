@@ -220,7 +220,7 @@ int __devinit setup_avm_a1_pcmcia(struct IsdnCard *card)
 	char tmp[64];
 
 
-	strlcpy(tmp,avm_revision,sizeof(tmp));
+	strcpy(tmp, avm_revision);
 	printk(KERN_INFO "HiSax: AVM A1 PCMCIA driver Rev. %s\n",
 						 HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_A1_PCMCIA)

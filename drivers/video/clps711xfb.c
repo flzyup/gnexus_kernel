@@ -370,7 +370,7 @@ int __init clps711xfb_init(void)
 	if (!cfb)
 		goto out;
 
-	strlcpy(cfb->fix.id,"clps711x",sizeof(cfb->fix.id));
+	strcpy(cfb->fix.id, "clps711x");
 
 	cfb->fbops		= &clps7111fb_ops;
 	cfb->flags		= FBINFO_DEFAULT;

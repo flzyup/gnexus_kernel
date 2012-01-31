@@ -1550,7 +1550,7 @@ struct net_device *init_atmel_card(unsigned short irq, unsigned long port,
 	priv->firmware_id[0] = '\0';
 	priv->firmware_type = fw_type;
 	if (firmware) /* module parameter */
-		strlcpy(priv->firmware_id,firmware,sizeof(priv->firmware_id));
+		strcpy(priv->firmware_id, firmware);
 	priv->bus_type = card_present ? BUS_TYPE_PCCARD : BUS_TYPE_PCI;
 	priv->station_state = STATION_STATE_DOWN;
 	priv->do_rx_crc = 0;
@@ -2036,7 +2036,7 @@ static int atmel_get_name(struct net_device *dev,
 			  char *cwrq,
 			  char *extra)
 {
-	strlcpy(cwrq,"IEEE 802.11-DS",sizeof(cwrq));
+	strcpy(cwrq, "IEEE 802.11-DS");
 	return 0;
 }
 
@@ -3933,7 +3933,7 @@ static int reset_atmel_card(struct net_device *dev)
 					printk(KERN_INFO
 					       "%s: if not, use the firmware= module parameter.\n",
 					       dev->name);
-					strlcpy(priv->firmware_id,"atmel_at76c502.bin",sizeof(priv->firmware_id));
+					strcpy(priv->firmware_id, "atmel_at76c502.bin");
 				}
 				err = request_firmware(&fw_entry, priv->firmware_id, priv->sys_dev);
 				if (err != 0) {

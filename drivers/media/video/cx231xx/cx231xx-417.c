@@ -1600,10 +1600,10 @@ static int vidioc_enum_input(struct file *file, void *priv,
 		return -EINVAL;
 
 	/* FIXME
-	 * strlcpy(i->name,input->name,sizeof(i->name)); */
+	 * strcpy(i->name, input->name); */
 
 	n = i->index;
-	strlcpy(i->name,iname[INPUT(n,sizeof(i->name))->type]);
+	strcpy(i->name, iname[INPUT(n)->type]);
 
 	if (input->type == CX231XX_VMUX_TELEVISION ||
 	    input->type == CX231XX_VMUX_CABLE)

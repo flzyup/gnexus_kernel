@@ -333,7 +333,7 @@ static int snd_line6_new_pcm(struct snd_line6_pcm *line6pcm)
 	pcm->private_data = line6pcm;
 	pcm->private_free = line6_cleanup_pcm;
 	line6pcm->pcm = pcm;
-	strlcpy(pcm->name,line6pcm->line6->properties->name,sizeof(pcm->name));
+	strcpy(pcm->name, line6pcm->line6->properties->name);
 
 	/* set operators */
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,

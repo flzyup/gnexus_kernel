@@ -298,13 +298,13 @@ static int open_host_sock(char *host_file, int *filter_out)
 	int fd;
 
 	end = &host_file[strlen(host_file)];
-	strlcpy(end,"/rw",sizeof(end));
+	strcpy(end, "/rw");
 	*filter_out = 1;
 	fd = os_connect_socket(host_file);
 	if (fd > 0)
 		return fd;
 
-	strlcpy(end,"/r",sizeof(end));
+	strcpy(end, "/r");
 	*filter_out = 0;
 	fd = os_connect_socket(host_file);
 	return fd;

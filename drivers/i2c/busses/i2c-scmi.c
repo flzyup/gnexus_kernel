@@ -366,8 +366,8 @@ static int acpi_smbus_cmi_add(struct acpi_device *device)
 		return -ENOMEM;
 
 	smbus_cmi->handle = device->handle;
-	strlcpy(acpi_device_name(device),ACPI_SMBUS_HC_DEVICE_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),ACPI_SMBUS_HC_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_name(device), ACPI_SMBUS_HC_DEVICE_NAME);
+	strcpy(acpi_device_class(device), ACPI_SMBUS_HC_CLASS);
 	device->driver_data = smbus_cmi;
 	smbus_cmi->cap_info = 0;
 	smbus_cmi->cap_read = 0;

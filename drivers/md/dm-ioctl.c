@@ -503,7 +503,7 @@ static int list_devices(struct dm_ioctl *param, size_t param_size)
 			disk = dm_disk(hc->md);
 			nl->dev = huge_encode_dev(disk_devt(disk));
 			nl->next = 0;
-			strlcpy(nl->name,hc->name,sizeof(nl->name));
+			strcpy(nl->name, hc->name);
 
 			old_nl = nl;
 			nl = align_ptr(((void *) ++nl) + strlen(hc->name) + 1);
@@ -543,7 +543,7 @@ static void list_version_get_info(struct target_type *tt, void *param)
     info->vers->version[1] = tt->version[1];
     info->vers->version[2] = tt->version[2];
     info->vers->next = 0;
-    strlcpy(info->vers->name,tt->name,sizeof(info->vers->name));
+    strcpy(info->vers->name, tt->name);
 
     info->old_vers = info->vers;
     info->vers = align_ptr(((void *) ++info->vers) + strlen(tt->name) + 1);
@@ -1732,9 +1732,9 @@ int dm_copy_name_and_uuid(struct mapped_device *md, char *name, char *uuid)
 	}
 
 	if (name)
-		strlcpy(name,hc->name,sizeof(name));
+		strcpy(name, hc->name);
 	if (uuid)
-		strlcpy(uuid,hc->uuid ? : "",sizeof(uuid));
+		strcpy(uuid, hc->uuid ? : "");
 
 out:
 	mutex_unlock(&dm_hash_cells_mutex);

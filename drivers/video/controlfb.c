@@ -1054,7 +1054,7 @@ static void __init control_init_info(struct fb_info *info, struct fb_info_contro
 	fb_alloc_cmap(&info->cmap, 256, 0);
 
 	/* Fill fix common fields */
-	strlcpy(info->fix.id,"control",sizeof(info->fix.id));
+	strcpy(info->fix.id, "control");
 	info->fix.mmio_start = p->control_regs_phys;
 	info->fix.mmio_len = sizeof(struct control_regs);
 	info->fix.type = FB_TYPE_PACKED_PIXELS;

@@ -297,7 +297,7 @@ static int probe(struct usb_interface *intf, const struct usb_device_id *id)
 		kfree(ttusbir);
 		return -ENOMEM;
 	}
-	strlcpy(ttusbir->driver.name,"TTUSBIR",sizeof(ttusbir->driver.name));
+	strcpy(ttusbir->driver.name, "TTUSBIR");
 	ttusbir->driver.minor = -1;
 	ttusbir->driver.code_length = 1;
 	ttusbir->driver.sample_rate = 0;

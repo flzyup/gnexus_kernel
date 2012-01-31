@@ -981,21 +981,22 @@ static int snd_es18xx_info_mux(struct snd_kcontrol *kcontrol, struct snd_ctl_ele
 		uinfo->value.enumerated.items = 4;
 		if (uinfo->value.enumerated.item > 3)
 			uinfo->value.enumerated.item = 3;
-		strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts5Source[uinfo->value.enumerated.item]);
+		strcpy(uinfo->value.enumerated.name,
+			texts5Source[uinfo->value.enumerated.item]);
 		break;
 	case 0x1887:
 	case 0x1888:
 		uinfo->value.enumerated.items = 5;
 		if (uinfo->value.enumerated.item > 4)
 			uinfo->value.enumerated.item = 4;
-		strlcpy(uinfo->value.enumerated.name,texts5Source[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+		strcpy(uinfo->value.enumerated.name, texts5Source[uinfo->value.enumerated.item]);
 		break;
 	case 0x1869: /* DS somewhat contradictory for 1869: could be be 5 or 8 */
 	case 0x1879:
 		uinfo->value.enumerated.items = 8;
 		if (uinfo->value.enumerated.item > 7)
 			uinfo->value.enumerated.item = 7;
-		strlcpy(uinfo->value.enumerated.name,texts8Source[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+		strcpy(uinfo->value.enumerated.name, texts8Source[uinfo->value.enumerated.item]);
 		break;
 	default:
 		return -EINVAL;
@@ -1844,7 +1845,7 @@ static int __devinit snd_es18xx_mixer(struct snd_card *card)
 	int err;
 	unsigned int idx;
 
-	strlcpy(card->mixername,chip->pcm->name,sizeof(card->mixername));
+	strcpy(card->mixername, chip->pcm->name);
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_es18xx_base_controls); idx++) {
 		struct snd_kcontrol *kctl;

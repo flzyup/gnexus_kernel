@@ -268,7 +268,7 @@ setup_netjet_s(struct IsdnCard *card)
 #ifdef __BIG_ENDIAN
 #error "not running on big endian machines now"
 #endif
-	strlcpy(tmp,NETjet_S_revision,sizeof(tmp));
+	strcpy(tmp, NETjet_S_revision);
 	printk(KERN_INFO "HiSax: Traverse Tech. NETjet-S driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_NETJET_S)
 		return(0);

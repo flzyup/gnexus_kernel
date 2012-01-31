@@ -229,7 +229,7 @@ static int dn_def_dev_handler(ctl_table *table, int write,
 		return 0;
 	}
 
-	strlcpy(devname,dev->name,sizeof(devname));
+	strcpy(devname, dev->name);
 	dev_put(dev);
 	len = strlen(devname);
 	devname[len++] = '\n';

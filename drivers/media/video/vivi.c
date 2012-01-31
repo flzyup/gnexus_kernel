@@ -809,8 +809,8 @@ static int vidioc_querycap(struct file *file, void  *priv,
 {
 	struct vivi_dev *dev = video_drvdata(file);
 
-	strlcpy(cap->driver,"vivi",sizeof(cap->driver));
-	strlcpy(cap->card,"vivi",sizeof(cap->card));
+	strcpy(cap->driver, "vivi");
+	strcpy(cap->card, "vivi");
 	strlcpy(cap->bus_info, dev->v4l2_dev.name, sizeof(cap->bus_info));
 	cap->version = VIVI_VERSION;
 	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING | \

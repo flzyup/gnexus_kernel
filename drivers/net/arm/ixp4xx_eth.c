@@ -528,7 +528,7 @@ static int ixp4xx_mdio_register(void)
 	mdio_bus->name = "IXP4xx MII Bus";
 	mdio_bus->read = &ixp4xx_mdio_read;
 	mdio_bus->write = &ixp4xx_mdio_write;
-	strlcpy(mdio_bus->id,"0",sizeof(mdio_bus->id));
+	strcpy(mdio_bus->id, "0");
 
 	if ((err = mdiobus_register(mdio_bus)))
 		mdiobus_free(mdio_bus);
@@ -976,11 +976,11 @@ static void ixp4xx_get_drvinfo(struct net_device *dev,
 			       struct ethtool_drvinfo *info)
 {
 	struct port *port = netdev_priv(dev);
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
+	strcpy(info->driver, DRV_NAME);
 	snprintf(info->fw_version, sizeof(info->fw_version), "%u:%u:%u:%u",
 		 port->firmware[0], port->firmware[1],
 		 port->firmware[2], port->firmware[3]);
-	strlcpy(info->bus_info,"internal",sizeof(info->bus_info));
+	strcpy(info->bus_info, "internal");
 }
 
 static int ixp4xx_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)

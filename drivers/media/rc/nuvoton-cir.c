@@ -250,23 +250,23 @@ static int nvt_hw_detect(struct nvt_dev *nvt)
 	/* these are the known working chip revisions... */
 	switch (chip_major) {
 	case CHIP_ID_HIGH_667:
-		strlcpy(chip_id,"w83667hg\0",sizeof(chip_id));
+		strcpy(chip_id, "w83667hg\0");
 		if (chip_minor != CHIP_ID_LOW_667)
 			chip_unknown = true;
 		break;
 	case CHIP_ID_HIGH_677B:
-		strlcpy(chip_id,"w83677hg\0",sizeof(chip_id));
+		strcpy(chip_id, "w83677hg\0");
 		if (chip_minor != CHIP_ID_LOW_677B2 &&
 		    chip_minor != CHIP_ID_LOW_677B3)
 			chip_unknown = true;
 		break;
 	case CHIP_ID_HIGH_677C:
-		strlcpy(chip_id,"w83677hg-c\0",sizeof(chip_id));
+		strcpy(chip_id, "w83677hg-c\0");
 		if (chip_minor != CHIP_ID_LOW_677C)
 			chip_unknown = true;
 		break;
 	default:
-		strlcpy(chip_id,"w836x7hg\0",sizeof(chip_id));
+		strcpy(chip_id, "w836x7hg\0");
 		chip_unknown = true;
 		break;
 	}

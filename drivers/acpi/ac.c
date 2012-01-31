@@ -274,8 +274,8 @@ static int acpi_ac_add(struct acpi_device *device)
 		return -ENOMEM;
 
 	ac->device = device;
-	strlcpy(acpi_device_name(device),ACPI_AC_DEVICE_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),ACPI_AC_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_name(device), ACPI_AC_DEVICE_NAME);
+	strcpy(acpi_device_class(device), ACPI_AC_CLASS);
 	device->driver_data = ac;
 
 	result = acpi_ac_get_state(ac);

@@ -78,7 +78,7 @@ static struct prom_pmemblock * __init prom_getmdesc(void)
 
 	/* Check the command line for a memsize directive that overrides
 	   the physical/default amount */
-	strlcpy(cmdline,arcs_cmdline,sizeof(cmdline));
+	strcpy(cmdline, arcs_cmdline);
 	ptr = strstr(cmdline, "memsize=");
 	if (ptr && (ptr != cmdline) && (*(ptr - 1) != ' '))
 		ptr = strstr(ptr, " memsize=");

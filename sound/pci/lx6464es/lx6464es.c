@@ -859,7 +859,7 @@ static int __devinit lx_pcm_create(struct lx6464es *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &lx_ops_capture);
 
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,card_name,sizeof(pcm->name));
+	strcpy(pcm->name, card_name);
 
 	err = snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 						    snd_dma_pci_data(chip->pci),
@@ -1108,8 +1108,8 @@ static int __devinit snd_lx6464es_probe(struct pci_dev *pci,
 		goto out_free;
 	}
 
-	strlcpy(card->driver,"lx6464es",sizeof(card->driver));
-	strlcpy(card->shortname,"Digigram LX6464ES",sizeof(card->shortname));
+	strcpy(card->driver, "lx6464es");
+	strcpy(card->shortname, "Digigram LX6464ES");
 	sprintf(card->longname, "%s at 0x%lx, 0x%p, irq %i",
 		card->shortname, chip->port_plx,
 		chip->port_dsp_bar, chip->irq);

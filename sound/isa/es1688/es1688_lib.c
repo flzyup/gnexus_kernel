@@ -759,7 +759,7 @@ static int snd_es1688_info_mux(struct snd_kcontrol *kcontrol, struct snd_ctl_ele
 	uinfo->value.enumerated.items = 8;
 	if (uinfo->value.enumerated.item > 7)
 		uinfo->value.enumerated.item = 7;
-	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -1006,7 +1006,7 @@ int snd_es1688_mixer(struct snd_card *card, struct snd_es1688 *chip)
 	if (snd_BUG_ON(!chip || !card))
 		return -EINVAL;
 
-	strlcpy(card->mixername,snd_es1688_chip_id(chip,sizeof(card->mixername)));
+	strcpy(card->mixername, snd_es1688_chip_id(chip));
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_es1688_controls); idx++) {
 		if ((err = snd_ctl_add(card, snd_ctl_new1(&snd_es1688_controls[idx], chip))) < 0)

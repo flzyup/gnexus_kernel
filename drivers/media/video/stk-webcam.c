@@ -712,8 +712,8 @@ static int v4l_stk_mmap(struct file *fp, struct vm_area_struct *vma)
 static int stk_vidioc_querycap(struct file *filp,
 		void *priv, struct v4l2_capability *cap)
 {
-	strlcpy(cap->driver,"stk",sizeof(cap->driver));
-	strlcpy(cap->card,"stk",sizeof(cap->card));
+	strcpy(cap->driver, "stk");
+	strcpy(cap->card, "stk");
 	cap->version = DRIVER_VERSION_NUM;
 
 	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE
@@ -727,7 +727,7 @@ static int stk_vidioc_enum_input(struct file *filp,
 	if (input->index != 0)
 		return -EINVAL;
 
-	strlcpy(input->name,"Syntek USB Camera",sizeof(input->name));
+	strcpy(input->name, "Syntek USB Camera");
 	input->type = V4L2_INPUT_TYPE_CAMERA;
 	return 0;
 }
@@ -848,23 +848,23 @@ static int stk_vidioc_enum_fmt_vid_cap(struct file *filp,
 	switch (fmtd->index) {
 	case 0:
 		fmtd->pixelformat = V4L2_PIX_FMT_RGB565;
-		strlcpy(fmtd->description,"r5g6b5",sizeof(fmtd->description));
+		strcpy(fmtd->description, "r5g6b5");
 		break;
 	case 1:
 		fmtd->pixelformat = V4L2_PIX_FMT_RGB565X;
-		strlcpy(fmtd->description,"r5g6b5BE",sizeof(fmtd->description));
+		strcpy(fmtd->description, "r5g6b5BE");
 		break;
 	case 2:
 		fmtd->pixelformat = V4L2_PIX_FMT_UYVY;
-		strlcpy(fmtd->description,"yuv4:2:2",sizeof(fmtd->description));
+		strcpy(fmtd->description, "yuv4:2:2");
 		break;
 	case 3:
 		fmtd->pixelformat = V4L2_PIX_FMT_SBGGR8;
-		strlcpy(fmtd->description,"Raw bayer",sizeof(fmtd->description));
+		strcpy(fmtd->description, "Raw bayer");
 		break;
 	case 4:
 		fmtd->pixelformat = V4L2_PIX_FMT_YUYV;
-		strlcpy(fmtd->description,"yuv4:2:2",sizeof(fmtd->description));
+		strcpy(fmtd->description, "yuv4:2:2");
 		break;
 	default:
 		return -EINVAL;

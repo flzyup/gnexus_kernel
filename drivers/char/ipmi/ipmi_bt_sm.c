@@ -171,7 +171,7 @@ static char *status2txt(unsigned char status)
 	 */
 	static char buf[40];
 
-	strlcpy(buf,"[ ",sizeof(buf));
+	strcpy(buf, "[ ");
 	if (status & BT_B_BUSY)
 		strcat(buf, "B_BUSY ");
 	if (status & BT_H_BUSY)

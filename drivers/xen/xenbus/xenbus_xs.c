@@ -490,9 +490,9 @@ int xenbus_transaction_end(struct xenbus_transaction t, int abort)
 	int err;
 
 	if (abort)
-		strlcpy(abortstr,"F",sizeof(abortstr));
+		strcpy(abortstr, "F");
 	else
-		strlcpy(abortstr,"T",sizeof(abortstr));
+		strcpy(abortstr, "T");
 
 	err = xs_error(xs_single(t, XS_TRANSACTION_END, abortstr, NULL));
 

@@ -173,7 +173,7 @@ sisfb_search_mode(char *name, bool quiet)
 	}
 
 	if(strlen(name) <= 19) {
-		strlcpy(strbuf1,name,sizeof(strbuf1));
+		strcpy(strbuf1, name);
 		for(i = 0; i < strlen(strbuf1); i++) {
 			if(strbuf1[i] < '0' || strbuf1[i] > '9') strbuf1[i] = ' ';
 		}
@@ -5991,33 +5991,33 @@ sisfb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 #ifdef CONFIG_FB_SIS_300
 		case PCI_DEVICE_ID_SI_730:
 			ivideo->chip = SIS_730;
-			strlcpy(ivideo->myid,"SiS 730",sizeof(ivideo->myid));
+			strcpy(ivideo->myid, "SiS 730");
 			break;
 #endif
 #ifdef CONFIG_FB_SIS_315
 		case PCI_DEVICE_ID_SI_651:
 			/* ivideo->chip is ok */
-			strlcpy(ivideo->myid,"SiS 651",sizeof(ivideo->myid));
+			strcpy(ivideo->myid, "SiS 651");
 			break;
 		case PCI_DEVICE_ID_SI_740:
 			ivideo->chip = SIS_740;
-			strlcpy(ivideo->myid,"SiS 740",sizeof(ivideo->myid));
+			strcpy(ivideo->myid, "SiS 740");
 			break;
 		case PCI_DEVICE_ID_SI_661:
 			ivideo->chip = SIS_661;
-			strlcpy(ivideo->myid,"SiS 661",sizeof(ivideo->myid));
+			strcpy(ivideo->myid, "SiS 661");
 			break;
 		case PCI_DEVICE_ID_SI_741:
 			ivideo->chip = SIS_741;
-			strlcpy(ivideo->myid,"SiS 741",sizeof(ivideo->myid));
+			strcpy(ivideo->myid, "SiS 741");
 			break;
 		case PCI_DEVICE_ID_SI_760:
 			ivideo->chip = SIS_760;
-			strlcpy(ivideo->myid,"SiS 760",sizeof(ivideo->myid));
+			strcpy(ivideo->myid, "SiS 760");
 			break;
 		case PCI_DEVICE_ID_SI_761:
 			ivideo->chip = SIS_761;
-			strlcpy(ivideo->myid,"SiS 761",sizeof(ivideo->myid));
+			strcpy(ivideo->myid, "SiS 761");
 			break;
 #endif
 		default:

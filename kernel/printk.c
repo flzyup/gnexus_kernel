@@ -916,7 +916,7 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 
 	if (recursion_bug) {
 		recursion_bug = 0;
-		strlcpy(printk_buf,recursion_bug_msg,sizeof(printk_buf));
+		strcpy(printk_buf, recursion_bug_msg);
 		printed_len = strlen(recursion_bug_msg);
 	}
 	/* Emit the output into the temporary buffer */
@@ -1087,7 +1087,7 @@ static int __init console_setup(char *str)
 	 * Decode str into name, index, options.
 	 */
 	if (str[0] >= '0' && str[0] <= '9') {
-		strlcpy(buf,"ttyS",sizeof(buf));
+		strcpy(buf, "ttyS");
 		strncpy(buf + 4, str, sizeof(buf) - 5);
 	} else {
 		strncpy(buf, str, sizeof(buf) - 1);
@@ -1097,9 +1097,9 @@ static int __init console_setup(char *str)
 		*(options++) = 0;
 #ifdef __sparc__
 	if (!strcmp(str, "ttya"))
-		strlcpy(buf,"ttyS0",sizeof(buf));
+		strcpy(buf, "ttyS0");
 	if (!strcmp(str, "ttyb"))
-		strlcpy(buf,"ttyS1",sizeof(buf));
+		strcpy(buf, "ttyS1");
 #endif
 	for (s = buf; *s; s++)
 		if ((*s >= '0' && *s <= '9') || *s == ',')

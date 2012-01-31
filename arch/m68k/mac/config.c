@@ -913,7 +913,7 @@ static void __init mac_report_hardware(void)
 
 static void mac_get_model(char *str)
 {
-	strlcpy(str,"Macintosh ",sizeof(str));
+	strcpy(str, "Macintosh ");
 	strcat(str, macintosh_config->name);
 }
 

@@ -40,8 +40,8 @@ static size_t jffs2_trusted_listxattr(struct dentry *dentry, char *list,
 	size_t retlen = XATTR_TRUSTED_PREFIX_LEN + name_len + 1;
 
 	if (list && retlen<=list_size) {
-		strlcpy(list,XATTR_TRUSTED_PREFIX,sizeof(list));
-		strlcpy(list + XATTR_TRUSTED_PREFIX_LEN,name,sizeof(list + XATTR_TRUSTED_PREFIX_LEN));
+		strcpy(list, XATTR_TRUSTED_PREFIX);
+		strcpy(list + XATTR_TRUSTED_PREFIX_LEN, name);
 	}
 
 	return retlen;

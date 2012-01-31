@@ -214,7 +214,7 @@ static int l2tp_eth_create(struct net *net, u32 tunnel_id, u32 session_id, u32 p
 		}
 		strlcpy(name, cfg->ifname, IFNAMSIZ);
 	} else
-		strlcpy(name,L2TP_ETH_DEV_NAME,sizeof(name));
+		strcpy(name, L2TP_ETH_DEV_NAME);
 
 	session = l2tp_session_create(sizeof(*spriv), tunnel, session_id,
 				      peer_session_id, cfg);

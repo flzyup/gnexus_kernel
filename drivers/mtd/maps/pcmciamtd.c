@@ -460,7 +460,7 @@ static void card_settings(struct pcmciamtd_dev *dev, struct pcmcia_device *p_dev
 
 	dev->pcmcia_map.name = dev->mtd_name;
 	if(!dev->mtd_name[0]) {
-		strlcpy(dev->mtd_name,"PCMCIA Memory card",sizeof(dev->mtd_name));
+		strcpy(dev->mtd_name, "PCMCIA Memory card");
 		*new_name = 1;
 	}
 

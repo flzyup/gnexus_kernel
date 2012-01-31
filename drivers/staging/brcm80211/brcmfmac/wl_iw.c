@@ -180,7 +180,7 @@ static int dev_wlc_ioctl(struct net_device *dev, int cmd, void *arg, int len)
 		ioc.buf = arg;
 		ioc.len = len;
 
-		strlcpy(ifr.ifr_name,dev->name,sizeof(ifr.ifr_name));
+		strcpy(ifr.ifr_name, dev->name);
 		ifr.ifr_data = (caddr_t)&ioc;
 
 		ret = dev_open(dev);
@@ -343,7 +343,7 @@ wl_iw_get_name(struct net_device *dev,
 {
 	WL_TRACE("%s: SIOCGIWNAME\n", dev->name);
 
-	strlcpy(cwrq,"IEEE 802.11-DS",sizeof(cwrq));
+	strcpy(cwrq, "IEEE 802.11-DS");
 
 	return 0;
 }
@@ -1988,7 +1988,7 @@ wl_iw_get_nick(struct net_device *dev,
 	if (!extra)
 		return -EINVAL;
 
-	strlcpy(extra,iw->nickname,sizeof(extra));
+	strcpy(extra, iw->nickname);
 	dwrq->length = strlen(extra) + 1;
 
 	return 0;
@@ -3514,7 +3514,7 @@ void wl_iw_event(struct net_device *dev, wl_event_msg_t *e, void *data)
 				 ssid->SSID, ssid->SSID_len);
 			cmd = IWEVCUSTOM;
 			memset(&wrqu, 0, sizeof(wrqu));
-			strlcpy(extra,PNO_EVENT_UP,sizeof(extra));
+			strcpy(extra, PNO_EVENT_UP);
 			wrqu.data.length = strlen(extra);
 		}
 		break;

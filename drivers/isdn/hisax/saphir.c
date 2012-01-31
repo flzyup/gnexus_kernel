@@ -246,7 +246,7 @@ setup_saphir(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strlcpy(tmp,saphir_rev,sizeof(tmp));
+	strcpy(tmp, saphir_rev);
 	printk(KERN_INFO "HiSax: HST Saphir driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_HSTSAPHIR)
 		return (0);

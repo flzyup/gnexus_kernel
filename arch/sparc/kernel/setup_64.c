@@ -483,7 +483,7 @@ void __init setup_arch(char **cmdline_p)
 {
 	/* Initialize PROM console and command line. */
 	*cmdline_p = prom_getbootargs();
-	strlcpy(boot_command_line,*cmdline_p,sizeof(boot_command_line));
+	strcpy(boot_command_line, *cmdline_p);
 	parse_early_param();
 
 	boot_flags_init(*cmdline_p);

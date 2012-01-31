@@ -555,7 +555,7 @@ wl_dev_ioctl(struct net_device *dev, u32 cmd, void *arg, u32 len)
 	ioc.cmd = cmd;
 	ioc.buf = arg;
 	ioc.len = len;
-	strlcpy(ifr.ifr_name,dev->name,sizeof(ifr.ifr_name));
+	strcpy(ifr.ifr_name, dev->name);
 	ifr.ifr_data = (caddr_t)&ioc;
 
 	fs = get_fs();
@@ -4366,7 +4366,7 @@ s8 *wl_cfg80211_get_fwname(void)
 	struct wl_priv *wl;
 
 	wl = WL_PRIV_GET();
-	strlcpy(wl->fw->fw_name,WL_4329_FW_FILE,sizeof(wl->fw->fw_name));
+	strcpy(wl->fw->fw_name, WL_4329_FW_FILE);
 	return wl->fw->fw_name;
 }
 
@@ -4375,7 +4375,7 @@ s8 *wl_cfg80211_get_nvramname(void)
 	struct wl_priv *wl;
 
 	wl = WL_PRIV_GET();
-	strlcpy(wl->fw->nvram_name,WL_4329_NVRAM_FILE,sizeof(wl->fw->nvram_name));
+	strcpy(wl->fw->nvram_name, WL_4329_NVRAM_FILE);
 	return wl->fw->nvram_name;
 }
 

@@ -60,7 +60,7 @@ static void parse_data(struct parport *port, int device, char *str)
 		printk(KERN_WARNING "%s probe: memory squeeze\n", port->name);
 		return;
 	}
-	strlcpy(txt,str,sizeof(txt));
+	strcpy(txt, str);
 	while (p) {
 		char *sep;
 		q = strchr(p, ';');

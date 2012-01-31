@@ -448,7 +448,7 @@ int dhd_prot_init(dhd_pub_t *dhd)
 	dhd_os_proto_block(dhd);
 
 	/* Get the device MAC address */
-	strlcpy(buf,"cur_etheraddr",sizeof(buf));
+	strcpy(buf, "cur_etheraddr");
 	ret = dhdcdc_query_ioctl(dhd, 0, WLC_GET_VAR, buf, sizeof(buf));
 	if (ret < 0) {
 		dhd_os_proto_unblock(dhd);

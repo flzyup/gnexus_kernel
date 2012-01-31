@@ -1275,7 +1275,7 @@ int snd_vx_pcm_new(struct vx_core *chip)
 		pcm->private_data = chip;
 		pcm->private_free = snd_vx_pcm_free;
 		pcm->info_flags = 0;
-		strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
+		strcpy(pcm->name, chip->card->shortname);
 		chip->pcm[i] = pcm;
 	}
 

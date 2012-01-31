@@ -906,7 +906,8 @@ int snd_soc_info_enum_ext1(struct snd_kcontrol *kcontrol,
 
 	if (uinfo->value.enumerated.item > e->max - 1)
 		uinfo->value.enumerated.item = e->max - 1;
-		strlcpy(uinfo->value.enumerated.name,snd_soc_get_enum_text(e, uinfo->value.enumerated.item),sizeof(uinfo->value.enumerated.name));
+	strcpy(uinfo->value.enumerated.name,
+		snd_soc_get_enum_text(e, uinfo->value.enumerated.item));
 
 	return 0;
 }

@@ -1564,7 +1564,7 @@ init_netdev(struct net_device *dev, char *name)
 
     if (name[0])
     {
-        strlcpy(dev->name,name,sizeof(dev->name));
+        strcpy(dev->name, name);
     }
 
 #ifdef CONFIG_CHECKSUM_OFFLOAD
@@ -5750,7 +5750,7 @@ void ap_wapi_rekey_event(struct ar6_softc *ar, u8 type, u8 *mac)
 
     A_MEMZERO(buf, sizeof(buf));
 
-    strlcpy(buf,"WAPI_REKEY",sizeof(buf));
+    strcpy(buf, "WAPI_REKEY");
     buf[10] = type;
     memcpy(&buf[11], mac, ATH_MAC_LEN);
 

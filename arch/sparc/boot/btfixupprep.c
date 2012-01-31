@@ -124,7 +124,7 @@ main0:
 main1:
 	sect = malloc(strlen (buffer + rellen) + 1);
 	if (!sect) fatal();
-	strlcpy(sect,buffer + rellen,sizeof(sect));
+	strcpy (sect, buffer + rellen);
 	p = strchr (sect, ']');
 	if (!p) fatal();
 	*p = 0;

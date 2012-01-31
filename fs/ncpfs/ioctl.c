@@ -238,7 +238,7 @@ ncp_get_charsets(struct ncp_server* server, struct ncp_nls_ioctl __user *arg)
 	}
 
 	if (NCP_IS_FLAG(server, NCP_FLAG_UTF8))
-		strlcpy(user.iocharset,"utf8",sizeof(user.iocharset));
+		strcpy(user.iocharset, "utf8");
 	else if (server->nls_io && server->nls_io->charset) {
 		len = strlen(server->nls_io->charset);
 		if (len > NCP_IOCSNAME_LEN)

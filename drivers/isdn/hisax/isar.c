@@ -1769,7 +1769,7 @@ isar_auxcmd(struct IsdnCardState *cs, isdn_ctrl *ic) {
 						cs->iif.statcallb(ic);
 						return(0);
 					} else if (ic->parm.aux.subcmd == AT_EQ_QUERY) {
-						strlcpy(ic->parm.aux.para,"0-255",sizeof(ic->parm.aux.para));
+						strcpy(ic->parm.aux.para, "0-255");
 						ic->command = ISDN_STAT_FAXIND;
 						ic->parm.aux.cmd = ISDN_FAX_CLASS1_QUERY;
 						cs->iif.statcallb(ic);

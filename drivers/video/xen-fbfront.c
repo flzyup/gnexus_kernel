@@ -439,7 +439,7 @@ static int __devinit xenfb_probe(struct xenbus_device *dev,
 	fb_info->fix.line_length = fb_info->var.xres * XENFB_DEPTH / 8;
 	fb_info->fix.smem_start = 0;
 	fb_info->fix.smem_len = fb_size;
-	strlcpy(fb_info->fix.id,"xen",sizeof(fb_info->fix.id));
+	strcpy(fb_info->fix.id, "xen");
 	fb_info->fix.type = FB_TYPE_PACKED_PIXELS;
 	fb_info->fix.accel = FB_ACCEL_NONE;
 

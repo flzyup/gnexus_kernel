@@ -289,7 +289,7 @@ static struct ip6_tnl *ip6_tnl_create(struct net *net, struct ip6_tnl_parm *p)
 	if ((err = register_netdevice(dev)) < 0)
 		goto failed_free;
 
-	strlcpy(t->parms.name,dev->name,sizeof(t->parms.name));
+	strcpy(t->parms.name, dev->name);
 
 	dev_hold(dev);
 	ip6_tnl_link(ip6n, t);
@@ -1502,7 +1502,7 @@ static int __net_init ip6_tnl_init_net(struct net *net)
 
 	t = netdev_priv(ip6n->fb_tnl_dev);
 
-	strlcpy(t->parms.name,ip6n->fb_tnl_dev->name,sizeof(t->parms.name));
+	strcpy(t->parms.name, ip6n->fb_tnl_dev->name);
 	return 0;
 
 err_register:

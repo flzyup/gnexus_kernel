@@ -294,7 +294,7 @@ static int rpmsg_omx_connect(struct rpmsg_omx_instance *omx, char *omxname)
 	hdr->flags = 0;
 	hdr->len = strlen(omxname) + 1;
 	payload = (struct omx_conn_req *)hdr->data;
-	strlcpy(payload->name,omxname,sizeof(payload->name));
+	strcpy(payload->name, omxname);
 
 	init_completion(&omx->reply_arrived);
 

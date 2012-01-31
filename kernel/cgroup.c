@@ -1294,7 +1294,7 @@ static int cgroup_remount(struct super_block *sb, int *flags, char *data)
 	cgroup_populate_dir(cgrp);
 
 	if (opts.release_agent)
-		strlcpy(root->release_agent_path,opts.release_agent,sizeof(root->release_agent_path));
+		strcpy(root->release_agent_path, opts.release_agent);
  out_unlock:
 	kfree(opts.release_agent);
 	kfree(opts.name);
@@ -1398,9 +1398,9 @@ static struct cgroupfs_root *cgroup_root_from_opts(struct cgroup_sb_opts *opts)
 	root->subsys_bits = opts->subsys_bits;
 	root->flags = opts->flags;
 	if (opts->release_agent)
-		strlcpy(root->release_agent_path,opts->release_agent,sizeof(root->release_agent_path));
+		strcpy(root->release_agent_path, opts->release_agent);
 	if (opts->name)
-		strlcpy(root->name,opts->name,sizeof(root->name));
+		strcpy(root->name, opts->name);
 	if (opts->clone_children)
 		set_bit(CGRP_CLONE_CHILDREN, &root->top_cgroup.flags);
 	return root;
@@ -1708,7 +1708,7 @@ int cgroup_path(const struct cgroup *cgrp, char *buf, int buflen)
 		 * Inactive subsystems have no dentry for their root
 		 * cgroup
 		 */
-		strlcpy(buf,"/",sizeof(buf));
+		strcpy(buf, "/");
 		return 0;
 	}
 
@@ -2335,7 +2335,7 @@ static int cgroup_release_agent_write(struct cgroup *cgrp, struct cftype *cft,
 		return -EINVAL;
 	if (!cgroup_lock_live_group(cgrp))
 		return -ENODEV;
-	strlcpy(cgrp->root->release_agent_path,buffer,sizeof(cgrp->root->release_agent_path));
+	strcpy(cgrp->root->release_agent_path, buffer);
 	cgroup_unlock();
 	return 0;
 }
@@ -2711,7 +2711,7 @@ int cgroup_add_file(struct cgroup *cgrp,
 
 	char name[MAX_CGROUP_TYPE_NAMELEN + MAX_CFTYPE_NAME + 2] = { 0 };
 	if (subsys && !test_bit(ROOT_NOPREFIX, &cgrp->root->flags)) {
-		strlcpy(name,subsys->name,sizeof(name));
+		strcpy(name, subsys->name);
 		strcat(name, ".");
 	}
 	strcat(name, cft->name);

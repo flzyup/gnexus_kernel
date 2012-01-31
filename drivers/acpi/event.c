@@ -121,8 +121,8 @@ int acpi_notifier_call_chain(struct acpi_device *dev, u32 type, u32 data)
 {
 	struct acpi_bus_event event;
 
-	strlcpy(event.device_class,dev->pnp.device_class,sizeof(event.device_class));
-	strlcpy(event.bus_id,dev->pnp.bus_id,sizeof(event.bus_id));
+	strcpy(event.device_class, dev->pnp.device_class);
+	strcpy(event.bus_id, dev->pnp.bus_id);
 	event.type = type;
 	event.data = data;
 	return (blocking_notifier_call_chain(&acpi_chain_head, 0, (void *)&event)
@@ -227,8 +227,8 @@ int acpi_bus_generate_netlink_event(const char *device_class,
 
 	memset(event, 0, sizeof(struct acpi_genl_event));
 
-	strlcpy(event->device_class,device_class,sizeof(event->device_class));
-	strlcpy(event->bus_id,bus_id,sizeof(event->bus_id));
+	strcpy(event->device_class, device_class);
+	strcpy(event->bus_id, bus_id);
 	event->type = type;
 	event->data = data;
 

@@ -283,7 +283,7 @@ c4_hdw_init (struct pci_dev * pdev, int found)
          */
         char       *cp = hi->devname;
 
-        strlcpy(cp,KBUILD_MODNAME,sizeof(cp));
+        strcpy (cp, KBUILD_MODNAME);
         cp += strlen (cp);          /* reposition */
         *cp++ = '-';
         *cp++ = '0' + (found / 2);  /* there are two found interfaces per

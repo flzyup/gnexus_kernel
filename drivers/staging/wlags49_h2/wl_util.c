@@ -304,7 +304,7 @@ void key_string2key( char *ks, KEY_STRCT *key )
     /* character string */
     else
     {
-        strlcpy((char *)key->key,ks ,sizeof((char *)key->key));
+        strcpy( (char *)key->key, ks );
         key->len = l;
     }
 

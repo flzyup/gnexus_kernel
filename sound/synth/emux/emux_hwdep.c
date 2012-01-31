@@ -125,7 +125,7 @@ snd_emux_init_hwdep(struct snd_emux *emu)
 	if ((err = snd_hwdep_new(emu->card, SNDRV_EMUX_HWDEP_NAME, emu->hwdep_idx, &hw)) < 0)
 		return err;
 	emu->hwdep = hw;
-	strlcpy(hw->name,SNDRV_EMUX_HWDEP_NAME,sizeof(hw->name));
+	strcpy(hw->name, SNDRV_EMUX_HWDEP_NAME);
 	hw->iface = SNDRV_HWDEP_IFACE_EMUX_WAVETABLE;
 	hw->ops.ioctl = snd_emux_hwdep_ioctl;
 	/* The ioctl parameter types are compatible between 32- and

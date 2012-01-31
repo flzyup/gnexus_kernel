@@ -230,7 +230,7 @@ setup_ix1micro(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strlcpy(tmp,ix1_revision,sizeof(tmp));
+	strcpy(tmp, ix1_revision);
 	printk(KERN_INFO "HiSax: ITK IX1 driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_IX1MICROR2)
 		return (0);

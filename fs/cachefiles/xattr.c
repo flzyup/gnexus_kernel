@@ -36,7 +36,7 @@ int cachefiles_check_object_type(struct cachefiles_object *object)
 	ASSERT(dentry->d_inode);
 
 	if (!object->fscache.cookie)
-		strlcpy(type,"C3",sizeof(type));
+		strcpy(type, "C3");
 	else
 		snprintf(type, 3, "%02x", object->fscache.cookie->def->type);
 

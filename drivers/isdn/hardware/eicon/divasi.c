@@ -93,7 +93,7 @@ static int um_idi_proc_show(struct seq_file *m, void *v)
 	seq_printf(m, "%s\n", DRIVERNAME);
 	seq_printf(m, "name     : %s\n", DRIVERLNAME);
 	seq_printf(m, "release  : %s\n", DRIVERRELEASE_IDI);
-	strlcpy(tmprev,main_revision,sizeof(tmprev));
+	strcpy(tmprev, main_revision);
 	seq_printf(m, "revision : %s\n", getrev(tmprev));
 	seq_printf(m, "build    : %s\n", DIVA_BUILD);
 	seq_printf(m, "major    : %d\n", major);
@@ -168,7 +168,7 @@ static int DIVA_INIT_FUNCTION divasi_init(void)
 
 	printk(KERN_INFO "%s\n", DRIVERNAME);
 	printk(KERN_INFO "%s: Rel:%s  Rev:", DRIVERLNAME, DRIVERRELEASE_IDI);
-	strlcpy(tmprev,main_revision,sizeof(tmprev));
+	strcpy(tmprev, main_revision);
 	printk("%s  Build: %s\n", getrev(tmprev), DIVA_BUILD);
 
 	if (!divas_idi_register_chrdev()) {

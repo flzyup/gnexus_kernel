@@ -2492,7 +2492,7 @@ static int __devinit qe_ep_config(struct qe_udc *udc, unsigned char pipe_num)
 	struct qe_ep *ep = &udc->eps[pipe_num];
 
 	ep->udc = udc;
-	strlcpy(ep->name,ep_name[pipe_num],sizeof(ep->name));
+	strcpy(ep->name, ep_name[pipe_num]);
 	ep->ep.name = ep_name[pipe_num];
 
 	ep->ep.ops = &qe_ep_ops;

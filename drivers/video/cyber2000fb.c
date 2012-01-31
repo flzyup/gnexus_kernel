@@ -1431,7 +1431,7 @@ static struct cfb_info __devinit *cyberpro_alloc_fb_info(unsigned int id,
 	else
 		cfb->divisors[3] = 6;
 
-	strlcpy(cfb->fb.fix.id,name,sizeof(cfb->fb.fix.id));
+	strcpy(cfb->fb.fix.id, name);
 
 	cfb->fb.fix.type	= FB_TYPE_PACKED_PIXELS;
 	cfb->fb.fix.type_aux	= 0;

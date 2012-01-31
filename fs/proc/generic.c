@@ -645,7 +645,7 @@ struct proc_dir_entry *proc_symlink(const char *name,
 	if (ent) {
 		ent->data = kmalloc((ent->size=strlen(dest))+1, GFP_KERNEL);
 		if (ent->data) {
-			strlcpy((char*)ent->data,dest,sizeof((char*)ent->data));
+			strcpy((char*)ent->data,dest);
 			if (proc_register(parent, ent) < 0) {
 				kfree(ent->data);
 				kfree(ent);

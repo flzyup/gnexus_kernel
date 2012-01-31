@@ -1606,7 +1606,7 @@ int __devinit snd_cs46xx_pcm(struct snd_cs46xx *chip, int device, struct snd_pcm
 
 	/* global setup */
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"CS46xx",sizeof(pcm->name));
+	strcpy(pcm->name, "CS46xx");
 	chip->pcm = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1637,7 +1637,7 @@ int __devinit snd_cs46xx_pcm_rear(struct snd_cs46xx *chip, int device, struct sn
 
 	/* global setup */
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"CS46xx - Rear",sizeof(pcm->name));
+	strcpy(pcm->name, "CS46xx - Rear");
 	chip->pcm_rear = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1666,7 +1666,7 @@ int __devinit snd_cs46xx_pcm_center_lfe(struct snd_cs46xx *chip, int device, str
 
 	/* global setup */
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"CS46xx - Center LFE",sizeof(pcm->name));
+	strcpy(pcm->name, "CS46xx - Center LFE");
 	chip->pcm_center_lfe = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1695,7 +1695,7 @@ int __devinit snd_cs46xx_pcm_iec958(struct snd_cs46xx *chip, int device, struct 
 
 	/* global setup */
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"CS46xx - IEC958",sizeof(pcm->name));
+	strcpy(pcm->name, "CS46xx - IEC958");
 	chip->pcm_rear = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -2355,7 +2355,7 @@ int __devinit snd_cs46xx_mixer(struct snd_cs46xx *chip, int spdif_device)
 	/* get EAPD mixer switch (for voyetra hack) */
 	memset(&id, 0, sizeof(id));
 	id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strlcpy(id.name,"External Amplifier",sizeof(id.name));
+	strcpy(id.name, "External Amplifier");
 	chip->eapd_switch = snd_ctl_find_id(chip->card, &id);
     
 #ifdef CONFIG_SND_CS46XX_NEW_DSP
@@ -2539,7 +2539,7 @@ int __devinit snd_cs46xx_midi(struct snd_cs46xx *chip, int device, struct snd_ra
 		*rrawmidi = NULL;
 	if ((err = snd_rawmidi_new(chip->card, "CS46XX", device, 1, 1, &rmidi)) < 0)
 		return err;
-	strlcpy(rmidi->name,"CS46XX",sizeof(rmidi->name));
+	strcpy(rmidi->name, "CS46XX");
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_OUTPUT, &snd_cs46xx_midi_output);
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_INPUT, &snd_cs46xx_midi_input);
 	rmidi->info_flags |= SNDRV_RAWMIDI_INFO_OUTPUT | SNDRV_RAWMIDI_INFO_INPUT | SNDRV_RAWMIDI_INFO_DUPLEX;
@@ -3755,27 +3755,27 @@ int __devinit snd_cs46xx_create(struct snd_card *card,
 	}
 
 	region = &chip->region.name.ba0;
-	strlcpy(region->name,"CS46xx_BA0",sizeof(region->name));
+	strcpy(region->name, "CS46xx_BA0");
 	region->base = chip->ba0_addr;
 	region->size = CS46XX_BA0_SIZE;
 
 	region = &chip->region.name.data0;
-	strlcpy(region->name,"CS46xx_BA1_data0",sizeof(region->name));
+	strcpy(region->name, "CS46xx_BA1_data0");
 	region->base = chip->ba1_addr + BA1_SP_DMEM0;
 	region->size = CS46XX_BA1_DATA0_SIZE;
 
 	region = &chip->region.name.data1;
-	strlcpy(region->name,"CS46xx_BA1_data1",sizeof(region->name));
+	strcpy(region->name, "CS46xx_BA1_data1");
 	region->base = chip->ba1_addr + BA1_SP_DMEM1;
 	region->size = CS46XX_BA1_DATA1_SIZE;
 
 	region = &chip->region.name.pmem;
-	strlcpy(region->name,"CS46xx_BA1_pmem",sizeof(region->name));
+	strcpy(region->name, "CS46xx_BA1_pmem");
 	region->base = chip->ba1_addr + BA1_SP_PMEM;
 	region->size = CS46XX_BA1_PRG_SIZE;
 
 	region = &chip->region.name.reg;
-	strlcpy(region->name,"CS46xx_BA1_reg",sizeof(region->name));
+	strcpy(region->name, "CS46xx_BA1_reg");
 	region->base = chip->ba1_addr + BA1_SP_REG;
 	region->size = CS46XX_BA1_REG_SIZE;
 

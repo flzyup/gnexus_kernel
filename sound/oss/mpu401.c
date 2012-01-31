@@ -1082,7 +1082,8 @@ int attach_mpu401(struct address_info *hw_config, struct module *owner)
 				n_mpu_devs);
 	}
 
-	strlcpy(mpu401_midi_operations[m].info.name,,sizeof(mpu401_midi_operations[m].info.name)	       mpu_synth_info[m].name);
+	strcpy(mpu401_midi_operations[m].info.name,
+	       mpu_synth_info[m].name);
 
 	conf_printf(mpu_synth_info[m].name, hw_config);
 

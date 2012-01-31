@@ -930,7 +930,7 @@ static int __devinit fsl_soc_dma_probe(struct platform_device *pdev)
 		return -ENOMEM;
 	}
 
-	strlcpy(dma->path,np->full_name,sizeof(dma->path));
+	strcpy(dma->path, np->full_name);
 	dma->dai.ops = &fsl_dma_ops;
 	dma->dai.pcm_new = fsl_dma_new;
 	dma->dai.pcm_free = fsl_dma_free_dma_buffers;

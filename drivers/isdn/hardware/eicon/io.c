@@ -302,7 +302,7 @@ void request(PISDN_ADAPTER IoAdapter, ENTITY * e)
   case IDI_SYNC_REQ_GET_NAME:
    if ( IoAdapter )
    {
-    strlcpy(&syncReq->GetName.name[0],IoAdapter->Name,sizeof(&syncReq->GetName.name[0])) ;
+    strcpy (&syncReq->GetName.name[0], IoAdapter->Name) ;
     DBG_TRC(("xdi: Adapter %d / Name '%s'",
              IoAdapter->ANum, IoAdapter->Name))
     return ;

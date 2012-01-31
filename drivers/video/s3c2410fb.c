@@ -886,7 +886,7 @@ static int __devinit s3c24xxfb_probe(struct platform_device *pdev,
 
 	dprintk("devinit\n");
 
-	strlcpy(fbinfo->fix.id,driver_name,sizeof(fbinfo->fix.id));
+	strcpy(fbinfo->fix.id, driver_name);
 
 	/* Stop the video */
 	lcdcon1 = readl(info->io + S3C2410_LCDCON1);

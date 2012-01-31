@@ -84,7 +84,7 @@ static int scan_tree(char *path, char *file, off_t offset, size_t length, int to
 			goto skip;
 
 		path2 = malloc(strlen(path) + strlen(name) + 3);
-		strlcpy(path2,path,sizeof(path2));
+		strcpy(path2, path);
 		strcat(path2, "/");
 		strcat(path2, name);
 
@@ -168,7 +168,7 @@ static int scan_rom(char *path, char *file)
 			goto skip;
 
 		path2 = malloc(strlen(path) + strlen(name) + 3);
-		strlcpy(path2,path,sizeof(path2));
+		strcpy(path2, path);
 		strcat(path2, "/");
 		strcat(path2, name);
 

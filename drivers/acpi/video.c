@@ -992,8 +992,8 @@ acpi_video_bus_get_one_device(struct acpi_device *device,
 		if (!data)
 			return -ENOMEM;
 
-		strlcpy(acpi_device_name(device),ACPI_VIDEO_DEVICE_NAME,sizeof(acpi_device_name(device)));
-		strlcpy(acpi_device_class(device),ACPI_VIDEO_CLASS,sizeof(acpi_device_class(device)));
+		strcpy(acpi_device_name(device), ACPI_VIDEO_DEVICE_NAME);
+		strcpy(acpi_device_class(device), ACPI_VIDEO_CLASS);
 		device->driver_data = data;
 
 		data->device_id = device_id;
@@ -1640,8 +1640,8 @@ static int acpi_video_bus_add(struct acpi_device *device)
 	}
 
 	video->device = device;
-	strlcpy(acpi_device_name(device),ACPI_VIDEO_BUS_NAME,sizeof(acpi_device_name(device)));
-	strlcpy(acpi_device_class(device),ACPI_VIDEO_CLASS,sizeof(acpi_device_class(device)));
+	strcpy(acpi_device_name(device), ACPI_VIDEO_BUS_NAME);
+	strcpy(acpi_device_class(device), ACPI_VIDEO_CLASS);
 	device->driver_data = video;
 
 	acpi_video_bus_find_cap(video);

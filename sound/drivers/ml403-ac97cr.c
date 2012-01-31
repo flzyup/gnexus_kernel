@@ -1256,7 +1256,7 @@ snd_ml403_ac97cr_pcm(struct snd_ml403_ac97cr *ml403_ac97cr, int device,
 			&snd_ml403_ac97cr_capture_ops);
 	pcm->private_data = ml403_ac97cr;
 	pcm->info_flags = 0;
-	strlcpy(pcm->name,"ML403AC97CR DAC/ADC",sizeof(pcm->name));
+	strcpy(pcm->name, "ML403AC97CR DAC/ADC");
 	ml403_ac97cr->pcm = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
@@ -1303,8 +1303,8 @@ static int __devinit snd_ml403_ac97cr_probe(struct platform_device *pfdev)
 		return err;
 	}
 	PDEBUG(INIT_INFO, "probe(): PCM done\n");
-	strlcpy(card->driver,SND_ML403_AC97CR_DRIVER,sizeof(card->driver));
-	strlcpy(card->shortname,"ML403 AC97 Controller Reference",sizeof(card->shortname));
+	strcpy(card->driver, SND_ML403_AC97CR_DRIVER);
+	strcpy(card->shortname, "ML403 AC97 Controller Reference");
 	sprintf(card->longname, "%s %s at 0x%lx, irq %i & %i, device %i",
 		card->shortname, card->driver,
 		(unsigned long)ml403_ac97cr->port, ml403_ac97cr->irq,

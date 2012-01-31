@@ -498,7 +498,7 @@ int snd_virmidi_new(struct snd_card *card, int device, struct snd_rawmidi **rrmi
 				   16,	/* may be configurable */
 				   &rmidi)) < 0)
 		return err;
-	strlcpy(rmidi->name,rmidi->id,sizeof(rmidi->name));
+	strcpy(rmidi->name, rmidi->id);
 	rdev = kzalloc(sizeof(*rdev), GFP_KERNEL);
 	if (rdev == NULL) {
 		snd_device_free(card, rmidi);

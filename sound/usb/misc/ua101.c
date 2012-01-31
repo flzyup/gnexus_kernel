@@ -1281,8 +1281,8 @@ static int ua101_probe(struct usb_interface *interface,
 		goto probe_error;
 
 	name = usb_id->idProduct == 0x0044 ? "UA-1000" : "UA-101";
-	strlcpy(card->driver,"UA-101",sizeof(card->driver));
-	strlcpy(card->shortname,name,sizeof(card->shortname));
+	strcpy(card->driver, "UA-101");
+	strcpy(card->shortname, name);
 	usb_make_path(ua->dev, usb_path, sizeof(usb_path));
 	snprintf(ua->card->longname, sizeof(ua->card->longname),
 		 "EDIROL %s (serial %s), %u Hz at %s, %s speed", name,
@@ -1307,7 +1307,7 @@ static int ua101_probe(struct usb_interface *interface,
 	if (err < 0)
 		goto probe_error;
 	ua->pcm->private_data = ua;
-	strlcpy(ua->pcm->name,name,sizeof(ua->pcm->name));
+	strcpy(ua->pcm->name, name);
 	snd_pcm_set_ops(ua->pcm, SNDRV_PCM_STREAM_PLAYBACK, &playback_pcm_ops);
 	snd_pcm_set_ops(ua->pcm, SNDRV_PCM_STREAM_CAPTURE, &capture_pcm_ops);
 

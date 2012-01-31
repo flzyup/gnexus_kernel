@@ -204,7 +204,7 @@ setup_isurf(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strlcpy(tmp,ISurf_revision,sizeof(tmp));
+	strcpy(tmp, ISurf_revision);
 	printk(KERN_INFO "HiSax: ISurf driver Rev. %s\n", HiSax_getrev(tmp));
 	
  	if (cs->typ != ISDN_CTYPE_ISURF)

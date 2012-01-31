@@ -111,7 +111,7 @@ static int ebook_switch_add(struct acpi_device *device)
 		goto err_free_input;
 	}
 
-	strlcpy(name,XO15_EBOOK_DEVICE_NAME,sizeof(name));
+	strcpy(name, XO15_EBOOK_DEVICE_NAME);
 	sprintf(class, "%s/%s", XO15_EBOOK_CLASS, XO15_EBOOK_SUBCLASS);
 
 	snprintf(button->phys, sizeof(button->phys), "%s/button/input0", hid);

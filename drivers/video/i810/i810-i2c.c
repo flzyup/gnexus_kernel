@@ -91,7 +91,7 @@ static int i810_setup_i2c_bus(struct i810fb_i2c_chan *chan, const char *name)
 {
         int rc;
 
-        strlcpy(chan->adapter.name,name,sizeof(chan->adapter.name));
+        strcpy(chan->adapter.name, name);
         chan->adapter.owner             = THIS_MODULE;
         chan->adapter.algo_data         = &chan->algo;
         chan->adapter.dev.parent        = &chan->par->dev->dev;

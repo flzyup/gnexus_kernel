@@ -705,7 +705,7 @@ static int __devinit snd_bt87x_pcm(struct snd_bt87x *chip, int device, char *nam
 	if (err < 0)
 		return err;
 	pcm->private_data = chip;
-	strlcpy(pcm->name,name,sizeof(pcm->name));
+	strcpy(pcm->name, name);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_bt87x_pcm_ops);
 	return snd_pcm_lib_preallocate_pages_for_all(pcm,
 						     SNDRV_DMA_TYPE_DEV_SG,
@@ -930,12 +930,12 @@ static int __devinit snd_bt87x_probe(struct pci_dev *pci,
 		   chip->board.no_analog ? "no " : "",
 		   chip->board.no_digital ? "no " : "", chip->board.dig_rate);
 
-	strlcpy(card->driver,"Bt87x",sizeof(card->driver));
+	strcpy(card->driver, "Bt87x");
 	sprintf(card->shortname, "Brooktree Bt%x", pci->device);
 	sprintf(card->longname, "%s at %#llx, irq %i",
 		card->shortname, (unsigned long long)pci_resource_start(pci, 0),
 		chip->irq);
-	strlcpy(card->mixername,"Bt87x",sizeof(card->mixername));
+	strcpy(card->mixername, "Bt87x");
 
 	err = snd_card_register(card);
 	if (err < 0)

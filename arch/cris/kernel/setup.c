@@ -161,7 +161,7 @@ void __init setup_arch(char **cmdline_p)
 	show_etrax_copyright();
 
 	/* Setup utsname */
-	strlcpy(init_utsname()->machine,cris_machine_name,sizeof(init_utsname()->machine));
+	strcpy(init_utsname()->machine, cris_machine_name);
 }
 
 static void *c_start(struct seq_file *m, loff_t *pos)

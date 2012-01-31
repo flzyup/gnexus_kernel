@@ -664,7 +664,7 @@ static int __devinit fsl_ssi_probe(struct platform_device *pdev)
 		return -ENOMEM;
 	}
 
-	strlcpy(ssi_private->name,p,sizeof(ssi_private->name));
+	strcpy(ssi_private->name, p);
 
 	/* Initialize this copy of the CPU DAI driver structure */
 	memcpy(&ssi_private->cpu_dai_drv, &fsl_ssi_dai_template,

@@ -676,9 +676,9 @@ static ssize_t show_associate_remote(struct device *d,
 
 	mutex_lock(&ictx->lock);
 	if (ictx->rf_isassociating)
-		strlcpy(buf,"associating\n",sizeof(buf));
+		strcpy(buf, "associating\n");
 	else
-		strlcpy(buf,"closed\n",sizeof(buf));
+		strcpy(buf, "closed\n");
 
 	dev_info(d, "Visit http://www.lirc.org/html/imon-24g.html for "
 		 "instructions on how to associate your iMON 2.4G DT/LT "

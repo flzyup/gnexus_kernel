@@ -10539,8 +10539,8 @@ static void ipw_ethtool_get_drvinfo(struct net_device *dev,
 	char date[32];
 	u32 len;
 
-	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
+	strcpy(info->driver, DRV_NAME);
+	strcpy(info->version, DRV_VERSION);
 
 	len = sizeof(vers);
 	ipw_get_ordinal(p, IPW_ORD_STAT_FW_VERSION, vers, &len);
@@ -10549,7 +10549,7 @@ static void ipw_ethtool_get_drvinfo(struct net_device *dev,
 
 	snprintf(info->fw_version, sizeof(info->fw_version), "%s (%s)",
 		 vers, date);
-	strlcpy(info->bus_info,pci_name(p->pci_dev,sizeof(info->bus_info)));
+	strcpy(info->bus_info, pci_name(p->pci_dev));
 	info->eedump_len = IPW_EEPROM_IMAGE_SIZE;
 }
 
@@ -11665,7 +11665,7 @@ static int ipw_prom_alloc(struct ipw_priv *priv)
 	priv->prom_priv->ieee = netdev_priv(priv->prom_net_dev);
 	priv->prom_priv->priv = priv;
 
-	strlcpy(priv->prom_net_dev->name,"rtap%d",sizeof(priv->prom_net_dev->name));
+	strcpy(priv->prom_net_dev->name, "rtap%d");
 	memcpy(priv->prom_net_dev->dev_addr, priv->mac_addr, ETH_ALEN);
 
 	priv->prom_net_dev->type = ARPHRD_IEEE80211_RADIOTAP;

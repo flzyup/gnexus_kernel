@@ -50,7 +50,7 @@ static int x25_add_route(struct x25_address *address, unsigned int sigdigits,
 	if (!rt)
 		goto out;
 
-	strlcpy(rt->address.x25_addr,"000000000000000",sizeof(rt->address.x25_addr));
+	strcpy(rt->address.x25_addr, "000000000000000");
 	memcpy(rt->address.x25_addr, address->x25_addr, sigdigits);
 
 	rt->sigdigits = sigdigits;

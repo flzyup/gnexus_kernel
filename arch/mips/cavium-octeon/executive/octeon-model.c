@@ -189,16 +189,16 @@ const char *octeon_model_get_string_buffer(uint32_t chip_id, char *buffer)
 		 */
 		switch (chip_id & 0xf) {
 		case 0:
-			strlcpy(pass,"1.X",sizeof(pass));
+			strcpy(pass, "1.X");
 			break;
 		case 1:
-			strlcpy(pass,"2.X",sizeof(pass));
+			strcpy(pass, "2.X");
 			break;
 		case 3:
-			strlcpy(pass,"3.X",sizeof(pass));
+			strcpy(pass, "3.X");
 			break;
 		default:
-			strlcpy(pass,"X.X",sizeof(pass));
+			strcpy(pass, "X.X");
 			break;
 		}
 		break;
@@ -213,13 +213,13 @@ const char *octeon_model_get_string_buffer(uint32_t chip_id, char *buffer)
 		 */
 		switch (chip_id & 0xf) {
 		case 0:
-			strlcpy(pass,"1.0",sizeof(pass));
+			strcpy(pass, "1.0");
 			break;
 		case 2:
-			strlcpy(pass,"1.1",sizeof(pass));
+			strcpy(pass, "1.1");
 			break;
 		default:
-			strlcpy(pass,"X.X",sizeof(pass));
+			strcpy(pass, "X.X");
 			break;
 		}
 		break;
@@ -234,13 +234,13 @@ const char *octeon_model_get_string_buffer(uint32_t chip_id, char *buffer)
 		 */
 		switch (chip_id & 0xf) {
 		case 0:
-			strlcpy(pass,"1.0",sizeof(pass));
+			strcpy(pass, "1.0");
 			break;
 		case 2:
-			strlcpy(pass,"1.1",sizeof(pass));
+			strcpy(pass, "1.1");
 			break;
 		default:
-			strlcpy(pass,"X.X",sizeof(pass));
+			strcpy(pass, "X.X");
 			break;
 		}
 		break;
@@ -254,16 +254,16 @@ const char *octeon_model_get_string_buffer(uint32_t chip_id, char *buffer)
 		if ((chip_id & 0xFF) < 0x8) {
 			switch (chip_id & 0x3) {
 			case 0:
-				strlcpy(pass,"1.0",sizeof(pass));
+				strcpy(pass, "1.0");
 				break;
 			case 1:
-				strlcpy(pass,"1.1",sizeof(pass));
+				strcpy(pass, "1.1");
 				break;
 			case 3:
-				strlcpy(pass,"1.2",sizeof(pass));
+				strcpy(pass, "1.2");
 				break;
 			default:
-				strlcpy(pass,"1.X",sizeof(pass));
+				strcpy(pass, "1.X");
 				break;
 			}
 		}
@@ -304,7 +304,7 @@ const char *octeon_model_get_string_buffer(uint32_t chip_id, char *buffer)
 	default:
 		family = "XX";
 		core_model = "XX";
-		strlcpy(pass,"X.X",sizeof(pass));
+		strcpy(pass, "X.X");
 		suffix = "XXX";
 		break;
 	}

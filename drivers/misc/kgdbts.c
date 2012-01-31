@@ -614,7 +614,7 @@ static void fill_get_buf(char *buf)
 	int count = 0;
 	char ch;
 
-	strlcpy(get_buf,"$",sizeof(get_buf));
+	strcpy(get_buf, "$");
 	strcat(get_buf, buf);
 	while ((ch = buf[count])) {
 		checksum += ch;
@@ -988,7 +988,7 @@ static int kgdbts_option_setup(char *opt)
 		printk(KERN_ERR "kgdbts: config string too long\n");
 		return -ENOSPC;
 	}
-	strlcpy(config,opt,sizeof(config));
+	strcpy(config, opt);
 
 	verbose = 0;
 	if (strstr(config, "V1"))
@@ -1067,7 +1067,7 @@ static int param_set_kgdbts_var(const char *kmessage, struct kernel_param *kp)
 
 	/* Only copy in the string if the init function has not run yet */
 	if (configured < 0) {
-		strlcpy(config,kmessage,sizeof(config));
+		strcpy(config, kmessage);
 		return 0;
 	}
 
@@ -1076,7 +1076,7 @@ static int param_set_kgdbts_var(const char *kmessage, struct kernel_param *kp)
 		return -EBUSY;
 	}
 
-	strlcpy(config,kmessage,sizeof(config));
+	strcpy(config, kmessage);
 	/* Chop out \n char as a result of echo */
 	if (config[len - 1] == '\n')
 		config[len - 1] = '\0';

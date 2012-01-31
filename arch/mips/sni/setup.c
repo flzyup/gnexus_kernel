@@ -77,7 +77,7 @@ static void __init sni_console_setup(void)
 			break;
 		}
 		if (baud)
-			strlcpy(options,baud,sizeof(options));
+			strcpy(options, baud);
 		if (strncmp(cdev, "tty552", 6) == 0)
 			add_preferred_console("ttyS", port,
 					      baud ? options : NULL);

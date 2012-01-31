@@ -705,7 +705,7 @@ int __devinit w100fb_probe(struct platform_device *pdev)
 	info->screen_base = remapped_fbuf + (W100_FB_BASE-MEM_WINDOW_BASE);
 	info->screen_size = REMAPPED_FB_LEN;
 
-	strlcpy(info->fix.id,"w100fb",sizeof(info->fix.id));
+	strcpy(info->fix.id, "w100fb");
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
 	info->fix.type_aux = 0;
 	info->fix.accel = FB_ACCEL_NONE;

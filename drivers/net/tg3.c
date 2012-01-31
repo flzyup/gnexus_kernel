@@ -10010,10 +10010,10 @@ static void tg3_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info
 {
 	struct tg3 *tp = netdev_priv(dev);
 
-	strlcpy(info->driver,DRV_MODULE_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_MODULE_VERSION,sizeof(info->version));
-	strlcpy(info->fw_version,tp->fw_ver,sizeof(info->fw_version));
-	strlcpy(info->bus_info,pci_name(tp->pdev,sizeof(info->bus_info)));
+	strcpy(info->driver, DRV_MODULE_NAME);
+	strcpy(info->version, DRV_MODULE_VERSION);
+	strcpy(info->fw_version, tp->fw_ver);
+	strcpy(info->bus_info, pci_name(tp->pdev));
 }
 
 static void tg3_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
@@ -13065,42 +13065,42 @@ out_not_found:
 out_no_vpd:
 	if (GET_ASIC_REV(tp->pci_chip_rev_id) == ASIC_REV_5717) {
 		if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_5717)
-			strlcpy(tp->board_part_number,"BCM5717",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM5717");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_5718)
-			strlcpy(tp->board_part_number,"BCM5718",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM5718");
 		else
 			goto nomatch;
 	} else if (GET_ASIC_REV(tp->pci_chip_rev_id) == ASIC_REV_57780) {
 		if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57780)
-			strlcpy(tp->board_part_number,"BCM57780",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57780");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57760)
-			strlcpy(tp->board_part_number,"BCM57760",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57760");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57790)
-			strlcpy(tp->board_part_number,"BCM57790",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57790");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57788)
-			strlcpy(tp->board_part_number,"BCM57788",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57788");
 		else
 			goto nomatch;
 	} else if (GET_ASIC_REV(tp->pci_chip_rev_id) == ASIC_REV_57765) {
 		if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57761)
-			strlcpy(tp->board_part_number,"BCM57761",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57761");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57765)
-			strlcpy(tp->board_part_number,"BCM57765",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57765");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57781)
-			strlcpy(tp->board_part_number,"BCM57781",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57781");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57785)
-			strlcpy(tp->board_part_number,"BCM57785",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57785");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57791)
-			strlcpy(tp->board_part_number,"BCM57791",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57791");
 		else if (tp->pdev->device == TG3PCI_DEVICE_TIGON3_57795)
-			strlcpy(tp->board_part_number,"BCM57795",sizeof(tp->board_part_number));
+			strcpy(tp->board_part_number, "BCM57795");
 		else
 			goto nomatch;
 	} else if (GET_ASIC_REV(tp->pci_chip_rev_id) == ASIC_REV_5906) {
-		strlcpy(tp->board_part_number,"BCM95906",sizeof(tp->board_part_number));
+		strcpy(tp->board_part_number, "BCM95906");
 	} else {
 nomatch:
-		strlcpy(tp->board_part_number,"none",sizeof(tp->board_part_number));
+		strcpy(tp->board_part_number, "none");
 	}
 }
 
@@ -14795,12 +14795,12 @@ static char * __devinit tg3_phy_string(struct tg3 *tp)
 static char * __devinit tg3_bus_string(struct tg3 *tp, char *str)
 {
 	if (tg3_flag(tp, PCI_EXPRESS)) {
-		strlcpy(str,"PCI Express",sizeof(str));
+		strcpy(str, "PCI Express");
 		return str;
 	} else if (tg3_flag(tp, PCIX_MODE)) {
 		u32 clock_ctrl = tr32(TG3PCI_CLOCK_CTRL) & 0x1f;
 
-		strlcpy(str,"PCIX:",sizeof(str));
+		strcpy(str, "PCIX:");
 
 		if ((clock_ctrl == 7) ||
 		    ((tr32(GRC_MISC_CFG) & GRC_MISC_CFG_BOARD_ID_MASK) ==
@@ -14815,7 +14815,7 @@ static char * __devinit tg3_bus_string(struct tg3 *tp, char *str)
 		else if (clock_ctrl == 6)
 			strcat(str, "100MHz");
 	} else {
-		strlcpy(str,"PCI:",sizeof(str));
+		strcpy(str, "PCI:");
 		if (tg3_flag(tp, PCI_HIGH_SPEED))
 			strcat(str, "66MHz");
 		else

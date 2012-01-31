@@ -48,7 +48,7 @@ int cfg80211_wext_giwname(struct net_device *dev,
 		is_ht |= sband->ht_cap.ht_supported;
 	}
 
-	strlcpy(name,"IEEE 802.11",sizeof(name));
+	strcpy(name, "IEEE 802.11");
 	if (is_a)
 		strcat(name, "a");
 	if (is_b)

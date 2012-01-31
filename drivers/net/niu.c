@@ -6824,12 +6824,12 @@ static void niu_get_drvinfo(struct net_device *dev,
 	struct niu *np = netdev_priv(dev);
 	struct niu_vpd *vpd = &np->vpd;
 
-	strlcpy(info->driver,DRV_MODULE_NAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_MODULE_VERSION,sizeof(info->version));
+	strcpy(info->driver, DRV_MODULE_NAME);
+	strcpy(info->version, DRV_MODULE_VERSION);
 	sprintf(info->fw_version, "%d.%d",
 		vpd->fcode_major, vpd->fcode_minor);
 	if (np->parent->plat_type != PLAT_TYPE_NIU)
-		strlcpy(info->bus_info,pci_name(np->pdev,sizeof(info->bus_info)));
+		strcpy(info->bus_info, pci_name(np->pdev));
 }
 
 static int niu_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)
@@ -9259,7 +9259,7 @@ static int __devinit niu_get_of_props(struct niu *np)
 	if (!strcmp(phy_type, "none"))
 		return -ENODEV;
 
-	strlcpy(np->vpd.phy_type,phy_type,sizeof(np->vpd.phy_type));
+	strcpy(np->vpd.phy_type, phy_type);
 
 	if (niu_phy_type_prop_decode(np, np->vpd.phy_type)) {
 		netdev_err(dev, "%s: Illegal phy string [%s]\n",
@@ -9290,7 +9290,7 @@ static int __devinit niu_get_of_props(struct niu *np)
 	model = of_get_property(dp, "model", &prop_len);
 
 	if (model)
-		strlcpy(np->vpd.model,model,sizeof(np->vpd.model));
+		strcpy(np->vpd.model, model);
 
 	if (of_find_property(dp, "hot-swappable-phy", &prop_len)) {
 		np->flags |= (NIU_FLAGS_10G | NIU_FLAGS_FIBER |

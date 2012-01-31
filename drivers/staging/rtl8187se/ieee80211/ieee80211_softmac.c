@@ -2174,7 +2174,7 @@ void ieee80211_start_ibss_wq(struct work_struct *work)
 
 
 	if (ieee->current_network.ssid_len == 0){
-		strlcpy(ieee->current_network.ssid,IEEE80211_DEFAULT_TX_ESSID,sizeof(ieee->current_network.ssid));
+		strcpy(ieee->current_network.ssid,IEEE80211_DEFAULT_TX_ESSID);
 		ieee->current_network.ssid_len = strlen(IEEE80211_DEFAULT_TX_ESSID);
 		ieee->ssid_set = 1;
 	}

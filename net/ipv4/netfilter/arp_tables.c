@@ -922,7 +922,7 @@ static int get_info(struct net *net, void __user *user,
 		       sizeof(info.underflow));
 		info.num_entries = private->number;
 		info.size = private->size;
-		strlcpy(info.name,name,sizeof(info.name));
+		strcpy(info.name, name);
 
 		if (copy_to_user(user, &info, *len) != 0)
 			ret = -EFAULT;

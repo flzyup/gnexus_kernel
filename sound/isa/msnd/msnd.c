@@ -693,7 +693,7 @@ int snd_msnd_pcm(struct snd_card *card, int device,
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_msnd_capture_ops);
 
 	pcm->private_data = chip;
-	strlcpy(pcm->name,"Hurricane",sizeof(pcm->name));
+	strcpy(pcm->name, "Hurricane");
 
 
 	if (rpcm)

@@ -904,7 +904,7 @@ isdnloop_parse_cmd(isdnloop_card * card)
 		case 7:
 			/* 0x;EAZ */
 			p += 3;
-			strlcpy(card->eazlist[ch - 1],p,sizeof(card->eazlist[ch - 1]));
+			strcpy(card->eazlist[ch - 1], p);
 			break;
 		case 8:
 			/* 0x;SEEAZ */
@@ -1085,7 +1085,7 @@ isdnloop_start(isdnloop_card * card, isdnloop_sdef * sdefp)
 				return -ENOMEM;
 			}
 			for (i = 0; i < 3; i++)
-				strlcpy(card->s0num[i],sdef.num[i],sizeof(card->s0num[i]));
+				strcpy(card->s0num[i], sdef.num[i]);
 			break;
 		case ISDN_PTYPE_1TR6:
 			if (isdnloop_fake(card, "DRV1.04TC-1TR6-CAPI-CNS-BASIS-29.11.95",
@@ -1098,7 +1098,7 @@ isdnloop_start(isdnloop_card * card, isdnloop_sdef * sdefp)
 				spin_unlock_irqrestore(&card->isdnloop_lock, flags);
 				return -ENOMEM;
 			}
-			strlcpy(card->s0num[0],sdef.num[0],sizeof(card->s0num[0]));
+			strcpy(card->s0num[0], sdef.num[0]);
 			card->s0num[1][0] = '\0';
 			card->s0num[2][0] = '\0';
 			break;
@@ -1199,11 +1199,11 @@ isdnloop_command(isdn_ctrl * c, isdnloop_card * card)
 				if (*p == 's' || *p == 'S') {
 					/* Dial for SPV */
 					p++;
-					strlcpy(dcode,"SCA",sizeof(dcode));
+					strcpy(dcode, "SCA");
 				} else
 					/* Normal Dial */
-					strlcpy(dcode,"CAL",sizeof(dcode));
-				strlcpy(dial,p,sizeof(dial));
+					strcpy(dcode, "CAL");
+				strcpy(dial, p);
 				sprintf(cbuf, "%02d;D%s_R%s,%02d,%02d,%s\n", (int) (a + 1),
 					dcode, dial, c->parm.setup.si1,
 				c->parm.setup.si2, c->parm.setup.eazmsn);
@@ -1498,11 +1498,11 @@ isdnloop_init(void)
 	char rev[10];
 
 	if ((p = strchr(revision, ':'))) {
-		strlcpy(rev,p + 1,sizeof(rev));
+		strcpy(rev, p + 1);
 		p = strchr(rev, '$');
 		*p = 0;
 	} else
-		strlcpy(rev," ??? ",sizeof(rev));
+		strcpy(rev, " ??? ");
 	printk(KERN_NOTICE "isdnloop-ISDN-driver Rev%s\n", rev);
 
 	if (isdnloop_id)

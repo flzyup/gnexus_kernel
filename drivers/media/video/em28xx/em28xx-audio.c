@@ -479,12 +479,12 @@ static int em28xx_audio_init(struct em28xx *dev)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_em28xx_pcm_capture);
 	pcm->info_flags = 0;
 	pcm->private_data = dev;
-	strlcpy(pcm->name,"Empia 28xx Capture",sizeof(pcm->name));
+	strcpy(pcm->name, "Empia 28xx Capture");
 
 	snd_card_set_dev(card, &dev->udev->dev);
-	strlcpy(card->driver,"Em28xx-Audio",sizeof(card->driver));
-	strlcpy(card->shortname,"Em28xx Audio",sizeof(card->shortname));
-	strlcpy(card->longname,"Empia Em28xx Audio",sizeof(card->longname));
+	strcpy(card->driver, "Em28xx-Audio");
+	strcpy(card->shortname, "Em28xx Audio");
+	strcpy(card->longname, "Empia Em28xx Audio");
 
 	INIT_WORK(&dev->wq_trigger, audio_trigger);
 

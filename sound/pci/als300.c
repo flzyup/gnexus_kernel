@@ -621,7 +621,7 @@ static int __devinit snd_als300_new_pcm(struct snd_als300 *chip)
 	if (err < 0)
 		return err;
 	pcm->private_data = chip;
-	strlcpy(pcm->name,"ALS300",sizeof(pcm->name));
+	strcpy(pcm->name, "ALS300");
 	chip->pcm = pcm;
 
 	/* set operators */
@@ -825,7 +825,7 @@ static int __devinit snd_als300_probe(struct pci_dev *pci,
 	}
 	card->private_data = chip;
 
-	strlcpy(card->driver,"ALS300",sizeof(card->driver));
+	strcpy(card->driver, "ALS300");
 	if (chip->chip_type == DEVICE_ALS300_PLUS)
 		/* don't know much about ALS300+ yet
 		 * print revision number for now */

@@ -428,9 +428,9 @@ static void dm9000_get_drvinfo(struct net_device *dev,
 {
 	board_info_t *dm = to_dm9000_board(dev);
 
-	strlcpy(info->driver,CARDNAME,sizeof(info->driver));
-	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
-	strlcpy(info->bus_info,to_platform_device(dm->dev,sizeof(info->bus_info))->name);
+	strcpy(info->driver, CARDNAME);
+	strcpy(info->version, DRV_VERSION);
+	strcpy(info->bus_info, to_platform_device(dm->dev)->name);
 }
 
 static u32 dm9000_get_msglevel(struct net_device *dev)

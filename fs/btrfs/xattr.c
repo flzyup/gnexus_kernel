@@ -383,8 +383,8 @@ int btrfs_xattr_security_init(struct btrfs_trans_handle *trans,
 	if (!name) {
 		err = -ENOMEM;
 	} else {
-		strlcpy(name,XATTR_SECURITY_PREFIX,sizeof(name));
-		strlcpy(name + XATTR_SECURITY_PREFIX_LEN,suffix,sizeof(name + XATTR_SECURITY_PREFIX_LEN));
+		strcpy(name, XATTR_SECURITY_PREFIX);
+		strcpy(name + XATTR_SECURITY_PREFIX_LEN, suffix);
 		err = __btrfs_setxattr(trans, inode, name, value, len, 0);
 		kfree(name);
 	}

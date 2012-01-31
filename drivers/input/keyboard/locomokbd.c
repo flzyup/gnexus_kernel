@@ -271,7 +271,7 @@ static int __devinit locomokbd_probe(struct locomo_dev *dev)
 	locomokbd->suspend_jiffies = jiffies;
 
 	locomokbd->input = input_dev;
-	strlcpy(locomokbd->phys,"locomokbd/input0",sizeof(locomokbd->phys));
+	strcpy(locomokbd->phys, "locomokbd/input0");
 
 	input_dev->name = "LoCoMo keyboard";
 	input_dev->phys = locomokbd->phys;

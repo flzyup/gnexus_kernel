@@ -1301,7 +1301,7 @@ qla2x00_fdmi_rhba(scsi_qla_host_t *vha)
 	/* Manufacturer. */
 	eiter = (struct ct_fdmi_hba_attr *) (entries + size);
 	eiter->type = __constant_cpu_to_be16(FDMI_HBA_MANUFACTURER);
-	strlcpy(eiter->a.manufacturer,"QLogic Corporation",sizeof(eiter->a.manufacturer));
+	strcpy(eiter->a.manufacturer, "QLogic Corporation");
 	alen = strlen(eiter->a.manufacturer);
 	alen += (alen & 3) ? (4 - (alen & 3)) : 4;
 	eiter->len = cpu_to_be16(4 + alen);
@@ -1326,7 +1326,7 @@ qla2x00_fdmi_rhba(scsi_qla_host_t *vha)
 	/* Model name. */
 	eiter = (struct ct_fdmi_hba_attr *) (entries + size);
 	eiter->type = __constant_cpu_to_be16(FDMI_HBA_MODEL);
-	strlcpy(eiter->a.model,ha->model_number,sizeof(eiter->a.model));
+	strcpy(eiter->a.model, ha->model_number);
 	alen = strlen(eiter->a.model);
 	alen += (alen & 3) ? (4 - (alen & 3)) : 4;
 	eiter->len = cpu_to_be16(4 + alen);
@@ -1351,7 +1351,7 @@ qla2x00_fdmi_rhba(scsi_qla_host_t *vha)
 	/* Hardware version. */
 	eiter = (struct ct_fdmi_hba_attr *) (entries + size);
 	eiter->type = __constant_cpu_to_be16(FDMI_HBA_HARDWARE_VERSION);
-	strlcpy(eiter->a.hw_version,ha->adapter_id,sizeof(eiter->a.hw_version));
+	strcpy(eiter->a.hw_version, ha->adapter_id);
 	alen = strlen(eiter->a.hw_version);
 	alen += (alen & 3) ? (4 - (alen & 3)) : 4;
 	eiter->len = cpu_to_be16(4 + alen);
@@ -1363,7 +1363,7 @@ qla2x00_fdmi_rhba(scsi_qla_host_t *vha)
 	/* Driver version. */
 	eiter = (struct ct_fdmi_hba_attr *) (entries + size);
 	eiter->type = __constant_cpu_to_be16(FDMI_HBA_DRIVER_VERSION);
-	strlcpy(eiter->a.driver_version,qla2x00_version_str,sizeof(eiter->a.driver_version));
+	strcpy(eiter->a.driver_version, qla2x00_version_str);
 	alen = strlen(eiter->a.driver_version);
 	alen += (alen & 3) ? (4 - (alen & 3)) : 4;
 	eiter->len = cpu_to_be16(4 + alen);
@@ -1375,7 +1375,7 @@ qla2x00_fdmi_rhba(scsi_qla_host_t *vha)
 	/* Option ROM version. */
 	eiter = (struct ct_fdmi_hba_attr *) (entries + size);
 	eiter->type = __constant_cpu_to_be16(FDMI_HBA_OPTION_ROM_VERSION);
-	strlcpy(eiter->a.orom_version,"0.00",sizeof(eiter->a.orom_version));
+	strcpy(eiter->a.orom_version, "0.00");
 	alen = strlen(eiter->a.orom_version);
 	alen += (alen & 3) ? (4 - (alen & 3)) : 4;
 	eiter->len = cpu_to_be16(4 + alen);
@@ -1615,7 +1615,7 @@ qla2x00_fdmi_rpa(scsi_qla_host_t *vha)
 	/* OS device name. */
 	eiter = (struct ct_fdmi_port_attr *) (entries + size);
 	eiter->type = __constant_cpu_to_be16(FDMI_PORT_OS_DEVICE_NAME);
-	strlcpy(eiter->a.os_dev_name,QLA2XXX_DRIVER_NAME,sizeof(eiter->a.os_dev_name));
+	strcpy(eiter->a.os_dev_name, QLA2XXX_DRIVER_NAME);
 	alen = strlen(eiter->a.os_dev_name);
 	alen += (alen & 3) ? (4 - (alen & 3)) : 4;
 	eiter->len = cpu_to_be16(4 + alen);

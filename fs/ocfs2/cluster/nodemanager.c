@@ -707,7 +707,7 @@ static struct config_item *o2nm_node_group_make_item(struct config_group *group,
 	if (node == NULL)
 		return ERR_PTR(-ENOMEM);
 
-	strlcpy(node->nd_name,name,sizeof(node->nd_name)); /* use item.ci_namebuf instead? */
+	strcpy(node->nd_name, name); /* use item.ci_namebuf instead? */
 	config_item_init_type_name(&node->nd_item, name, &o2nm_node_type);
 	spin_lock_init(&node->nd_lock);
 

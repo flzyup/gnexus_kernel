@@ -258,7 +258,7 @@ static int __devinit fm2fb_probe(struct zorro_dev *z,
 	fb_fix.mmio_start = fb_fix.smem_start + FRAMEMASTER_REG;
 	fm2fb_reg  = (unsigned char *)(info->screen_base+FRAMEMASTER_REG);
 
-	strlcpy(fb_fix.id,is_fm ? "FrameMaster II" : "Rainbow II",sizeof(fb_fix.id));
+	strcpy(fb_fix.id, is_fm ? "FrameMaster II" : "Rainbow II");
 
 	/* make EBU color bars on display */
 	ptr = (unsigned long *)fb_fix.smem_start;

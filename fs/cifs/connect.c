@@ -956,7 +956,7 @@ cifs_parse_mount_options(const char *mountdata, const char *devname,
 							    "for password\n");
 					goto cifs_parse_mount_err;
 				}
-				strlcpy(vol->password,value,sizeof(vol->password));
+				strcpy(vol->password, value);
 			}
 		} else if (!strnicmp(data, "ip", 2) ||
 			   !strnicmp(data, "addr", 4)) {
@@ -1039,7 +1039,7 @@ cifs_parse_mount_options(const char *mountdata, const char *devname,
 				vol->UNC = kmalloc(temp_len+1, GFP_KERNEL);
 				if (vol->UNC == NULL)
 					goto cifs_parse_mount_err;
-				strlcpy(vol->UNC,value,sizeof(vol->UNC));
+				strcpy(vol->UNC, value);
 				if (strncmp(vol->UNC, "//", 2) == 0) {
 					vol->UNC[0] = '\\';
 					vol->UNC[1] = '\\';
@@ -1104,9 +1104,9 @@ cifs_parse_mount_options(const char *mountdata, const char *devname,
 					goto cifs_parse_mount_err;
 				if (value[0] != '/') {
 					vol->prepath[0] = '/';
-					strlcpy(vol->prepath+1,value,sizeof(vol->prepath+1));
+					strcpy(vol->prepath+1, value);
 				} else
-					strlcpy(vol->prepath,value,sizeof(vol->prepath));
+					strcpy(vol->prepath, value);
 				cFYI(1, "prefix path %s", vol->prepath);
 			} else {
 				printk(KERN_WARNING "CIFS: prefix too long\n");
@@ -1416,7 +1416,7 @@ cifs_parse_mount_options(const char *mountdata, const char *devname,
 			vol->UNC = kmalloc(temp_len+1, GFP_KERNEL);
 			if (vol->UNC == NULL)
 				goto cifs_parse_mount_err;
-			strlcpy(vol->UNC,devname,sizeof(vol->UNC));
+			strcpy(vol->UNC, devname);
 			if (strncmp(vol->UNC, "//", 2) == 0) {
 				vol->UNC[0] = '\\';
 				vol->UNC[1] = '\\';
@@ -2268,8 +2268,8 @@ get_dfs_path(int xid, struct cifs_ses *pSesInfo, const char *old_path,
 			return -ENOMEM;
 		temp_unc[0] = '\\';
 		temp_unc[1] = '\\';
-		strlcpy(temp_unc + 2,pSesInfo->serverName,sizeof(temp_unc + 2));
-		strlcpy(temp_unc + 2 + strlen(pSesInfo->serverName),"\\IPC$",sizeof(temp_unc + 2 + strlen(pSesInfo->serverName)));
+		strcpy(temp_unc + 2, pSesInfo->serverName);
+		strcpy(temp_unc + 2 + strlen(pSesInfo->serverName), "\\IPC$");
 		rc = CIFSTCon(xid, pSesInfo, temp_unc, NULL, nls_codepage);
 		cFYI(1, "CIFS Tcon rc = %d ipc_tid = %d", rc, pSesInfo->ipc_tid);
 		kfree(temp_unc);
@@ -3296,10 +3296,10 @@ CIFSTCon(unsigned int xid, struct cifs_ses *ses,
 		bcc_ptr += 2 * length;	/* convert num 16 bit words to bytes */
 		bcc_ptr += 2;	/* skip trailing null */
 	} else {		/* ASCII */
-		strlcpy(bcc_ptr,tree,sizeof(bcc_ptr));
+		strcpy(bcc_ptr, tree);
 		bcc_ptr += strlen(tree) + 1;
 	}
-	strlcpy(bcc_ptr,"?????",sizeof(bcc_ptr));
+	strcpy(bcc_ptr, "?????");
 	bcc_ptr += strlen("?????");
 	bcc_ptr += 1;
 	count = bcc_ptr - &pSMB->Password[0];

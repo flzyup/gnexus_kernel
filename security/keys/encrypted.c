@@ -415,9 +415,9 @@ static int get_derived_key(u8 *derived_key, enum derived_key_type key_type,
 		return -ENOMEM;
 	}
 	if (key_type)
-		strlcpy(derived_buf,"AUTH_KEY",sizeof(derived_buf));
+		strcpy(derived_buf, "AUTH_KEY");
 	else
-		strlcpy(derived_buf,"ENC_KEY",sizeof(derived_buf));
+		strcpy(derived_buf, "ENC_KEY");
 
 	memcpy(derived_buf + strlen(derived_buf) + 1, master_key,
 	       master_keylen);

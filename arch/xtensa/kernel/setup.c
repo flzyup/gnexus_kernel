@@ -207,7 +207,7 @@ void __init init_arch(bp_tag_t *bp_start)
 	sysmem.nr_banks = 0;
 
 #ifdef CONFIG_CMDLINE_BOOL
-	strlcpy(command_line,default_command_line,sizeof(command_line));
+	strcpy(command_line, default_command_line);
 #endif
 
 	/* Parse boot parameters */

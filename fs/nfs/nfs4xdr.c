@@ -894,7 +894,7 @@ static void encode_attrs(struct xdr_stream *xdr, const struct iattr *iap, const 
 			dprintk("nfs: couldn't resolve uid %d to string\n",
 					iap->ia_uid);
 			/* XXX */
-			strlcpy(owner_name,"nobody",sizeof(owner_name));
+			strcpy(owner_name, "nobody");
 			owner_namelen = sizeof("nobody") - 1;
 			/* goto out; */
 		}
@@ -905,7 +905,7 @@ static void encode_attrs(struct xdr_stream *xdr, const struct iattr *iap, const 
 		if (owner_grouplen < 0) {
 			dprintk("nfs: couldn't resolve gid %d to string\n",
 					iap->ia_gid);
-			strlcpy(owner_group,"nobody",sizeof(owner_group));
+			strcpy(owner_group, "nobody");
 			owner_grouplen = sizeof("nobody") - 1;
 			/* goto out; */
 		}
