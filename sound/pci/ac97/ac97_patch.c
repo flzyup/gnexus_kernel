@@ -56,7 +56,7 @@ static void reset_tlv(struct snd_ac97 *ac97, const char *name,
 	struct snd_ctl_elem_id sid;
 	struct snd_kcontrol *kctl;
 	memset(&sid, 0, sizeof(sid));
-	strcpy(sid.name, name);
+	strlcpy(sid.name,name,sizeof(sid.name));
 	sid.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	kctl = snd_ctl_find_id(ac97->bus->card, &sid);
 	if (kctl && kctl->tlv.p)
@@ -89,7 +89,7 @@ static int ac97_enum_text_info(struct snd_kcontrol *kcontrol, struct snd_ctl_ele
 	uinfo->value.enumerated.items = nums;
 	if (uinfo->value.enumerated.item > nums - 1)
 		uinfo->value.enumerated.item = nums - 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -249,7 +249,7 @@ static int snd_ac97_ymf7x3_info_speaker(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -300,7 +300,7 @@ static int snd_ac97_ymf7x3_spdif_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item > 1)
 		uinfo->value.enumerated.item = 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -336,7 +336,7 @@ static int patch_yamaha_ymf7x3_3d(struct snd_ac97 *ac97)
 	err = snd_ctl_add(ac97->bus->card, kctl);
 	if (err < 0)
 		return err;
-	strcpy(kctl->id.name, "3D Control - Wide");
+	strlcpy(kctl->id.name,"3D Control - Wide",sizeof(kctl->id.name));
 	kctl->private_value = AC97_SINGLE_VALUE(AC97_3D_CONTROL, 9, 7, 0);
 	snd_ac97_write_cache(ac97, AC97_3D_CONTROL, 0x0000);
 	err = snd_ctl_add(ac97->bus->card,
@@ -408,7 +408,7 @@ static int snd_ac97_ymf753_spdif_output_pin_info(struct snd_kcontrol *kcontrol, 
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -928,7 +928,7 @@ static int patch_sigmatel_stac9700_3d(struct snd_ac97 * ac97)
 
 	if ((err = snd_ctl_add(ac97->bus->card, kctl = snd_ac97_cnew(&snd_ac97_controls_3d[0], ac97))) < 0)
 		return err;
-	strcpy(kctl->id.name, "3D Control Sigmatel - Depth");
+	strlcpy(kctl->id.name,"3D Control Sigmatel - Depth",sizeof(kctl->id.name));
 	kctl->private_value = AC97_SINGLE_VALUE(AC97_3D_CONTROL, 2, 3, 0);
 	snd_ac97_write_cache(ac97, AC97_3D_CONTROL, 0x0000);
 	return 0;
@@ -941,11 +941,11 @@ static int patch_sigmatel_stac9708_3d(struct snd_ac97 * ac97)
 
 	if ((err = snd_ctl_add(ac97->bus->card, kctl = snd_ac97_cnew(&snd_ac97_controls_3d[0], ac97))) < 0)
 		return err;
-	strcpy(kctl->id.name, "3D Control Sigmatel - Depth");
+	strlcpy(kctl->id.name,"3D Control Sigmatel - Depth",sizeof(kctl->id.name));
 	kctl->private_value = AC97_SINGLE_VALUE(AC97_3D_CONTROL, 0, 3, 0);
 	if ((err = snd_ctl_add(ac97->bus->card, kctl = snd_ac97_cnew(&snd_ac97_controls_3d[0], ac97))) < 0)
 		return err;
-	strcpy(kctl->id.name, "3D Control Sigmatel - Rear Depth");
+	strlcpy(kctl->id.name,"3D Control Sigmatel - Rear Depth",sizeof(kctl->id.name));
 	kctl->private_value = AC97_SINGLE_VALUE(AC97_3D_CONTROL, 2, 3, 0);
 	snd_ac97_write_cache(ac97, AC97_3D_CONTROL, 0x0000);
 	return 0;
@@ -1111,7 +1111,7 @@ static int snd_ac97_stac9758_output_jack_info(struct snd_kcontrol *kcontrol, str
 	uinfo->value.enumerated.items = 5;
 	if (uinfo->value.enumerated.item > 4)
 		uinfo->value.enumerated.item = 4;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1155,7 +1155,7 @@ static int snd_ac97_stac9758_input_jack_info(struct snd_kcontrol *kcontrol, stru
 	uinfo->value.enumerated.items = 7;
 	if (uinfo->value.enumerated.item > 6)
 		uinfo->value.enumerated.item = 6;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1188,7 +1188,7 @@ static int snd_ac97_stac9758_phonesel_info(struct snd_kcontrol *kcontrol, struct
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1811,7 +1811,7 @@ static int snd_ac97_ad198x_spdif_source_info(struct snd_kcontrol *kcontrol, stru
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item > 1)
 		uinfo->value.enumerated.item = 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -2001,7 +2001,7 @@ static int snd_ac97_ad1888_downmix_info(struct snd_kcontrol *kcontrol, struct sn
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -2160,8 +2160,7 @@ static int snd_ac97_ad1985_vrefout_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item > 3)
 		uinfo->value.enumerated.item = 3;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -2743,8 +2742,7 @@ static int alc655_iec958_route_info(struct snd_kcontrol *kcontrol, struct snd_ct
 	uinfo->value.enumerated.items = ac97->spec.dev_flags ? 4 : 3;
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-	       ac97->spec.dev_flags ?
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       ac97->spec.dev_flags ?
 	       texts_658[uinfo->value.enumerated.item] :
 	       texts_655[uinfo->value.enumerated.item]);
 	return 0;
@@ -3040,7 +3038,7 @@ static int snd_ac97_cmedia_spdif_playback_source_info(struct snd_kcontrol *kcont
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item > 1)
 		uinfo->value.enumerated.item = 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -3220,7 +3218,7 @@ static int cm9761_spdif_out_source_info(struct snd_kcontrol *kcontrol, struct sn
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -3431,7 +3429,7 @@ static struct snd_kcontrol *snd_ac97_find_mixer_ctl(struct snd_ac97 *ac97,
 	struct snd_ctl_elem_id id;
 	memset(&id, 0, sizeof(id));
 	id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strcpy(id.name, name);
+	strlcpy(id.name,name,sizeof(id.name));
 	return snd_ctl_find_id(ac97->bus->card, &id);
 }
 

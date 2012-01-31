@@ -130,10 +130,10 @@ be_get_drvinfo(struct net_device *netdev, struct ethtool_drvinfo *drvinfo)
 {
 	struct be_adapter *adapter = netdev_priv(netdev);
 
-	strcpy(drvinfo->driver, DRV_NAME);
-	strcpy(drvinfo->version, DRV_VER);
+	strlcpy(drvinfo->driver,DRV_NAME,sizeof(drvinfo->driver));
+	strlcpy(drvinfo->version,DRV_VER,sizeof(drvinfo->version));
 	strncpy(drvinfo->fw_version, adapter->fw_ver, FW_VER_LEN);
-	strcpy(drvinfo->bus_info, pci_name(adapter->pdev));
+	strlcpy(drvinfo->bus_info,pci_name(adapter->pdev,sizeof(drvinfo->bus_info)));
 	drvinfo->testinfo_len = 0;
 	drvinfo->regdump_len = 0;
 	drvinfo->eedump_len = 0;
@@ -651,7 +651,7 @@ be_do_flash(struct net_device *netdev, struct ethtool_flash *efl)
 	char file_name[ETHTOOL_FLASH_MAX_FILENAME];
 
 	file_name[ETHTOOL_FLASH_MAX_FILENAME - 1] = 0;
-	strcpy(file_name, efl->data);
+	strlcpy(file_name,efl->data,sizeof(file_name));
 
 	return be_load_fw(adapter, file_name);
 }

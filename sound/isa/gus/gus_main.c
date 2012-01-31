@@ -368,8 +368,8 @@ static int snd_gus_check_version(struct snd_gus_card * gus)
 	rev = inb(GUSP(gus, BOARDVERSION));
 	spin_unlock_irqrestore(&gus->reg_lock, flags);
 	snd_printdd("GF1 [0x%lx] init - val = 0x%x, rev = 0x%x\n", gus->gf1.port, val, rev);
-	strcpy(card->driver, "GUS");
-	strcpy(card->longname, "Gravis UltraSound Classic (2.4)");
+	strlcpy(card->driver,"GUS",sizeof(card->driver));
+	strlcpy(card->longname,"Gravis UltraSound Classic (2.4,sizeof(card->longname))");
 	if ((val != 255 && (val & 0x06)) || (rev >= 5 && rev != 255)) {
 		if (rev >= 5 && rev <= 9) {
 			gus->ics_flag = 1;
@@ -380,16 +380,16 @@ static int snd_gus_check_version(struct snd_gus_card * gus)
 		}
 		if (rev >= 10 && rev != 255) {
 			if (rev >= 10 && rev <= 11) {
-				strcpy(card->driver, "GUS MAX");
-				strcpy(card->longname, "Gravis UltraSound MAX");
+				strlcpy(card->driver,"GUS MAX",sizeof(card->driver));
+				strlcpy(card->longname,"Gravis UltraSound MAX",sizeof(card->longname));
 				gus->max_flag = 1;
 			} else if (rev == 0x30) {
-				strcpy(card->driver, "GUS ACE");
-				strcpy(card->longname, "Gravis UltraSound Ace");
+				strlcpy(card->driver,"GUS ACE",sizeof(card->driver));
+				strlcpy(card->longname,"Gravis UltraSound Ace",sizeof(card->longname));
 				gus->ace_flag = 1;
 			} else if (rev == 0x50) {
-				strcpy(card->driver, "GUS Extreme");
-				strcpy(card->longname, "Gravis UltraSound Extreme");
+				strlcpy(card->driver,"GUS Extreme",sizeof(card->driver));
+				strlcpy(card->longname,"Gravis UltraSound Extreme",sizeof(card->longname));
 				gus->ess_flag = 1;
 			} else {
 				snd_printk(KERN_ERR "unknown GF1 revision number at 0x%lx - 0x%x (0x%x)\n", gus->gf1.port, rev, val);
@@ -397,7 +397,7 @@ static int snd_gus_check_version(struct snd_gus_card * gus)
 			}
 		}
 	}
-	strcpy(card->shortname, card->longname);
+	strlcpy(card->shortname,card->longname,sizeof(card->shortname));
 	gus->uart_enable = 1;	/* standard GUSes doesn't have midi uart trouble */
 	snd_gus_init_control(gus);
 	return 0;

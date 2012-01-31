@@ -1855,14 +1855,14 @@ retry:
 	de->name_len = 1;
 	de->rec_len = ext4_rec_len_to_disk(EXT4_DIR_REC_LEN(de->name_len),
 					   blocksize);
-	strcpy(de->name, ".");
+	strlcpy(de->name,".",sizeof(de->name));
 	ext4_set_de_type(dir->i_sb, de, S_IFDIR);
 	de = ext4_next_entry(de, blocksize);
 	de->inode = cpu_to_le32(dir->i_ino);
 	de->rec_len = ext4_rec_len_to_disk(blocksize - EXT4_DIR_REC_LEN(1),
 					   blocksize);
 	de->name_len = 2;
-	strcpy(de->name, "..");
+	strlcpy(de->name,"..",sizeof(de->name));
 	ext4_set_de_type(dir->i_sb, de, S_IFDIR);
 	inode->i_nlink = 2;
 	BUFFER_TRACE(dir_block, "call ext4_handle_dirty_metadata");

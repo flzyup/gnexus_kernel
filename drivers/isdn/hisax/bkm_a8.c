@@ -282,7 +282,7 @@ setup_sct_quadro(struct IsdnCard *card)
 	u_int found = 0;
 	u_int pci_ioaddr1, pci_ioaddr2, pci_ioaddr3, pci_ioaddr4, pci_ioaddr5;
 
-	strcpy(tmp, sct_quadro_revision);
+	strlcpy(tmp,sct_quadro_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: T-Berkom driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ == ISDN_CTYPE_SCT_QUADRO) {
 		cs->subtyp = SCT_1;	/* Preset */

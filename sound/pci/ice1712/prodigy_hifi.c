@@ -565,8 +565,7 @@ static int wm_adc_mux_enum_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 32;
 	if (uinfo->value.enumerated.item > 31)
 		uinfo->value.enumerated.item = 31;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 

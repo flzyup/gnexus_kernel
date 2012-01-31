@@ -458,8 +458,8 @@ static int __cpuinit acpi_processor_add(struct acpi_device *device)
 	}
 
 	pr->handle = device->handle;
-	strcpy(acpi_device_name(device), ACPI_PROCESSOR_DEVICE_NAME);
-	strcpy(acpi_device_class(device), ACPI_PROCESSOR_CLASS);
+	strlcpy(acpi_device_name(device),ACPI_PROCESSOR_DEVICE_NAME,sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_PROCESSOR_CLASS,sizeof(acpi_device_class(device)));
 	device->driver_data = pr;
 
 	result = acpi_processor_get_info(device);

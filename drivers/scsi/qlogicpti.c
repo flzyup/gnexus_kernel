@@ -1324,7 +1324,7 @@ static int __devinit qpti_sbus_probe(struct platform_device *op)
 	qpti->qhost = host;
 	qpti->op = op;
 	qpti->qpti_id = nqptis;
-	strcpy(qpti->prom_name, op->dev.of_node->name);
+	strlcpy(qpti->prom_name,op->dev.of_node->name,sizeof(qpti->prom_name));
 	qpti->is_pti = strcmp(qpti->prom_name, "QLGC,isp");
 
 	if (qpti_map_regs(qpti) < 0)

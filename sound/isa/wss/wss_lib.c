@@ -1938,7 +1938,7 @@ int snd_wss_pcm(struct snd_wss *chip, int device, struct snd_pcm **rpcm)
 		pcm->info_flags |= SNDRV_PCM_INFO_HALF_DUPLEX;
 	if (chip->hardware != WSS_HW_INTERWAVE)
 		pcm->info_flags |= SNDRV_PCM_INFO_JOINT_DUPLEX;
-	strcpy(pcm->name, snd_wss_chip_id(chip));
+	strlcpy(pcm->name,snd_wss_chip_id(chip,sizeof(pcm->name)));
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					      snd_dma_isa_data(),
@@ -1971,7 +1971,7 @@ int snd_wss_timer(struct snd_wss *chip, int device, struct snd_timer **rtimer)
 	tid.subdevice = 0;
 	if ((err = snd_timer_new(chip->card, "CS4231", &tid, &timer)) < 0)
 		return err;
-	strcpy(timer->name, snd_wss_chip_id(chip));
+	strlcpy(timer->name,snd_wss_chip_id(chip,sizeof(timer->name)));
 	timer->private_data = chip;
 	timer->private_free = snd_wss_timer_free;
 	timer->hw = snd_wss_timer_table;
@@ -2019,7 +2019,7 @@ static int snd_wss_info_mux(struct snd_kcontrol *kcontrol,
 		ptexts = opl3sa_texts;
 		break;
 	}
-	strcpy(uinfo->value.enumerated.name, ptexts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,ptexts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -2259,7 +2259,7 @@ int snd_wss_mixer(struct snd_wss *chip)
 
 	card = chip->card;
 
-	strcpy(card->mixername, chip->pcm->name);
+	strlcpy(card->mixername,chip->pcm->name,sizeof(card->mixername));
 
 	/* Use only the first 11 entries on AD1848 */
 	if (chip->hardware & WSS_HW_AD1848_MASK)

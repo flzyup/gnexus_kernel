@@ -704,7 +704,7 @@ struct scsi_inq {
  *	without copying \0
  */
 
-static void inqstrcpy(char *a, char *b)
+static void inqstrlcpy(char *a,char *b,sizeof(char *a))
 {
 
 	while (*a != (char)0)
@@ -762,15 +762,14 @@ static void setinqstr(struct aac_dev *dev, void *data, int tindex)
 		char * cp = dev->supplement_adapter_info.AdapterTypeText;
 		int c;
 		if ((cp[0] == 'A') && (cp[1] == 'O') && (cp[2] == 'C'))
-			inqstrcpy("SMC", str->vid);
+			inqstrlcpy("SMC",str->vid,sizeof("SMC"));
 		else {
 			c = sizeof(str->vid);
 			while (*cp && *cp != ' ' && --c)
 				++cp;
 			c = *cp;
 			*cp = '\0';
-			inqstrcpy (dev->supplement_adapter_info.AdapterTypeText,
-				   str->vid);
+			inqstrlcpy(dev->supplement_adapter_info.AdapterTypeText,,sizeof(dev->supplement_adapter_info.AdapterTypeText)				   str->vid);
 			*cp = c;
 			while (*cp && *cp != ' ')
 				++cp;
@@ -783,15 +782,15 @@ static void setinqstr(struct aac_dev *dev, void *data, int tindex)
 			c = cp[sizeof(str->pid)];
 			cp[sizeof(str->pid)] = '\0';
 		}
-		inqstrcpy (cp, str->pid);
+		inqstrlcpy(cp,str->pid,sizeof(cp));
 		if (c)
 			cp[sizeof(str->pid)] = c;
 	} else {
 		struct aac_driver_ident *mp = aac_get_driver_ident(dev->cardtype);
 
-		inqstrcpy (mp->vname, str->vid);
+		inqstrlcpy(mp->vname,str->vid,sizeof(mp->vname));
 		/* last six chars reserved for vol type */
-		inqstrcpy (mp->model, str->pid);
+		inqstrlcpy(mp->model,str->pid,sizeof(mp->model));
 	}
 
 	if (tindex < ARRAY_SIZE(container_types)){
@@ -803,9 +802,9 @@ static void setinqstr(struct aac_dev *dev, void *data, int tindex)
 			*(findit -= 4) = ' ';
 		if (((findit - str->pid) + strlen(container_types[tindex]))
 		 < (sizeof(str->pid) + sizeof(str->prl)))
-			inqstrcpy (container_types[tindex], findit + 1);
+			inqstrlcpy(container_types[tindex],findit + 1,sizeof(container_types[tindex]));
 	}
-	inqstrcpy ("V1.0", str->prl);
+	inqstrlcpy("V1.0",str->prl,sizeof("V1.0"));
 }
 
 static void get_container_serial_callback(void *context, struct fib * fibptr)

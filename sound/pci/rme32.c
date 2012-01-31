@@ -1370,7 +1370,7 @@ static int __devinit snd_rme32_create(struct rme32 * rme32)
 	}
 	rme32->spdif_pcm->private_data = rme32;
 	rme32->spdif_pcm->private_free = snd_rme32_free_spdif_pcm;
-	strcpy(rme32->spdif_pcm->name, "Digi32 IEC958");
+	strlcpy(rme32->spdif_pcm->name,"Digi32 IEC958",sizeof(rme32->spdif_pcm->name));
 	if (rme32->fullduplex_mode) {
 		snd_pcm_set_ops(rme32->spdif_pcm, SNDRV_PCM_STREAM_PLAYBACK,
 				&snd_rme32_playback_spdif_fd_ops);
@@ -1402,7 +1402,7 @@ static int __devinit snd_rme32_create(struct rme32 * rme32)
 		}		
 		rme32->adat_pcm->private_data = rme32;
 		rme32->adat_pcm->private_free = snd_rme32_free_adat_pcm;
-		strcpy(rme32->adat_pcm->name, "Digi32 ADAT");
+		strlcpy(rme32->adat_pcm->name,"Digi32 ADAT",sizeof(rme32->adat_pcm->name));
 		if (rme32->fullduplex_mode) {
 			snd_pcm_set_ops(rme32->adat_pcm, SNDRV_PCM_STREAM_PLAYBACK, 
 					&snd_rme32_playback_adat_fd_ops);
@@ -1628,8 +1628,7 @@ snd_rme32_info_inputtype_control(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 		    uinfo->value.enumerated.items - 1;
 	}
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 static int
@@ -1705,8 +1704,7 @@ snd_rme32_info_clockmode_control(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item > 3) {
 		uinfo->value.enumerated.item = 3;
 	}
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 static int
@@ -1954,16 +1952,16 @@ snd_rme32_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
 		return err;
 	}
 
-	strcpy(card->driver, "Digi32");
+	strlcpy(card->driver,"Digi32",sizeof(card->driver));
 	switch (rme32->pci->device) {
 	case PCI_DEVICE_ID_RME_DIGI32:
-		strcpy(card->shortname, "RME Digi32");
+		strlcpy(card->shortname,"RME Digi32",sizeof(card->shortname));
 		break;
 	case PCI_DEVICE_ID_RME_DIGI32_8:
-		strcpy(card->shortname, "RME Digi32/8");
+		strlcpy(card->shortname,"RME Digi32/8",sizeof(card->shortname));
 		break;
 	case PCI_DEVICE_ID_RME_DIGI32_PRO:
-		strcpy(card->shortname, "RME Digi32 PRO");
+		strlcpy(card->shortname,"RME Digi32 PRO",sizeof(card->shortname));
 		break;
 	}
 	sprintf(card->longname, "%s (Rev. %d) at 0x%lx, irq %d",

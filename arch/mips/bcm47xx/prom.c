@@ -105,7 +105,7 @@ static __init void prom_init_cmdline(void)
 	/* Get the kernel command line from CFE */
 	if (cfe_getenv("LINUX_CMDLINE", buf, COMMAND_LINE_SIZE) >= 0) {
 		buf[COMMAND_LINE_SIZE - 1] = 0;
-		strcpy(arcs_cmdline, buf);
+		strlcpy(arcs_cmdline,buf,sizeof(arcs_cmdline));
 	}
 
 	/* Force a console handover by adding a console= argument if needed,
@@ -115,7 +115,7 @@ static __init void prom_init_cmdline(void)
 		if ((cfe_getenv("BOOT_CONSOLE", buf, COMMAND_LINE_SIZE) < 0)
 		    || (strncmp("uart", buf, 4)))
 			/* Default to uart0 */
-			strcpy(buf, "uart0");
+			strlcpy(buf,"uart0",sizeof(buf));
 
 		/* Compute the new command line */
 		snprintf(arcs_cmdline, COMMAND_LINE_SIZE, "%s console=ttyS%c,115200",

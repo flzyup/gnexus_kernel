@@ -1074,8 +1074,8 @@ static int __devinit create_sscape(int dev, struct snd_card *card)
 				wss_port[dev], irq[dev]);
 		goto _release_dma;
 	}
-	strcpy(card->driver, "SoundScape");
-	strcpy(card->shortname, name);
+	strlcpy(card->driver,"SoundScape",sizeof(card->driver));
+	strlcpy(card->shortname,name,sizeof(card->shortname));
 	snprintf(card->longname, sizeof(card->longname),
 		 "%s at 0x%lx, IRQ %d, DMA1 %d, DMA2 %d\n",
 		 name, sscape->chip->port, sscape->chip->irq,

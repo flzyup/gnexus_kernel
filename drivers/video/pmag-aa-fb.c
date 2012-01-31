@@ -229,7 +229,7 @@ static int aafb_get_fix(struct fb_fix_screeninfo *fix, int con,
 	struct aafb_info *ip = (struct aafb_info *)info;
 
 	memset(fix, 0, sizeof(struct fb_fix_screeninfo));
-	strcpy(fix->id, "PMAG-AA");
+	strlcpy(fix->id,"PMAG-AA",sizeof(fix->id));
 	fix->smem_start = ip->fb_start;
 	fix->smem_len = ip->fb_size;
 	fix->type = FB_TYPE_PACKED_PIXELS;
@@ -427,7 +427,7 @@ static int __init init_one(int slot)
 	/*
 	 * Let there be consoles..
 	 */
-	strcpy(ip->info.modename, "PMAG-AA");
+	strlcpy(ip->info.modename,"PMAG-AA",sizeof(ip->info.modename));
 	ip->info.node = -1;
 	ip->info.flags = FBINFO_FLAG_DEFAULT;
 	ip->info.fbops = &aafb_ops;

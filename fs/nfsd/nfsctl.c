@@ -779,7 +779,7 @@ static ssize_t write_pool_threads(struct file *file, char *buf, size_t size)
 		 * file, sorry.  Report zero threads.
 		 */
 		mutex_unlock(&nfsd_mutex);
-		strcpy(buf, "0\n");
+		strlcpy(buf,"0\n",sizeof(buf));
 		return strlen(buf);
 	}
 

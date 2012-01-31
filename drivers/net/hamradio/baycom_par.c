@@ -429,7 +429,7 @@ static int baycom_ioctl(struct net_device *dev, struct ifreq *ifr,
 		break;
 
 	case HDLCDRVCTL_GETMODE:
-		strcpy(hi->data.modename, bc->options ? "par96" : "picpar");
+		strlcpy(hi->data.modename,bc->options ? "par96" : "picpar",sizeof(hi->data.modename));
 		if (copy_to_user(ifr->ifr_data, hi, sizeof(struct hdlcdrv_ioctl)))
 			return -EFAULT;
 		return 0;
@@ -441,7 +441,7 @@ static int baycom_ioctl(struct net_device *dev, struct ifreq *ifr,
 		return baycom_setmode(bc, hi->data.modename);
 
 	case HDLCDRVCTL_MODELIST:
-		strcpy(hi->data.modename, "par96,picpar");
+		strlcpy(hi->data.modename, "par96,picpar",sizeof(hi->data.modename, "par96));
 		if (copy_to_user(ifr->ifr_data, hi, sizeof(struct hdlcdrv_ioctl)))
 			return -EFAULT;
 		return 0;

@@ -1247,7 +1247,7 @@ static int vidioc_enum_input(struct file *file, void *priv,
 	i->index = n;
 	i->type = V4L2_INPUT_TYPE_CAMERA;
 
-	strcpy(i->name, iname[INPUT(n)->type]);
+	strlcpy(i->name,iname[INPUT(n,sizeof(i->name))->type]);
 
 	if ((EM28XX_VMUX_TELEVISION == INPUT(n)->type) ||
 		(EM28XX_VMUX_CABLE == INPUT(n)->type))
@@ -1299,28 +1299,28 @@ static int vidioc_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 
 	switch (a->index) {
 	case EM28XX_AMUX_VIDEO:
-		strcpy(a->name, "Television");
+		strlcpy(a->name,"Television",sizeof(a->name));
 		break;
 	case EM28XX_AMUX_LINE_IN:
-		strcpy(a->name, "Line In");
+		strlcpy(a->name,"Line In",sizeof(a->name));
 		break;
 	case EM28XX_AMUX_VIDEO2:
-		strcpy(a->name, "Television alt");
+		strlcpy(a->name,"Television alt",sizeof(a->name));
 		break;
 	case EM28XX_AMUX_PHONE:
-		strcpy(a->name, "Phone");
+		strlcpy(a->name,"Phone",sizeof(a->name));
 		break;
 	case EM28XX_AMUX_MIC:
-		strcpy(a->name, "Mic");
+		strlcpy(a->name,"Mic",sizeof(a->name));
 		break;
 	case EM28XX_AMUX_CD:
-		strcpy(a->name, "CD");
+		strlcpy(a->name,"CD",sizeof(a->name));
 		break;
 	case EM28XX_AMUX_AUX:
-		strcpy(a->name, "Aux");
+		strlcpy(a->name,"Aux",sizeof(a->name));
 		break;
 	case EM28XX_AMUX_PCM_OUT:
-		strcpy(a->name, "PCM");
+		strlcpy(a->name,"PCM",sizeof(a->name));
 		break;
 	default:
 		return -EINVAL;
@@ -1494,7 +1494,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 	if (0 != t->index)
 		return -EINVAL;
 
-	strcpy(t->name, "Tuner");
+	strlcpy(t->name,"Tuner",sizeof(t->name));
 	t->type = V4L2_TUNER_ANALOG_TV;
 
 	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, g_tuner, t);
@@ -1989,7 +1989,7 @@ static int radio_g_tuner(struct file *file, void *priv,
 	if (unlikely(t->index > 0))
 		return -EINVAL;
 
-	strcpy(t->name, "Radio");
+	strlcpy(t->name,"Radio",sizeof(t->name));
 	t->type = V4L2_TUNER_RADIO;
 
 	v4l2_device_call_all(&dev->v4l2_dev, 0, tuner, g_tuner, t);
@@ -2002,7 +2002,7 @@ static int radio_enum_input(struct file *file, void *priv,
 {
 	if (i->index != 0)
 		return -EINVAL;
-	strcpy(i->name, "Radio");
+	strlcpy(i->name,"Radio",sizeof(i->name));
 	i->type = V4L2_INPUT_TYPE_TUNER;
 
 	return 0;
@@ -2013,7 +2013,7 @@ static int radio_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 	if (unlikely(a->index))
 		return -EINVAL;
 
-	strcpy(a->name, "Radio");
+	strlcpy(a->name,"Radio",sizeof(a->name));
 	return 0;
 }
 

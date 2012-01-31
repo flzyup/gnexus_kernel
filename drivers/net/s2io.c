@@ -5790,13 +5790,13 @@ static void s2io_vpd_read(struct s2io_nic *nic)
 	struct swStat *swstats = &nic->mac_control.stats_info->sw_stat;
 
 	if (nic->device_type == XFRAME_II_DEVICE) {
-		strcpy(nic->product_name, "Xframe II 10GbE network adapter");
+		strlcpy(nic->product_name,"Xframe II 10GbE network adapter",sizeof(nic->product_name));
 		vpd_addr = 0x80;
 	} else {
-		strcpy(nic->product_name, "Xframe I 10GbE network adapter");
+		strlcpy(nic->product_name,"Xframe I 10GbE network adapter",sizeof(nic->product_name));
 		vpd_addr = 0x50;
 	}
-	strcpy(nic->serial_num, "NOT AVAILABLE");
+	strlcpy(nic->serial_num,"NOT AVAILABLE",sizeof(nic->serial_num));
 
 	vpd_data = kmalloc(256, GFP_KERNEL);
 	if (!vpd_data) {

@@ -114,8 +114,8 @@ ssize_t hfs_listxattr(struct dentry *dentry, char *buffer, size_t size)
 		return HFS_ATTRLIST_SIZE;
 	if (size < HFS_ATTRLIST_SIZE)
 		return -ERANGE;
-	strcpy(buffer, "hfs.type");
-	strcpy(buffer + sizeof("hfs.type"), "hfs.creator");
+	strlcpy(buffer,"hfs.type",sizeof(buffer));
+	strlcpy(buffer + sizeof("hfs.type"),"hfs.creator",sizeof(buffer + sizeof("hfs.type")));
 
 	return HFS_ATTRLIST_SIZE;
 }

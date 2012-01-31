@@ -1355,7 +1355,7 @@ static int ad1983_spdif_route_info(struct snd_kcontrol *kcontrol, struct snd_ctl
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item > 1)
 		uinfo->value.enumerated.item = 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -2332,7 +2332,7 @@ static int ad1988_spdif_playback_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item >= 4)
 		uinfo->value.enumerated.item = 3;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 

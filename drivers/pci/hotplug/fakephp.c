@@ -34,7 +34,7 @@ static ssize_t legacy_show(struct kobject *kobj, struct attribute *attr,
 			   char *buf)
 {
 	struct legacy_slot *slot = container_of(kobj, typeof(*slot), kobj);
-	strcpy(buf, "1\n");
+	strlcpy(buf,"1\n",sizeof(buf));
 	return 2;
 }
 

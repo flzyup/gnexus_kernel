@@ -272,7 +272,7 @@ int snd_sb8dsp_midi(struct snd_sb *chip, int device, struct snd_rawmidi ** rrawm
 		*rrawmidi = NULL;
 	if ((err = snd_rawmidi_new(chip->card, "SB8 MIDI", device, 1, 1, &rmidi)) < 0)
 		return err;
-	strcpy(rmidi->name, "SB8 MIDI");
+	strlcpy(rmidi->name,"SB8 MIDI",sizeof(rmidi->name));
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_OUTPUT, &snd_sb8dsp_midi_output);
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_INPUT, &snd_sb8dsp_midi_input);
 	rmidi->info_flags |= SNDRV_RAWMIDI_INFO_OUTPUT | SNDRV_RAWMIDI_INFO_INPUT;

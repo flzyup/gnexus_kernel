@@ -905,10 +905,10 @@ static int bat_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 static void bat_get_drvinfo(struct net_device *dev,
 			    struct ethtool_drvinfo *info)
 {
-	strcpy(info->driver, "B.A.T.M.A.N. advanced");
-	strcpy(info->version, SOURCE_VERSION);
-	strcpy(info->fw_version, "N/A");
-	strcpy(info->bus_info, "batman");
+	strlcpy(info->driver,"B.A.T.M.A.N. advanced",sizeof(info->driver));
+	strlcpy(info->version,SOURCE_VERSION,sizeof(info->version));
+	strlcpy(info->fw_version,"N/A",sizeof(info->fw_version));
+	strlcpy(info->bus_info,"batman",sizeof(info->bus_info));
 }
 
 static u32 bat_get_msglevel(struct net_device *dev)

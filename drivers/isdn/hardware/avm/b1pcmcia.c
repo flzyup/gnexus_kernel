@@ -109,7 +109,7 @@ static int b1pcmcia_add_card(unsigned int port, unsigned irq,
 	cinfo->capi_ctrl.reset_ctr     = b1_reset_ctr;
 	cinfo->capi_ctrl.procinfo      = b1pcmcia_procinfo;
 	cinfo->capi_ctrl.proc_fops = &b1ctl_proc_fops;
-	strcpy(cinfo->capi_ctrl.name, card->name);
+	strlcpy(cinfo->capi_ctrl.name,card->name,sizeof(cinfo->capi_ctrl.name));
 
 	retval = attach_capi_ctr(&cinfo->capi_ctrl);
 	if (retval) {
@@ -206,7 +206,7 @@ static int __init b1pcmcia_init(void)
 		if ((p = strchr(rev, '$')) != NULL && p > rev)
 		   *(p-1) = 0;
 	} else
-		strcpy(rev, "1.0");
+		strlcpy(rev,"1.0",sizeof(rev));
 
 	strlcpy(capi_driver_b1pcmcia.revision, rev, 32);
 	register_capi_driver(&capi_driver_b1pcmcia);

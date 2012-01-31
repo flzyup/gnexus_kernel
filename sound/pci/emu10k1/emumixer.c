@@ -407,8 +407,7 @@ static int snd_emu1010_input_output_source_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-	       items[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       items[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -708,7 +707,7 @@ static int snd_emu1010_internal_clock_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 	
 	
@@ -843,7 +842,7 @@ static int snd_audigy_i2c_capture_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 2;
 	if (uinfo->value.enumerated.item > 1)
                 uinfo->value.enumerated.item = 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1004,7 +1003,7 @@ static int snd_audigy_spdif_output_rate_info(struct snd_kcontrol *kcontrol, stru
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1692,7 +1691,7 @@ static int remove_ctl(struct snd_card *card, const char *name)
 {
 	struct snd_ctl_elem_id id;
 	memset(&id, 0, sizeof(id));
-	strcpy(id.name, name);
+	strlcpy(id.name,name,sizeof(id.name));
 	id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	return snd_ctl_remove_id(card, &id);
 }
@@ -1701,7 +1700,7 @@ static struct snd_kcontrol *ctl_find(struct snd_card *card, const char *name)
 {
 	struct snd_ctl_elem_id sid;
 	memset(&sid, 0, sizeof(sid));
-	strcpy(sid.name, name);
+	strlcpy(sid.name,name,sizeof(sid.name));
 	sid.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	return snd_ctl_find_id(card, &sid);
 }
@@ -1710,7 +1709,7 @@ static int rename_ctl(struct snd_card *card, const char *src, const char *dst)
 {
 	struct snd_kcontrol *kctl = ctl_find(card, src);
 	if (kctl) {
-		strcpy(kctl->id.name, dst);
+		strlcpy(kctl->id.name,dst,sizeof(kctl->id.name));
 		return 0;
 	}
 	return -ENOENT;
@@ -1894,11 +1893,11 @@ int __devinit snd_emu10k1_mixer(struct snd_emu10k1 *emu,
 	} else {
 	no_ac97:
 		if (emu->card_capabilities->ecard)
-			strcpy(emu->card->mixername, "EMU APS");
+			strlcpy(emu->card->mixername,"EMU APS",sizeof(emu->card->mixername));
 		else if (emu->audigy)
-			strcpy(emu->card->mixername, "SB Audigy");
+			strlcpy(emu->card->mixername,"SB Audigy",sizeof(emu->card->mixername));
 		else
-			strcpy(emu->card->mixername, "Emu10k1");
+			strlcpy(emu->card->mixername,"Emu10k1",sizeof(emu->card->mixername));
 	}
 
 	if (emu->audigy)

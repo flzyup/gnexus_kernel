@@ -2662,8 +2662,7 @@ static void easycap_complete(struct urb *purb)
 				(peasycap->field_buffer
 					[peasycap->field_fill][0].kount) |= 0x8000 ;
 				/* FIXME: 1. missing '-' check boundaries */
-				strcpy(&errbuf[0],
-					strerror(purb->iso_frame_desc[i].status));
+				strlcpy(&errbuf[0],,sizeof(&errbuf[0])					strerror(purb->iso_frame_desc[i].status));
 			}
 			framestatus = purb->iso_frame_desc[i].status;
 			framelength = purb->iso_frame_desc[i].length;
@@ -3054,7 +3053,7 @@ static int easycap_usb_probe(struct usb_interface *intf,
 */
 /*---------------------------------------------------------------------------*/
 		peasycap->minor = -1;
-		strcpy(&peasycap->telltale[0], TELLTALE);
+		strlcpy(&peasycap->telltale[0],TELLTALE,sizeof(&peasycap->telltale[0]));
 		kref_init(&peasycap->kref);
 		JOM(8, "intf[%i]: after kref_init(..._video) "
 				"%i=peasycap->kref.refcount.counter\n",
@@ -3795,7 +3794,7 @@ static int easycap_usb_probe(struct usb_interface *intf,
 /*---------------------------------------------------------------------------*/
 
 
-		strcpy(&peasycap->video_device.name[0], "easycapdc60");
+		strlcpy(&peasycap->video_device.name[0],"easycapdc60",sizeof(&peasycap->video_device.name[0]));
 		peasycap->video_device.fops = &v4l2_fops;
 		peasycap->video_device.minor = -1;
 		peasycap->video_device.release = (void *)(&videodev_release);

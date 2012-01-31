@@ -302,7 +302,7 @@ static inline void pcwd_get_firmware(void)
 {
 	int one, ten, hund, minor;
 
-	strcpy(pcwd_private.fw_ver_str, "ERROR");
+	strlcpy(pcwd_private.fw_ver_str,"ERROR",sizeof(pcwd_private.fw_ver_str));
 
 	if (set_command_mode()) {
 		one = send_isa_command(CMD_ISA_VERSION_INTEGER);

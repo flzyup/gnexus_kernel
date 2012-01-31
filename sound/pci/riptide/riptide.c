@@ -1716,7 +1716,7 @@ snd_riptide_pcm(struct snd_riptide *chip, int device, struct snd_pcm **rpcm)
 			&snd_riptide_capture_ops);
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "RIPTIDE");
+	strlcpy(pcm->name,"RIPTIDE",sizeof(pcm->name));
 	chip->pcm = pcm;
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV_SG,
 					      snd_dma_pci_data(chip->pci),
@@ -2143,8 +2143,8 @@ snd_card_riptide_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
 	}
 #endif
 
-	strcpy(card->driver, "RIPTIDE");
-	strcpy(card->shortname, "Riptide");
+	strlcpy(card->driver,"RIPTIDE",sizeof(card->driver));
+	strlcpy(card->shortname,"Riptide",sizeof(card->shortname));
 #ifdef SUPPORT_JOYSTICK
 	snprintf(card->longname, sizeof(card->longname),
 		 "%s at 0x%lx, irq %i mpu 0x%x opl3 0x%x gameport 0x%x",

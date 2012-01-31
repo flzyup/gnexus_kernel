@@ -173,7 +173,7 @@ static int get_family_id(int sd)
 	struct nlattr *na;
 	int rep_len;
 
-	strcpy(name, TASKSTATS_GENL_NAME);
+	strlcpy(name,TASKSTATS_GENL_NAME,sizeof(name));
 	rc = send_cmd(sd, GENL_ID_CTRL, getpid(), CTRL_CMD_GETFAMILY,
 			CTRL_ATTR_FAMILY_NAME, (void *)name,
 			strlen(TASKSTATS_GENL_NAME)+1);

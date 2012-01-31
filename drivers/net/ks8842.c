@@ -1215,7 +1215,7 @@ static int __devinit ks8842_probe(struct platform_device *pdev)
 
 	id = ks8842_read16(adapter, 32, REG_SW_ID_AND_ENABLE);
 
-	strcpy(netdev->name, "eth%d");
+	strlcpy(netdev->name,"eth%d",sizeof(netdev->name));
 	err = register_netdev(netdev);
 	if (err)
 		goto err_register;

@@ -950,7 +950,7 @@ static int snd_mixart_pcm_analog(struct snd_mixart *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_mixart_capture_ops);
 
 	pcm->info_flags = 0;
-	strcpy(pcm->name, name);
+	strlcpy(pcm->name,name,sizeof(pcm->name));
 
 	preallocate_buffers(chip, pcm);
 
@@ -981,7 +981,7 @@ static int snd_mixart_pcm_digital(struct snd_mixart *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_mixart_capture_ops);
 
 	pcm->info_flags = 0;
-	strcpy(pcm->name, name);
+	strlcpy(pcm->name,name,sizeof(pcm->name));
 
 	preallocate_buffers(chip, pcm);
 
@@ -1316,7 +1316,7 @@ static int __devinit snd_mixart_probe(struct pci_dev *pci,
 			return err;
 		}
 
-		strcpy(card->driver, CARD_NAME);
+		strlcpy(card->driver,CARD_NAME,sizeof(card->driver));
 		sprintf(card->shortname, "%s [PCM #%d]", mgr->shortname, i);
 		sprintf(card->longname, "%s [PCM #%d]", mgr->longname, i);
 

@@ -128,7 +128,7 @@ static int snd_usX2Y_hwdep_dsp_status(struct snd_hwdep *hw,
 	}
 	if (0 > id)
 		return -ENODEV;
-	strcpy(info->id, type_ids[id]);
+	strlcpy(info->id,type_ids[id],sizeof(info->id));
 	info->num_dsps = 2;		// 0: Prepad Data, 1: FPGA Code
 	if (us428->chip_status & USX2Y_STAT_CHIP_INIT)
 		info->chip_ready = 1;

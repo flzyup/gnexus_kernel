@@ -2878,14 +2878,14 @@ static int receive_SyncParam(struct drbd_conf *mdev, enum drbd_packets cmd, unsi
 		spin_lock(&mdev->peer_seq_lock);
 		/* lock against drbd_nl_syncer_conf() */
 		if (verify_tfm) {
-			strcpy(mdev->sync_conf.verify_alg, p->verify_alg);
+			strlcpy(mdev->sync_conf.verify_alg,p->verify_alg,sizeof(mdev->sync_conf.verify_alg));
 			mdev->sync_conf.verify_alg_len = strlen(p->verify_alg) + 1;
 			crypto_free_hash(mdev->verify_tfm);
 			mdev->verify_tfm = verify_tfm;
 			dev_info(DEV, "using verify-alg: \"%s\"\n", p->verify_alg);
 		}
 		if (csums_tfm) {
-			strcpy(mdev->sync_conf.csums_alg, p->csums_alg);
+			strlcpy(mdev->sync_conf.csums_alg,p->csums_alg,sizeof(mdev->sync_conf.csums_alg));
 			mdev->sync_conf.csums_alg_len = strlen(p->csums_alg) + 1;
 			crypto_free_hash(mdev->csums_tfm);
 			mdev->csums_tfm = csums_tfm;

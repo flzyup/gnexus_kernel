@@ -2195,7 +2195,7 @@ int __devinit snd_trident_pcm(struct snd_trident * trident,
 
 	pcm->info_flags = 0;
 	pcm->dev_subclass = SNDRV_PCM_SUBCLASS_GENERIC_MIX;
-	strcpy(pcm->name, "Trident 4DWave");
+	strlcpy(pcm->name,"Trident 4DWave",sizeof(pcm->name));
 	trident->pcm = pcm;
 
 	if (trident->tlb.entries) {
@@ -2249,16 +2249,16 @@ int __devinit snd_trident_foldback_pcm(struct snd_trident * trident,
 	else
 		snd_pcm_set_ops(foldback, SNDRV_PCM_STREAM_CAPTURE, &snd_trident_foldback_ops);
 	foldback->info_flags = 0;
-	strcpy(foldback->name, "Trident 4DWave");
+	strlcpy(foldback->name,"Trident 4DWave",sizeof(foldback->name));
 	substream = foldback->streams[SNDRV_PCM_STREAM_CAPTURE].substream;
-	strcpy(substream->name, "Front Mixer");
+	strlcpy(substream->name,"Front Mixer",sizeof(substream->name));
 	substream = substream->next;
-	strcpy(substream->name, "Reverb Mixer");
+	strlcpy(substream->name,"Reverb Mixer",sizeof(substream->name));
 	substream = substream->next;
-	strcpy(substream->name, "Chorus Mixer");
+	strlcpy(substream->name,"Chorus Mixer",sizeof(substream->name));
 	if (num_chan == 4) {
 		substream = substream->next;
-		strcpy(substream->name, "Second AC'97 ADC");
+		strlcpy(substream->name,"Second AC'97 ADC",sizeof(substream->name));
 	}
 	trident->foldback = foldback;
 
@@ -2303,7 +2303,7 @@ int __devinit snd_trident_spdif_pcm(struct snd_trident * trident,
 		snd_pcm_set_ops(spdif, SNDRV_PCM_STREAM_PLAYBACK, &snd_trident_spdif_7018_ops);
 	}
 	spdif->info_flags = 0;
-	strcpy(spdif->name, "Trident 4DWave IEC958");
+	strlcpy(spdif->name,"Trident 4DWave IEC958",sizeof(spdif->name));
 	trident->spdif = spdif;
 
 	snd_pcm_lib_preallocate_pages_for_all(spdif, SNDRV_DMA_TYPE_DEV, snd_dma_pci_data(trident->pci), 64*1024, 128*1024);

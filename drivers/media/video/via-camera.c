@@ -872,7 +872,7 @@ static int viacam_enum_input(struct file *filp, void *priv,
 
 	input->type = V4L2_INPUT_TYPE_CAMERA;
 	input->std = V4L2_STD_ALL; /* Not sure what should go here */
-	strcpy(input->name, "Camera");
+	strlcpy(input->name,"Camera",sizeof(input->name));
 	return 0;
 }
 
@@ -1041,8 +1041,8 @@ out:
 static int viacam_querycap(struct file *filp, void *priv,
 		struct v4l2_capability *cap)
 {
-	strcpy(cap->driver, "via-camera");
-	strcpy(cap->card, "via-camera");
+	strlcpy(cap->driver,"via-camera",sizeof(cap->driver));
+	strlcpy(cap->card,"via-camera",sizeof(cap->card));
 	cap->version = 1;
 	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE |
 		V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;

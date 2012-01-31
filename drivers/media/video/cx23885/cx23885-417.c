@@ -1228,8 +1228,8 @@ static int vidioc_enum_input(struct file *file, void *priv,
 		return -EINVAL;
 
 	/* FIXME
-	 * strcpy(i->name, input->name); */
-	strcpy(i->name, "unset");
+	 * strlcpy(i->name,input->name,sizeof(i->name)); */
+	strlcpy(i->name,"unset",sizeof(i->name));
 
 	if (input->type == CX23885_VMUX_TELEVISION ||
 	    input->type == CX23885_VMUX_CABLE)
@@ -1269,7 +1269,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 		return -EINVAL;
 	if (0 != t->index)
 		return -EINVAL;
-	strcpy(t->name, "Television");
+	strlcpy(t->name,"Television",sizeof(t->name));
 	call_all(dev, tuner, g_tuner, t);
 
 	dprintk(1, "VIDIOC_G_TUNER: tuner type %d\n", t->type);

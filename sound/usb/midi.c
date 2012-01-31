@@ -2016,7 +2016,7 @@ static int snd_usbmidi_create_rawmidi(struct snd_usb_midi* umidi,
 			      out_ports, in_ports, &rmidi);
 	if (err < 0)
 		return err;
-	strcpy(rmidi->name, umidi->card->shortname);
+	strlcpy(rmidi->name,umidi->card->shortname,sizeof(rmidi->name));
 	rmidi->info_flags = SNDRV_RAWMIDI_INFO_OUTPUT |
 			    SNDRV_RAWMIDI_INFO_INPUT |
 			    SNDRV_RAWMIDI_INFO_DUPLEX;

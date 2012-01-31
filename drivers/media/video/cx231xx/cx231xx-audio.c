@@ -661,11 +661,11 @@ static int cx231xx_audio_init(struct cx231xx *dev)
 			&snd_cx231xx_pcm_capture);
 	pcm->info_flags = 0;
 	pcm->private_data = dev;
-	strcpy(pcm->name, "Conexant cx231xx Capture");
+	strlcpy(pcm->name,"Conexant cx231xx Capture",sizeof(pcm->name));
 	snd_card_set_dev(card, &dev->udev->dev);
-	strcpy(card->driver, "Cx231xx-Audio");
-	strcpy(card->shortname, "Cx231xx Audio");
-	strcpy(card->longname, "Conexant cx231xx Audio");
+	strlcpy(card->driver,"Cx231xx-Audio",sizeof(card->driver));
+	strlcpy(card->shortname,"Cx231xx Audio",sizeof(card->shortname));
+	strlcpy(card->longname,"Conexant cx231xx Audio",sizeof(card->longname));
 
 	INIT_WORK(&dev->wq_trigger, audio_trigger);
 

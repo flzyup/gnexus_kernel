@@ -111,8 +111,8 @@ static int __devinit snd_ad1848_probe(struct device *dev, unsigned int n)
 	if (error < 0)
 		goto out;
 
-	strcpy(card->driver, "AD1848");
-	strcpy(card->shortname, pcm->name);
+	strlcpy(card->driver,"AD1848",sizeof(card->driver));
+	strlcpy(card->shortname,pcm->name,sizeof(card->shortname));
 
 	sprintf(card->longname, "%s at 0x%lx, irq %d, dma %d",
 		pcm->name, chip->port, irq[n], dma1[n]);

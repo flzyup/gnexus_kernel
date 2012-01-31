@@ -130,7 +130,7 @@ static int __init handle_nextprop_quirks(char *buf, const char *name)
 		return -1;
 
 #ifdef CONFIG_SPARC32
-	strcpy(buf, name);
+	strlcpy(buf,name,sizeof(buf));
 #endif
 	return 0;
 }

@@ -2187,7 +2187,7 @@ sn9c102_vidioc_enuminput(struct sn9c102_device* cam, void __user * arg)
 		return -EINVAL;
 
 	memset(&i, 0, sizeof(i));
-	strcpy(i.name, "Camera");
+	strlcpy(i.name,"Camera",sizeof(i.name));
 	i.type = V4L2_INPUT_TYPE_CAMERA;
 	i.capabilities = V4L2_IN_CAP_STD;
 
@@ -2517,19 +2517,19 @@ sn9c102_vidioc_enum_fmt(struct sn9c102_device* cam, void __user * arg)
 		return -EINVAL;
 
 	if (fmtd.index == 0) {
-		strcpy(fmtd.description, "bayer rgb");
+		strlcpy(fmtd.description,"bayer rgb",sizeof(fmtd.description));
 		fmtd.pixelformat = V4L2_PIX_FMT_SBGGR8;
 	} else if (fmtd.index == 1) {
 		switch (cam->bridge) {
 		case BRIDGE_SN9C101:
 		case BRIDGE_SN9C102:
 		case BRIDGE_SN9C103:
-			strcpy(fmtd.description, "compressed");
+			strlcpy(fmtd.description,"compressed",sizeof(fmtd.description));
 			fmtd.pixelformat = V4L2_PIX_FMT_SN9C10X;
 			break;
 		case BRIDGE_SN9C105:
 		case BRIDGE_SN9C120:
-			strcpy(fmtd.description, "JPEG");
+			strlcpy(fmtd.description,"JPEG",sizeof(fmtd.description));
 			fmtd.pixelformat = V4L2_PIX_FMT_JPEG;
 			break;
 		}
@@ -3048,7 +3048,7 @@ sn9c102_vidioc_enumaudio(struct sn9c102_device* cam, void __user * arg)
 	if (audio.index != 0)
 		return -EINVAL;
 
-	strcpy(audio.name, "Microphone");
+	strlcpy(audio.name,"Microphone",sizeof(audio.name));
 	audio.capability = 0;
 	audio.mode = 0;
 
@@ -3071,7 +3071,7 @@ sn9c102_vidioc_g_audio(struct sn9c102_device* cam, void __user * arg)
 		return -EFAULT;
 
 	memset(&audio, 0, sizeof(audio));
-	strcpy(audio.name, "Microphone");
+	strlcpy(audio.name,"Microphone",sizeof(audio.name));
 
 	if (copy_to_user(arg, &audio, sizeof(audio)))
 		return -EFAULT;
@@ -3330,7 +3330,7 @@ sn9c102_usb_probe(struct usb_interface* intf, const struct usb_device_id* id)
 		cam->state |= DEV_MISCONFIGURED;
 	}
 
-	strcpy(cam->v4ldev->name, "SN9C1xx PC Camera");
+	strlcpy(cam->v4ldev->name,"SN9C1xx PC Camera",sizeof(cam->v4ldev->name));
 	cam->v4ldev->fops = &sn9c102_fops;
 	cam->v4ldev->release = video_device_release;
 	cam->v4ldev->parent = &udev->dev;

@@ -222,7 +222,7 @@ static int sysfs_get_target_path(struct sysfs_dirent *parent_sd,
 		if (base == sd)
 			break;
 
-		strcpy(s, "../");
+		strlcpy(s,"../",sizeof(s));
 		s += 3;
 		base = base->s_parent;
 	}

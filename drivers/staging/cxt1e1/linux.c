@@ -976,7 +976,7 @@ c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
     if (CI == 0)
         CI = ci;                    /* DEBUG, only board 0 usage */
 
-    strcpy (ci->devname, hi->devname);
+    strlcpy(ci->devname,hi->devname,sizeof(ci->devname));
     ci->release = &pmcc4_OSSI_release[0];
 
     /* tasklet */

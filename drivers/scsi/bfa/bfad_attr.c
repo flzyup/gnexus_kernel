@@ -384,7 +384,7 @@ bfad_im_vport_create(struct fc_vport *fc_vport, bool disable)
 	u64_to_wwn(fc_vport->node_name, (u8 *)&port_cfg.nwwn);
 	u64_to_wwn(fc_vport->port_name, (u8 *)&port_cfg.pwwn);
 	if (strlen(vname) > 0)
-		strcpy((char *)&port_cfg.sym_name, vname);
+		strlcpy((char *)&port_cfg.sym_name,vname,sizeof((char *)&port_cfg.sym_name));
 	port_cfg.roles = BFA_LPORT_ROLE_FCP_IM;
 
 	spin_lock_irqsave(&bfad->bfad_lock, flags);

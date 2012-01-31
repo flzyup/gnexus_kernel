@@ -1039,9 +1039,9 @@ static void fec_enet_get_drvinfo(struct net_device *ndev,
 {
 	struct fec_enet_private *fep = netdev_priv(ndev);
 
-	strcpy(info->driver, fep->pdev->dev.driver->name);
-	strcpy(info->version, "Revision: 1.0");
-	strcpy(info->bus_info, dev_name(&ndev->dev));
+	strlcpy(info->driver,fep->pdev->dev.driver->name,sizeof(info->driver));
+	strlcpy(info->version,"Revision: 1.0",sizeof(info->version));
+	strlcpy(info->bus_info,dev_name(&ndev->dev,sizeof(info->bus_info)));
 }
 
 static struct ethtool_ops fec_enet_ethtool_ops = {

@@ -390,13 +390,13 @@ poll_again:
 			/* Special escape to kgdb */
 			if (lastchar - buffer >= 5 &&
 			    strcmp(lastchar - 5, "$?#3f") == 0) {
-				strcpy(buffer, "kgdb");
+				strlcpy(buffer,"kgdb",sizeof(buffer));
 				KDB_STATE_SET(DOING_KGDB);
 				return buffer;
 			}
 			if (lastchar - buffer >= 14 &&
 			    strcmp(lastchar - 14, "$qSupported#37") == 0) {
-				strcpy(buffer, "kgdb");
+				strlcpy(buffer,"kgdb",sizeof(buffer));
 				KDB_STATE_SET(DOING_KGDB2);
 				return buffer;
 			}
@@ -655,7 +655,7 @@ int vkdb_printf(const char *fmt, va_list ap)
 			 * Shift the buffer left.
 			 */
 			*cphold = replaced_byte;
-			strcpy(kdb_buffer, cphold);
+			strlcpy(kdb_buffer,cphold,sizeof(kdb_buffer));
 			len = strlen(kdb_buffer);
 			next_avail = kdb_buffer + len;
 			size_avail = sizeof(kdb_buffer) - len;
@@ -789,7 +789,7 @@ kdb_printit:
 	 */
 	if (kdb_grepping_flag && !suspend_grep) {
 		*cphold = replaced_byte;
-		strcpy(kdb_buffer, cphold);
+		strlcpy(kdb_buffer,cphold,sizeof(kdb_buffer));
 		len = strlen(kdb_buffer);
 		next_avail = kdb_buffer + len;
 		size_avail = sizeof(kdb_buffer) - len;

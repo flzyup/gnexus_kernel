@@ -534,7 +534,7 @@ static int autofs4_dir_symlink(struct inode *dir,
 	if (!cp)
 		return -ENOMEM;
 
-	strcpy(cp, symname);
+	strlcpy(cp,symname,sizeof(cp));
 
 	inode = autofs4_get_inode(dir->i_sb, S_IFLNK | 0555);
 	if (!inode) {

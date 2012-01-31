@@ -232,7 +232,7 @@ setup_netjet_u(struct IsdnCard *card)
 #error "not running on big endian machines now"
 #endif
 
-	strcpy(tmp, NETjet_U_revision);
+	strlcpy(tmp,NETjet_U_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: Traverse Tech. NETspider-U driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_NETJET_U)
 		return(0);

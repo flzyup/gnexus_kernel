@@ -241,7 +241,7 @@ static char type_to_char(short type)
 static void set_majmin(char *str, unsigned m)
 {
 	if (m == ~0)
-		strcpy(str, "*");
+		strlcpy(str,"*",sizeof(str));
 	else
 		sprintf(str, "%u", m);
 }

@@ -2070,7 +2070,7 @@ send_simple_event(islpci_private *priv, const char *str)
 	BUG_ON(n >= IW_CUSTOM_MAX);
 	wrqu.data.pointer = memptr;
 	wrqu.data.length = n;
-	strcpy(memptr, str);
+	strlcpy(memptr,str,sizeof(memptr));
 	wireless_send_event(priv->ndev, IWEVCUSTOM, &wrqu, memptr);
 	kfree(memptr);
 }

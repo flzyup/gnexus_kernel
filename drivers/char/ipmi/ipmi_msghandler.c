@@ -2035,7 +2035,7 @@ int ipmi_smi_add_proc_entry(ipmi_smi_t smi, char *name,
 		kfree(entry);
 		return -ENOMEM;
 	}
-	strcpy(entry->name, name);
+	strlcpy(entry->name,name,sizeof(entry->name));
 
 	file = proc_create_data(name, 0, smi->proc_dir, proc_ops, data);
 	if (!file) {

@@ -593,7 +593,7 @@ static int mixart_hwdep_dsp_status(struct snd_hwdep *hw,
 {
 	struct mixart_mgr *mgr = hw->private_data;
 
-	strcpy(info->id, "miXart");
+	strlcpy(info->id,"miXart",sizeof(info->id));
         info->num_dsps = MIXART_HARDW_FILES_MAX_INDEX;
 
 	if (mgr->dsp_loaded & (1 <<  MIXART_MOTHERBOARD_ELF_INDEX))

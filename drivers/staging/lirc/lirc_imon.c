@@ -846,7 +846,7 @@ static int imon_probe(struct usb_interface *interface,
 	mutex_init(&context->ctx_lock);
 	context->vfd_proto_6p = vfd_proto_6p;
 
-	strcpy(driver->name, MOD_NAME);
+	strlcpy(driver->name,MOD_NAME,sizeof(driver->name));
 	driver->minor = -1;
 	driver->code_length = BUF_CHUNK_SIZE * 8;
 	driver->sample_rate = 0;

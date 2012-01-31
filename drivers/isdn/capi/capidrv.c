@@ -2055,7 +2055,7 @@ static int capidrv_addcontr(u16 contr, struct capi_profile *profp)
 	}
 	card->owner = THIS_MODULE;
 	init_timer(&card->listentimer);
-	strcpy(card->name, id);
+	strlcpy(card->name,id,sizeof(card->name));
 	card->contrnr = contr;
 	card->nbchan = profp->nbchannel;
 	card->bchans = kmalloc(sizeof(capidrv_bchan) * card->nbchan, GFP_ATOMIC);

@@ -78,7 +78,7 @@ static void deflect_timer_expire(ulong arg)
      case DEFLECT_ALERT:
        cs->ics.command = ISDN_CMD_REDIR; /* protocol */
        strlcpy(cs->ics.parm.setup.phone, cs->deflect_dest, sizeof(cs->ics.parm.setup.phone));
-       strcpy(cs->ics.parm.setup.eazmsn,"Testtext delayed");
+       strlcpy(cs->ics.parm.setup.eazmsn,"Testtext delayed",sizeof(cs->ics.parm.setup.eazmsn));
        divert_if.ll_cmd(&cs->ics);
        spin_lock_irqsave(&divert_lock, flags);
        cs->akt_state = DEFLECT_AUTODEL; /* delete after timeout */
@@ -138,7 +138,7 @@ int cf_command(int drvid, int mode,
      *p++ = fwd_len + 2; /* complete forward to len */ 
      *p++ = 0x80; /* fwd to nr */
      *p++ = fwd_len; /* length of number */
-     strcpy(p,fwd_nr); /* copy number */
+     strlcpy(p,fwd_nr,sizeof(p)); /* copy number */
      p += fwd_len; /* pointer beyond fwd */
    } /* activate */
 
@@ -146,7 +146,7 @@ int cf_command(int drvid, int mode,
   *p++ = 0x80; /* msn number */
   if (msnlen > 1)
    { *p++ = msnlen; /* length */
-     strcpy(p,msn);
+     strlcpy(p,msn,sizeof(p));
      p += msnlen;
    }
   else *p++ = 0;
@@ -252,7 +252,7 @@ int deflect_extern_action(u_char cmd, ulong callid, char *to_nr)
      case 2: /* redir */
        del_timer(&cs->timer); 
        strlcpy(cs->ics.parm.setup.phone, to_nr, sizeof(cs->ics.parm.setup.phone));
-       strcpy(cs->ics.parm.setup.eazmsn, "Testtext manual");
+       strlcpy(cs->ics.parm.setup.eazmsn,"Testtext manual",sizeof(cs->ics.parm.setup.eazmsn));
        ic.command = ISDN_CMD_REDIR;
        if ((i = divert_if.ll_cmd(&ic)))
 	{
@@ -460,8 +460,8 @@ static int isdn_divert_icall(isdn_ctrl *ic)
            cs->timer.data = (ulong) cs; /* pointer to own structure */
            
            cs->ics = *ic; /* copy incoming data */
-           if (!cs->ics.parm.setup.phone[0]) strcpy(cs->ics.parm.setup.phone,"0");
-           if (!cs->ics.parm.setup.eazmsn[0]) strcpy(cs->ics.parm.setup.eazmsn,"0");
+           if (!cs->ics.parm.setup.phone[0]) strlcpy(cs->ics.parm.setup.phone,"0",sizeof(cs->ics.parm.setup.phone));
+           if (!cs->ics.parm.setup.eazmsn[0]) strlcpy(cs->ics.parm.setup.eazmsn,"0",sizeof(cs->ics.parm.setup.eazmsn));
 	   cs->ics.parm.setup.screen = dv->rule.screen;  
            if (dv->rule.waittime) 
              cs->timer.expires = jiffies + (HZ * dv->rule.waittime);
@@ -476,9 +476,9 @@ static int isdn_divert_icall(isdn_ctrl *ic)
            spin_unlock_irqrestore(&divert_lock, flags);
            cs->prev = NULL;
            if (cs->akt_state == DEFLECT_ALERT)
-             { strcpy(cs->deflect_dest,dv->rule.to_nr);
+             { strlcpy(cs->deflect_dest,dv->rule.to_nr,sizeof(cs->deflect_dest));
                if (!cs->timer.expires)
-		 { strcpy(ic->parm.setup.eazmsn,"Testtext direct");
+		 { strlcpy(ic->parm.setup.eazmsn,"Testtext direct",sizeof(ic->parm.setup.eazmsn));
                    ic->parm.setup.screen = dv->rule.screen;
                    strlcpy(ic->parm.setup.phone, dv->rule.to_nr, sizeof(ic->parm.setup.phone));
                    cs->akt_state = DEFLECT_AUTODEL; /* delete after timeout */

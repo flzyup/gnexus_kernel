@@ -210,7 +210,7 @@ static int aureon_universe_inmux_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1112,12 +1112,12 @@ static int wm_adc_mux_info(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_in
 		uinfo->value.enumerated.items = 8;
 		if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 			uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-		strcpy(uinfo->value.enumerated.name, universe_texts[uinfo->value.enumerated.item]);
+		strlcpy(uinfo->value.enumerated.name,universe_texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	} else {
 		uinfo->value.enumerated.items = 5;
 		if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 			uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-		strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+		strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	}
 	return 0;
 }
@@ -1173,9 +1173,9 @@ static int aureon_cs8415_mux_info(struct snd_kcontrol *kcontrol, struct snd_ctl_
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
 	if (ice->eeprom.subvendor == VT1724_SUBDEVICE_PRODIGY71)
-		strcpy(uinfo->value.enumerated.name, prodigy_texts[uinfo->value.enumerated.item]);
+		strlcpy(uinfo->value.enumerated.name,prodigy_texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	else
-		strcpy(uinfo->value.enumerated.name, aureon_texts[uinfo->value.enumerated.item]);
+		strlcpy(uinfo->value.enumerated.name,aureon_texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1398,7 +1398,7 @@ static int aureon_oversampling_info(struct snd_kcontrol *k, struct snd_ctl_elem_
 
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 
 	return 0;
 }

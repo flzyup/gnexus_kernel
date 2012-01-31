@@ -606,9 +606,9 @@ static ssize_t write_rbu_image_type(struct file *filp, struct kobject *kobj,
 		buffer[count] = '\0';
 
 	if (strstr(buffer, "mono"))
-		strcpy(image_type, "mono");
+		strlcpy(image_type,"mono",sizeof(image_type));
 	else if (strstr(buffer, "packet"))
-		strcpy(image_type, "packet");
+		strlcpy(image_type,"packet",sizeof(image_type));
 	else if (strstr(buffer, "init")) {
 		/*
 		 * If due to the user error the driver gets in a bad

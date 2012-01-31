@@ -4731,12 +4731,12 @@ void qeth_core_get_drvinfo(struct net_device *dev,
 {
 	struct qeth_card *card = dev->ml_priv;
 	if (card->options.layer2)
-		strcpy(info->driver, "qeth_l2");
+		strlcpy(info->driver,"qeth_l2",sizeof(info->driver));
 	else
-		strcpy(info->driver, "qeth_l3");
+		strlcpy(info->driver,"qeth_l3",sizeof(info->driver));
 
-	strcpy(info->version, "1.0");
-	strcpy(info->fw_version, card->info.mcl_level);
+	strlcpy(info->version,"1.0",sizeof(info->version));
+	strlcpy(info->fw_version,card->info.mcl_level,sizeof(info->fw_version));
 	sprintf(info->bus_info, "%s/%s/%s",
 			CARD_RDEV_ID(card),
 			CARD_WDEV_ID(card),

@@ -347,7 +347,7 @@ int __devinit snd_pcsp_new_pcm(struct snd_pcsp *chip)
 
 	chip->pcm->private_data = chip;
 	chip->pcm->info_flags = SNDRV_PCM_INFO_HALF_DUPLEX;
-	strcpy(chip->pcm->name, "pcsp");
+	strlcpy(chip->pcm->name,"pcsp",sizeof(chip->pcm->name));
 
 	snd_pcm_lib_preallocate_pages_for_all(chip->pcm,
 					      SNDRV_DMA_TYPE_CONTINUOUS,

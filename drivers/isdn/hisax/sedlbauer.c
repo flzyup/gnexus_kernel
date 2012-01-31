@@ -682,7 +682,7 @@ setup_sedlbauer(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strcpy(tmp, Sedlbauer_revision);
+	strlcpy(tmp,Sedlbauer_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: Sedlbauer driver Rev. %s\n", HiSax_getrev(tmp));
 	
  	if (cs->typ == ISDN_CTYPE_SEDLBAUER) {

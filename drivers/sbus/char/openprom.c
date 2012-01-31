@@ -290,7 +290,7 @@ static int opromgetbootargs(void __user *argp, struct openpromio *op, int bufsiz
 	if (len > bufsize)
 		return -EINVAL;
 
-	strcpy(op->oprom_array, buf);
+	strlcpy(op->oprom_array,buf,sizeof(op->oprom_array));
 	op->oprom_size = len;
 
 	return copyout(argp, op, bufsize + sizeof(int));

@@ -726,7 +726,7 @@ void __init board_prom_init(void)
 		snprintf(cfe_version, sizeof(cfe_version), "%u.%u.%u-%u.%u",
 			 cfe[5], cfe[6], cfe[7], cfe[8], cfe[9]);
 	else
-		strcpy(cfe_version, "unknown");
+		strlcpy(cfe_version,"unknown",sizeof(cfe_version));
 	printk(KERN_INFO PFX "CFE version: %s\n", cfe_version);
 
 	/* extract nvram data */

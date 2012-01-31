@@ -796,7 +796,7 @@ static int __devinit atmel_ac97c_pcm_new(struct atmel_ac97c *chip)
 
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, chip->card->shortname);
+	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
 	chip->pcm = pcm;
 
 	return 0;
@@ -964,8 +964,8 @@ static int __devinit atmel_ac97c_probe(struct platform_device *pdev)
 
 	spin_lock_init(&chip->lock);
 
-	strcpy(card->driver, "Atmel AC97C");
-	strcpy(card->shortname, "Atmel AC97C");
+	strlcpy(card->driver,"Atmel AC97C",sizeof(card->driver));
+	strlcpy(card->shortname,"Atmel AC97C",sizeof(card->shortname));
 	sprintf(card->longname, "Atmel AC97 controller");
 
 	chip->card = card;

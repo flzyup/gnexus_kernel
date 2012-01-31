@@ -451,7 +451,7 @@ fw_create_instance(struct firmware *firmware, const char *fw_name,
 
 	fw_priv->fw = firmware;
 	fw_priv->nowait = nowait;
-	strcpy(fw_priv->fw_id, fw_name);
+	strcpy(fw_priv->fw_id,fw_name);
 	init_completion(&fw_priv->completion);
 	setup_timer(&fw_priv->timeout,
 		    firmware_class_timeout, (u_long) fw_priv);

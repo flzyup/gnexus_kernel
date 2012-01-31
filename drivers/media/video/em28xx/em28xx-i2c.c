@@ -527,7 +527,7 @@ int em28xx_i2c_register(struct em28xx *dev)
 	BUG_ON(!dev->em28xx_write_regs_req || !dev->em28xx_read_reg_req);
 	dev->i2c_adap = em28xx_adap_template;
 	dev->i2c_adap.dev.parent = &dev->udev->dev;
-	strcpy(dev->i2c_adap.name, dev->name);
+	strlcpy(dev->i2c_adap.name,dev->name,sizeof(dev->i2c_adap.name));
 	dev->i2c_adap.algo_data = dev;
 	i2c_set_adapdata(&dev->i2c_adap, &dev->v4l2_dev);
 

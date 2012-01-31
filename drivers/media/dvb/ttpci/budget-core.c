@@ -498,7 +498,7 @@ int ttpci_budget_init(struct budget *budget, struct saa7146_dev *dev,
 	strlcpy(budget->i2c_adap.name, budget->card->name, sizeof(budget->i2c_adap.name));
 
 	saa7146_i2c_adapter_prepare(dev, &budget->i2c_adap, SAA7146_I2C_BUS_BIT_RATE_120);
-	strcpy(budget->i2c_adap.name, budget->card->name);
+	strlcpy(budget->i2c_adap.name,budget->card->name,sizeof(budget->i2c_adap.name));
 
 	if (i2c_add_adapter(&budget->i2c_adap) < 0) {
 		ret = -ENOMEM;

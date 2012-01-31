@@ -192,7 +192,7 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
     size = sprintf(buffer+len,"Driver Parameters:\n");
     len += size;  pos = begin + len;
     if (reserve_list[0] == 0xff)
-        strcpy(hrec, "--");
+        strlcpy(hrec,"--",sizeof(hrec));
     else {
         hlen = sprintf(hrec, "%d", reserve_list[0]);
         for (i = 1;  i < MAX_RES_ARGS; i++) {
@@ -213,7 +213,7 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
     /* controller information */
     size = sprintf(buffer+len,"\nDisk Array Controller Information:\n");
     len += size;  pos = begin + len;
-    strcpy(hrec, ha->binfo.type_string);
+    strlcpy(hrec,ha->binfo.type_string,sizeof(hrec));
     size = sprintf(buffer+len,
                    " Number:       \t%d         \tName:          \t%s\n",
                    ha->hanum, hrec);
@@ -316,7 +316,7 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
                     flag = TRUE;
                     pdi->no_ldrive &= 0xffff;
                     if (pdi->no_ldrive == 0xffff)
-                        strcpy(hrec,"--");
+                        strlcpy(hrec,"--",sizeof(hrec));
                     else
                         sprintf(hrec,"%d",pdi->no_ldrive);
                     size = sprintf(buffer+len,
@@ -407,14 +407,14 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
                 pcdi->ld_dtype >>= 16;
                 j++;
                 if (pcdi->ld_dtype > 2) {
-                    strcpy(hrec, "missing");
+                    strlcpy(hrec,"missing",sizeof(hrec));
                 } else if (pcdi->ld_error & 1) {
-                    strcpy(hrec, "fault");
+                    strlcpy(hrec,"fault",sizeof(hrec));
                 } else if (pcdi->ld_error & 2) {
-                    strcpy(hrec, "invalid");
+                    strlcpy(hrec,"invalid",sizeof(hrec));
                     k++; j--;
                 } else {
-                    strcpy(hrec, "ok");
+                    strlcpy(hrec,"ok",sizeof(hrec));
                 }
                     
                 if (drv_no == i) {
@@ -426,15 +426,15 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
                     no_mdrv = pcdi->cd_ldcnt;
                     if (no_mdrv > 1 || pcdi->ld_slave != -1) {
                         is_mirr = TRUE;
-                        strcpy(hrec, "RAID-1");
+                        strlcpy(hrec,"RAID-1",sizeof(hrec));
                     } else if (pcdi->ld_dtype == 0) {
-                        strcpy(hrec, "Disk");
+                        strlcpy(hrec,"Disk",sizeof(hrec));
                     } else if (pcdi->ld_dtype == 1) {
-                        strcpy(hrec, "RAID-0");
+                        strlcpy(hrec,"RAID-0",sizeof(hrec));
                     } else if (pcdi->ld_dtype == 2) {
-                        strcpy(hrec, "Chain");
+                        strlcpy(hrec,"Chain",sizeof(hrec));
                     } else {
-                        strcpy(hrec, "???");
+                        strlcpy(hrec,"???",sizeof(hrec));
                     }
                     size = sprintf(buffer+len,
                                    " Capacity [MB]:\t%-6d    \tType:          \t%s\n",
@@ -466,7 +466,7 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
             }
               
             if (!ha->hdr[i].is_arraydrv)
-                strcpy(hrec, "--");
+                strlcpy(hrec,"--",sizeof(hrec));
             else
                 sprintf(hrec, "%d", ha->hdr[i].master_no);
             size = sprintf(buffer+len,
@@ -510,17 +510,17 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
             gdtcmd->u.ioctl.channel = i;
             if (gdth_execute(host, gdtcmd, cmnd, 30, NULL) == S_OK) {
                 if (pai->ai_state == 0)
-                    strcpy(hrec, "idle");
+                    strlcpy(hrec,"idle",sizeof(hrec));
                 else if (pai->ai_state == 2)
-                    strcpy(hrec, "build");
+                    strlcpy(hrec,"build",sizeof(hrec));
                 else if (pai->ai_state == 4)
-                    strcpy(hrec, "ready");
+                    strlcpy(hrec,"ready",sizeof(hrec));
                 else if (pai->ai_state == 6)
-                    strcpy(hrec, "fail");
+                    strlcpy(hrec,"fail",sizeof(hrec));
                 else if (pai->ai_state == 8 || pai->ai_state == 10)
-                    strcpy(hrec, "rebuild");
+                    strlcpy(hrec,"rebuild",sizeof(hrec));
                 else
-                    strcpy(hrec, "error");
+                    strlcpy(hrec,"error",sizeof(hrec));
                 if (pai->ai_ext_state & 0x10)
                     strcat(hrec, "/expand");
                 else if (pai->ai_ext_state & 0x1)
@@ -532,13 +532,13 @@ static int gdth_get_info(char *buffer,char **start,off_t offset,int length,
                 flag = TRUE;
 
                 if (pai->ai_type == 0)
-                    strcpy(hrec, "RAID-0");
+                    strlcpy(hrec,"RAID-0",sizeof(hrec));
                 else if (pai->ai_type == 4)
-                    strcpy(hrec, "RAID-4");
+                    strlcpy(hrec,"RAID-4",sizeof(hrec));
                 else if (pai->ai_type == 5)
-                    strcpy(hrec, "RAID-5");
+                    strlcpy(hrec,"RAID-5",sizeof(hrec));
                 else 
-                    strcpy(hrec, "RAID-10");
+                    strlcpy(hrec,"RAID-10",sizeof(hrec));
                 size = sprintf(buffer+len,
                                " Capacity [MB]:\t%-6d    \tType:          \t%s\n",
                                pai->ai_size/(1024*1024/pai->ai_secsize),

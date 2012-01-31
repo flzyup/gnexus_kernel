@@ -723,7 +723,7 @@ static int __init vdso_init(void)
 	/*
 	 * Fill up the "systemcfg" stuff for backward compatibility
 	 */
-	strcpy((char *)vdso_data->eye_catcher, "SYSTEMCFG:PPC64");
+	strlcpy((char *)vdso_data->eye_catcher,"SYSTEMCFG:PPC64",sizeof((char *)vdso_data->eye_catcher));
 	vdso_data->version.major = SYSTEMCFG_MAJOR;
 	vdso_data->version.minor = SYSTEMCFG_MINOR;
 	vdso_data->processor = mfspr(SPRN_PVR);

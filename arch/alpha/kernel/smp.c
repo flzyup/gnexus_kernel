@@ -262,11 +262,11 @@ recv_secondary_console_msg(void)
 
 		cnt = cpu->ipc_buffer[0] >> 32;
 		if (cnt <= 0 || cnt >= 80)
-			strcpy(buf, "<<< BOGUS MSG >>>");
+			strlcpy(buf,"<<< BOGUS MSG >>>",sizeof(buf));
 		else {
 			cp1 = (char *) &cpu->ipc_buffer[11];
 			cp2 = buf;
-			strcpy(cp2, cp1);
+			strlcpy(cp2,cp1,sizeof(cp2));
 			
 			while ((cp2 = strchr(cp2, '\r')) != 0) {
 				*cp2 = ' ';

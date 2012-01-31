@@ -146,17 +146,17 @@ void cb_in_1(struct pcbit_dev * dev, struct pcbit_chan* chan,
 
 	if (cbdata->data.setup.CallingPN == NULL) {
 		printk(KERN_DEBUG "NULL CallingPN to phone; using 0\n");
-		strcpy(ictl.parm.setup.phone, "0");
+		strlcpy(ictl.parm.setup.phone,"0",sizeof(ictl.parm.setup.phone));
 	}
 	else {
-		strcpy(ictl.parm.setup.phone, cbdata->data.setup.CallingPN);
+		strlcpy(ictl.parm.setup.phone,cbdata->data.setup.CallingPN,sizeof(ictl.parm.setup.phone));
 	}
 	if (cbdata->data.setup.CalledPN == NULL) {
 		printk(KERN_DEBUG "NULL CalledPN to eazmsn; using 0\n");
-		strcpy(ictl.parm.setup.eazmsn, "0");
+		strlcpy(ictl.parm.setup.eazmsn,"0",sizeof(ictl.parm.setup.eazmsn));
 	}
 	else {
-		strcpy(ictl.parm.setup.eazmsn, cbdata->data.setup.CalledPN);
+		strlcpy(ictl.parm.setup.eazmsn,cbdata->data.setup.CalledPN,sizeof(ictl.parm.setup.eazmsn));
 	}
 	ictl.parm.setup.si1 = 7;
 	ictl.parm.setup.si2 = 0;

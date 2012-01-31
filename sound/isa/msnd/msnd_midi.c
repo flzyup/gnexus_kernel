@@ -173,7 +173,7 @@ int snd_msndmidi_new(struct snd_card *card, int device)
 	rmidi->private_data = mpu;
 	rmidi->private_free = snd_msndmidi_free;
 	spin_lock_init(&mpu->input_lock);
-	strcpy(rmidi->name, "MSND MIDI");
+	strlcpy(rmidi->name,"MSND MIDI",sizeof(rmidi->name));
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_INPUT,
 			    &snd_msndmidi_input);
 	rmidi->info_flags |= SNDRV_RAWMIDI_INFO_INPUT;

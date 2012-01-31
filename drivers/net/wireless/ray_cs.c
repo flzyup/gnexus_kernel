@@ -1030,7 +1030,7 @@ AP to AP	1	1	dest AP		src AP		dest	source
 static int ray_get_name(struct net_device *dev, struct iw_request_info *info,
 			union iwreq_data *wrqu, char *extra)
 {
-	strcpy(wrqu->name, "IEEE 802.11-FH");
+	strlcpy(wrqu->name,"IEEE 802.11-FH",sizeof(wrqu->name));
 	return 0;
 }
 

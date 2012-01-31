@@ -1039,7 +1039,7 @@ static int __devinit snd_es1938_new_pcm(struct es1938 *chip, int device)
 	
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "ESS Solo-1");
+	strlcpy(pcm->name,"ESS Solo-1",sizeof(pcm->name));
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					      snd_dma_pci_data(chip->pci), 64*1024, 64*1024);
@@ -1066,7 +1066,7 @@ static int snd_es1938_info_mux(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 8;
 	if (uinfo->value.enumerated.item > 7)
 		uinfo->value.enumerated.item = 7;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1760,7 +1760,7 @@ static int __devinit snd_es1938_mixer(struct es1938 *chip)
 
 	card = chip->card;
 
-	strcpy(card->mixername, "ESS Solo-1");
+	strlcpy(card->mixername,"ESS Solo-1",sizeof(card->mixername));
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_es1938_controls); idx++) {
 		struct snd_kcontrol *kctl;
@@ -1822,8 +1822,8 @@ static int __devinit snd_es1938_probe(struct pci_dev *pci,
 	}
 	card->private_data = chip;
 
-	strcpy(card->driver, "ES1938");
-	strcpy(card->shortname, "ESS ES1938 (Solo-1)");
+	strlcpy(card->driver,"ES1938",sizeof(card->driver));
+	strlcpy(card->shortname,"ESS ES1938 (Solo-1,sizeof(card->shortname))");
 	sprintf(card->longname, "%s rev %i, irq %i",
 		card->shortname,
 		chip->revision,

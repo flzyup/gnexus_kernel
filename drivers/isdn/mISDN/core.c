@@ -90,7 +90,7 @@ static ssize_t _show_protocol(struct device *dev,
 static ssize_t _show_name(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
-	strcpy(buf, dev_name(dev));
+	strlcpy(buf,dev_name(dev,sizeof(buf)));
 	return strlen(buf);
 }
 

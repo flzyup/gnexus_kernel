@@ -612,8 +612,8 @@ dt3155_ioc_querycap(struct file *filp, void *p, struct v4l2_capability *cap)
 {
 	struct dt3155_priv *pd = video_drvdata(filp);
 
-	strcpy(cap->driver, DT3155_NAME);
-	strcpy(cap->card, DT3155_NAME " frame grabber");
+	strlcpy(cap->driver,DT3155_NAME,sizeof(cap->driver));
+	strlcpy(cap->card,DT3155_NAME " frame grabber",sizeof(cap->card));
 	sprintf(cap->bus_info, "PCI:%s", pci_name(pd->pdev));
 	cap->version =
 	       KERNEL_VERSION(DT3155_VER_MAJ, DT3155_VER_MIN, DT3155_VER_EXT);
@@ -783,7 +783,7 @@ dt3155_ioc_enum_input(struct file *filp, void *p, struct v4l2_input *input)
 {
 	if (input->index)
 		return -EINVAL;
-	strcpy(input->name, "Coax in");
+	strlcpy(input->name,"Coax in",sizeof(input->name));
 	input->type = V4L2_INPUT_TYPE_CAMERA;
 	/*
 	 * FIXME: input->std = 0 according to v4l2 API

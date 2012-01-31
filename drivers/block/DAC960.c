@@ -1603,41 +1603,41 @@ static bool DAC960_V1_ReadControllerConfiguration(DAC960_Controller_T
     {
     case DAC960_V1_P_PD_PU:
       if (Enquiry2->SCSICapability.BusSpeed == DAC960_V1_Ultra)
-	strcpy(Controller->ModelName, "DAC960PU");
-      else strcpy(Controller->ModelName, "DAC960PD");
+	strlcpy(Controller->ModelName,"DAC960PU",sizeof(Controller->ModelName));
+      else strlcpy(Controller->ModelName,"DAC960PD",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PL:
-      strcpy(Controller->ModelName, "DAC960PL");
+      strlcpy(Controller->ModelName,"DAC960PL",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PG:
-      strcpy(Controller->ModelName, "DAC960PG");
+      strlcpy(Controller->ModelName,"DAC960PG",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PJ:
-      strcpy(Controller->ModelName, "DAC960PJ");
+      strlcpy(Controller->ModelName,"DAC960PJ",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PR:
-      strcpy(Controller->ModelName, "DAC960PR");
+      strlcpy(Controller->ModelName,"DAC960PR",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PT:
-      strcpy(Controller->ModelName, "DAC960PT");
+      strlcpy(Controller->ModelName,"DAC960PT",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PTL0:
-      strcpy(Controller->ModelName, "DAC960PTL0");
+      strlcpy(Controller->ModelName,"DAC960PTL0",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PRL:
-      strcpy(Controller->ModelName, "DAC960PRL");
+      strlcpy(Controller->ModelName,"DAC960PRL",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_PTL1:
-      strcpy(Controller->ModelName, "DAC960PTL1");
+      strlcpy(Controller->ModelName,"DAC960PTL1",sizeof(Controller->ModelName));
       break;
     case DAC960_V1_1164P:
-      strcpy(Controller->ModelName, "DAC1164P");
+      strlcpy(Controller->ModelName,"DAC1164P",sizeof(Controller->ModelName));
       break;
     default:
       free_dma_loaf(Controller->PCIDevice, &local_dma);
       return DAC960_Failure(Controller, "MODEL VERIFICATION");
     }
-  strcpy(Controller->FullModelName, "Mylex ");
+  strlcpy(Controller->FullModelName,"Mylex ",sizeof(Controller->FullModelName));
   strcat(Controller->FullModelName, Controller->ModelName);
   /*
     Initialize the Controller Firmware Version field and verify that it
@@ -1813,7 +1813,7 @@ static bool DAC960_V2_ReadControllerConfiguration(DAC960_Controller_T
 	 Controller->ModelName[ModelNameLength] == '\0')
     ModelNameLength--;
   Controller->ModelName[++ModelNameLength] = '\0';
-  strcpy(Controller->FullModelName, "Mylex ");
+  strlcpy(Controller->FullModelName,"Mylex ",sizeof(Controller->FullModelName));
   strcat(Controller->FullModelName, Controller->ModelName);
   /*
     Initialize the Controller Firmware Version field.
@@ -2735,7 +2735,7 @@ DAC960_DetectController(struct pci_dev *PCI_Device,
   Controller->Device = DeviceFunction >> 3;
   Controller->Function = DeviceFunction & 0x7;
   Controller->PCIDevice = PCI_Device;
-  strcpy(Controller->FullModelName, "DAC960");
+  strlcpy(Controller->FullModelName,"DAC960",sizeof(Controller->FullModelName));
 
   if (pci_enable_device(PCI_Device))
 	goto Failure;
@@ -5803,7 +5803,7 @@ static void DAC960_Message(DAC960_MessageLevel_T MessageLevel,
     }
   else if (MessageLevel == DAC960_ProgressLevel)
     {
-      strcpy(Controller->ProgressBuffer, Buffer);
+      strlcpy(Controller->ProgressBuffer,Buffer,sizeof(Controller->ProgressBuffer));
       Controller->ProgressBufferLength = Length;
       if (Controller->EphemeralProgressMessage)
 	{
@@ -5820,8 +5820,7 @@ static void DAC960_Message(DAC960_MessageLevel_T MessageLevel,
     }
   else if (MessageLevel == DAC960_UserCriticalLevel)
     {
-      strcpy(&Controller->UserStatusBuffer[Controller->UserStatusLength],
-	     Buffer);
+      strlcpy(&Controller->UserStatusBuffer[Controller->UserStatusLength],,sizeof(&Controller->UserStatusBuffer[Controller->UserStatusLength])	     Buffer);
       Controller->UserStatusLength += Length;
       if (Buffer[0] != '\n' || Length > 1)
 	printk("%sDAC960#%d: %s", DAC960_MessageLevelMap[MessageLevel],
@@ -6502,11 +6501,9 @@ static int dac960_current_status_proc_show(struct seq_file *m, void *v)
 	  CurrentStatusBuffer[Controller->CurrentStatusLength++] = ' ';
 	  CurrentStatusBuffer[Controller->CurrentStatusLength++] = ' ';
 	  if (Controller->ProgressBufferLength > 0)
-	    strcpy(&CurrentStatusBuffer[Controller->CurrentStatusLength],
-		   Controller->ProgressBuffer);
+	    strlcpy(&CurrentStatusBuffer[Controller->CurrentStatusLength],,sizeof(&CurrentStatusBuffer[Controller->CurrentStatusLength])		   Controller->ProgressBuffer);
 	  else
-	    strcpy(&CurrentStatusBuffer[Controller->CurrentStatusLength],
-		   StatusMessage);
+	    strlcpy(&CurrentStatusBuffer[Controller->CurrentStatusLength],,sizeof(&CurrentStatusBuffer[Controller->CurrentStatusLength])		   StatusMessage);
 	  Controller->CurrentStatusLength += ProgressMessageLength;
 	}
       Controller->LastCurrentStatusTime = jiffies;
@@ -6664,8 +6661,8 @@ static long DAC960_gam_ioctl(struct file *file, unsigned int Request,
 	ControllerInfo.PCI_Function = Controller->Function;
 	ControllerInfo.IRQ_Channel = Controller->IRQ_Channel;
 	ControllerInfo.PCI_Address = Controller->PCI_Address;
-	strcpy(ControllerInfo.ModelName, Controller->ModelName);
-	strcpy(ControllerInfo.FirmwareVersion, Controller->FirmwareVersion);
+	strlcpy(ControllerInfo.ModelName,Controller->ModelName,sizeof(ControllerInfo.ModelName));
+	strlcpy(ControllerInfo.FirmwareVersion,Controller->FirmwareVersion,sizeof(ControllerInfo.FirmwareVersion));
 	ErrorCode = (copy_to_user(UserSpaceControllerInfo, &ControllerInfo,
 			     sizeof(DAC960_ControllerInfo_T)) ? -EFAULT : 0);
 	break;

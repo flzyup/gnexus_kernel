@@ -708,7 +708,7 @@ isdn_tty_cmd_FCLASS2(char **p, modem_info * info)
 		switch (*p[0]) {
 			case '?':
 				p[0]++;
-				strcpy(rs, "\r\n");
+				strlcpy(rs,"\r\n",sizeof(rs));
 				for (i = 0; i < 8; i++) {
 					sprintf(rss, "%c%s", rp[i] + 48,
 						(i < 7) ? "," : "");
@@ -754,7 +754,7 @@ isdn_tty_cmd_FCLASS2(char **p, modem_info * info)
 		switch (*p[0]) {
 			case '?':
 				p[0]++;
-				strcpy(rs, "\r\n");
+				strlcpy(rs,"\r\n",sizeof(rs));
 				for (i = 0; i < 8; i++) {
 					sprintf(rss, "%c%s", rp[i] + 48,
 						(i < 7) ? "," : "");
@@ -1087,7 +1087,7 @@ isdn_tty_cmd_FCLASS2(char **p, modem_info * info)
 #ifdef ISDN_TTY_FAX_STAT_DEBUG
 		printk(KERN_DEBUG "isdn_tty: FREV?\n");
 #endif
-		strcpy(rss, isdn_tty_fax_revision);
+		strlcpy(rss,isdn_tty_fax_revision,sizeof(rss));
 		sprintf(rs, "\r\nRev: %s", isdn_getrev(rss));
 		isdn_tty_at_cout(rs, info);
 		return 0;

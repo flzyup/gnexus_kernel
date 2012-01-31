@@ -196,7 +196,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 
 	snd_tea575x_read(tea);
 
-	strcpy(v->name, "FM");
+	strlcpy(v->name,"FM",sizeof(v->name));
 	v->type = V4L2_TUNER_RADIO;
 	v->capability = V4L2_TUNER_CAP_LOW | V4L2_TUNER_CAP_STEREO;
 	v->rangelow = FREQ_LO;
@@ -253,7 +253,7 @@ static int vidioc_g_audio(struct file *file, void *priv,
 	if (a->index > 1)
 		return -EINVAL;
 
-	strcpy(a->name, "Radio");
+	strlcpy(a->name,"Radio",sizeof(a->name));
 	a->capability = V4L2_AUDCAP_STEREO;
 	return 0;
 }
@@ -393,8 +393,8 @@ int snd_tea575x_init(struct snd_tea575x *tea)
 
 	memcpy(tea575x_radio_inst, &tea575x_radio, sizeof(tea575x_radio));
 
-	strcpy(tea575x_radio.name, tea->tea5759 ?
-				   "TEA5759 radio" : "TEA5757 radio");
+	strlcpy(tea575x_radio.name,tea->tea5759 ?
+,sizeof(tea575x_radio.name)				   "TEA5759 radio" : "TEA5757 radio");
 
 	video_set_drvdata(tea575x_radio_inst, tea);
 

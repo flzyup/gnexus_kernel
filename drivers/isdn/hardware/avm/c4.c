@@ -1212,7 +1212,7 @@ static int c4_add_card(struct capicardparams *p, struct pci_dev *dev,
 		cinfo->capi_ctrl.reset_ctr     = c4_reset_ctr;
 		cinfo->capi_ctrl.procinfo      = c4_procinfo;
 		cinfo->capi_ctrl.proc_fops = &c4_proc_fops;
-		strcpy(cinfo->capi_ctrl.name, card->name);
+		strlcpy(cinfo->capi_ctrl.name,card->name,sizeof(cinfo->capi_ctrl.name));
 
 		retval = attach_capi_ctr(&cinfo->capi_ctrl);
 		if (retval) {
@@ -1307,7 +1307,7 @@ static int __init c4_init(void)
 		if ((p = strchr(rev, '$')) != NULL && p > rev)
 		   *(p-1) = 0;
 	} else
-		strcpy(rev, "1.0");
+		strlcpy(rev,"1.0",sizeof(rev));
 
 	err = pci_register_driver(&c4_pci_driver);
 	if (!err) {

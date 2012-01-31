@@ -50,7 +50,7 @@ static char * __init move_firmware_args(char* cp)
 				s = strchr(prom_argv(actr), '=');
 				if (s) {
 					s++;
-					strcpy(cp, s);
+					strlcpy(cp,s,sizeof(cp));
 					cp += strlen(s);
 				}
 				*cp++ = ' ';
@@ -85,7 +85,7 @@ void __init prom_init_cmdline(void)
 				goto pic_cont;
 		}
 		/* Ok, we want it. */
-		strcpy(cp, prom_argv(actr));
+		strlcpy(cp,prom_argv(actr,sizeof(cp)));
 		cp += strlen(prom_argv(actr));
 		*cp++ = ' ';
 

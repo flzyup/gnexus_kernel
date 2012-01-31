@@ -3898,7 +3898,7 @@ static int dev_ifname(struct net *net, struct ifreq __user *arg)
 		return -ENODEV;
 	}
 
-	strcpy(ifr.ifr_name, dev->name);
+	strlcpy(ifr.ifr_name,dev->name,sizeof(ifr.ifr_name));
 	rcu_read_unlock();
 
 	if (copy_to_user(arg, &ifr, sizeof(struct ifreq)))
@@ -5887,7 +5887,7 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
 		goto free_all;
 #endif
 
-	strcpy(dev->name, name);
+	strlcpy(dev->name,name,sizeof(dev->name));
 	dev->group = INIT_NETDEV_GROUP;
 	return dev;
 

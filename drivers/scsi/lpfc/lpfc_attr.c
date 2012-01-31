@@ -2760,7 +2760,7 @@ lpfc_stat_data_ctrl_store(struct device *dev, struct device_attribute *attr,
 		if (strlen(buf) > (LPFC_MAX_DATA_CTRL_LEN - 1))
 			return -EINVAL;
 
-		strcpy(bucket_data, buf);
+		strlcpy(bucket_data,buf,sizeof(bucket_data));
 		str_ptr = &bucket_data[0];
 		/* Ignore this token - this is command token */
 		token = strsep(&str_ptr, "\t ");

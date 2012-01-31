@@ -344,7 +344,7 @@ dev_wlc_ioctl(
 		ioc.buf = arg;
 		ioc.len = len;
 
-		strcpy(ifr.ifr_name, dev->name);
+		strlcpy(ifr.ifr_name,dev->name,sizeof(ifr.ifr_name));
 		ifr.ifr_data = (caddr_t) &ioc;
 
 		ret = dev_open(dev);
@@ -636,7 +636,7 @@ wl_iw_get_macaddr(
 	char *p = extra;
 
 	
-	strcpy(buf, "cur_etheraddr");
+	strlcpy(buf,"cur_etheraddr",sizeof(buf));
 	error = dev_wlc_ioctl(dev, WLC_GET_VAR, buf, sizeof(buf));
 	id = (struct ether_addr *) buf;
 	p += snprintf(p, MAX_WX_STRING, "Macaddr = %02X:%02X:%02X:%02X:%02X:%02X\n",
@@ -1142,7 +1142,7 @@ wl_iw_get_dtim_skip(
 	if (g_onoff == G_WLAN_SET_ON) {
 
 			memset(iovbuf, 0, sizeof(iovbuf));
-			strcpy(iovbuf, "bcn_li_dtim");
+			strlcpy(iovbuf,"bcn_li_dtim",sizeof(iovbuf));
 
 			if ((error = dev_wlc_ioctl(dev, WLC_GET_VAR,
 				&iovbuf, sizeof(iovbuf))) >= 0) {
@@ -1543,7 +1543,7 @@ wl_iw_send_priv_event(
 	if (strlen(flag) > sizeof(extra))
 		return -1;
 
-	strcpy(extra, flag);
+	strlcpy(extra,flag,sizeof(extra));
 	wrqu.data.length = strlen(extra);
 	wireless_send_event(dev, cmd, &wrqu, extra);
 	net_os_wake_lock_timeout_enable(dev);
@@ -2205,7 +2205,7 @@ wl_iw_get_name(
 {
 	WL_TRACE(("%s: SIOCGIWNAME\n", dev->name));
 
-	strcpy(cwrq, "IEEE 802.11-DS");
+	strlcpy(cwrq,"IEEE 802.11-DS",sizeof(cwrq));
 
 	return 0;
 }
@@ -4394,7 +4394,7 @@ wl_iw_get_nick(
 	if (!extra)
 		return -EINVAL;
 
-	strcpy(extra, iw->nickname);
+	strlcpy(extra,iw->nickname,sizeof(extra));
 	dwrq->length = strlen(extra) + 1;
 
 	return 0;
@@ -8051,7 +8051,7 @@ wl_iw_event(struct net_device *dev, wl_event_msg_t *e, void* data)
 		net_os_wake_lock_timeout_enable(dev);
 		cmd = IWEVCUSTOM;
 		memset(&wrqu, 0, sizeof(wrqu));
-		strcpy(extra, PNO_EVENT_UP);
+		strlcpy(extra,PNO_EVENT_UP,sizeof(extra));
 		wrqu.data.length = strlen(extra);
 	}
 	break;

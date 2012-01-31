@@ -308,11 +308,11 @@ int poseidon_audio_init(struct poseidon *p)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &pcm_capture_ops);
 	pcm->info_flags   = 0;
 	pcm->private_data = p;
-	strcpy(pcm->name, "poseidon audio capture");
+	strlcpy(pcm->name,"poseidon audio capture",sizeof(pcm->name));
 
-	strcpy(card->driver, "ALSA driver");
-	strcpy(card->shortname, "poseidon Audio");
-	strcpy(card->longname, "poseidon ALSA Audio");
+	strlcpy(card->driver,"ALSA driver",sizeof(card->driver));
+	strlcpy(card->shortname,"poseidon Audio",sizeof(card->shortname));
+	strlcpy(card->longname,"poseidon ALSA Audio",sizeof(card->longname));
 
 	if (snd_card_register(card)) {
 		snd_card_free(card);

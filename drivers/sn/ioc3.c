@@ -299,7 +299,7 @@ static void read_nic(struct ioc3_driver_data *idd, unsigned long addr)
 		return;
 	if(!strncmp(part, "060-0038-", 9))
 		return;
-	strcpy(idd->nic_part, part);
+	strlcpy(idd->nic_part,part,sizeof(idd->nic_part));
 	/* assemble the serial # */
 	j=0;
 	for(i=0;i<10;i++)

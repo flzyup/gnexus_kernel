@@ -2088,7 +2088,7 @@ void cxgbi_get_conn_stats(struct iscsi_cls_conn *cls_conn,
 	stats->digest_err = 0;
 	stats->timeout_err = 0;
 	stats->custom_length = 1;
-	strcpy(stats->custom[0].desc, "eh_abort_cnt");
+	strlcpy(stats->custom[0].desc,"eh_abort_cnt",sizeof(stats->custom[0].desc));
 	stats->custom[0].value = conn->eh_abort_cnt;
 }
 EXPORT_SYMBOL_GPL(cxgbi_get_conn_stats);

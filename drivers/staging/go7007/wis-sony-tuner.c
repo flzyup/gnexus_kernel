@@ -608,7 +608,7 @@ static int tuner_command(struct i2c_client *client, unsigned int cmd, void *arg)
 		struct v4l2_tuner *tun = arg;
 
 		memset(tun, 0, sizeof(*tun));
-		strcpy(tun->name, "Television");
+		strlcpy(tun->name,"Television",sizeof(tun->name));
 		tun->type = V4L2_TUNER_ANALOG_TV;
 		tun->rangelow = 0UL; /* does anything use these? */
 		tun->rangehigh = 0xffffffffUL;

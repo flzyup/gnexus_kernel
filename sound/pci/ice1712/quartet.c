@@ -559,8 +559,7 @@ static int qtet_ain12_enum_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-			texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -711,8 +710,7 @@ static int qtet_enum_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-			private.texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			private.texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -810,7 +808,7 @@ static struct snd_kcontrol __devinit *ctl_find(struct snd_card *card,
 	struct snd_ctl_elem_id sid;
 	memset(&sid, 0, sizeof(sid));
 	/* FIXME: strcpy is bad. */
-	strcpy(sid.name, name);
+	strlcpy(sid.name,name,sizeof(sid.name));
 	sid.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	return snd_ctl_find_id(card, &sid);
 }

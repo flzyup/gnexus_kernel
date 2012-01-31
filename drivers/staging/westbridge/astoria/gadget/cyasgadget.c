@@ -2114,7 +2114,7 @@ static int cyasgadget_initialize(void)
 	cy_as_dev->gadget.is_dualspeed = 1;
 
 	/* the "gadget" abstracts/virtualizes the controller */
-	/*strcpy(cy_as_dev->gadget.dev.bus_id, "cyasgadget");*/
+	/*strlcpy(cy_as_dev->gadget.dev.bus_id,"cyasgadget",sizeof(cy_as_dev->gadget.dev.bus_id));*/
 	cy_as_dev->gadget.dev.release = cyas_gadget_release;
 	cy_as_dev->gadget.name = cy_as_driver_name;
 

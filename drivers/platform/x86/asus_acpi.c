@@ -1395,8 +1395,8 @@ static int asus_hotk_add(struct acpi_device *device)
 		return -ENOMEM;
 
 	hotk->handle = device->handle;
-	strcpy(acpi_device_name(device), ACPI_HOTK_DEVICE_NAME);
-	strcpy(acpi_device_class(device), ACPI_HOTK_CLASS);
+	strlcpy(acpi_device_name(device),ACPI_HOTK_DEVICE_NAME,sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_HOTK_CLASS,sizeof(acpi_device_class(device)));
 	device->driver_data = hotk;
 	hotk->device = device;
 

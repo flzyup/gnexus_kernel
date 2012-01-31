@@ -1401,7 +1401,7 @@ static int Config_FileGetParameter(unsigned char *string,
    if (start_p == NULL)
       return FALSE;
    memset(buf1,0,100);
-   strcpy(buf1,start_p+1);
+   strlcpy(buf1,start_p+1,sizeof(buf1));
 
   //except space
   tmp_p = buf1;

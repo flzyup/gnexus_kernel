@@ -2211,7 +2211,7 @@ static int tile_net_get_mac(struct net_device *dev)
 	int ret;
 
 	/* For example, "xgbe0". */
-	strcpy(hv_dev_name, dev->name);
+	strlcpy(hv_dev_name,dev->name,sizeof(hv_dev_name));
 	len = strlen(hv_dev_name);
 
 	/* For example, "xgbe/0". */
@@ -2220,7 +2220,7 @@ static int tile_net_get_mac(struct net_device *dev)
 	len++;
 
 	/* For example, "xgbe/0/native_hash". */
-	strcpy(hv_dev_name + len, hash_default ? "/native_hash" : "/native");
+	strlcpy(hv_dev_name + len,hash_default ? "/native_hash" : "/native",sizeof(hv_dev_name + len));
 
 	/* Get the hypervisor handle for this device. */
 	priv->hv_devhdl = hv_dev_open((HV_VirtAddr)hv_dev_name, 0);

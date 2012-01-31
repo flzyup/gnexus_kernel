@@ -1556,7 +1556,7 @@ void cpufreq_unregister_governor(struct cpufreq_governor *governor)
 		if (cpu_online(cpu))
 			continue;
 		if (!strcmp(per_cpu(cpufreq_cpu_governor, cpu), governor->name))
-			strcpy(per_cpu(cpufreq_cpu_governor, cpu), "\0");
+			strlcpy(per_cpu(cpufreq_cpu_governor, cpu),"\0",sizeof(per_cpu(cpufreq_cpu_governor, cpu)));
 	}
 #endif
 

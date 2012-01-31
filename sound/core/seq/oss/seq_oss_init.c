@@ -89,7 +89,7 @@ snd_seq_oss_create_client(void)
 
 	/* create annoucement receiver port */
 	memset(port, 0, sizeof(*port));
-	strcpy(port->name, "Receiver");
+	strlcpy(port->name,"Receiver",sizeof(port->name));
 	port->addr.client = system_client;
 	port->capability = SNDRV_SEQ_PORT_CAP_WRITE; /* receive only */
 	port->type = 0;
@@ -368,7 +368,7 @@ alloc_seq_queue(struct seq_oss_devinfo *dp)
 	memset(&qinfo, 0, sizeof(qinfo));
 	qinfo.owner = system_client;
 	qinfo.locked = 1;
-	strcpy(qinfo.name, "OSS Sequencer Emulation");
+	strlcpy(qinfo.name,"OSS Sequencer Emulation",sizeof(qinfo.name));
 	if ((rc = call_ctl(SNDRV_SEQ_IOCTL_CREATE_QUEUE, &qinfo)) < 0)
 		return rc;
 	dp->queue = qinfo.queue;

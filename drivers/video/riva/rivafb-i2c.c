@@ -92,7 +92,7 @@ static int __devinit riva_setup_i2c_bus(struct riva_i2c_chan *chan,
 {
 	int rc;
 
-	strcpy(chan->adapter.name, name);
+	strlcpy(chan->adapter.name,name,sizeof(chan->adapter.name));
 	chan->adapter.owner		= THIS_MODULE;
 	chan->adapter.class		= i2c_class;
 	chan->adapter.algo_data		= &chan->algo;

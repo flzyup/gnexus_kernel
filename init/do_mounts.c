@@ -177,7 +177,7 @@ dev_t name_to_dev_t(char *name)
 
 	if (strlen(name) > 31)
 		goto fail;
-	strcpy(s, name);
+	strlcpy(s,name,sizeof(s));
 	for (p = s; *p; p++)
 		if (*p == '/')
 			*p = '!';
@@ -263,7 +263,7 @@ static void __init get_fs_names(char *page)
 	char *s = page;
 
 	if (root_fs_names) {
-		strcpy(page, root_fs_names);
+		strlcpy(page,root_fs_names,sizeof(page));
 		while (*s++) {
 			if (s[-1] == ',')
 				s[-1] = '\0';

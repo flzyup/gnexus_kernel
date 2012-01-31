@@ -391,47 +391,47 @@ int adjust_format(struct easycap *peasycap,
 	    width, height, pc, pixelformat, field, mask);
 	switch (field) {
 	case V4L2_FIELD_ANY: {
-		strcpy(&fo[0], "V4L2_FIELD_ANY ");
+		strlcpy(&fo[0],"V4L2_FIELD_ANY ",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_NONE: {
-		strcpy(&fo[0], "V4L2_FIELD_NONE");
+		strlcpy(&fo[0],"V4L2_FIELD_NONE",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_TOP: {
-		strcpy(&fo[0], "V4L2_FIELD_TOP");
+		strlcpy(&fo[0],"V4L2_FIELD_TOP",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_BOTTOM: {
-		strcpy(&fo[0], "V4L2_FIELD_BOTTOM");
+		strlcpy(&fo[0],"V4L2_FIELD_BOTTOM",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_INTERLACED: {
-		strcpy(&fo[0], "V4L2_FIELD_INTERLACED");
+		strlcpy(&fo[0],"V4L2_FIELD_INTERLACED",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_SEQ_TB: {
-		strcpy(&fo[0], "V4L2_FIELD_SEQ_TB");
+		strlcpy(&fo[0],"V4L2_FIELD_SEQ_TB",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_SEQ_BT: {
-		strcpy(&fo[0], "V4L2_FIELD_SEQ_BT");
+		strlcpy(&fo[0],"V4L2_FIELD_SEQ_BT",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_ALTERNATE: {
-		strcpy(&fo[0], "V4L2_FIELD_ALTERNATE");
+		strlcpy(&fo[0],"V4L2_FIELD_ALTERNATE",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_INTERLACED_TB: {
-		strcpy(&fo[0], "V4L2_FIELD_INTERLACED_TB");
+		strlcpy(&fo[0],"V4L2_FIELD_INTERLACED_TB",sizeof(&fo[0]));
 		break;
 	}
 	case V4L2_FIELD_INTERLACED_BT: {
-		strcpy(&fo[0], "V4L2_FIELD_INTERLACED_BT");
+		strlcpy(&fo[0],"V4L2_FIELD_INTERLACED_BT",sizeof(&fo[0]));
 		break;
 	}
 	default: {
-		strcpy(&fo[0], "V4L2_FIELD_... UNKNOWN  ");
+		strlcpy(&fo[0],"V4L2_FIELD_... UNKNOWN  ",sizeof(&fo[0]));
 		break;
 	}
 	}
@@ -1038,7 +1038,7 @@ long easycap_unlocked_ioctl(struct file *file,
 			mutex_unlock(&easycapdc60_dongle[kd].mutex_video);
 			return -EINVAL;
 		}
-		strcpy(&version[0], EASYCAP_DRIVER_VERSION);
+		strlcpy(&version[0],EASYCAP_DRIVER_VERSION,sizeof(&version[0]));
 		for (i = 0; i < 3; i++)
 			k[i] = 0;
 		p2 = &version[0];
@@ -1112,7 +1112,7 @@ long easycap_unlocked_ioctl(struct file *file,
 		switch (index) {
 		case 0: {
 			v4l2_input.index = index;
-			strcpy(&v4l2_input.name[0], "CVBS0");
+			strlcpy(&v4l2_input.name[0],"CVBS0",sizeof(&v4l2_input.name[0]));
 			v4l2_input.type = V4L2_INPUT_TYPE_CAMERA;
 			v4l2_input.audioset = 0x01;
 			v4l2_input.tuner = 0;
@@ -1125,7 +1125,7 @@ long easycap_unlocked_ioctl(struct file *file,
 		}
 		case 1: {
 			v4l2_input.index = index;
-			strcpy(&v4l2_input.name[0], "CVBS1");
+			strlcpy(&v4l2_input.name[0],"CVBS1",sizeof(&v4l2_input.name[0]));
 			v4l2_input.type = V4L2_INPUT_TYPE_CAMERA;
 			v4l2_input.audioset = 0x01;
 			v4l2_input.tuner = 0;
@@ -1137,7 +1137,7 @@ long easycap_unlocked_ioctl(struct file *file,
 		}
 		case 2: {
 			v4l2_input.index = index;
-			strcpy(&v4l2_input.name[0], "CVBS2");
+			strlcpy(&v4l2_input.name[0],"CVBS2",sizeof(&v4l2_input.name[0]));
 			v4l2_input.type = V4L2_INPUT_TYPE_CAMERA;
 			v4l2_input.audioset = 0x01;
 			v4l2_input.tuner = 0;
@@ -1149,7 +1149,7 @@ long easycap_unlocked_ioctl(struct file *file,
 		}
 		case 3: {
 			v4l2_input.index = index;
-			strcpy(&v4l2_input.name[0], "CVBS3");
+			strlcpy(&v4l2_input.name[0],"CVBS3",sizeof(&v4l2_input.name[0]));
 			v4l2_input.type = V4L2_INPUT_TYPE_CAMERA;
 			v4l2_input.audioset = 0x01;
 			v4l2_input.tuner = 0;
@@ -1161,7 +1161,7 @@ long easycap_unlocked_ioctl(struct file *file,
 		}
 		case 4: {
 			v4l2_input.index = index;
-			strcpy(&v4l2_input.name[0], "CVBS4");
+			strlcpy(&v4l2_input.name[0],"CVBS4",sizeof(&v4l2_input.name[0]));
 			v4l2_input.type = V4L2_INPUT_TYPE_CAMERA;
 			v4l2_input.audioset = 0x01;
 			v4l2_input.tuner = 0;
@@ -1173,7 +1173,7 @@ long easycap_unlocked_ioctl(struct file *file,
 		}
 		case 5: {
 			v4l2_input.index = index;
-			strcpy(&v4l2_input.name[0], "S-VIDEO");
+			strlcpy(&v4l2_input.name[0],"S-VIDEO",sizeof(&v4l2_input.name[0]));
 			v4l2_input.type = V4L2_INPUT_TYPE_CAMERA;
 			v4l2_input.audioset = 0x01;
 			v4l2_input.tuner = 0;
@@ -1270,7 +1270,7 @@ long easycap_unlocked_ioctl(struct file *file,
 		}
 		memset(&v4l2_audioout, 0, sizeof(struct v4l2_audioout));
 		v4l2_audioout.index = 0;
-		strcpy(&v4l2_audioout.name[0], "Soundtrack");
+		strlcpy(&v4l2_audioout.name[0],"Soundtrack",sizeof(&v4l2_audioout.name[0]));
 
 		if (copy_to_user((void __user *)arg, &v4l2_audioout,
 				sizeof(struct v4l2_audioout))) {
@@ -1483,42 +1483,42 @@ long easycap_unlocked_ioctl(struct file *file,
 		switch (index) {
 		case 0: {
 			v4l2_fmtdesc.flags = 0;
-			strcpy(&v4l2_fmtdesc.description[0], "uyvy");
+			strlcpy(&v4l2_fmtdesc.description[0],"uyvy",sizeof(&v4l2_fmtdesc.description[0]));
 			v4l2_fmtdesc.pixelformat = V4L2_PIX_FMT_UYVY;
 			JOM(8, "%i=index: %s\n", index, &v4l2_fmtdesc.description[0]);
 			break;
 		}
 		case 1: {
 			v4l2_fmtdesc.flags = 0;
-			strcpy(&v4l2_fmtdesc.description[0], "yuy2");
+			strlcpy(&v4l2_fmtdesc.description[0],"yuy2",sizeof(&v4l2_fmtdesc.description[0]));
 			v4l2_fmtdesc.pixelformat = V4L2_PIX_FMT_YUYV;
 			JOM(8, "%i=index: %s\n", index, &v4l2_fmtdesc.description[0]);
 			break;
 		}
 		case 2: {
 			v4l2_fmtdesc.flags = 0;
-			strcpy(&v4l2_fmtdesc.description[0], "rgb24");
+			strlcpy(&v4l2_fmtdesc.description[0],"rgb24",sizeof(&v4l2_fmtdesc.description[0]));
 			v4l2_fmtdesc.pixelformat = V4L2_PIX_FMT_RGB24;
 			JOM(8, "%i=index: %s\n", index, &v4l2_fmtdesc.description[0]);
 			break;
 		}
 		case 3: {
 			v4l2_fmtdesc.flags = 0;
-			strcpy(&v4l2_fmtdesc.description[0], "rgb32");
+			strlcpy(&v4l2_fmtdesc.description[0],"rgb32",sizeof(&v4l2_fmtdesc.description[0]));
 			v4l2_fmtdesc.pixelformat = V4L2_PIX_FMT_RGB32;
 			JOM(8, "%i=index: %s\n", index, &v4l2_fmtdesc.description[0]);
 			break;
 		}
 		case 4: {
 			v4l2_fmtdesc.flags = 0;
-			strcpy(&v4l2_fmtdesc.description[0], "bgr24");
+			strlcpy(&v4l2_fmtdesc.description[0],"bgr24",sizeof(&v4l2_fmtdesc.description[0]));
 			v4l2_fmtdesc.pixelformat = V4L2_PIX_FMT_BGR24;
 			JOM(8, "%i=index: %s\n", index, &v4l2_fmtdesc.description[0]);
 			break;
 		}
 		case 5: {
 			v4l2_fmtdesc.flags = 0;
-			strcpy(&v4l2_fmtdesc.description[0], "bgr32");
+			strlcpy(&v4l2_fmtdesc.description[0],"bgr32",sizeof(&v4l2_fmtdesc.description[0]));
 			v4l2_fmtdesc.pixelformat = V4L2_PIX_FMT_BGR32;
 			JOM(8, "%i=index: %s\n", index, &v4l2_fmtdesc.description[0]);
 			break;

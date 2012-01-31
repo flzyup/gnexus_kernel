@@ -268,7 +268,7 @@ nt_lm_owf_gen(char *pwd, unsigned char nt_p16[16], unsigned char p16[16])
 
 	memset(passwd, '\0', 514);
 	if (strlen(pwd) < 513)
-		strcpy(passwd, pwd);
+		strlcpy(passwd,pwd,sizeof(passwd));
 	else
 		memcpy(passwd, pwd, 512);
 	/* Calculate the MD4 hash (NT compatible) of the password */

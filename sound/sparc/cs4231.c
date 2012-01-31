@@ -1236,7 +1236,7 @@ static int __devinit snd_cs4231_pcm(struct snd_card *card)
 	/* global setup */
 	pcm->private_data = chip;
 	pcm->info_flags = SNDRV_PCM_INFO_JOINT_DUPLEX;
-	strcpy(pcm->name, "CS4231");
+	strlcpy(pcm->name,"CS4231",sizeof(pcm->name));
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					      &chip->op->dev,
@@ -1263,7 +1263,7 @@ static int __devinit snd_cs4231_timer(struct snd_card *card)
 	err = snd_timer_new(card, "CS4231", &tid, &timer);
 	if (err < 0)
 		return err;
-	strcpy(timer->name, "CS4231");
+	strlcpy(timer->name,"CS4231",sizeof(timer->name));
 	timer->private_data = chip;
 	timer->hw = snd_cs4231_timer_table;
 	chip->timer = timer;
@@ -1287,8 +1287,7 @@ static int snd_cs4231_info_mux(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item > 3)
 		uinfo->value.enumerated.item = 3;
-	strcpy(uinfo->value.enumerated.name,
-		texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -1545,7 +1544,7 @@ static int __devinit snd_cs4231_mixer(struct snd_card *card)
 	if (snd_BUG_ON(!chip || !chip->pcm))
 		return -EINVAL;
 
-	strcpy(card->mixername, chip->pcm->name);
+	strlcpy(card->mixername,chip->pcm->name,sizeof(card->mixername));
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_cs4231_controls); idx++) {
 		err = snd_ctl_add(card,
@@ -1579,8 +1578,8 @@ static int __devinit cs4231_attach_begin(struct snd_card **rcard)
 	if (err < 0)
 		return err;
 
-	strcpy(card->driver, "CS4231");
-	strcpy(card->shortname, "Sun CS4231");
+	strlcpy(card->driver,"CS4231",sizeof(card->driver));
+	strlcpy(card->shortname,"Sun CS4231",sizeof(card->shortname));
 
 	chip = card->private_data;
 	chip->card = card;
@@ -1975,12 +1974,12 @@ static int __devinit snd_cs4231_ebus_create(struct snd_card *card,
 	chip->op = op;
 	memcpy(&chip->image, &snd_cs4231_original_image,
 	       sizeof(snd_cs4231_original_image));
-	strcpy(chip->c_dma.ebus_info.name, "cs4231(capture)");
+	strlcpy(chip->c_dma.ebus_info.name,"cs4231(capture,sizeof(chip->c_dma.ebus_info.name))");
 	chip->c_dma.ebus_info.flags = EBUS_DMA_FLAG_USE_EBDMA_HANDLER;
 	chip->c_dma.ebus_info.callback = snd_cs4231_ebus_capture_callback;
 	chip->c_dma.ebus_info.client_cookie = chip;
 	chip->c_dma.ebus_info.irq = op->archdata.irqs[0];
-	strcpy(chip->p_dma.ebus_info.name, "cs4231(play)");
+	strlcpy(chip->p_dma.ebus_info.name,"cs4231(play,sizeof(chip->p_dma.ebus_info.name))");
 	chip->p_dma.ebus_info.flags = EBUS_DMA_FLAG_USE_EBDMA_HANDLER;
 	chip->p_dma.ebus_info.callback = snd_cs4231_ebus_play_callback;
 	chip->p_dma.ebus_info.client_cookie = chip;

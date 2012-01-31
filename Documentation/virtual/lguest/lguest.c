@@ -542,7 +542,7 @@ static void concat(char *dst, char *args[])
 			strcat(dst+len, " ");
 			len++;
 		}
-		strcpy(dst+len, args[i]);
+		strlcpy(dst+len,args[i],sizeof(dst+len));
 		len += strlen(args[i]);
 	}
 	/* In case it's empty. */
@@ -1443,7 +1443,7 @@ static void configure_device(int fd, const char *tapif, u32 ipaddr)
 	struct sockaddr_in sin;
 
 	memset(&ifr, 0, sizeof(ifr));
-	strcpy(ifr.ifr_name, tapif);
+	strlcpy(ifr.ifr_name,tapif,sizeof(ifr.ifr_name));
 
 	/* Don't read these incantations.  Just cut & paste them like I did! */
 	sin.sin_family = AF_INET;
@@ -1472,7 +1472,7 @@ static int get_tun_device(char tapif[IFNAMSIZ])
 	 */
 	netfd = open_or_die("/dev/net/tun", O_RDWR);
 	ifr.ifr_flags = IFF_TAP | IFF_NO_PI | IFF_VNET_HDR;
-	strcpy(ifr.ifr_name, "tap%d");
+	strlcpy(ifr.ifr_name,"tap%d",sizeof(ifr.ifr_name));
 	if (ioctl(netfd, TUNSETIFF, &ifr) != 0)
 		err(1, "configuring /dev/net/tun");
 

@@ -693,7 +693,7 @@ void yaffs_set_obj_name(struct yaffs_obj *obj, const YCHAR * name)
 	if (name && 
 	        strnlen(name, YAFFS_SHORT_NAME_LENGTH + 1) <=
 	    YAFFS_SHORT_NAME_LENGTH)
-		strcpy(obj->short_name, name);
+		strlcpy(obj->short_name,name,sizeof(obj->short_name));
 	else
 		obj->short_name[0] = _Y('\0');
 #endif
@@ -3391,7 +3391,7 @@ int yaffs_update_oh(struct yaffs_obj *in, const YCHAR * name, int force,
 
 	struct yaffs_obj_hdr *oh = NULL;
 
-	strcpy(old_name, _Y("silly old name"));
+	strlcpy(old_name,_Y("silly old name",sizeof(old_name)));
 
 	if (!in->fake || in == dev->root_dir ||
 	    force || xmod) {
@@ -4574,7 +4574,7 @@ static void yaffs_fix_null_name(struct yaffs_obj *obj, YCHAR * name,
 			v /= 10;
 		}
 		/* make up a name */
-		strcpy(local_name, YAFFS_LOSTNFOUND_PREFIX);
+		strlcpy(local_name,YAFFS_LOSTNFOUND_PREFIX,sizeof(local_name));
 		strcat(local_name, x);
 		strncpy(name, local_name, buffer_size - 1);
 	}
@@ -4591,7 +4591,7 @@ int yaffs_get_obj_name(struct yaffs_obj *obj, YCHAR * name, int buffer_size)
 	}
 #ifndef CONFIG_YAFFS_NO_SHORT_NAMES
 	else if (obj->short_name[0]) {
-		strcpy(name, obj->short_name);
+		strlcpy(name,obj->short_name,sizeof(name));
 	}
 #endif
 	else if (obj->hdr_chunk > 0) {

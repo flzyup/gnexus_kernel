@@ -128,7 +128,7 @@ static int DIVA_INIT_FUNCTION divacapi_init(void)
 
 	printk(KERN_INFO "%s\n", DRIVERNAME);
 	printk(KERN_INFO "%s: Rel:%s  Rev:", DRIVERLNAME, DRIVERRELEASE_CAPI);
-	strcpy(tmprev, main_revision);
+	strlcpy(tmprev,main_revision,sizeof(tmprev));
 	printk("%s  Build: %s(%s)\n", getrev(tmprev),
 	       diva_capi_common_code_build, DIVA_BUILD);
 

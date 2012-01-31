@@ -1155,7 +1155,7 @@ int pcxhr_create_pcm(struct snd_pcxhr *chip)
 		snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &pcxhr_ops);
 
 	pcm->info_flags = 0;
-	strcpy(pcm->name, name);
+	strlcpy(pcm->name,name,sizeof(pcm->name));
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					      snd_dma_pci_data(chip->mgr->pci),
@@ -1559,7 +1559,7 @@ static int __devinit pcxhr_probe(struct pci_dev *pci,
 			return err;
 		}
 
-		strcpy(card->driver, DRIVER_NAME);
+		strlcpy(card->driver,DRIVER_NAME,sizeof(card->driver));
 		sprintf(card->shortname, "%s [PCM #%d]", mgr->shortname, i);
 		sprintf(card->longname, "%s [PCM #%d]", mgr->longname, i);
 

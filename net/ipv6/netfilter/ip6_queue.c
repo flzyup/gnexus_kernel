@@ -195,12 +195,12 @@ ipq_build_packet_message(struct nf_queue_entry *entry, int *errp)
 	pmsg->hw_protocol     = entry->skb->protocol;
 
 	if (entry->indev)
-		strcpy(pmsg->indev_name, entry->indev->name);
+		strlcpy(pmsg->indev_name,entry->indev->name,sizeof(pmsg->indev_name));
 	else
 		pmsg->indev_name[0] = '\0';
 
 	if (entry->outdev)
-		strcpy(pmsg->outdev_name, entry->outdev->name);
+		strlcpy(pmsg->outdev_name,entry->outdev->name,sizeof(pmsg->outdev_name));
 	else
 		pmsg->outdev_name[0] = '\0';
 

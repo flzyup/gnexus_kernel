@@ -343,7 +343,7 @@ nouveau_fbcon_create(struct nouveau_fbdev *nfbdev,
 	nfbdev->helper.fb = fb;
 	nfbdev->helper.fbdev = info;
 
-	strcpy(info->fix.id, "nouveaufb");
+	strlcpy(info->fix.id,"nouveaufb",sizeof(info->fix.id));
 	if (nouveau_nofbaccel)
 		info->flags = FBINFO_DEFAULT | FBINFO_HWACCEL_DISABLED;
 	else

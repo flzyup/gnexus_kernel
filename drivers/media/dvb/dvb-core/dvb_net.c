@@ -107,7 +107,7 @@ static void hexdump( const unsigned char *buf, unsigned short len )
 			if ((i + ofs) < len)
 				sprintf( octet, "%02x ", buf[ofs + i] );
 			else
-				strcpy( octet, "   " );
+				strlcpy(octet,"   " ,sizeof(octet));
 
 			strcat( str, octet );
 		}

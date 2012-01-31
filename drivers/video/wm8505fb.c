@@ -262,7 +262,7 @@ static int __devinit wm8505fb_probe(struct platform_device *pdev)
 		goto failed;
 	}
 
-	strcpy(fbi->fb.fix.id, DRIVER_NAME);
+	strlcpy(fbi->fb.fix.id,DRIVER_NAME,sizeof(fbi->fb.fix.id));
 
 	fbi->fb.fix.type	= FB_TYPE_PACKED_PIXELS;
 	fbi->fb.fix.xpanstep	= 1;

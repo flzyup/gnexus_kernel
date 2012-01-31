@@ -199,7 +199,7 @@ int mconsole_notify(char *sock_name, int type, const void *data, int len)
 		return err;
 
 	target.sun_family = AF_UNIX;
-	strcpy(target.sun_path, sock_name);
+	strlcpy(target.sun_path,sock_name,sizeof(target.sun_path));
 
 	packet.magic = MCONSOLE_MAGIC;
 	packet.version = MCONSOLE_VERSION;

@@ -725,7 +725,7 @@ static ssize_t s6e63m0_sysfs_show_gamma_table(struct device *dev,
 	char temp[3];
 
 	sprintf(temp, "%d\n", lcd->gamma_table_count);
-	strcpy(buf, temp);
+	strlcpy(buf,temp,sizeof(buf));
 
 	return strlen(buf);
 }

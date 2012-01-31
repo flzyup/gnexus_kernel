@@ -296,7 +296,7 @@ static ssize_t show_text_leaf(struct device *dev,
 		/* Strip trailing whitespace and add newline. */
 		while (ret > 0 && isspace(buf[ret - 1]))
 			ret--;
-		strcpy(buf + ret, "\n");
+		strlcpy(buf + ret,"\n",sizeof(buf + ret));
 		ret++;
 	}
 
@@ -350,7 +350,7 @@ static ssize_t modalias_show(struct device *dev,
 	int length;
 
 	length = get_modalias(unit, buf, PAGE_SIZE);
-	strcpy(buf + length, "\n");
+	strlcpy(buf + length,"\n",sizeof(buf + length));
 
 	return length + 1;
 }

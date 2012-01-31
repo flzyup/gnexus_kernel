@@ -157,7 +157,7 @@ int __devinit snd_pcsp_new_mixer(struct snd_pcsp *chip, int nopcm)
 	if (err < 0)
 		return err;
 
-	strcpy(card->mixername, "PC-Speaker");
+	strlcpy(card->mixername,"PC-Speaker",sizeof(card->mixername));
 
 	return 0;
 }

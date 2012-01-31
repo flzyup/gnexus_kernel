@@ -2500,7 +2500,7 @@ int mpol_to_str(char *buffer, int maxlen, struct mempolicy *pol, int no_context)
 	if (buffer + maxlen < p + l + 1)
 		return -ENOSPC;
 
-	strcpy(p, policy_modes[mode]);
+	strlcpy(p,policy_modes[mode],sizeof(p));
 	p += l;
 
 	if (flags & MPOL_MODE_FLAGS) {

@@ -798,11 +798,11 @@ iscsi_sw_tcp_conn_get_stats(struct iscsi_cls_conn *cls_conn,
 	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
 
 	stats->custom_length = 3;
-	strcpy(stats->custom[0].desc, "tx_sendpage_failures");
+	strlcpy(stats->custom[0].desc,"tx_sendpage_failures",sizeof(stats->custom[0].desc));
 	stats->custom[0].value = tcp_sw_conn->sendpage_failures_cnt;
-	strcpy(stats->custom[1].desc, "rx_discontiguous_hdr");
+	strlcpy(stats->custom[1].desc,"rx_discontiguous_hdr",sizeof(stats->custom[1].desc));
 	stats->custom[1].value = tcp_sw_conn->discontiguous_hdr_cnt;
-	strcpy(stats->custom[2].desc, "eh_abort_cnt");
+	strlcpy(stats->custom[2].desc,"eh_abort_cnt",sizeof(stats->custom[2].desc));
 	stats->custom[2].value = conn->eh_abort_cnt;
 
 	iscsi_tcp_conn_get_stats(cls_conn, stats);

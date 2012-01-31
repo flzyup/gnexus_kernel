@@ -1284,7 +1284,7 @@ static int get_ports(struct r_port *info, struct rocket_ports __user *retports)
 
 	for (board = 0; board < 4; board++) {
 		tmp.rocketModel[board].model = rocketModel[board].model;
-		strcpy(tmp.rocketModel[board].modelString, rocketModel[board].modelString);
+		strlcpy(tmp.rocketModel[board].modelString,rocketModel[board].modelString,sizeof(tmp.rocketModel[board].modelString));
 		tmp.rocketModel[board].numPorts = rocketModel[board].numPorts;
 		tmp.rocketModel[board].loadrm2 = rocketModel[board].loadrm2;
 		tmp.rocketModel[board].startingPortNumber = rocketModel[board].startingPortNumber;
@@ -1795,86 +1795,86 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 		max_num_aiops = 1;
 		ports_per_aiop = 4;
 		rocketModel[i].model = MODEL_RP4QUAD;
-		strcpy(rocketModel[i].modelString, "RocketPort 4 port w/quad cable");
+		strlcpy(rocketModel[i].modelString,"RocketPort 4 port w/quad cable",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 4;
 		break;
 	case PCI_DEVICE_ID_RP8OCTA:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_RP8OCTA;
-		strcpy(rocketModel[i].modelString, "RocketPort 8 port w/octa cable");
+		strlcpy(rocketModel[i].modelString,"RocketPort 8 port w/octa cable",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		break;
 	case PCI_DEVICE_ID_URP8OCTA:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_UPCI_RP8OCTA;
-		strcpy(rocketModel[i].modelString, "RocketPort UPCI 8 port w/octa cable");
+		strlcpy(rocketModel[i].modelString,"RocketPort UPCI 8 port w/octa cable",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		break;
 	case PCI_DEVICE_ID_RP8INTF:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_RP8INTF;
-		strcpy(rocketModel[i].modelString, "RocketPort 8 port w/external I/F");
+		strlcpy(rocketModel[i].modelString,"RocketPort 8 port w/external I/F",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		break;
 	case PCI_DEVICE_ID_URP8INTF:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_UPCI_RP8INTF;
-		strcpy(rocketModel[i].modelString, "RocketPort UPCI 8 port w/external I/F");
+		strlcpy(rocketModel[i].modelString,"RocketPort UPCI 8 port w/external I/F",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		break;
 	case PCI_DEVICE_ID_RP8J:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_RP8J;
-		strcpy(rocketModel[i].modelString, "RocketPort 8 port w/RJ11 connectors");
+		strlcpy(rocketModel[i].modelString,"RocketPort 8 port w/RJ11 connectors",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		break;
 	case PCI_DEVICE_ID_RP4J:
 		max_num_aiops = 1;
 		ports_per_aiop = 4;
 		rocketModel[i].model = MODEL_RP4J;
-		strcpy(rocketModel[i].modelString, "RocketPort 4 port w/RJ45 connectors");
+		strlcpy(rocketModel[i].modelString,"RocketPort 4 port w/RJ45 connectors",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 4;
 		break;
 	case PCI_DEVICE_ID_RP8SNI:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_RP8SNI;
-		strcpy(rocketModel[i].modelString, "RocketPort 8 port w/ custom DB78");
+		strlcpy(rocketModel[i].modelString,"RocketPort 8 port w/ custom DB78",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		break;
 	case PCI_DEVICE_ID_RP16SNI:
 		max_num_aiops = 2;
 		rocketModel[i].model = MODEL_RP16SNI;
-		strcpy(rocketModel[i].modelString, "RocketPort 16 port w/ custom DB78");
+		strlcpy(rocketModel[i].modelString,"RocketPort 16 port w/ custom DB78",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 16;
 		break;
 	case PCI_DEVICE_ID_RP16INTF:
 		max_num_aiops = 2;
 		rocketModel[i].model = MODEL_RP16INTF;
-		strcpy(rocketModel[i].modelString, "RocketPort 16 port w/external I/F");
+		strlcpy(rocketModel[i].modelString,"RocketPort 16 port w/external I/F",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 16;
 		break;
 	case PCI_DEVICE_ID_URP16INTF:
 		max_num_aiops = 2;
 		rocketModel[i].model = MODEL_UPCI_RP16INTF;
-		strcpy(rocketModel[i].modelString, "RocketPort UPCI 16 port w/external I/F");
+		strlcpy(rocketModel[i].modelString,"RocketPort UPCI 16 port w/external I/F",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 16;
 		break;
 	case PCI_DEVICE_ID_CRP16INTF:
 		max_num_aiops = 2;
 		rocketModel[i].model = MODEL_CPCI_RP16INTF;
-		strcpy(rocketModel[i].modelString, "RocketPort Compact PCI 16 port w/external I/F");
+		strlcpy(rocketModel[i].modelString,"RocketPort Compact PCI 16 port w/external I/F",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 16;
 		break;
 	case PCI_DEVICE_ID_RP32INTF:
 		max_num_aiops = 4;
 		rocketModel[i].model = MODEL_RP32INTF;
-		strcpy(rocketModel[i].modelString, "RocketPort 32 port w/external I/F");
+		strlcpy(rocketModel[i].modelString,"RocketPort 32 port w/external I/F",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 32;
 		break;
 	case PCI_DEVICE_ID_URP32INTF:
 		max_num_aiops = 4;
 		rocketModel[i].model = MODEL_UPCI_RP32INTF;
-		strcpy(rocketModel[i].modelString, "RocketPort UPCI 32 port w/external I/F");
+		strlcpy(rocketModel[i].modelString,"RocketPort UPCI 32 port w/external I/F",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 32;
 		break;
 	case PCI_DEVICE_ID_RPP4:
@@ -1883,7 +1883,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 		altChanRingIndicator++;
 		fast_clock++;
 		rocketModel[i].model = MODEL_RPP4;
-		strcpy(rocketModel[i].modelString, "RocketPort Plus 4 port");
+		strlcpy(rocketModel[i].modelString,"RocketPort Plus 4 port",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 4;
 		break;
 	case PCI_DEVICE_ID_RPP8:
@@ -1892,7 +1892,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 		altChanRingIndicator++;
 		fast_clock++;
 		rocketModel[i].model = MODEL_RPP8;
-		strcpy(rocketModel[i].modelString, "RocketPort Plus 8 port");
+		strlcpy(rocketModel[i].modelString,"RocketPort Plus 8 port",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		break;
 	case PCI_DEVICE_ID_RP2_232:
@@ -1901,7 +1901,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 		altChanRingIndicator++;
 		fast_clock++;
 		rocketModel[i].model = MODEL_RP2_232;
-		strcpy(rocketModel[i].modelString, "RocketPort Plus 2 port RS232");
+		strlcpy(rocketModel[i].modelString,"RocketPort Plus 2 port RS232",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 2;
 		break;
 	case PCI_DEVICE_ID_RP2_422:
@@ -1910,7 +1910,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 		altChanRingIndicator++;
 		fast_clock++;
 		rocketModel[i].model = MODEL_RP2_422;
-		strcpy(rocketModel[i].modelString, "RocketPort Plus 2 port RS422");
+		strlcpy(rocketModel[i].modelString,"RocketPort Plus 2 port RS422",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 2;
 		break;
 	case PCI_DEVICE_ID_RP6M:
@@ -1928,7 +1928,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 		}
 
 		rocketModel[i].model = MODEL_RP6M;
-		strcpy(rocketModel[i].modelString, "RocketModem 6 port");
+		strlcpy(rocketModel[i].modelString,"RocketModem 6 port",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 6;
 		break;
 	case PCI_DEVICE_ID_RP4M:
@@ -1942,7 +1942,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 		}
 
 		rocketModel[i].model = MODEL_RP4M;
-		strcpy(rocketModel[i].modelString, "RocketModem 4 port");
+		strlcpy(rocketModel[i].modelString,"RocketModem 4 port",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 4;
 		break;
 	default:
@@ -1979,7 +1979,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 	case PCI_DEVICE_ID_UPCI_RM3_8PORT:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_UPCI_RM3_8PORT;
-		strcpy(rocketModel[i].modelString, "RocketModem III 8 port");
+		strlcpy(rocketModel[i].modelString,"RocketModem III 8 port",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 8;
 		rcktpt_io_addr[i] = pci_resource_start(dev, 2);
 		UPCIRingInd = rcktpt_io_addr[i] + _PCI_9030_RING_IND;
@@ -1989,7 +1989,7 @@ static __init int register_PCI(int i, struct pci_dev *dev)
 	case PCI_DEVICE_ID_UPCI_RM3_4PORT:
 		max_num_aiops = 1;
 		rocketModel[i].model = MODEL_UPCI_RM3_4PORT;
-		strcpy(rocketModel[i].modelString, "RocketModem III 4 port");
+		strlcpy(rocketModel[i].modelString,"RocketModem III 4 port",sizeof(rocketModel[i].modelString));
 		rocketModel[i].numPorts = 4;
 		rcktpt_io_addr[i] = pci_resource_start(dev, 2);
 		UPCIRingInd = rcktpt_io_addr[i] + _PCI_9030_RING_IND;
@@ -2177,9 +2177,9 @@ static int __init init_ISA(int i)
 		for (chan = 0; chan < num_chan; chan++)
 			sModemReset(ctlp, chan, 0);
 		msleep(500);
-		strcpy(rocketModel[i].modelString, "RocketModem ISA");
+		strlcpy(rocketModel[i].modelString,"RocketModem ISA",sizeof(rocketModel[i].modelString));
 	} else {
-		strcpy(rocketModel[i].modelString, "RocketPort ISA");
+		strlcpy(rocketModel[i].modelString,"RocketPort ISA",sizeof(rocketModel[i].modelString));
 	}
 	rocketModel[i].numPorts = total_num_chan;
 	rocketModel[i].model = MODEL_ISA;

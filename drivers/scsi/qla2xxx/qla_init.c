@@ -2062,7 +2062,7 @@ qla2x00_configure_hba(scsi_qla_host_t *vha)
 		DEBUG3(printk("scsi(%ld): HBA in NL topology.\n",
 		    vha->host_no));
 		ha->current_topology = ISP_CFG_NL;
-		strcpy(connect_type, "(Loop)");
+		strlcpy(connect_type,"(Loop,sizeof(connect_type))");
 		break;
 
 	case 1:
@@ -2070,7 +2070,7 @@ qla2x00_configure_hba(scsi_qla_host_t *vha)
 		    vha->host_no));
 		ha->switch_cap = sw_cap;
 		ha->current_topology = ISP_CFG_FL;
-		strcpy(connect_type, "(FL_Port)");
+		strlcpy(connect_type,"(FL_Port,sizeof(connect_type))");
 		break;
 
 	case 2:
@@ -2078,7 +2078,7 @@ qla2x00_configure_hba(scsi_qla_host_t *vha)
 		    vha->host_no));
 		ha->operating_mode = P2P;
 		ha->current_topology = ISP_CFG_N;
-		strcpy(connect_type, "(N_Port-to-N_Port)");
+		strlcpy(connect_type,"(N_Port-to-N_Port,sizeof(connect_type))");
 		break;
 
 	case 3:
@@ -2087,7 +2087,7 @@ qla2x00_configure_hba(scsi_qla_host_t *vha)
 		ha->switch_cap = sw_cap;
 		ha->operating_mode = P2P;
 		ha->current_topology = ISP_CFG_F;
-		strcpy(connect_type, "(F_Port)");
+		strlcpy(connect_type,"(F_Port,sizeof(connect_type))");
 		break;
 
 	default:
@@ -2095,7 +2095,7 @@ qla2x00_configure_hba(scsi_qla_host_t *vha)
 		    "Using NL.\n",
 		    vha->host_no, topo));
 		ha->current_topology = ISP_CFG_NL;
-		strcpy(connect_type, "(Loop)");
+		strlcpy(connect_type,"(Loop,sizeof(connect_type))");
 		break;
 	}
 
@@ -2151,13 +2151,12 @@ qla2x00_set_model_info(scsi_qla_host_t *vha, uint8_t *model, size_t len,
 		if (use_tbl &&
 		    ha->pdev->subsystem_vendor == PCI_VENDOR_ID_QLOGIC &&
 		    index < QLA_MODEL_NAMES) {
-			strcpy(ha->model_number,
-			    qla2x00_model_name[index * 2]);
+			strlcpy(ha->model_number,,sizeof(ha->model_number)			    qla2x00_model_name[index * 2]);
 			strncpy(ha->model_desc,
 			    qla2x00_model_name[index * 2 + 1],
 			    sizeof(ha->model_desc) - 1);
 		} else {
-			strcpy(ha->model_number, def);
+			strlcpy(ha->model_number,def,sizeof(ha->model_number));
 		}
 	}
 	if (IS_FWI2_CAPABLE(ha))
@@ -2323,9 +2322,9 @@ qla2x00_nvram_config(scsi_qla_host_t *vha)
 
 		if (IS_QLA2300(ha)) {
 			if (ha->fb_rev == FPM_2310) {
-				strcpy(ha->model_number, "QLA2310");
+				strlcpy(ha->model_number,"QLA2310",sizeof(ha->model_number));
 			} else {
-				strcpy(ha->model_number, "QLA2300");
+				strlcpy(ha->model_number,"QLA2300",sizeof(ha->model_number));
 			}
 		} else {
 			qla2x00_set_model_info(vha, nv->model_number,
@@ -2343,9 +2342,9 @@ qla2x00_nvram_config(scsi_qla_host_t *vha)
 			nv->add_firmware_options[0] &= ~(BIT_6 | BIT_5 | BIT_4);
 			nv->add_firmware_options[0] |= BIT_5;
 		}
-		strcpy(ha->model_number, "QLA22xx");
+		strlcpy(ha->model_number,"QLA22xx",sizeof(ha->model_number));
 	} else /*if (IS_QLA2100(ha))*/ {
-		strcpy(ha->model_number, "QLA2100");
+		strlcpy(ha->model_number,"QLA2100",sizeof(ha->model_number));
 	}
 
 	/*

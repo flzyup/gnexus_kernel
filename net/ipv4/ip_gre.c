@@ -405,7 +405,7 @@ static struct ip_tunnel *ipgre_tunnel_locate(struct net *net,
 	if (parms->name[0])
 		strlcpy(name, parms->name, IFNAMSIZ);
 	else
-		strcpy(name, "gre%d");
+		strlcpy(name,"gre%d",sizeof(name));
 
 	dev = alloc_netdev(sizeof(*t), name, ipgre_tunnel_setup);
 	if (!dev)
@@ -1273,7 +1273,7 @@ static int ipgre_tunnel_init(struct net_device *dev)
 	iph = &tunnel->parms.iph;
 
 	tunnel->dev = dev;
-	strcpy(tunnel->parms.name, dev->name);
+	strlcpy(tunnel->parms.name,dev->name,sizeof(tunnel->parms.name));
 
 	memcpy(dev->dev_addr, &tunnel->parms.iph.saddr, 4);
 	memcpy(dev->broadcast, &tunnel->parms.iph.daddr, 4);
@@ -1303,7 +1303,7 @@ static void ipgre_fb_tunnel_init(struct net_device *dev)
 	struct iphdr *iph = &tunnel->parms.iph;
 
 	tunnel->dev = dev;
-	strcpy(tunnel->parms.name, dev->name);
+	strlcpy(tunnel->parms.name,dev->name,sizeof(tunnel->parms.name));
 
 	iph->version		= 4;
 	iph->protocol		= IPPROTO_GRE;
@@ -1476,7 +1476,7 @@ static int ipgre_tap_init(struct net_device *dev)
 	tunnel = netdev_priv(dev);
 
 	tunnel->dev = dev;
-	strcpy(tunnel->parms.name, dev->name);
+	strlcpy(tunnel->parms.name,dev->name,sizeof(tunnel->parms.name));
 
 	ipgre_tunnel_bind_dev(dev);
 

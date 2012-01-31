@@ -462,7 +462,7 @@ static int snd_ac97_info_enum_double(struct snd_kcontrol *kcontrol,
 	
 	if (uinfo->value.enumerated.item > e->mask - 1)
 		uinfo->value.enumerated.item = e->mask - 1;
-	strcpy(uinfo->value.enumerated.name, e->texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,e->texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1808,7 +1808,7 @@ void snd_ac97_get_name(struct snd_ac97 *ac97, unsigned int id, char *name, int m
 	if (! pid)
 		return;
 
-	strcpy(name, pid->name);
+	strlcpy(name,pid->name,sizeof(name));
 	if (ac97 && pid->patch) {
 		if ((modem && (pid->flags & AC97_MODEM_PATCH)) ||
 		    (! modem && ! (pid->flags & AC97_MODEM_PATCH)))
@@ -2246,7 +2246,7 @@ int snd_ac97_mixer(struct snd_ac97_bus *bus, struct snd_ac97_template *template,
 	if (ac97_is_audio(ac97)) {
 		char comp[16];
 		if (card->mixername[0] == '\0') {
-			strcpy(card->mixername, name);
+			strlcpy(card->mixername,name,sizeof(card->mixername));
 		} else {
 			if (strlen(card->mixername) + 1 + strlen(name) + 1 <= sizeof(card->mixername)) {
 				strcat(card->mixername, ",");
@@ -2266,7 +2266,7 @@ int snd_ac97_mixer(struct snd_ac97_bus *bus, struct snd_ac97_template *template,
 	if (ac97_is_modem(ac97)) {
 		char comp[16];
 		if (card->mixername[0] == '\0') {
-			strcpy(card->mixername, name);
+			strlcpy(card->mixername,name,sizeof(card->mixername));
 		} else {
 			if (strlen(card->mixername) + 1 + strlen(name) + 1 <= sizeof(card->mixername)) {
 				strcat(card->mixername, ",");
@@ -2595,7 +2595,7 @@ static void set_ctl_name(char *dst, const char *src, const char *suffix)
 	if (suffix)
 		sprintf(dst, "%s %s", src, suffix);
 	else
-		strcpy(dst, src);
+		strlcpy(dst,src,sizeof(dst));
 }	
 
 /* remove the control with the given name and optional suffix */

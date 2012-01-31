@@ -1115,7 +1115,7 @@ snd_azf3328_info_mixer_enum(struct snd_kcontrol *kcontrol,
 	if (reg.reg == IDX_MIXER_REC_SELECT)
 		p = texts3;
 
-	strcpy(uinfo->value.enumerated.name, p[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,p[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
         return 0;
 }
 
@@ -1277,7 +1277,7 @@ snd_azf3328_mixer_new(struct snd_azf3328 *chip)
 			return err;
 	}
 	snd_component_add(card, "AZF3328 mixer");
-	strcpy(card->mixername, "AZF3328 mixer");
+	strlcpy(card->mixername,"AZF3328 mixer",sizeof(card->mixername));
 
 	snd_azf3328_dbgcallleave();
 	return 0;
@@ -2233,7 +2233,7 @@ enum { AZF_PCMDEV_STD, AZF_PCMDEV_I2S_OUT, NUM_AZF_PCMDEVS }; /* pcm devices */
 
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, chip->card->shortname);
+	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
 	/* same pcm object for playback/capture (see snd_pcm_new() above) */
 	chip->pcm[AZF_CODEC_PLAYBACK] = pcm;
 	chip->pcm[AZF_CODEC_CAPTURE] = pcm;
@@ -2251,7 +2251,7 @@ enum { AZF_PCMDEV_STD, AZF_PCMDEV_I2S_OUT, NUM_AZF_PCMDEVS }; /* pcm devices */
 
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, chip->card->shortname);
+	strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
 	chip->pcm[AZF_CODEC_I2S_OUT] = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -2365,7 +2365,7 @@ snd_azf3328_timer(struct snd_azf3328 *chip, int device)
 	if (err < 0)
 		goto out;
 
-	strcpy(timer->name, "AZF3328 timer");
+	strlcpy(timer->name,"AZF3328 timer",sizeof(timer->name));
 	timer->private_data = chip;
 	timer->hw = snd_azf3328_timer_hw;
 
@@ -2636,8 +2636,8 @@ snd_azf3328_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
 	if (err < 0)
 		return err;
 
-	strcpy(card->driver, "AZF3328");
-	strcpy(card->shortname, "Aztech AZF3328 (PCI168)");
+	strlcpy(card->driver,"AZF3328",sizeof(card->driver));
+	strlcpy(card->shortname,"Aztech AZF3328 (PCI168,sizeof(card->shortname))");
 
 	err = snd_azf3328_create(card, pci, pci_id->driver_data, &chip);
 	if (err < 0)

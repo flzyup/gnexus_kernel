@@ -182,7 +182,7 @@ static int absolutize(char *to, int size, char *from)
 			       "chars\n", from, size);
 			return -1;
 		}
-		strcpy(to, save_cwd);
+		strlcpy(to,save_cwd,sizeof(to));
 		strcat(to, "/");
 		strcat(to, from);
 	}

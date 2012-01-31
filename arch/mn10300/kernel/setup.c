@@ -82,7 +82,7 @@ static void __init parse_mem_cmdline(char **cmdline_p)
 	char *from, *to, c;
 
 	/* save unparsed command line copy for /proc/cmdline */
-	strcpy(boot_command_line, redboot_command_line);
+	strlcpy(boot_command_line,redboot_command_line,sizeof(boot_command_line));
 
 	/* see if there's an explicit memory size option */
 	from = redboot_command_line;

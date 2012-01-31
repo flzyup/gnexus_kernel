@@ -171,7 +171,7 @@ void snd_gf1_timers_init(struct snd_gus_card * gus)
 	tid.subdevice = 0;
 
 	if (snd_timer_new(gus->card, "GF1 timer", &tid, &timer) >= 0) {
-		strcpy(timer->name, "GF1 timer #1");
+		strlcpy(timer->name,"GF1 timer #1",sizeof(timer->name));
 		timer->private_data = gus;
 		timer->private_free = snd_gf1_timer1_free;
 		timer->hw = snd_gf1_timer1;
@@ -181,7 +181,7 @@ void snd_gf1_timers_init(struct snd_gus_card * gus)
 	tid.device++;
 
 	if (snd_timer_new(gus->card, "GF1 timer", &tid, &timer) >= 0) {
-		strcpy(timer->name, "GF1 timer #2");
+		strlcpy(timer->name,"GF1 timer #2",sizeof(timer->name));
 		timer->private_data = gus;
 		timer->private_free = snd_gf1_timer2_free;
 		timer->hw = snd_gf1_timer2;

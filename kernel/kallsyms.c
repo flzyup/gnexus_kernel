@@ -356,7 +356,7 @@ static int __sprint_symbol(char *buffer, unsigned long address,
 		return sprintf(buffer, "0x%lx", address);
 
 	if (name != buffer)
-		strcpy(buffer, name);
+		strlcpy(buffer,name,sizeof(buffer));
 	len = strlen(buffer);
 	buffer += len;
 	offset -= symbol_offset;

@@ -136,7 +136,7 @@ static int savage_setup_i2c_bus(struct savagefb_i2c_chan *chan,
 	int rc = 0;
 
 	if (chan->par) {
-		strcpy(chan->adapter.name, name);
+		strlcpy(chan->adapter.name,name,sizeof(chan->adapter.name));
 		chan->adapter.owner		= THIS_MODULE;
 		chan->adapter.algo_data		= &chan->algo;
 		chan->adapter.dev.parent	= &chan->par->pcidev->dev;

@@ -72,7 +72,7 @@ void dsp_hwec_enable(struct dsp *dsp, const char *arg)
 		char *dup, *tok, *name, *val;
 		int tmp;
 
-		strcpy(_dup, arg);
+		strlcpy(_dup,arg,sizeof(_dup));
 		dup = _dup;
 
 		while ((tok = strsep(&dup, ","))) {

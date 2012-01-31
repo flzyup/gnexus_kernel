@@ -233,7 +233,7 @@ static int __init us3_freq_init(void)
 		driver->get = us3_freq_get;
 		driver->exit = us3_freq_cpu_exit;
 		driver->owner = THIS_MODULE,
-		strcpy(driver->name, "UltraSPARC-III");
+		strlcpy(driver->name,"UltraSPARC-III",sizeof(driver->name));
 
 		cpufreq_us3_driver = driver;
 		ret = cpufreq_register_driver(driver);

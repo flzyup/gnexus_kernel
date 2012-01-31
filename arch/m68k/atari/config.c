@@ -157,7 +157,7 @@ static int __init atari_switches_setup(char *str)
 		return 0;
 
 	/* copy string to local array, strsep works destructively... */
-	strcpy(switches, str);
+	strlcpy(switches,str,sizeof(switches));
 	atari_switches = 0;
 
 	/* parse the options */
@@ -578,7 +578,7 @@ static void atari_reset(void)
 
 static void atari_get_model(char *model)
 {
-	strcpy(model, "Atari ");
+	strlcpy(model,"Atari ",sizeof(model));
 	switch (atari_mch_cookie >> 16) {
 	case ATARI_MCH_ST:
 		if (ATARIHW_PRESENT(MSTE_CLK))

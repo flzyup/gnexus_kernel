@@ -232,7 +232,7 @@ static int parse_afs_partitions(struct mtd_info *mtd,
 		if (ret == 0)
 			continue;
 
-		strcpy(str, iis.name);
+		strlcpy(str,iis.name,sizeof(str));
 
 		parts[idx].name		= str;
 		parts[idx].size		= (iis.length + mtd->erasesize - 1) & ~(mtd->erasesize - 1);

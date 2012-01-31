@@ -384,7 +384,7 @@ static int block2mtd_setup2(const char *val)
 	if (strnlen(val, sizeof(buf)) >= sizeof(buf))
 		parse_err("parameter too long");
 
-	strcpy(str, val);
+	strlcpy(str,val,sizeof(str));
 	kill_final_newline(str);
 
 	for (i = 0; i < 2; i++)

@@ -221,9 +221,9 @@ static int link_name_validate(const char *name, struct link_name *name_parts)
 
 	if (name_parts) {
 		name_parts->addr_local = tipc_addr(z_local, c_local, n_local);
-		strcpy(name_parts->if_local, if_local);
+		strlcpy(name_parts->if_local,if_local,sizeof(name_parts->if_local));
 		name_parts->addr_peer = tipc_addr(z_peer, c_peer, n_peer);
-		strcpy(name_parts->if_peer, if_peer);
+		strlcpy(name_parts->if_peer,if_peer,sizeof(name_parts->if_peer));
 	}
 	return 1;
 }
@@ -351,7 +351,7 @@ struct link *tipc_link_create(struct tipc_node *n_ptr,
 	msg_set_size(msg, sizeof(l_ptr->proto_msg));
 	msg_set_session(msg, (tipc_random & 0xffff));
 	msg_set_bearer_id(msg, b_ptr->identity);
-	strcpy((char *)msg_data(msg), if_name);
+	strlcpy((char *)msg_data(msg),if_name,sizeof((char *)msg_data(msg)));
 
 	l_ptr->priority = b_ptr->priority;
 	tipc_link_set_queue_limits(l_ptr, b_ptr->media->window);
@@ -2058,7 +2058,7 @@ static void link_recv_proto_msg(struct link *l_ptr, struct sk_buff *buf)
 	case ACTIVATE_MSG:
 		/* Update link settings according other endpoint's values */
 
-		strcpy((strrchr(l_ptr->name, ':') + 1), (char *)msg_data(msg));
+		strlcpy((strrchr(l_ptr->name, ':') + 1),(char *,sizeof((strrchr(l_ptr->name, ':') + 1)))msg_data(msg));
 
 		msg_tol = msg_link_tolerance(msg);
 		if (msg_tol > l_ptr->tolerance)

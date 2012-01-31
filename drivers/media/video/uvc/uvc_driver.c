@@ -1855,7 +1855,7 @@ static int uvc_probe(struct usb_interface *intf,
 	if (udev->serial)
 		strlcpy(dev->mdev.serial, udev->serial,
 			sizeof(dev->mdev.serial));
-	strcpy(dev->mdev.bus_info, udev->devpath);
+	strlcpy(dev->mdev.bus_info,udev->devpath,sizeof(dev->mdev.bus_info));
 	dev->mdev.hw_revision = le16_to_cpu(udev->descriptor.bcdDevice);
 	dev->mdev.driver_version = DRIVER_VERSION_NUMBER;
 	if (media_device_register(&dev->mdev) < 0)

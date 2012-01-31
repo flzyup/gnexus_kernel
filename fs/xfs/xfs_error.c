@@ -108,7 +108,7 @@ xfs_errortag_add(int error_tag, xfs_mount_t *mp)
 			xfs_etest_fsid[i] = fsid;
 			len = strlen(mp->m_fsname);
 			xfs_etest_fsname[i] = kmem_alloc(len + 1, KM_SLEEP);
-			strcpy(xfs_etest_fsname[i], mp->m_fsname);
+			strlcpy(xfs_etest_fsname[i],mp->m_fsname,sizeof(xfs_etest_fsname[i]));
 			xfs_error_test_active++;
 			return 0;
 		}

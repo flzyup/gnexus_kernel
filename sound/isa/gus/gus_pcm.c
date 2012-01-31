@@ -888,7 +888,7 @@ int snd_gf1_pcm_new(struct snd_gus_card * gus, int pcm_dev, int control_index, s
 					      SNDRV_DMA_TYPE_DEV, snd_dma_isa_data(),
 					      64*1024, gus->gf1.dma2 > 3 ? 128*1024 : 64*1024);
 	}
-	strcpy(pcm->name, pcm->id);
+	strlcpy(pcm->name,pcm->id,sizeof(pcm->name));
 	if (gus->interwave) {
 		sprintf(pcm->name + strlen(pcm->name), " rev %c", gus->revision + 'A');
 	}

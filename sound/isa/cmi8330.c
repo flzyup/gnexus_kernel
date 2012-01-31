@@ -311,7 +311,7 @@ static int __devinit snd_cmi8330_mixer(struct snd_card *card, struct snd_cmi8330
 	unsigned int idx;
 	int err;
 
-	strcpy(card->mixername, (acard->type == CMI8329) ? "CMI8329" : "CMI8330/C3D");
+	strlcpy(card->mixername,(acard->type == CMI8329,sizeof(card->mixername)) ? "CMI8329" : "CMI8330/C3D");
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_cmi8330_controls); idx++) {
 		err = snd_ctl_add(card,
@@ -449,7 +449,7 @@ static int __devinit snd_cmi8330_pcm(struct snd_card *card, struct snd_cmi8330 *
 
 	if ((err = snd_pcm_new(card, (chip->type == CMI8329) ? "CMI8329" : "CMI8330", 0, 1, 1, &pcm)) < 0)
 		return err;
-	strcpy(pcm->name, (chip->type == CMI8329) ? "CMI8329" : "CMI8330");
+	strlcpy(pcm->name,(chip->type == CMI8329,sizeof(pcm->name)) ? "CMI8329" : "CMI8330");
 	pcm->private_data = chip;
 	
 	/* SB16 */
@@ -602,8 +602,8 @@ static int __devinit snd_cmi8330_probe(struct snd_card *card, int dev)
 				mpuport[dev]);
 	}
 
-	strcpy(card->driver, (acard->type == CMI8329) ? "CMI8329" : "CMI8330/C3D");
-	strcpy(card->shortname, (acard->type == CMI8329) ? "C-Media CMI8329" : "C-Media CMI8330/C3D");
+	strlcpy(card->driver,(acard->type == CMI8329,sizeof(card->driver)) ? "CMI8329" : "CMI8330/C3D");
+	strlcpy(card->shortname,(acard->type == CMI8329,sizeof(card->shortname)) ? "C-Media CMI8329" : "C-Media CMI8330/C3D");
 	sprintf(card->longname, "%s at 0x%lx, irq %d, dma %d",
 		card->shortname,
 		acard->wss->port,

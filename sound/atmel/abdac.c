@@ -319,7 +319,7 @@ static int __devinit atmel_abdac_pcm_new(struct atmel_abdac *dac)
 	if (retval)
 		return retval;
 
-	strcpy(pcm->name, dac->card->shortname);
+	strlcpy(pcm->name,dac->card->shortname,sizeof(pcm->name));
 	pcm->private_data = dac;
 	pcm->info_flags = 0;
 	dac->pcm = pcm;
@@ -483,8 +483,8 @@ static int __devinit atmel_abdac_probe(struct platform_device *pdev)
 		goto out_unset_card_dev;
 	}
 
-	strcpy(card->driver, "Atmel ABDAC");
-	strcpy(card->shortname, "Atmel ABDAC");
+	strlcpy(card->driver,"Atmel ABDAC",sizeof(card->driver));
+	strlcpy(card->shortname,"Atmel ABDAC",sizeof(card->shortname));
 	sprintf(card->longname, "Atmel Audio Bitstream DAC");
 
 	retval = atmel_abdac_pcm_new(dac);

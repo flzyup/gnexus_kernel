@@ -695,7 +695,7 @@ static int probe_disk(struct vdc_port *port)
 	blk_queue_max_hw_sectors(q, port->max_xfer_size);
 	g->major = vdc_major;
 	g->first_minor = port->vio.vdev->dev_no << PARTITION_SHIFT;
-	strcpy(g->disk_name, port->disk_name);
+	strlcpy(g->disk_name,port->disk_name,sizeof(g->disk_name));
 
 	g->fops = &vdc_fops;
 	g->queue = q;

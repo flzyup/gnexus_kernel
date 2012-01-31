@@ -205,7 +205,7 @@ static int __devinit snd_opti9xx_init(struct snd_opti9xx *chip,
 	static int opti9xx_mc_size[] = {7, 7, 10, 10, 2, 2, 2};
 
 	chip->hardware = hardware;
-	strcpy(chip->name, snd_opti9xx_names[hardware]);
+	strlcpy(chip->name,snd_opti9xx_names[hardware],sizeof(chip->name));
 
 	spin_lock_init(&chip->lock);
 
@@ -618,35 +618,35 @@ static int __devinit snd_opti93x_mixer(struct snd_wss *chip)
 
 	card = chip->card;
 
-	strcpy(card->mixername, chip->pcm->name);
+	strlcpy(card->mixername,chip->pcm->name,sizeof(card->mixername));
 
 	memset(&id1, 0, sizeof(id1));
 	memset(&id2, 0, sizeof(id2));
 	id1.iface = id2.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	/* reassign AUX0 switch to CD */
-	strcpy(id1.name, "Aux Playback Switch");
-	strcpy(id2.name, "CD Playback Switch");
+	strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name));
+	strlcpy(id2.name,"CD Playback Switch",sizeof(id2.name));
 	err = snd_ctl_rename_id(card, &id1, &id2);
 	if (err < 0) {
 		snd_printk(KERN_ERR "Cannot rename opti93x control\n");
 		return err;
 	}
 	/* reassign AUX1 switch to FM */
-	strcpy(id1.name, "Aux Playback Switch"); id1.index = 1;
-	strcpy(id2.name, "FM Playback Switch");
+	strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name)); id1.index = 1;
+	strlcpy(id2.name,"FM Playback Switch",sizeof(id2.name));
 	err = snd_ctl_rename_id(card, &id1, &id2);
 	if (err < 0) {
 		snd_printk(KERN_ERR "Cannot rename opti93x control\n");
 		return err;
 	}
 	/* remove AUX1 volume */
-	strcpy(id1.name, "Aux Playback Volume"); id1.index = 1;
+	strlcpy(id1.name,"Aux Playback Volume",sizeof(id1.name)); id1.index = 1;
 	snd_ctl_remove_id(card, &id1);
 
 	/* Replace WSS volume controls with OPTi93x volume controls */
 	id1.index = 0;
 	for (idx = 0; idx < ARRAY_SIZE(snd_opti93x_controls); idx++) {
-		strcpy(id1.name, snd_opti93x_controls[idx].name);
+		strlcpy(id1.name,snd_opti93x_controls[idx].name,sizeof(id1.name));
 		snd_ctl_remove_id(card, &id1);
 
 		err = snd_ctl_add(card,
@@ -899,7 +899,7 @@ static int __devinit snd_opti9xx_probe(struct snd_card *card)
 	}
 #endif
 	chip->irq = irq;
-	strcpy(card->driver, chip->name);
+	strlcpy(card->driver,chip->name,sizeof(card->driver));
 	sprintf(card->shortname, "OPTi %s", card->driver);
 #if defined(CS4231) || defined(OPTi93X)
 	sprintf(card->longname, "%s, %s at 0x%lx, irq %d, dma %d&%d",

@@ -231,17 +231,17 @@ static ssize_t target_stat_scsi_tgt_dev_show_attr_status(
 
 	switch (dev->dev_status) {
 	case TRANSPORT_DEVICE_ACTIVATED:
-		strcpy(status, "activated");
+		strlcpy(status,"activated",sizeof(status));
 		break;
 	case TRANSPORT_DEVICE_DEACTIVATED:
-		strcpy(status, "deactivated");
+		strlcpy(status,"deactivated",sizeof(status));
 		break;
 	case TRANSPORT_DEVICE_SHUTDOWN:
-		strcpy(status, "shutdown");
+		strlcpy(status,"shutdown",sizeof(status));
 		break;
 	case TRANSPORT_DEVICE_OFFLINE_ACTIVATED:
 	case TRANSPORT_DEVICE_OFFLINE_DEACTIVATED:
-		strcpy(status, "offline");
+		strlcpy(status,"offline",sizeof(status));
 		break;
 	default:
 		sprintf(status, "unknown(%d)", dev->dev_status);

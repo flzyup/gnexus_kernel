@@ -176,7 +176,7 @@ void parse_config(struct net_device *dev)
 	}
 
 	/* setup the default encryption string */
-	strcpy(wvlan_config->szEncryption, DEF_CRYPT_STR);
+	strlcpy(wvlan_config->szEncryption,DEF_CRYPT_STR,sizeof(wvlan_config->szEncryption));
 
 	/* Obtain a user-space process context, storing the original context */
 	fs = get_fs();
@@ -241,7 +241,7 @@ void parse_config(struct net_device *dev)
 		set_fs(get_ds());
 
 		/* ;?just to fake something */
-		strcpy(/*wvlan_config->fw_image_*/filename, "/etc/agere/fw.bin");
+		strlcpy(/*wvlan_config->fw_image_*/filename,"/etc/agere/fw.bin",sizeof(/*wvlan_config->fw_image_*/filename));
 		file_desc = open(/*wvlan_config->fw_image_*/filename, 0, 0);
 		if (file_desc == -1) {
 			DBG_ERROR(DbgInfo, "No image file found\n");

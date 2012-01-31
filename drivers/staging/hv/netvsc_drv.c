@@ -294,9 +294,9 @@ int netvsc_recv_callback(struct hv_device *device_obj,
 static void netvsc_get_drvinfo(struct net_device *net,
 			       struct ethtool_drvinfo *info)
 {
-	strcpy(info->driver, "hv_netvsc");
-	strcpy(info->version, HV_DRV_VERSION);
-	strcpy(info->fw_version, "N/A");
+	strlcpy(info->driver,"hv_netvsc",sizeof(info->driver));
+	strlcpy(info->version,HV_DRV_VERSION,sizeof(info->version));
+	strlcpy(info->fw_version,"N/A",sizeof(info->fw_version));
 }
 
 static const struct ethtool_ops ethtool_ops = {

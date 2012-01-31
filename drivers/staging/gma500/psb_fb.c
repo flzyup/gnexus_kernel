@@ -427,7 +427,7 @@ static int psbfb_create(struct psb_fbdev *fbdev,
 	fbdev->psb_fb_helper.fbdev = info;
 	fbdev->pfb = psbfb;
 
-	strcpy(info->fix.id, "psbfb");
+	strlcpy(info->fix.id,"psbfb",sizeof(info->fix.id));
 
 	info->flags = FBINFO_DEFAULT;
 	info->fbops = &psbfb_ops;

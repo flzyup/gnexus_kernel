@@ -1138,8 +1138,8 @@ static int sonypi_disable(void)
 static int sonypi_acpi_add(struct acpi_device *device)
 {
 	sonypi_acpi_device = device;
-	strcpy(acpi_device_name(device), "Sony laptop hotkeys");
-	strcpy(acpi_device_class(device), "sony/hotkey");
+	strlcpy(acpi_device_name(device),"Sony laptop hotkeys",sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),"sony/hotkey",sizeof(acpi_device_class(device)));
 	return 0;
 }
 

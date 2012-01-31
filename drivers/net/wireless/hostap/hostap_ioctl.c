@@ -113,7 +113,7 @@ static int prism2_get_name(struct net_device *dev,
 		}
 	}
 
-	strcpy(name, over2 ? "IEEE 802.11b" : "IEEE 802.11-DS");
+	strlcpy(name,over2 ? "IEEE 802.11b" : "IEEE 802.11-DS",sizeof(name));
 
 	return 0;
 }

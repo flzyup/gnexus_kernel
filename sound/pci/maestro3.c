@@ -1964,7 +1964,7 @@ snd_m3_pcm(struct snd_m3 * chip, int device)
 
 	pcm->private_data = chip;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, chip->card->driver);
+	strlcpy(pcm->name,chip->card->driver,sizeof(pcm->name));
 	chip->pcm = pcm;
 	
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -2171,11 +2171,11 @@ static int __devinit snd_m3_mixer(struct snd_m3 *chip)
 #ifndef CONFIG_SND_MAESTRO3_INPUT
 	memset(&elem_id, 0, sizeof(elem_id));
 	elem_id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strcpy(elem_id.name, "Master Playback Switch");
+	strlcpy(elem_id.name,"Master Playback Switch",sizeof(elem_id.name));
 	chip->master_switch = snd_ctl_find_id(chip->card, &elem_id);
 	memset(&elem_id, 0, sizeof(elem_id));
 	elem_id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strcpy(elem_id.name, "Master Playback Volume");
+	strlcpy(elem_id.name,"Master Playback Volume",sizeof(elem_id.name));
 	chip->master_volume = snd_ctl_find_id(chip->card, &elem_id);
 #endif
 
@@ -2834,14 +2834,14 @@ snd_m3_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
 	switch (pci->device) {
 	case PCI_DEVICE_ID_ESS_ALLEGRO:
 	case PCI_DEVICE_ID_ESS_ALLEGRO_1:
-		strcpy(card->driver, "Allegro");
+		strlcpy(card->driver,"Allegro",sizeof(card->driver));
 		break;
 	case PCI_DEVICE_ID_ESS_CANYON3D_2LE:
 	case PCI_DEVICE_ID_ESS_CANYON3D_2:
-		strcpy(card->driver, "Canyon3D-2");
+		strlcpy(card->driver,"Canyon3D-2",sizeof(card->driver));
 		break;
 	default:
-		strcpy(card->driver, "Maestro3");
+		strlcpy(card->driver,"Maestro3",sizeof(card->driver));
 		break;
 	}
 

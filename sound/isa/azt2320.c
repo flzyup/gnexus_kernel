@@ -210,8 +210,8 @@ static int __devinit snd_card_azt2320_probe(int dev,
 		return error;
 	}
 
-	strcpy(card->driver, "AZT2320");
-	strcpy(card->shortname, "Aztech AZT2320");
+	strlcpy(card->driver,"AZT2320",sizeof(card->driver));
+	strlcpy(card->shortname,"Aztech AZT2320",sizeof(card->shortname));
 	sprintf(card->longname, "%s, WSS at 0x%lx, irq %i, dma %i&%i",
 		card->shortname, chip->port, irq[dev], dma1[dev], dma2[dev]);
 

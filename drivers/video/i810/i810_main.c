@@ -1089,7 +1089,7 @@ static int encode_fix(struct fb_fix_screeninfo *fix, struct fb_info *info)
 
     	memset(fix, 0, sizeof(struct fb_fix_screeninfo));
 
-    	strcpy(fix->id, "I810");
+    	strlcpy(fix->id,"I810",sizeof(fix->id));
 	mutex_lock(&info->mm_lock);
     	fix->smem_start = par->fb.physical;
     	fix->smem_len = par->fb.size;

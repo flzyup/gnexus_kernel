@@ -156,7 +156,7 @@ static int slip_open(void *data)
 	pri->slip.esc = 0;
 	if (pri->gate_addr != NULL) {
 		sprintf(version_buf, "%d", UML_NET_VERSION);
-		strcpy(gate_buf, pri->gate_addr);
+		strlcpy(gate_buf,pri->gate_addr,sizeof(gate_buf));
 
 		err = slip_tramp(argv, sfd);
 

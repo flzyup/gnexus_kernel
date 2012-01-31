@@ -3947,7 +3947,7 @@ static int __devinit slic_entry_probe(struct pci_dev *pcidev,
 
 	slic_debug_adapter_create(adapter);
 
-	strcpy(netdev->name, "eth%d");
+	strlcpy(netdev->name,"eth%d",sizeof(netdev->name));
 	err = register_netdev(netdev);
 	if (err) {
 		dev_err(&pcidev->dev, "Cannot register net device, aborting.\n");

@@ -4613,7 +4613,7 @@ static int __devinit rtl8192_pci_probe(struct pci_dev *pdev,
 
 	if (dev_alloc_name(dev, ifname) < 0){
                 RT_TRACE(COMP_INIT, "Oops: devname already taken! Trying wlan%%d...\n");
-		strcpy(ifname, "wlan%d");
+		strlcpy(ifname,"wlan%d",sizeof(ifname));
 		dev_alloc_name(dev, ifname);
         }
 

@@ -4717,7 +4717,7 @@ vxge_probe(struct pci_dev *pdev, const struct pci_device_id *pre)
 	vxge_print_parm(vdev, vpath_mask);
 
 	/* Store the fw version for ethttool option */
-	strcpy(vdev->fw_version, ll_config->device_hw_info.fw_version.version);
+	strlcpy(vdev->fw_version,ll_config->device_hw_info.fw_version.version,sizeof(vdev->fw_version));
 	memcpy(vdev->ndev->dev_addr, (u8 *)vdev->vpaths[0].macaddr, ETH_ALEN);
 	memcpy(vdev->ndev->perm_addr, vdev->ndev->dev_addr, ETH_ALEN);
 

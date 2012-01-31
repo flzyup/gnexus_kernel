@@ -1534,7 +1534,7 @@ bool dbll_find_dsp_symbol(struct dbll_library_obj *zl_lib, u32 address,
 
 	if (context.name[0]) {
 		status = true;
-		strcpy(name_output, context.name);
+		strlcpy(name_output,context.name,sizeof(name_output));
 		*sym_addr_output = context.sym_addr;
 	}
 

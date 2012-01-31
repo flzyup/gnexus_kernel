@@ -104,8 +104,7 @@ static int inet_csk_diag_fill(struct sock *sk,
 	if ((ext & (1 << (INET_DIAG_CONG - 1))) && icsk->icsk_ca_ops) {
 		const size_t len = strlen(icsk->icsk_ca_ops->name);
 
-		strcpy(INET_DIAG_PUT(skb, INET_DIAG_CONG, len + 1),
-		       icsk->icsk_ca_ops->name);
+		strlcpy(INET_DIAG_PUT(skb, INET_DIAG_CONG, len + 1),icsk->icsk_ca_ops->name,sizeof(INET_DIAG_PUT(skb, INET_DIAG_CONG, len + 1)));
 	}
 
 	r->idiag_family = sk->sk_family;

@@ -429,7 +429,7 @@ static struct snd_kcontrol __devinit *ctl_find(struct snd_card *card,
 	struct snd_ctl_elem_id sid;
 	memset(&sid, 0, sizeof(sid));
 	/* FIXME: strcpy is bad. */
-	strcpy(sid.name, name);
+	strlcpy(sid.name,name,sizeof(sid.name));
 	sid.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	return snd_ctl_find_id(card, &sid);
 }

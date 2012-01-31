@@ -1849,7 +1849,7 @@ snd_es1968_pcm(struct es1968 *chip, int device)
 
 	pcm->info_flags = 0;
 
-	strcpy(pcm->name, "ESS Maestro");
+	strlcpy(pcm->name,"ESS Maestro",sizeof(pcm->name));
 
 	chip->pcm = pcm;
 
@@ -2079,11 +2079,11 @@ snd_es1968_mixer(struct es1968 *chip)
 	/* attach master switch / volumes for h/w volume control */
 	memset(&elem_id, 0, sizeof(elem_id));
 	elem_id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strcpy(elem_id.name, "Master Playback Switch");
+	strlcpy(elem_id.name,"Master Playback Switch",sizeof(elem_id.name));
 	chip->master_switch = snd_ctl_find_id(chip->card, &elem_id);
 	memset(&elem_id, 0, sizeof(elem_id));
 	elem_id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strcpy(elem_id.name, "Master Playback Volume");
+	strlcpy(elem_id.name,"Master Playback Volume",sizeof(elem_id.name));
 	chip->master_volume = snd_ctl_find_id(chip->card, &elem_id);
 #endif
 
@@ -2847,16 +2847,16 @@ static int __devinit snd_es1968_probe(struct pci_dev *pci,
 
 	switch (chip->type) {
 	case TYPE_MAESTRO2E:
-		strcpy(card->driver, "ES1978");
-		strcpy(card->shortname, "ESS ES1978 (Maestro 2E)");
+		strlcpy(card->driver,"ES1978",sizeof(card->driver));
+		strlcpy(card->shortname,"ESS ES1978 (Maestro 2E,sizeof(card->shortname))");
 		break;
 	case TYPE_MAESTRO2:
-		strcpy(card->driver, "ES1968");
-		strcpy(card->shortname, "ESS ES1968 (Maestro 2)");
+		strlcpy(card->driver,"ES1968",sizeof(card->driver));
+		strlcpy(card->shortname,"ESS ES1968 (Maestro 2,sizeof(card->shortname))");
 		break;
 	case TYPE_MAESTRO:
-		strcpy(card->driver, "ESM1");
-		strcpy(card->shortname, "ESS Maestro 1");
+		strlcpy(card->driver,"ESM1",sizeof(card->driver));
+		strlcpy(card->shortname,"ESS Maestro 1",sizeof(card->shortname));
 		break;
 	}
 

@@ -1277,7 +1277,7 @@ static bool __init BusLogic_ReadHostAdapterConfiguration(struct BusLogic_HostAda
 		for (i = 0; i < sizeof(FlashPointInfo->ModelNumber); i++)
 			*TargetPointer++ = FlashPointInfo->ModelNumber[i];
 		*TargetPointer++ = '\0';
-		strcpy(HostAdapter->FirmwareVersion, FlashPoint_FirmwareVersion);
+		strlcpy(HostAdapter->FirmwareVersion,FlashPoint_FirmwareVersion,sizeof(HostAdapter->FirmwareVersion));
 		HostAdapter->SCSI_ID = FlashPointInfo->SCSI_ID;
 		HostAdapter->ExtendedTranslationEnabled = FlashPointInfo->ExtendedTranslationEnabled;
 		HostAdapter->ParityCheckingEnabled = FlashPointInfo->ParityCheckingEnabled;
@@ -1346,13 +1346,13 @@ static bool __init BusLogic_ReadHostAdapterConfiguration(struct BusLogic_HostAda
 	 */
 	if (ExtendedSetupInformation.BusType == 'A' && BoardID.FirmwareVersion1stDigit == '2')
 		/* BusLogic BT-542B ISA 2.xx */
-		strcpy(HostAdapterModelNumber, "542B");
+		strlcpy(HostAdapterModelNumber,"542B",sizeof(HostAdapterModelNumber));
 	else if (ExtendedSetupInformation.BusType == 'E' && BoardID.FirmwareVersion1stDigit == '2' && (BoardID.FirmwareVersion2ndDigit <= '1' || (BoardID.FirmwareVersion2ndDigit == '2' && FirmwareVersion3rdDigit == '0')))
 		/* BusLogic BT-742A EISA 2.1x or 2.20 */
-		strcpy(HostAdapterModelNumber, "742A");
+		strlcpy(HostAdapterModelNumber,"742A",sizeof(HostAdapterModelNumber));
 	else if (ExtendedSetupInformation.BusType == 'E' && BoardID.FirmwareVersion1stDigit == '0')
 		/* AMI FastDisk EISA Series 441 0.x */
-		strcpy(HostAdapterModelNumber, "747A");
+		strlcpy(HostAdapterModelNumber,"747A",sizeof(HostAdapterModelNumber));
 	else {
 		RequestedReplyLength = sizeof(HostAdapterModelNumber);
 		if (BusLogic_Command(HostAdapter, BusLogic_InquireHostAdapterModelNumber, &RequestedReplyLength, sizeof(RequestedReplyLength), &HostAdapterModelNumber, sizeof(HostAdapterModelNumber))
@@ -1633,7 +1633,7 @@ static bool __init BusLogic_ReadHostAdapterConfiguration(struct BusLogic_HostAda
 	/*
 	   Initialize the Host Adapter Full Model Name from the Model Name.
 	 */
-	strcpy(HostAdapter->FullModelName, "BusLogic ");
+	strlcpy(HostAdapter->FullModelName,"BusLogic ",sizeof(HostAdapter->FullModelName));
 	strcat(HostAdapter->FullModelName, HostAdapter->ModelName);
 	/*
 	   Select an appropriate value for the Tagged Queue Depth either from a
@@ -3332,12 +3332,12 @@ static void BusLogic_Message(enum BusLogic_MessageLevel MessageLevel, char *Form
 	va_end(Arguments);
 	if (MessageLevel == BusLogic_AnnounceLevel) {
 		static int AnnouncementLines = 0;
-		strcpy(&HostAdapter->MessageBuffer[HostAdapter->MessageBufferLength], Buffer);
+		strlcpy(&HostAdapter->MessageBuffer[HostAdapter->MessageBufferLength],Buffer,sizeof(&HostAdapter->MessageBuffer[HostAdapter->MessageBufferLength]));
 		HostAdapter->MessageBufferLength += Length;
 		if (++AnnouncementLines <= 2)
 			printk("%sscsi: %s", BusLogic_MessageLevelMap[MessageLevel], Buffer);
 	} else if (MessageLevel == BusLogic_InfoLevel) {
-		strcpy(&HostAdapter->MessageBuffer[HostAdapter->MessageBufferLength], Buffer);
+		strlcpy(&HostAdapter->MessageBuffer[HostAdapter->MessageBufferLength],Buffer,sizeof(&HostAdapter->MessageBuffer[HostAdapter->MessageBufferLength]));
 		HostAdapter->MessageBufferLength += Length;
 		if (BeginningOfLine) {
 			if (Buffer[0] != '\n' || Length > 1)

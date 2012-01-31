@@ -2509,8 +2509,7 @@ static int stac92xx_dc_bias_info(struct snd_kcontrol *kcontrol,
 	uinfo->count = 1;
 	if (uinfo->value.enumerated.item >= i)
 		uinfo->value.enumerated.item = i-1;
-	strcpy(uinfo->value.enumerated.name,
-		texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -2575,8 +2574,7 @@ static int stac92xx_io_switch_info(struct snd_kcontrol *kcontrol,
 
 	if (uinfo->value.enumerated.item >= 2)
 		uinfo->value.enumerated.item = 1;
-	strcpy(uinfo->value.enumerated.name,
-		texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)		texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -2786,7 +2784,7 @@ static inline int stac92xx_add_jack_mode_control(struct hda_codec *codec,
 	}
 
 	if (control) {
-		strcpy(name, hda_get_input_pin_label(codec, nid, 1));
+		strlcpy(name, hda_get_input_pin_label(codec, nid,1,sizeof(name, hda_get_input_pin_label(codec, nid)));
 		return stac92xx_add_control(codec->spec, control,
 					strcat(name, " Jack Mode"), nid);
 	}

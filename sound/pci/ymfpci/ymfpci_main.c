@@ -1141,7 +1141,7 @@ int __devinit snd_ymfpci_pcm(struct snd_ymfpci *chip, int device, struct snd_pcm
 
 	/* global setup */
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "YMFPCI");
+	strlcpy(pcm->name,"YMFPCI",sizeof(pcm->name));
 	chip->pcm = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1216,7 +1216,7 @@ int __devinit snd_ymfpci_pcm_spdif(struct snd_ymfpci *chip, int device, struct s
 
 	/* global setup */
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "YMFPCI - IEC958");
+	strlcpy(pcm->name,"YMFPCI - IEC958",sizeof(pcm->name));
 	chip->pcm_spdif = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1253,7 +1253,7 @@ int __devinit snd_ymfpci_pcm_4ch(struct snd_ymfpci *chip, int device, struct snd
 
 	/* global setup */
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "YMFPCI - Rear PCM");
+	strlcpy(pcm->name,"YMFPCI - Rear PCM",sizeof(pcm->name));
 	chip->pcm_4ch = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1938,7 +1938,7 @@ int __devinit snd_ymfpci_timer(struct snd_ymfpci *chip, int device)
 	tid.device = device;
 	tid.subdevice = 0;
 	if ((err = snd_timer_new(chip->card, "YMFPCI", &tid, &timer)) >= 0) {
-		strcpy(timer->name, "YMFPCI timer");
+		strlcpy(timer->name,"YMFPCI timer",sizeof(timer->name));
 		timer->private_data = chip;
 		timer->hw = snd_ymfpci_timer_hw;
 	}

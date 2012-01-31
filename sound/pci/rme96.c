@@ -1578,7 +1578,7 @@ snd_rme96_create(struct rme96 *rme96)
 	}
 	rme96->spdif_pcm->private_data = rme96;
 	rme96->spdif_pcm->private_free = snd_rme96_free_spdif_pcm;
-	strcpy(rme96->spdif_pcm->name, "Digi96 IEC958");
+	strlcpy(rme96->spdif_pcm->name,"Digi96 IEC958",sizeof(rme96->spdif_pcm->name));
 	snd_pcm_set_ops(rme96->spdif_pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_rme96_playback_spdif_ops);
 	snd_pcm_set_ops(rme96->spdif_pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_rme96_capture_spdif_ops);
 
@@ -1596,7 +1596,7 @@ snd_rme96_create(struct rme96 *rme96)
 		}		
 		rme96->adat_pcm->private_data = rme96;
 		rme96->adat_pcm->private_free = snd_rme96_free_adat_pcm;
-		strcpy(rme96->adat_pcm->name, "Digi96 ADAT");
+		strlcpy(rme96->adat_pcm->name,"Digi96 ADAT",sizeof(rme96->adat_pcm->name));
 		snd_pcm_set_ops(rme96->adat_pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_rme96_playback_adat_ops);
 		snd_pcm_set_ops(rme96->adat_pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_rme96_capture_adat_ops);
 		
@@ -1862,7 +1862,7 @@ snd_rme96_info_inputtype_control(struct snd_kcontrol *kcontrol, struct snd_ctl_e
 	if (uinfo->value.enumerated.item > uinfo->value.enumerated.items - 1) {
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
 	}
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 static int
@@ -1957,7 +1957,7 @@ snd_rme96_info_clockmode_control(struct snd_kcontrol *kcontrol, struct snd_ctl_e
 	if (uinfo->value.enumerated.item > 2) {
 		uinfo->value.enumerated.item = 2;
 	}
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 static int
@@ -1996,7 +1996,7 @@ snd_rme96_info_attenuation_control(struct snd_kcontrol *kcontrol, struct snd_ctl
 	if (uinfo->value.enumerated.item > 3) {
 		uinfo->value.enumerated.item = 3;
 	}
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 static int
@@ -2036,7 +2036,7 @@ snd_rme96_info_montracks_control(struct snd_kcontrol *kcontrol, struct snd_ctl_e
 	if (uinfo->value.enumerated.item > 3) {
 		uinfo->value.enumerated.item = 3;
 	}
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 static int
@@ -2357,23 +2357,23 @@ snd_rme96_probe(struct pci_dev *pci,
 		return err;
 	}
 	
-	strcpy(card->driver, "Digi96");
+	strlcpy(card->driver,"Digi96",sizeof(card->driver));
 	switch (rme96->pci->device) {
 	case PCI_DEVICE_ID_RME_DIGI96:
-		strcpy(card->shortname, "RME Digi96");
+		strlcpy(card->shortname,"RME Digi96",sizeof(card->shortname));
 		break;
 	case PCI_DEVICE_ID_RME_DIGI96_8:
-		strcpy(card->shortname, "RME Digi96/8");
+		strlcpy(card->shortname,"RME Digi96/8",sizeof(card->shortname));
 		break;
 	case PCI_DEVICE_ID_RME_DIGI96_8_PRO:
-		strcpy(card->shortname, "RME Digi96/8 PRO");
+		strlcpy(card->shortname,"RME Digi96/8 PRO",sizeof(card->shortname));
 		break;
 	case PCI_DEVICE_ID_RME_DIGI96_8_PAD_OR_PST:
 		pci_read_config_byte(rme96->pci, 8, &val);
 		if (val < 5) {
-			strcpy(card->shortname, "RME Digi96/8 PAD");
+			strlcpy(card->shortname,"RME Digi96/8 PAD",sizeof(card->shortname));
 		} else {
-			strcpy(card->shortname, "RME Digi96/8 PST");
+			strlcpy(card->shortname,"RME Digi96/8 PST",sizeof(card->shortname));
 		}
 		break;
 	}

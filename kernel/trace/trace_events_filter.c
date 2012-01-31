@@ -544,7 +544,7 @@ static int append_filter_string(struct event_filter *filter,
 	if (!new_filter_string)
 		return -ENOMEM;
 
-	strcpy(new_filter_string, filter->filter_string);
+	strlcpy(new_filter_string,filter->filter_string,sizeof(new_filter_string));
 	strcat(new_filter_string, string);
 	kfree(filter->filter_string);
 	filter->filter_string = new_filter_string;
@@ -1316,7 +1316,7 @@ static struct filter_pred *create_pred(int op, char *operand1, char *operand2)
 		return NULL;
 	}
 
-	strcpy(pred->regex.pattern, operand2);
+	strlcpy(pred->regex.pattern,operand2,sizeof(pred->regex.pattern));
 	pred->regex.len = strlen(pred->regex.pattern);
 
 	pred->op = op;

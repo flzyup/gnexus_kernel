@@ -56,7 +56,7 @@ static char * __init dmi_string(const struct dmi_header *dm, u8 s)
 	len = strlen(bp) + 1;
 	str = dmi_alloc(len);
 	if (str != NULL)
-		strcpy(str, bp);
+		strlcpy(str,bp,sizeof(str));
 	else
 		printk(KERN_ERR "dmi_string: cannot allocate %Zu bytes.\n", len);
 
@@ -205,7 +205,7 @@ static void __init dmi_save_one_device(int type, const char *name)
 	}
 
 	dev->type = type;
-	strcpy((char *)(dev + 1), name);
+	strlcpy((char *)(dev + 1),name,sizeof((char *)(dev + 1)));
 	dev->name = (char *)(dev + 1);
 	dev->device_data = NULL;
 	list_add(&dev->list, &dmi_devices);
@@ -293,7 +293,7 @@ static void __init dmi_save_dev_onboard(int instance, int segment, int bus,
 	onboard_dev->bus = bus;
 	onboard_dev->devfn = devfn;
 
-	strcpy((char *)&onboard_dev[1], name);
+	strlcpy((char *)&onboard_dev[1],name,sizeof((char *)&onboard_dev[1]));
 	onboard_dev->dev.type = DMI_DEV_TYPE_DEV_ONBOARD;
 	onboard_dev->dev.name = (char *)&onboard_dev[1];
 	onboard_dev->dev.device_data = onboard_dev;

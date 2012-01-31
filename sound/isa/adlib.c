@@ -67,8 +67,8 @@ static int __devinit snd_adlib_probe(struct device *dev, unsigned int n)
 	}
 	card->private_free = snd_adlib_free;
 
-	strcpy(card->driver, DEV_NAME);
-	strcpy(card->shortname, CRD_NAME);
+	strlcpy(card->driver,DEV_NAME,sizeof(card->driver));
+	strlcpy(card->shortname,CRD_NAME,sizeof(card->shortname));
 	sprintf(card->longname, CRD_NAME " at %#lx", port[n]);
 
 	error = snd_opl3_create(card, port[n], port[n] + 2, OPL3_HW_AUTO, 1, &opl3);

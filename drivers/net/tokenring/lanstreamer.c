@@ -709,7 +709,7 @@ static int streamer_open(struct net_device *dev)
 
 					writew(srb_open + 6, streamer_mmio + LAPA);
 					error_code = ntohs(readw(streamer_mmio + LAPD));
-					strcpy(open_error, open_maj_error[(error_code & 0xf0) >> 4]);
+					strlcpy(open_error,open_maj_error[(error_code & 0xf0,sizeof(open_error)) >> 4]);
 					strcat(open_error, " - ");
 					strcat(open_error, open_min_error[(error_code & 0x0f)]);
 

@@ -349,7 +349,7 @@ int __init pcic_probe(void)
 	pbm = &pcic->pbm;
 	pbm->prom_node = node;
 	prom_getstring(node, "name", namebuf, 63);  namebuf[63] = 0;
-	strcpy(pbm->prom_name, namebuf);
+	strlcpy(pbm->prom_name,namebuf,sizeof(pbm->prom_name));
 
 	{
 		extern volatile int t_nmi[4];
@@ -472,7 +472,7 @@ static void pcic_map_pci_device(struct linux_pcic *pcic,
 	int j;
 
 	if (node == 0 || node == -1) {
-		strcpy(namebuf, "???");
+		strlcpy(namebuf,"???",sizeof(namebuf));
 	} else {
 		prom_getstring(node, "name", namebuf, 63); namebuf[63] = 0;
 	}
@@ -531,7 +531,7 @@ pcic_fill_irq(struct linux_pcic *pcic, struct pci_dev *dev, int node)
 	char namebuf[64];
 
 	if (node == 0 || node == -1) {
-		strcpy(namebuf, "???");
+		strlcpy(namebuf,"???",sizeof(namebuf));
 	} else {
 		prom_getstring(node, "name", namebuf, sizeof(namebuf));
 	}

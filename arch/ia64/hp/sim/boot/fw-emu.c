@@ -320,13 +320,13 @@ sys_fw_init (const char *args, int arglen)
 	sal_systab->entry_count = 1;
 
 #ifdef CONFIG_IA64_GENERIC
-        strcpy(sal_systab->oem_id, "Generic");
-        strcpy(sal_systab->product_id, "IA-64 system");
+        strlcpy(sal_systab->oem_id,"Generic",sizeof(sal_systab->oem_id));
+        strlcpy(sal_systab->product_id,"IA-64 system",sizeof(sal_systab->product_id));
 #endif
 
 #ifdef CONFIG_IA64_HP_SIM
-	strcpy(sal_systab->oem_id, "Hewlett-Packard");
-	strcpy(sal_systab->product_id, "HP-simulator");
+	strlcpy(sal_systab->oem_id,"Hewlett-Packard",sizeof(sal_systab->oem_id));
+	strlcpy(sal_systab->product_id,"HP-simulator",sizeof(sal_systab->product_id));
 #endif
 
 	/* fill in an entry point: */

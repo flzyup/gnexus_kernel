@@ -260,7 +260,7 @@ static void parse_hid_report_descriptor(struct gtco *device, char * report,
 		type = PREF_TYPE(prefix);
 		switch (type) {
 		case TYPE_MAIN:
-			strcpy(globtype, "");
+			strlcpy(globtype,"",sizeof(globtype));
 			switch (tag) {
 
 			case TAG_MAIN_INPUT:
@@ -273,9 +273,9 @@ static void parse_hid_report_descriptor(struct gtco *device, char * report,
 
 				maintype = 'I';
 				if (data == 2)
-					strcpy(globtype, "Variable");
+					strlcpy(globtype,"Variable",sizeof(globtype));
 				else if (data == 3)
-					strcpy(globtype, "Var|Const");
+					strlcpy(globtype,"Var|Const",sizeof(globtype));
 
 				dbg("::::: Saving Report: %d input #%d Max: 0x%X(%d) Min:0x%X(%d) of %d bits",
 				    globalval[TAG_GLOB_REPORT_ID], inputnum,
@@ -351,7 +351,7 @@ static void parse_hid_report_descriptor(struct gtco *device, char * report,
 
 				if (data == 0) {
 					dbg("======>>>>>> Physical");
-					strcpy(globtype, "Physical");
+					strlcpy(globtype,"Physical",sizeof(globtype));
 				} else
 					dbg("======>>>>>>");
 
@@ -410,53 +410,53 @@ static void parse_hid_report_descriptor(struct gtco *device, char * report,
 				if (device->usage == 0)
 					device->usage = data;
 
-				strcpy(globtype, "USAGE");
+				strlcpy(globtype,"USAGE",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_LOG_MIN:
-				strcpy(globtype, "LOG_MIN");
+				strlcpy(globtype,"LOG_MIN",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_LOG_MAX:
-				strcpy(globtype, "LOG_MAX");
+				strlcpy(globtype,"LOG_MAX",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_PHYS_MIN:
-				strcpy(globtype, "PHYS_MIN");
+				strlcpy(globtype,"PHYS_MIN",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_PHYS_MAX:
-				strcpy(globtype, "PHYS_MAX");
+				strlcpy(globtype,"PHYS_MAX",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_UNIT_EXP:
-				strcpy(globtype, "EXP");
+				strlcpy(globtype,"EXP",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_UNIT:
-				strcpy(globtype, "UNIT");
+				strlcpy(globtype,"UNIT",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_REPORT_SZ:
-				strcpy(globtype, "REPORT_SZ");
+				strlcpy(globtype,"REPORT_SZ",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_REPORT_ID:
-				strcpy(globtype, "REPORT_ID");
+				strlcpy(globtype,"REPORT_ID",sizeof(globtype));
 				/* New report, restart numbering */
 				inputnum = 0;
 				break;
 
 			case TAG_GLOB_REPORT_CNT:
-				strcpy(globtype, "REPORT_CNT");
+				strlcpy(globtype,"REPORT_CNT",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_PUSH:
-				strcpy(globtype, "PUSH");
+				strlcpy(globtype,"PUSH",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_POP:
-				strcpy(globtype, "POP");
+				strlcpy(globtype,"POP",sizeof(globtype));
 				break;
 			}
 
@@ -491,21 +491,21 @@ static void parse_hid_report_descriptor(struct gtco *device, char * report,
 		case TYPE_LOCAL:
 			switch (tag) {
 			case TAG_GLOB_USAGE:
-				strcpy(globtype, "USAGE");
+				strlcpy(globtype,"USAGE",sizeof(globtype));
 				/* Always 1 byte */
 				usage = data;
 				break;
 
 			case TAG_GLOB_LOG_MIN:
-				strcpy(globtype, "MIN");
+				strlcpy(globtype,"MIN",sizeof(globtype));
 				break;
 
 			case TAG_GLOB_LOG_MAX:
-				strcpy(globtype, "MAX");
+				strlcpy(globtype,"MAX",sizeof(globtype));
 				break;
 
 			default:
-				strcpy(globtype, "UNKNOWN");
+				strlcpy(globtype,"UNKNOWN",sizeof(globtype));
 				break;
 			}
 

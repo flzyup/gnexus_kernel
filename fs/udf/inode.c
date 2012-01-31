@@ -1582,7 +1582,7 @@ static int udf_update_inode(struct inode *inode, int do_sync)
 		}
 		eid = (struct regid *)dsea->impUse;
 		memset(eid, 0, sizeof(struct regid));
-		strcpy(eid->ident, UDF_ID_DEVELOPER);
+		strlcpy(eid->ident,UDF_ID_DEVELOPER,sizeof(eid->ident));
 		eid->identSuffix[0] = UDF_OS_CLASS_UNIX;
 		eid->identSuffix[1] = UDF_OS_ID_LINUX;
 		dsea->majorDeviceIdent = cpu_to_le32(imajor(inode));
@@ -1601,7 +1601,7 @@ static int udf_update_inode(struct inode *inode, int do_sync)
 		udf_time_to_disk_stamp(&fe->modificationTime, inode->i_mtime);
 		udf_time_to_disk_stamp(&fe->attrTime, inode->i_ctime);
 		memset(&(fe->impIdent), 0, sizeof(struct regid));
-		strcpy(fe->impIdent.ident, UDF_ID_DEVELOPER);
+		strlcpy(fe->impIdent.ident,UDF_ID_DEVELOPER,sizeof(fe->impIdent.ident));
 		fe->impIdent.identSuffix[0] = UDF_OS_CLASS_UNIX;
 		fe->impIdent.identSuffix[1] = UDF_OS_ID_LINUX;
 		fe->uniqueID = cpu_to_le64(iinfo->i_unique);
@@ -1640,7 +1640,7 @@ static int udf_update_inode(struct inode *inode, int do_sync)
 		udf_time_to_disk_stamp(&efe->attrTime, inode->i_ctime);
 
 		memset(&(efe->impIdent), 0, sizeof(struct regid));
-		strcpy(efe->impIdent.ident, UDF_ID_DEVELOPER);
+		strlcpy(efe->impIdent.ident,UDF_ID_DEVELOPER,sizeof(efe->impIdent.ident));
 		efe->impIdent.identSuffix[0] = UDF_OS_CLASS_UNIX;
 		efe->impIdent.identSuffix[1] = UDF_OS_ID_LINUX;
 		efe->uniqueID = cpu_to_le64(iinfo->i_unique);

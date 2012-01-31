@@ -509,21 +509,21 @@ static int if_getconfig(char *ifname)
 	struct sockaddr dstaddr, broadaddr, netmask;
 	unsigned char *hwaddr;
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFFLAGS, &ifr) < 0)
 		return -1;
 	mif_flags = ifr.ifr_flags;
 	printf("The result of SIOCGIFFLAGS on %s is %x.\n",
 	       ifname, ifr.ifr_flags);
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFADDR, &ifr) < 0)
 		return -1;
 	printf("The result of SIOCGIFADDR is %2.2x.%2.2x.%2.2x.%2.2x.\n",
 	       ifr.ifr_addr.sa_data[0], ifr.ifr_addr.sa_data[1],
 	       ifr.ifr_addr.sa_data[2], ifr.ifr_addr.sa_data[3]);
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFHWADDR, &ifr) < 0)
 		return -1;
 
@@ -534,31 +534,31 @@ static int if_getconfig(char *ifname)
 	       ifr.ifr_hwaddr.sa_family, hwaddr[0], hwaddr[1],
 	       hwaddr[2], hwaddr[3], hwaddr[4], hwaddr[5]);
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFMETRIC, &ifr) < 0) {
 		metric = 0;
 	} else
 		metric = ifr.ifr_metric;
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFMTU, &ifr) < 0)
 		mtu = 0;
 	else
 		mtu = ifr.ifr_mtu;
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFDSTADDR, &ifr) < 0) {
 		memset(&dstaddr, 0, sizeof(struct sockaddr));
 	} else
 		dstaddr = ifr.ifr_dstaddr;
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFBRDADDR, &ifr) < 0) {
 		memset(&broadaddr, 0, sizeof(struct sockaddr));
 	} else
 		broadaddr = ifr.ifr_broadaddr;
 
-	strcpy(ifr.ifr_name, ifname);
+	strlcpy(ifr.ifr_name,ifname,sizeof(ifr.ifr_name));
 	if (ioctl(skfd, SIOCGIFNETMASK, &ifr) < 0) {
 		memset(&netmask, 0, sizeof(struct sockaddr));
 	} else

@@ -757,7 +757,7 @@ static int zr364xx_vidioc_enum_input(struct file *file, void *priv,
 {
 	if (i->index != 0)
 		return -EINVAL;
-	strcpy(i->name, DRIVER_DESC " Camera");
+	strlcpy(i->name,DRIVER_DESC " Camera",sizeof(i->name));
 	i->type = V4L2_INPUT_TYPE_CAMERA;
 	return 0;
 }
@@ -789,7 +789,7 @@ static int zr364xx_vidioc_queryctrl(struct file *file, void *priv,
 	switch (c->id) {
 	case V4L2_CID_BRIGHTNESS:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Brightness");
+		strlcpy(c->name,"Brightness",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 127;
 		c->step = 1;
@@ -854,7 +854,7 @@ static int zr364xx_vidioc_enum_fmt_vid_cap(struct file *file,
 	if (f->index > 0)
 		return -EINVAL;
 	f->flags = V4L2_FMT_FLAG_COMPRESSED;
-	strcpy(f->description, formats[0].name);
+	strlcpy(f->description,formats[0].name,sizeof(f->description));
 	f->pixelformat = formats[0].fourcc;
 	return 0;
 }

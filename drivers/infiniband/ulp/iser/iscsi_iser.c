@@ -522,13 +522,13 @@ iscsi_iser_conn_get_stats(struct iscsi_cls_conn *cls_conn, struct iscsi_stats *s
 	stats->tmfcmd_pdus = conn->tmfcmd_pdus_cnt;
 	stats->tmfrsp_pdus = conn->tmfrsp_pdus_cnt;
 	stats->custom_length = 4;
-	strcpy(stats->custom[0].desc, "qp_tx_queue_full");
+	strlcpy(stats->custom[0].desc,"qp_tx_queue_full",sizeof(stats->custom[0].desc));
 	stats->custom[0].value = 0; /* TB iser_conn->qp_tx_queue_full; */
-	strcpy(stats->custom[1].desc, "fmr_map_not_avail");
+	strlcpy(stats->custom[1].desc,"fmr_map_not_avail",sizeof(stats->custom[1].desc));
 	stats->custom[1].value = 0; /* TB iser_conn->fmr_map_not_avail */;
-	strcpy(stats->custom[2].desc, "eh_abort_cnt");
+	strlcpy(stats->custom[2].desc,"eh_abort_cnt",sizeof(stats->custom[2].desc));
 	stats->custom[2].value = conn->eh_abort_cnt;
-	strcpy(stats->custom[3].desc, "fmr_unalign_cnt");
+	strlcpy(stats->custom[3].desc,"fmr_unalign_cnt",sizeof(stats->custom[3].desc));
 	stats->custom[3].value = conn->fmr_unalign_cnt;
 }
 

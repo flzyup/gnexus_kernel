@@ -435,7 +435,7 @@ static int igorplugusb_remote_probe(struct usb_interface *intf,
 		goto mem_failure_switch;
 	}
 
-	strcpy(driver->name, DRIVER_NAME " ");
+	strlcpy(driver->name,DRIVER_NAME " ",sizeof(driver->name));
 	driver->minor = -1;
 	driver->code_length = CODE_LENGTH * 8; /* in bits */
 	driver->features = LIRC_CAN_REC_MODE2;

@@ -434,7 +434,7 @@ static int init_Jazz16(sb_devc * devc, struct address_info *hw_config)
 	 * Now we have configured a standard Jazz16 device. 
 	 */
 	devc->model = MDL_JAZZ;
-	strcpy(name, "Jazz16");
+	strlcpy(name,"Jazz16",sizeof(name));
 
 	hw_config->name = "Jazz16";
 	devc->caps |= SB_NO_MIDI;

@@ -83,7 +83,7 @@ static struct audit_tree *alloc_tree(const char *s)
 		INIT_LIST_HEAD(&tree->list);
 		INIT_LIST_HEAD(&tree->same_root);
 		tree->root = NULL;
-		strcpy(tree->pathname, s);
+		strlcpy(tree->pathname,s,sizeof(tree->pathname));
 	}
 	return tree;
 }

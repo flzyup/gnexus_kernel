@@ -218,7 +218,7 @@ static int DIVA_INIT_FUNCTION maint_init(void)
 
 	printk(KERN_INFO "%s\n", DRIVERNAME);
 	printk(KERN_INFO "%s: Rel:%s  Rev:", DRIVERLNAME, DRIVERRELEASE_MNT);
-	strcpy(tmprev, main_revision);
+	strlcpy(tmprev,main_revision,sizeof(tmprev));
 	printk("%s  Build: %s \n", getrev(tmprev), DIVA_BUILD);
 
 	if (!divas_maint_register_chrdev()) {

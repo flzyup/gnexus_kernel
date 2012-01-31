@@ -386,15 +386,15 @@ static void __init HiSaxVersion(void)
 #else
 	printk(KERN_INFO "HiSax: Version 3.5 (kernel)\n");
 #endif
-	strcpy(tmp, l1_revision);
+	strlcpy(tmp,l1_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: Layer1 Revision %s\n", HiSax_getrev(tmp));
-	strcpy(tmp, l2_revision);
+	strlcpy(tmp,l2_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: Layer2 Revision %s\n", HiSax_getrev(tmp));
-	strcpy(tmp, tei_revision);
+	strlcpy(tmp,tei_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: TeiMgr Revision %s\n", HiSax_getrev(tmp));
-	strcpy(tmp, l3_revision);
+	strlcpy(tmp,l3_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: Layer3 Revision %s\n", HiSax_getrev(tmp));
-	strcpy(tmp, lli_revision);
+	strlcpy(tmp,lli_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: LinkLayer Revision %s\n",
 	       HiSax_getrev(tmp));
 }
@@ -443,11 +443,11 @@ static int __init HiSax_setup(char *line)
 	}
   	if (str && *str) {
 		if (strlen(str) < HISAX_IDSIZE)
-			strcpy(HiSaxID, str);
+			strlcpy(HiSaxID,str,sizeof(HiSaxID));
 		else
 			printk(KERN_WARNING "HiSax: ID too long!");
 	} else
-		strcpy(HiSaxID, "HiSax");
+		strlcpy(HiSaxID,"HiSax",sizeof(HiSaxID));
 
 	HiSax_id = HiSaxID;
 	return 1;
@@ -1078,7 +1078,7 @@ static int hisax_cs_new(int cardnr, char *id, struct IsdnCard *card,
 #ifdef MODULE
 	cs->iif.owner = lockowner;
 #endif
-	strcpy(cs->iif.id, id);
+	strlcpy(cs->iif.id,id,sizeof(cs->iif.id));
 	cs->iif.channels = 2;
 	cs->iif.maxbufsize = MAX_DATA_SIZE;
 	cs->iif.hl_hdrlen = MAX_HEADER_LEN;
@@ -1239,12 +1239,12 @@ static int __init HiSax_inithardware(int *busy_flag)
 		id = next_id;
 		if ((next_id = strchr(id, t))) {
 			*next_id++ = 0;
-			strcpy(ids, id);
+			strlcpy(ids,id,sizeof(ids));
 			flg = i + 1;
 		} else {
 			next_id = id;
 			if (flg >= i)
-				strcpy(ids, id);
+				strlcpy(ids,id,sizeof(ids));
 			else
 				sprintf(ids, "%s%d", id, i);
 		}
@@ -1509,7 +1509,7 @@ static int __init HiSax_init(void)
 	if (!HiSax_id)
 		HiSax_id = HiSaxID;
 	if (!HiSaxID[0])
-		strcpy(HiSaxID, "HiSax");
+		strlcpy(HiSaxID,"HiSax",sizeof(HiSaxID));
 	for (i = 0; i < HISAX_MAX_CARDS; i++)
 		if (cards[i].typ > 0)
 			nrcards++;

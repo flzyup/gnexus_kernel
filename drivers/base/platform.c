@@ -168,7 +168,7 @@ struct platform_device *platform_device_alloc(const char *name, int id)
 
 	pa = kzalloc(sizeof(struct platform_object) + strlen(name), GFP_KERNEL);
 	if (pa) {
-		strcpy(pa->name, name);
+		strlcpy(pa->name,name,sizeof(pa->name));
 		pa->pdev.name = pa->name;
 		pa->pdev.id = id;
 		device_initialize(&pa->pdev.dev);

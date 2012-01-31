@@ -611,8 +611,8 @@ int easycap_alsa_probe(struct easycap *peasycap)
 	}
 
 	sprintf(&psnd_card->id[0], "EasyALSA%i", peasycap->minor);
-	strcpy(&psnd_card->driver[0], EASYCAP_DRIVER_DESCRIPTION);
-	strcpy(&psnd_card->shortname[0], "easycap_alsa");
+	strlcpy(&psnd_card->driver[0],EASYCAP_DRIVER_DESCRIPTION,sizeof(&psnd_card->driver[0]));
+	strlcpy(&psnd_card->shortname[0],"easycap_alsa",sizeof(&psnd_card->shortname[0]));
 	sprintf(&psnd_card->longname[0], "%s", &psnd_card->shortname[0]);
 
 	psnd_card->dev = &peasycap->pusb_device->dev;
@@ -629,7 +629,7 @@ int easycap_alsa_probe(struct easycap *peasycap)
 	snd_pcm_set_ops(psnd_pcm, SNDRV_PCM_STREAM_CAPTURE,
 			&easycap_alsa_pcm_ops);
 	psnd_pcm->info_flags = 0;
-	strcpy(&psnd_pcm->name[0], &psnd_card->id[0]);
+	strlcpy(&psnd_pcm->name[0],&psnd_card->id[0],sizeof(&psnd_pcm->name[0]));
 	psnd_pcm->private_data = peasycap;
 	peasycap->psnd_pcm = psnd_pcm;
 	peasycap->psubstream = NULL;

@@ -698,8 +698,7 @@ actcapi_dispatch(struct work_struct *work)
 					cmd.parm.setup.si1 = msg->msg.connect_ind.si1;
 					cmd.parm.setup.si2 = msg->msg.connect_ind.si2;
 					if (card->ptype == ISDN_PTYPE_EURO)
-						strcpy(cmd.parm.setup.eazmsn,
-						       act2000_find_eaz(card, msg->msg.connect_ind.eaz));
+						strlcpy(cmd.parm.setup.eazmsn,,sizeof(cmd.parm.setup.eazmsn)						       act2000_find_eaz(card, msg->msg.connect_ind.eaz));
 					else {
 						cmd.parm.setup.eazmsn[0] = msg->msg.connect_ind.eaz;
 						cmd.parm.setup.eazmsn[1] = 0;

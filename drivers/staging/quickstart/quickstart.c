@@ -277,7 +277,7 @@ static int quickstart_acpi_config(struct quickstart_acpi *quickstart, char *bid)
 		quickstart_btnlst_free();
 		return -ENOMEM;
 	}
-	strcpy(quickstart->btn->name, bid);
+	strlcpy(quickstart->btn->name,bid,sizeof(quickstart->btn->name));
 
 	return 0;
 }
@@ -296,8 +296,8 @@ static int quickstart_acpi_add(struct acpi_device *device)
 		return -ENOMEM;
 
 	quickstart->device = device;
-	strcpy(acpi_device_name(device), QUICKSTART_ACPI_DEVICE_NAME);
-	strcpy(acpi_device_class(device), QUICKSTART_ACPI_CLASS);
+	strlcpy(acpi_device_name(device),QUICKSTART_ACPI_DEVICE_NAME,sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),QUICKSTART_ACPI_CLASS,sizeof(acpi_device_class(device)));
 	device->driver_data = quickstart;
 
 	/* Add button to list and initialize some stuff */

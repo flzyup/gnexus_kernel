@@ -265,8 +265,8 @@ static int uml_net_change_mtu(struct net_device *dev, int new_mtu)
 static void uml_net_get_drvinfo(struct net_device *dev,
 				struct ethtool_drvinfo *info)
 {
-	strcpy(info->driver, DRIVER_NAME);
-	strcpy(info->version, "42");
+	strlcpy(info->driver,DRIVER_NAME,sizeof(info->driver));
+	strlcpy(info->version,"42",sizeof(info->version));
 }
 
 static const struct ethtool_ops uml_net_ethtool_ops = {

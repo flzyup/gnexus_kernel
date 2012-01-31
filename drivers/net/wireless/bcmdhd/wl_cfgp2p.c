@@ -722,7 +722,7 @@ wl_cfgp2p_escan(struct wl_priv *wl, struct net_device *dev, u16 active,
 		 * we have to set ssid to P2P WILDCARD because
 		 * we just do broadcast scan unless setting SSID
 		 */
-		strcpy(ssid.SSID, WL_P2P_WILDCARD_SSID);
+		strlcpy(ssid.SSID,WL_P2P_WILDCARD_SSID,sizeof(ssid.SSID));
 		ssid.SSID_len = htod32(WL_P2P_WILDCARD_SSID_LEN);
 		wl_cfgp2p_set_p2p_mode(wl, WL_P2P_DISC_ST_SCAN, 0, 0, bssidx);
 	}
@@ -1117,9 +1117,9 @@ wl_cfgp2p_vndr_ie(struct wl_priv *wl, struct net_device *ndev, s32 bssidx, s32 p
 		return -ENOMEM;
 	}
 	if (delete)
-		strcpy(ie_setbuf->cmd, "del");
+		strlcpy(ie_setbuf->cmd,"del",sizeof(ie_setbuf->cmd));
 	else
-		strcpy(ie_setbuf->cmd, "add");
+		strlcpy(ie_setbuf->cmd,"add",sizeof(ie_setbuf->cmd));
 	/* Buffer contains only 1 IE */
 	iecount = htod32(1);
 	memcpy((void *)&ie_setbuf->vndr_ie_buffer.iecount, &iecount, sizeof(int));
@@ -1799,7 +1799,7 @@ wl_cfgp2p_register_ndev(struct wl_priv *wl)
 		goto fail;
 	}
 
-	strcpy(net->name, "p2p%d");
+	strlcpy(net->name, "p2p%d",sizeof(net->name));
 	net->name[IFNAMSIZ - 1] = '\0';
 
 	/* Copy the reference to wl_priv */

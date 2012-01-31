@@ -48,12 +48,12 @@ static char * __init of_pdt_build_full_name(struct device_node *dp)
 	len = ourlen + plen + 2;
 
 	n = prom_early_alloc(len);
-	strcpy(n, dp->parent->full_name);
+	strlcpy(n,dp->parent->full_name,sizeof(n));
 	if (!of_node_is_root(dp->parent)) {
-		strcpy(n + plen, "/");
+		strlcpy(n + plen,"/",sizeof(n + plen));
 		plen++;
 	}
-	strcpy(n + plen, dp->path_component_name);
+	strlcpy(n + plen,dp->path_component_name,sizeof(n + plen));
 
 	return n;
 }
@@ -109,7 +109,7 @@ static struct property * __init of_pdt_build_one_prop(phandle node, char *prev,
 
 	p->name = (char *) (p + 1);
 	if (special_name) {
-		strcpy(p->name, special_name);
+		strlcpy(p->name,special_name,sizeof(p->name));
 		p->length = special_len;
 		p->value = prom_early_alloc(special_len);
 		memcpy(p->value, special_val, special_len);

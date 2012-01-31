@@ -180,7 +180,7 @@ static int wireless_get_protocol(struct net_device *dev, struct iw_request_info 
 	   the wireless extensions (/linux/wireless.h) indicate this string should
 	   describe the wireless protocol. */
 
-	strcpy(name, "IEEE 802.11b");
+	strlcpy(name,"IEEE 802.11b",sizeof(name));
 
 	DBG_LEAVE(DbgInfo);
 	return 0;
@@ -970,10 +970,10 @@ static int wireless_set_essid(struct net_device *dev, struct iw_request_info *in
 		/* Need this because in STAP build PARM_DEFAULT_SSID is "LinuxAP"
 		 * ;?but there ain't no STAP anymore*/
 		if ( CNV_INT_TO_LITTLE( lp->hcfCtx.IFB_FWIdentity.comp_id ) == COMP_ID_FW_STA  ) {
-			strcpy( lp->NetworkName, "ANY" );
+			strlcpy(lp->NetworkName,"ANY" ,sizeof(lp->NetworkName));
 		} else {
-			//strcpy( lp->NetworkName, "ANY" );
-			strcpy( lp->NetworkName, PARM_DEFAULT_SSID );
+			//strlcpy(lp->NetworkName,"ANY" ,sizeof(lp->NetworkName));
+			strlcpy(lp->NetworkName,PARM_DEFAULT_SSID ,sizeof(lp->NetworkName));
 		}
 	} else {
 		memcpy( lp->NetworkName, ssid, data->length );

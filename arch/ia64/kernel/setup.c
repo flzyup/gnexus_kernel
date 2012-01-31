@@ -752,7 +752,7 @@ get_model_name(__u8 family, __u8 model)
 			return brandname[i];
 	for (i = 0; i < MAX_BRANDS; i++)
 		if (brandname[i][0] == '\0')
-			return strcpy(brandname[i], brand);
+			return strlcpy(brandname[i],brand,sizeof(brandname[i]));
 	if (overflow++ == 0)
 		printk(KERN_ERR
 		       "%s: Table overflow. Some processor model information will be missing\n",

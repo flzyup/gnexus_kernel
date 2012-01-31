@@ -194,7 +194,7 @@ kvp_get_ip_address(int family, char *buffer, int length)
 	 */
 
 	if (getifaddrs(&ifap)) {
-		strcpy(buffer, "getifaddrs failed\n");
+		strlcpy(buffer,"getifaddrs failed\n",sizeof(buffer));
 		return 1;
 	}
 
@@ -209,12 +209,12 @@ kvp_get_ip_address(int family, char *buffer, int length)
 				str = inet_ntop(family, &addr->sin_addr,
 						tmp, 50);
 				if (str == NULL) {
-					strcpy(buffer, "inet_ntop failed\n");
+					strlcpy(buffer,"inet_ntop failed\n",sizeof(buffer));
 					error = 1;
 					goto getaddr_done;
 				}
 				if (offset == 0)
-					strcpy(buffer, tmp);
+					strlcpy(buffer,tmp,sizeof(buffer));
 				else
 					strcat(buffer, tmp);
 				strcat(buffer, ";");
@@ -236,12 +236,12 @@ kvp_get_ip_address(int family, char *buffer, int length)
 					&addr->sin6_addr.s6_addr,
 					tmp, 50);
 				if (str == NULL) {
-					strcpy(buffer, "inet_ntop failed\n");
+					strlcpy(buffer,"inet_ntop failed\n",sizeof(buffer));
 					error = 1;
 					goto getaddr_done;
 				}
 				if (offset == 0)
-					strcpy(buffer, tmp);
+					strlcpy(buffer,tmp,sizeof(buffer));
 				else
 					strcat(buffer, tmp);
 				strcat(buffer, ";");
@@ -275,11 +275,11 @@ kvp_get_domain_name(char *buffer, int length)
 
 	error = getaddrinfo(buffer, "http", &hints, &info);
 	if (error != 0) {
-		strcpy(buffer, "getaddrinfo failed\n");
+		strlcpy(buffer,"getaddrinfo failed\n",sizeof(buffer));
 		error = 1;
 		goto get_domain_done;
 	}
-	strcpy(buffer, info->ai_canonname);
+	strlcpy(buffer,info->ai_canonname,sizeof(buffer));
 get_domain_done:
 	freeaddrinfo(info);
 	return error;
@@ -402,7 +402,7 @@ int main(void)
 			p = (char *)incoming_cn_msg->data;
 			lic_version = malloc(strlen(p) + 1);
 			if (lic_version) {
-				strcpy(lic_version, p);
+				strlcpy(lic_version,p,sizeof(lic_version));
 				syslog(LOG_INFO, "KVP LIC Version: %s",
 					lic_version);
 			} else {
@@ -424,52 +424,52 @@ int main(void)
 		case FullyQualifiedDomainName:
 			kvp_get_domain_name(key_value,
 					HV_KVP_EXCHANGE_MAX_VALUE_SIZE);
-			strcpy(key_name, "FullyQualifiedDomainName");
+			strlcpy(key_name,"FullyQualifiedDomainName",sizeof(key_name));
 			break;
 		case IntegrationServicesVersion:
-			strcpy(key_name, "IntegrationServicesVersion");
-			strcpy(key_value, lic_version);
+			strlcpy(key_name,"IntegrationServicesVersion",sizeof(key_name));
+			strlcpy(key_value,lic_version,sizeof(key_value));
 			break;
 		case NetworkAddressIPv4:
 			kvp_get_ip_address(AF_INET, key_value,
 					HV_KVP_EXCHANGE_MAX_VALUE_SIZE);
-			strcpy(key_name, "NetworkAddressIPv4");
+			strlcpy(key_name,"NetworkAddressIPv4",sizeof(key_name));
 			break;
 		case NetworkAddressIPv6:
 			kvp_get_ip_address(AF_INET6, key_value,
 					HV_KVP_EXCHANGE_MAX_VALUE_SIZE);
-			strcpy(key_name, "NetworkAddressIPv6");
+			strlcpy(key_name,"NetworkAddressIPv6",sizeof(key_name));
 			break;
 		case OSBuildNumber:
-			strcpy(key_value, os_build);
-			strcpy(key_name, "OSBuildNumber");
+			strlcpy(key_value,os_build,sizeof(key_value));
+			strlcpy(key_name,"OSBuildNumber",sizeof(key_name));
 			break;
 		case OSName:
-			strcpy(key_value, os_name);
-			strcpy(key_name, "OSName");
+			strlcpy(key_value,os_name,sizeof(key_value));
+			strlcpy(key_name,"OSName",sizeof(key_name));
 			break;
 		case OSMajorVersion:
-			strcpy(key_value, os_major);
-			strcpy(key_name, "OSMajorVersion");
+			strlcpy(key_value,os_major,sizeof(key_value));
+			strlcpy(key_name,"OSMajorVersion",sizeof(key_name));
 			break;
 		case OSMinorVersion:
-			strcpy(key_value, os_minor);
-			strcpy(key_name, "OSMinorVersion");
+			strlcpy(key_value,os_minor,sizeof(key_value));
+			strlcpy(key_name,"OSMinorVersion",sizeof(key_name));
 			break;
 		case OSVersion:
-			strcpy(key_value, os_build);
-			strcpy(key_name, "OSVersion");
+			strlcpy(key_value,os_build,sizeof(key_value));
+			strlcpy(key_name,"OSVersion",sizeof(key_name));
 			break;
 		case ProcessorArchitecture:
-			strcpy(key_value, processor_arch);
-			strcpy(key_name, "ProcessorArchitecture");
+			strlcpy(key_value,processor_arch,sizeof(key_value));
+			strlcpy(key_name,"ProcessorArchitecture",sizeof(key_name));
 			break;
 		default:
-			strcpy(key_value, "Unknown Key");
+			strlcpy(key_value,"Unknown Key",sizeof(key_value));
 			/*
 			 * We use a null key name to terminate enumeration.
 			 */
-			strcpy(key_name, "");
+			strlcpy(key_name,"",sizeof(key_name));
 			break;
 		}
 		/*

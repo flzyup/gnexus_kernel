@@ -1190,7 +1190,7 @@ static int vidioc_enum_input(struct file *file, void *priv,
 	i->index = n;
 	i->type = V4L2_INPUT_TYPE_CAMERA;
 
-	strcpy(i->name, iname[INPUT(n)->type]);
+	strlcpy(i->name,iname[INPUT(n,sizeof(i->name))->type]);
 
 	if ((CX231XX_VMUX_TELEVISION == INPUT(n)->type) ||
 	    (CX231XX_VMUX_CABLE == INPUT(n)->type))
@@ -1247,10 +1247,10 @@ static int vidioc_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 
 	switch (a->index) {
 	case CX231XX_AMUX_VIDEO:
-		strcpy(a->name, "Television");
+		strlcpy(a->name,"Television",sizeof(a->name));
 		break;
 	case CX231XX_AMUX_LINE_IN:
-		strcpy(a->name, "Line In");
+		strlcpy(a->name,"Line In",sizeof(a->name));
 		break;
 	default:
 		return -EINVAL;
@@ -1363,7 +1363,7 @@ static int vidioc_g_tuner(struct file *file, void *priv, struct v4l2_tuner *t)
 	if (0 != t->index)
 		return -EINVAL;
 
-	strcpy(t->name, "Tuner");
+	strlcpy(t->name,"Tuner",sizeof(t->name));
 
 	t->type = V4L2_TUNER_ANALOG_TV;
 	t->capability = V4L2_TUNER_CAP_NORM;
@@ -2069,7 +2069,7 @@ static int radio_g_tuner(struct file *file, void *priv, struct v4l2_tuner *t)
 	if (unlikely(t->index > 0))
 		return -EINVAL;
 
-	strcpy(t->name, "Radio");
+	strlcpy(t->name,"Radio",sizeof(t->name));
 	t->type = V4L2_TUNER_RADIO;
 
 	call_all(dev, tuner, s_tuner, t);
@@ -2081,7 +2081,7 @@ static int radio_enum_input(struct file *file, void *priv, struct v4l2_input *i)
 {
 	if (i->index != 0)
 		return -EINVAL;
-	strcpy(i->name, "Radio");
+	strlcpy(i->name,"Radio",sizeof(i->name));
 	i->type = V4L2_INPUT_TYPE_TUNER;
 
 	return 0;
@@ -2092,7 +2092,7 @@ static int radio_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 	if (unlikely(a->index))
 		return -EINVAL;
 
-	strcpy(a->name, "Radio");
+	strlcpy(a->name,"Radio",sizeof(a->name));
 	return 0;
 }
 
@@ -2617,7 +2617,7 @@ int cx231xx_register_analog_devices(struct cx231xx *dev)
 	/* Initialize VBI template */
 	memcpy(&cx231xx_vbi_template, &cx231xx_video_template,
 	       sizeof(cx231xx_vbi_template));
-	strcpy(cx231xx_vbi_template.name, "cx231xx-vbi");
+	strlcpy(cx231xx_vbi_template.name,"cx231xx-vbi",sizeof(cx231xx_vbi_template.name));
 
 	/* Allocate and fill vbi video_device struct */
 	dev->vbi_dev = cx231xx_vdev_init(dev, &cx231xx_vbi_template, "vbi");

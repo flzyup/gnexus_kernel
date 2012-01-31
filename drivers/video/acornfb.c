@@ -953,7 +953,7 @@ static void __devinit acornfb_init_fbinfo(void)
 	fb_info.flags		= FBINFO_DEFAULT | FBINFO_HWACCEL_YPAN;
 	fb_info.pseudo_palette	= current_par.pseudo_palette;
 
-	strcpy(fb_info.fix.id, "Acorn");
+	strlcpy(fb_info.fix.id,"Acorn",sizeof(fb_info.fix.id));
 	fb_info.fix.type	= FB_TYPE_PACKED_PIXELS;
 	fb_info.fix.type_aux	= 0;
 	fb_info.fix.xpanstep	= 0;

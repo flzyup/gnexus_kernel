@@ -369,7 +369,7 @@ int probe_uart401(struct address_info *hw_config, struct module *owner)
 		goto cleanup_midi_devs;
 	}
 	memcpy(midi_devs[devc->my_dev]->converter, &std_midi_synth, sizeof(struct synth_operations));
-	strcpy(midi_devs[devc->my_dev]->info.name, name);
+	strlcpy(midi_devs[devc->my_dev]->info.name,name,sizeof(midi_devs[devc->my_dev]->info.name));
 	midi_devs[devc->my_dev]->converter->id = "UART401";
 	midi_devs[devc->my_dev]->converter->midi_dev = devc->my_dev;
 

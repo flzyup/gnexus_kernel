@@ -222,7 +222,7 @@ static int vidioc_enum_input(struct file *file, void *priv,
 	if (i->index >= 7)
 		return -EINVAL;
 
-	strcpy(i->name, inputs[i->index]);
+	strlcpy(i->name,inputs[i->index],sizeof(i->name));
 
 	if (i->index == 0)
 		i->type = V4L2_INPUT_TYPE_TUNER;
@@ -280,7 +280,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 	if (0 != t->index)
 		return -EINVAL;
 
-	strcpy(t->name, "tuner");
+	strlcpy(t->name,"tuner",sizeof(t->name));
 	t->type = V4L2_TUNER_ANALOG_TV;
 	t->capability = V4L2_TUNER_CAP_NORM | V4L2_TUNER_CAP_STEREO;
 
@@ -645,7 +645,7 @@ static int vidioc_querycap(struct file *file, void  *priv,
 	struct saa7164_port *port = fh->port;
 	struct saa7164_dev *dev = port->dev;
 
-	strcpy(cap->driver, dev->name);
+	strlcpy(cap->driver,dev->name,sizeof(cap->driver));
 	strlcpy(cap->card, saa7164_boards[dev->board].name,
 		sizeof(cap->card));
 	sprintf(cap->bus_info, "PCI:%s", pci_name(dev->pci));

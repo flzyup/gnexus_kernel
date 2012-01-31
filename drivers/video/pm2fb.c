@@ -1536,15 +1536,15 @@ static int __devinit pm2fb_probe(struct pci_dev *pdev,
 
 	switch (pdev->device) {
 	case  PCI_DEVICE_ID_TI_TVP4020:
-		strcpy(pm2fb_fix.id, "TVP4020");
+		strlcpy(pm2fb_fix.id,"TVP4020",sizeof(pm2fb_fix.id));
 		default_par->type = PM2_TYPE_PERMEDIA2;
 		break;
 	case  PCI_DEVICE_ID_3DLABS_PERMEDIA2:
-		strcpy(pm2fb_fix.id, "Permedia2");
+		strlcpy(pm2fb_fix.id,"Permedia2",sizeof(pm2fb_fix.id));
 		default_par->type = PM2_TYPE_PERMEDIA2;
 		break;
 	case  PCI_DEVICE_ID_3DLABS_PERMEDIA2V:
-		strcpy(pm2fb_fix.id, "Permedia2v");
+		strlcpy(pm2fb_fix.id,"Permedia2v",sizeof(pm2fb_fix.id));
 		default_par->type = PM2_TYPE_PERMEDIA2V;
 		break;
 	}

@@ -854,7 +854,7 @@ static int __init atmel_lcdfb_probe(struct platform_device *pdev)
 	sinfo->info = info;
 	sinfo->pdev = pdev;
 
-	strcpy(info->fix.id, sinfo->pdev->name);
+	strlcpy(info->fix.id,sinfo->pdev->name,sizeof(info->fix.id));
 	info->flags = ATMEL_LCDFB_FBINFO_DEFAULT;
 	info->pseudo_palette = sinfo->pseudo_palette;
 	info->fbops = &atmel_lcdfb_ops;

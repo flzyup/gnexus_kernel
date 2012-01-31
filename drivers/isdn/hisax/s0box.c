@@ -216,7 +216,7 @@ setup_s0box(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strcpy(tmp, s0box_revision);
+	strlcpy(tmp,s0box_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: S0Box IO driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_S0BOX)
 		return (0);

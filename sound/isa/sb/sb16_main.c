@@ -710,7 +710,7 @@ static int snd_sb16_dma_control_info(struct snd_kcontrol *kcontrol, struct snd_c
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item > 2)
 		uinfo->value.enumerated.item = 2;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 

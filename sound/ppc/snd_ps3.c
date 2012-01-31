@@ -985,9 +985,9 @@ static int __devinit snd_ps3_driver_probe(struct ps3_system_bus_device *dev)
 	if (ret < 0)
 		goto clean_irq;
 
-	strcpy(the_card.card->driver, "PS3");
-	strcpy(the_card.card->shortname, "PS3");
-	strcpy(the_card.card->longname, "PS3 sound");
+	strlcpy(the_card.card->driver,"PS3",sizeof(the_card.card->driver));
+	strlcpy(the_card.card->shortname,"PS3",sizeof(the_card.card->shortname));
+	strlcpy(the_card.card->longname,"PS3 sound",sizeof(the_card.card->longname));
 
 	/* create control elements */
 	for (i = 0; i < ARRAY_SIZE(spdif_ctls); i++) {
@@ -1009,7 +1009,7 @@ static int __devinit snd_ps3_driver_probe(struct ps3_system_bus_device *dev)
 		goto clean_card;
 
 	the_card.pcm->private_data = &the_card;
-	strcpy(the_card.pcm->name, "SPDIF");
+	strlcpy(the_card.pcm->name,"SPDIF",sizeof(the_card.pcm->name));
 
 	/* set pcm ops */
 	snd_pcm_set_ops(the_card.pcm, SNDRV_PCM_STREAM_PLAYBACK,

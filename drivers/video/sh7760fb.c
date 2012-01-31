@@ -512,7 +512,7 @@ static int __devinit sh7760fb_probe(struct platform_device *pdev)
 	info->var.transp.length = 0;
 	info->var.transp.msb_right = 0;
 
-	strcpy(info->fix.id, "sh7760-lcdc");
+	strlcpy(info->fix.id,"sh7760-lcdc",sizeof(info->fix.id));
 
 	/* set the DON2 bit now, before cmap allocation, as it will randomize
 	 * palette memory.

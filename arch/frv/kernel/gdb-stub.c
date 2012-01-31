@@ -244,7 +244,7 @@ void gdbstub_printk(const char *fmt, ...)
 	debug_to_serial(buf, len);
 }
 
-static inline char *gdbstub_strcpy(char *dst, const char *src)
+static inline char *gdbstub_strlcpy(char *dst,const char *src,sizeof(char *dst))
 {
 	int loop = 0;
 	while ((dst[loop] = src[loop]))
@@ -1379,7 +1379,7 @@ static void gdbstub_handle_query(void)
 		return;
 	}
 
-	gdbstub_strcpy(output_buffer,"E01");
+	gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 }
 
 /*****************************************************************************/
@@ -1747,7 +1747,7 @@ void gdbstub(int sigval)
 			ptr = hex2mem(ptr, &__debug_user_context->f.fner[0], 4);
 			ptr = hex2mem(ptr, &__debug_user_context->f.fner[1], 4);
 
-			gdbstub_strcpy(output_buffer,"OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			break;
 
 			/* mAA..AA,LLLL  Read LLLL bytes at address AA..AA */
@@ -1760,10 +1760,10 @@ void gdbstub(int sigval)
 			    ) {
 				if (mem2hex((char *)addr, output_buffer, length, 1))
 					break;
-				gdbstub_strcpy (output_buffer, "E03");
+				gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 			}
 			else {
-				gdbstub_strcpy(output_buffer,"E01");
+				gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 			}
 			break;
 
@@ -1777,14 +1777,14 @@ void gdbstub(int sigval)
 			    *ptr++ == ':'
 			    ) {
 				if (hex2mem(ptr, (char *)addr, length)) {
-					gdbstub_strcpy(output_buffer, "OK");
+					gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 				}
 				else {
-					gdbstub_strcpy(output_buffer, "E03");
+					gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 				}
 			}
 			else
-				gdbstub_strcpy(output_buffer, "E02");
+				gdbstub_strlcpy(output_buffer,"E02",sizeof(output_buffer));
 
 			flush_cache = 1;
 			break;
@@ -1803,7 +1803,7 @@ void gdbstub(int sigval)
 			    *ptr++ != '=' ||
 			    !hexToInt(&ptr, &temp)
 			    ) {
-				gdbstub_strcpy(output_buffer, "E01");
+				gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 				break;
 			}
 
@@ -1865,10 +1865,10 @@ void gdbstub(int sigval)
 			}
 
 			if (temp2) {
-				gdbstub_strcpy(output_buffer, "OK");
+				gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			}
 			else {
-				gdbstub_strcpy(output_buffer, "E02");
+				gdbstub_strlcpy(output_buffer,"E02",sizeof(output_buffer));
 			}
 			break;
 
@@ -1886,7 +1886,7 @@ void gdbstub(int sigval)
 
 			/* detach */
 		case 'D':
-			gdbstub_strcpy(output_buffer, "OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			break;
 
 			/* reset the whole machine (FIXME: system dependent) */
@@ -1912,7 +1912,7 @@ void gdbstub(int sigval)
 		case 'b':
 			ptr = &input_buffer[1];
 			if (!hexToInt(&ptr, &temp)) {
-				gdbstub_strcpy(output_buffer,"B01");
+				gdbstub_strlcpy(output_buffer,"B01",sizeof(output_buffer));
 				break;
 			}
 
@@ -1931,24 +1931,24 @@ void gdbstub(int sigval)
 			    !hexToInt(&ptr,&addr) || *ptr++ != ',' ||
 			    !hexToInt(&ptr,&length)
 			    ) {
-				gdbstub_strcpy(output_buffer,"E01");
+				gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 				break;
 			}
 
 			if (temp >= 5) {
-				gdbstub_strcpy(output_buffer,"E03");
+				gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 				break;
 			}
 
 			if (gdbstub_set_breakpoint(temp, addr, length) < 0) {
-				gdbstub_strcpy(output_buffer,"E03");
+				gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 				break;
 			}
 
 			if (temp == 0)
 				flush_cache = 1; /* soft bkpt by modified memory */
 
-			gdbstub_strcpy(output_buffer,"OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			break;
 
 			/* clear breakpoint */
@@ -1959,29 +1959,29 @@ void gdbstub(int sigval)
 			    !hexToInt(&ptr,&addr) || *ptr++ != ',' ||
 			    !hexToInt(&ptr,&length)
 			    ) {
-				gdbstub_strcpy(output_buffer,"E01");
+				gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 				break;
 			}
 
 			if (temp >= 5) {
-				gdbstub_strcpy(output_buffer,"E03");
+				gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 				break;
 			}
 
 			if (gdbstub_clear_breakpoint(temp, addr, length) < 0) {
-				gdbstub_strcpy(output_buffer,"E03");
+				gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 				break;
 			}
 
 			if (temp == 0)
 				flush_cache = 1; /* soft bkpt by modified memory */
 
-			gdbstub_strcpy(output_buffer,"OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			break;
 
 			/* Thread-setting packet */
 		case 'H':
-			gdbstub_strcpy(output_buffer, "OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			break;
 
 		case 'q':
@@ -1991,7 +1991,7 @@ void gdbstub(int sigval)
 		default:
 		unsupported_cmd:
 			gdbstub_proto("### GDB Unsupported Cmd '%s'\n",input_buffer);
-			gdbstub_strcpy(output_buffer,"E01");
+			gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 			break;
 		}
 

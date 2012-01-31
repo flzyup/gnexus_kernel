@@ -273,7 +273,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 			for (i = 0; i < env->envp_idx; i++) {
 				len = strlen(env->envp[i]) + 1;
 				scratch = skb_put(skb, len);
-				strcpy(scratch, env->envp[i]);
+				strlcpy(scratch,env->envp[i],sizeof(scratch));
 			}
 
 			NETLINK_CB(skb).dst_group = 1;

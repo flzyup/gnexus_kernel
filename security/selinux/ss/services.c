@@ -1090,7 +1090,7 @@ static int security_sid_to_context_core(u32 sid, char **scontext,
 				rc = -ENOMEM;
 				goto out;
 			}
-			strcpy(scontextp, initial_sid_to_string[sid]);
+			strlcpy(scontextp,initial_sid_to_string[sid],sizeof(scontextp));
 			*scontext = scontextp;
 			goto out;
 		}

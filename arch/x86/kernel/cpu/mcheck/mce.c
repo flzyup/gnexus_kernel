@@ -1838,7 +1838,7 @@ static ssize_t set_bank(struct sys_device *s, struct sysdev_attribute *attr,
 static ssize_t
 show_trigger(struct sys_device *s, struct sysdev_attribute *attr, char *buf)
 {
-	strcpy(buf, mce_helper);
+	strlcpy(buf,mce_helper,sizeof(buf));
 	strcat(buf, "\n");
 	return strlen(mce_helper) + 1;
 }

@@ -1446,10 +1446,10 @@ static int sd_querymenu(struct gspca_dev *gspca_dev,
 	case V4L2_CID_POWER_LINE_FREQUENCY:
 		switch (menu->index) {
 		case 0:         /* V4L2_CID_POWER_LINE_FREQUENCY_DISABLED */
-			strcpy((char *) menu->name, "Disabled");
+			strlcpy((char *) menu->name,"Disabled",sizeof((char *) menu->name));
 			return 0;
 		case 1:         /* V4L2_CID_POWER_LINE_FREQUENCY_50HZ */
-			strcpy((char *) menu->name, "50 Hz");
+			strlcpy((char *) menu->name,"50 Hz",sizeof((char *) menu->name));
 			return 0;
 		}
 		break;

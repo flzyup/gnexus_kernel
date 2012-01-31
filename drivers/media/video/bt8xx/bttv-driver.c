@@ -2917,7 +2917,7 @@ static int bttv_g_tuner(struct file *file, void *priv,
 
 	t->rxsubchans = V4L2_TUNER_SUB_MONO;
 	bttv_call_all(btv, tuner, g_tuner, t);
-	strcpy(t->name, "Television");
+	strlcpy(t->name,"Television",sizeof(t->name));
 	t->capability = V4L2_TUNER_CAP_NORM;
 	t->type       = V4L2_TUNER_ANALOG_TV;
 	if (btread(BT848_DSTATUS)&BT848_DSTATUS_HLOC)
@@ -3070,7 +3070,7 @@ static int bttv_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 	if (unlikely(a->index))
 		return -EINVAL;
 
-	strcpy(a->name, "audio");
+	strlcpy(a->name,"audio",sizeof(a->name));
 	return 0;
 }
 
@@ -3413,7 +3413,7 @@ static int radio_querycap(struct file *file, void *priv,
 	struct bttv_fh *fh = priv;
 	struct bttv *btv = fh->btv;
 
-	strcpy(cap->driver, "bttv");
+	strlcpy(cap->driver,"bttv",sizeof(cap->driver));
 	strlcpy(cap->card, btv->radio_dev->name, sizeof(cap->card));
 	sprintf(cap->bus_info, "PCI:%s", pci_name(btv->c.pci));
 	cap->version = BTTV_VERSION_CODE;
@@ -3431,7 +3431,7 @@ static int radio_g_tuner(struct file *file, void *priv, struct v4l2_tuner *t)
 		return -EINVAL;
 	if (0 != t->index)
 		return -EINVAL;
-	strcpy(t->name, "Radio");
+	strlcpy(t->name,"Radio",sizeof(t->name));
 	t->type = V4L2_TUNER_RADIO;
 
 	bttv_call_all(btv, tuner, g_tuner, t);
@@ -3448,7 +3448,7 @@ static int radio_enum_input(struct file *file, void *priv,
 	if (i->index != 0)
 		return -EINVAL;
 
-	strcpy(i->name, "Radio");
+	strlcpy(i->name,"Radio",sizeof(i->name));
 	i->type = V4L2_INPUT_TYPE_TUNER;
 
 	return 0;
@@ -3460,7 +3460,7 @@ static int radio_g_audio(struct file *file, void *priv,
 	if (unlikely(a->index))
 		return -EINVAL;
 
-	strcpy(a->name, "Radio");
+	strlcpy(a->name,"Radio",sizeof(a->name));
 
 	return 0;
 }

@@ -589,8 +589,8 @@ au1000_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
 {
 	struct au1000_private *aup = netdev_priv(dev);
 
-	strcpy(info->driver, DRV_NAME);
-	strcpy(info->version, DRV_VERSION);
+	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
+	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
 	info->fw_version[0] = '\0';
 	sprintf(info->bus_info, "%s %d", DRV_NAME, aup->mac_id);
 	info->regdump_len = 0;

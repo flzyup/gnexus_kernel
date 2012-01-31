@@ -233,7 +233,7 @@ struct register_image
 /************** Prototypes for local library functions ***********************/
 
 /* Copy of strcpy from libc. */
-static char *gdb_cris_strcpy (char *s1, const char *s2);
+static char *gdb_cris_strlcpy(char *s1,const char *s2,sizeof(char *s1));
 
 /* Copy of strlen from libc. */
 static int gdb_cris_strlen (const char *s);
@@ -446,7 +446,7 @@ static unsigned char is_dyn_brkp = 0;
 
 /* Copy char s2[] to s1[]. */
 static char*
-gdb_cris_strcpy (char *s1, const char *s2)
+gdb_cris_strlcpy(char *s1,const char *s2,sizeof(char *s1))
 {
 	char *s = s1;
 	
@@ -904,11 +904,11 @@ stub_is_stopped(int sigval)
 	copy_registers (&reg_g, &reg, sizeof(registers));
 
 	/* Store thread:r...; with the executing task TID. */
-	gdb_cris_strcpy (&remcomOutBuffer[pos], "thread:");
+	gdb_cris_strlcpy(&remcomOutBuffer[pos],"thread:",sizeof(&remcomOutBuffer[pos]));
 	pos += gdb_cris_strlen ("thread:");
 	remcomOutBuffer[pos++] = hex_asc_hi(executing_task);
 	remcomOutBuffer[pos++] = hex_asc_lo(executing_task);
-	gdb_cris_strcpy (&remcomOutBuffer[pos], ";");
+	gdb_cris_strlcpy(&remcomOutBuffer[pos],";",sizeof(&remcomOutBuffer[pos]));
 #endif
 
 	/* null-terminate and send it off */
@@ -974,7 +974,7 @@ handle_exception (int sigval)
 #else
 				hex2mem((char *)&reg, &remcomInBuffer[1], sizeof(registers));
 #endif
-				gdb_cris_strcpy (remcomOutBuffer, "OK");
+				gdb_cris_strlcpy(remcomOutBuffer,"OK",sizeof(remcomOutBuffer));
 				break;
 				
 			case 'P':
@@ -999,19 +999,19 @@ handle_exception (int sigval)
 					switch (status) {
 						case E02:
 							/* Do not support read-only registers. */
-							gdb_cris_strcpy (remcomOutBuffer, error_message[E02]);
+							gdb_cris_strlcpy(remcomOutBuffer,error_message[E02],sizeof(remcomOutBuffer));
 							break;
 						case E05:
 							/* Do not support non-existing registers. */
-							gdb_cris_strcpy (remcomOutBuffer, error_message[E05]);
+							gdb_cris_strlcpy(remcomOutBuffer,error_message[E05],sizeof(remcomOutBuffer));
 							break;
 						case E07:
 							/* Do not support non-existing registers on the stack. */
-							gdb_cris_strcpy (remcomOutBuffer, error_message[E07]);
+							gdb_cris_strlcpy(remcomOutBuffer,error_message[E07],sizeof(remcomOutBuffer));
 							break;
 						default:
 							/* Valid register number. */
-							gdb_cris_strcpy (remcomOutBuffer, "OK");
+							gdb_cris_strlcpy(remcomOutBuffer,"OK",sizeof(remcomOutBuffer));
 							break;
 					}
 				}
@@ -1058,10 +1058,10 @@ handle_exception (int sigval)
 						else /* X */ {
 							bin2mem(addr, dataptr + 1, length);
 						}
-						gdb_cris_strcpy (remcomOutBuffer, "OK");
+						gdb_cris_strlcpy(remcomOutBuffer,"OK",sizeof(remcomOutBuffer));
 					}
 					else {
-						gdb_cris_strcpy (remcomOutBuffer, error_message[E06]);
+						gdb_cris_strlcpy(remcomOutBuffer,error_message[E06],sizeof(remcomOutBuffer));
 					}
 				}
 				break;
@@ -1086,7 +1086,7 @@ handle_exception (int sigval)
 				   
 				   Should never be invoked. The single-step is implemented on
 				   the host side. If ever invoked, it is an internal error E04. */
-				gdb_cris_strcpy (remcomOutBuffer, error_message[E04]);
+				gdb_cris_strlcpy(remcomOutBuffer,error_message[E04],sizeof(remcomOutBuffer));
 				putpacket (remcomOutBuffer);
 				return;
 				
@@ -1127,7 +1127,7 @@ handle_exception (int sigval)
 				   Toggle debug flag. d
 				   Search backwards. tAA:PP,MM
 				   Not supported: E04 */
-				gdb_cris_strcpy (remcomOutBuffer, error_message[E04]);
+				gdb_cris_strlcpy(remcomOutBuffer,error_message[E04],sizeof(remcomOutBuffer));
 				break;
 #ifdef PROCESS_SUPPORT
 
@@ -1140,7 +1140,7 @@ handle_exception (int sigval)
 					int thread_id = (int)gdb_cris_strtol (&remcomInBuffer[1], 0, 16);
 					/* Cannot tell whether it is alive or not. */
 					if (thread_id >= 0 && thread_id < number_of_tasks)
-						gdb_cris_strcpy (remcomOutBuffer, "OK");
+						gdb_cris_strlcpy(remcomOutBuffer,"OK",sizeof(remcomOutBuffer));
 				}
 				break;
 								
@@ -1158,7 +1158,7 @@ handle_exception (int sigval)
 						/* c = 'c' for thread used in step and continue */
 						/* Do not change current_thread_c here. It would create a mess in
 						   the scheduler. */
-						gdb_cris_strcpy (remcomOutBuffer, "OK");
+						gdb_cris_strlcpy(remcomOutBuffer,"OK",sizeof(remcomOutBuffer));
 					}
 					else if (remcomInBuffer[1] == 'g') {
 						/* c = 'g' for thread used in other  operations.
@@ -1166,16 +1166,16 @@ handle_exception (int sigval)
 						   not allow that. */
 						if (thread_id >= 0 && thread_id < number_of_tasks) {
 							current_thread_g = thread_id;
-							gdb_cris_strcpy (remcomOutBuffer, "OK");
+							gdb_cris_strlcpy(remcomOutBuffer,"OK",sizeof(remcomOutBuffer));
 						}
 						else {
 							/* Not expected - send an error message. */
-							gdb_cris_strcpy (remcomOutBuffer, error_message[E01]);
+							gdb_cris_strlcpy(remcomOutBuffer,error_message[E01],sizeof(remcomOutBuffer));
 						}
 					}
 					else {
 						/* Not expected - send an error message. */
-						gdb_cris_strcpy (remcomOutBuffer, error_message[E01]);
+						gdb_cris_strlcpy(remcomOutBuffer,error_message[E01],sizeof(remcomOutBuffer));
 					}
 				}
 				break;
@@ -1192,13 +1192,13 @@ handle_exception (int sigval)
 					switch (remcomInBuffer[1]) {
 						case 'C':
 							/* Identify the remote current thread. */
-							gdb_cris_strcpy (&remcomOutBuffer[0], "QC");
+							gdb_cris_strlcpy(&remcomOutBuffer[0],"QC",sizeof(&remcomOutBuffer[0]));
 							remcomOutBuffer[2] = hex_asc_hi(current_thread_c);
 							remcomOutBuffer[3] = hex_asc_lo(current_thread_c);
 							remcomOutBuffer[4] = '\0';
 							break;
 						case 'L':
-							gdb_cris_strcpy (&remcomOutBuffer[0], "QM");
+							gdb_cris_strlcpy(&remcomOutBuffer[0],"QM",sizeof(&remcomOutBuffer[0]));
 							/* Reply with number of threads. */
 							if (os_is_started()) {
 								remcomOutBuffer[2] = hex_asc_hi(number_of_tasks);

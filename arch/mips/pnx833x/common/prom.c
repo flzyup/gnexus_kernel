@@ -34,7 +34,7 @@ void __init prom_init_cmdline(void)
 	int i;
 
 	for (i = 1; i < argc; i++) {
-		strcpy(c, argv[i]);
+		strlcpy(c,argv[i],sizeof(c));
 		c += strlen(argv[i]);
 		if (i < argc-1)
 			*c++ = ' ';

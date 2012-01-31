@@ -631,14 +631,14 @@ isdn_tty_dial(char *n, modem_info * info, atemu * m)
 		dev->m_idx[i] = info->line;
 		dev->usage[i] |= ISDN_USAGE_OUTGOING;
 		info->last_dir = 1;
-		strcpy(info->last_num, n);
+		strlcpy(info->last_num,n,sizeof(info->last_num));
 		isdn_info_update();
 		spin_unlock_irqrestore(&dev->lock, flags);
 		cmd.driver = info->isdn_driver;
 		cmd.arg = info->isdn_channel;
 		cmd.command = ISDN_CMD_CLREAZ;
 		isdn_command(&cmd);
-		strcpy(cmd.parm.num, isdn_map_eaz2msn(m->msn, info->isdn_driver));
+		strlcpy(cmd.parm.num, isdn_map_eaz2msn(m->msn,info->isdn_driver,sizeof(cmd.parm.num, isdn_map_eaz2msn(m->msn)));
 		cmd.driver = info->isdn_driver;
 		cmd.command = ISDN_CMD_SETEAZ;
 		isdn_command(&cmd);
@@ -667,7 +667,7 @@ isdn_tty_dial(char *n, modem_info * info, atemu * m)
 		cmd.command = ISDN_CMD_DIAL;
 		info->dialing = 1;
 		info->emu.carrierwait = 0;
-		strcpy(dev->num[i], n);
+		strlcpy(dev->num[i],n,sizeof(dev->num[i]));
 		isdn_info_update();
 		isdn_command(&cmd);
 		isdn_timer_ctrl(ISDN_TIMER_CARRIER, 1);
@@ -841,14 +841,14 @@ isdn_tty_resume(char *id, modem_info * info, atemu * m)
 		dev->m_idx[i] = info->line;
 		dev->usage[i] |= ISDN_USAGE_OUTGOING;
 		info->last_dir = 1;
-//		strcpy(info->last_num, n);
+//		strlcpy(info->last_num,n,sizeof(info->last_num));
 		isdn_info_update();
 		spin_unlock_irqrestore(&dev->lock, flags);
 		cmd.driver = info->isdn_driver;
 		cmd.arg = info->isdn_channel;
 		cmd.command = ISDN_CMD_CLREAZ;
 		isdn_command(&cmd);
-		strcpy(cmd.parm.num, isdn_map_eaz2msn(m->msn, info->isdn_driver));
+		strlcpy(cmd.parm.num, isdn_map_eaz2msn(m->msn,info->isdn_driver,sizeof(cmd.parm.num, isdn_map_eaz2msn(m->msn)));
 		cmd.driver = info->isdn_driver;
 		cmd.command = ISDN_CMD_SETEAZ;
 		isdn_command(&cmd);
@@ -876,7 +876,7 @@ isdn_tty_resume(char *id, modem_info * info, atemu * m)
 		strncpy(&cmd.parm.cmsg.para[6], id, l);
 		cmd.command =CAPI_PUT_MESSAGE;
 		info->dialing = 1;
-//		strcpy(dev->num[i], n);
+//		strlcpy(dev->num[i],n,sizeof(dev->num[i]));
 		isdn_info_update();
 		isdn_command(&cmd);
 		isdn_timer_ctrl(ISDN_TIMER_CARRIER, 1);
@@ -940,7 +940,7 @@ isdn_tty_send_msg(modem_info * info, atemu * m, char *msg)
 		cmd.arg = info->isdn_channel;
 		cmd.command = ISDN_CMD_CLREAZ;
 		isdn_command(&cmd);
-		strcpy(cmd.parm.num, isdn_map_eaz2msn(m->msn, info->isdn_driver));
+		strlcpy(cmd.parm.num, isdn_map_eaz2msn(m->msn,info->isdn_driver,sizeof(cmd.parm.num, isdn_map_eaz2msn(m->msn)));
 		cmd.driver = info->isdn_driver;
 		cmd.command = ISDN_CMD_SETEAZ;
 		isdn_command(&cmd);
@@ -964,7 +964,7 @@ isdn_tty_send_msg(modem_info * info, atemu * m, char *msg)
 		cmd.parm.cmsg.para[l+1] = 0xd;
 		cmd.command =CAPI_PUT_MESSAGE;
 /*		info->dialing = 1;
-		strcpy(dev->num[i], n);
+		strlcpy(dev->num[i],n,sizeof(dev->num[i]));
 		isdn_info_update();
 */
 		isdn_command(&cmd);
@@ -2099,8 +2099,8 @@ isdn_tty_find_icall(int di, int ch, setup_parm *setup)
 					dev->m_idx[idx] = info->line;
 					dev->usage[idx] &= ISDN_USAGE_EXCLUSIVE;
 					dev->usage[idx] |= isdn_calc_usage(si1, info->emu.mdmreg[REG_L2PROT]); 
-					strcpy(dev->num[idx], nr);
-					strcpy(info->emu.cpn, eaz);
+					strlcpy(dev->num[idx],nr,sizeof(dev->num[idx]));
+					strlcpy(info->emu.cpn,eaz,sizeof(info->emu.cpn));
 					info->emu.mdmreg[REG_SI1I] = si2bit[si1];
 					info->emu.mdmreg[REG_PLAN] = setup->plan;
 					info->emu.mdmreg[REG_SCREEN] = setup->screen;
@@ -2235,7 +2235,7 @@ isdn_tty_stat_callback(int i, isdn_ctrl *c)
 					info->rcvsched = 1;
 					if (USG_MODEM(dev->usage[i])) {
 						if (info->emu.mdmreg[REG_L2PROT] == ISDN_PROTO_L2_MODEM) {
-							strcpy(info->emu.connmsg, c->parm.num);
+							strlcpy(info->emu.connmsg,c->parm.num,sizeof(info->emu.connmsg));
 							isdn_tty_modem_result(RESULT_CONNECT, info);
 						} else
 							isdn_tty_modem_result(RESULT_CONNECT64000, info);
@@ -3088,7 +3088,7 @@ isdn_tty_cmd_ATA(modem_info * info)
 	if (info->msr & UART_MSR_RI) {
 		/* Accept incoming call */
 		info->last_dir = 0;
-		strcpy(info->last_num, dev->num[info->drv_index]);
+		strlcpy(info->last_num,dev->num[info->drv_index],sizeof(info->last_num));
 		m->mdmreg[REG_RINGCNT] = 0;
 		info->msr &= ~UART_MSR_RI;
 		l2 = m->mdmreg[REG_L2PROT];
@@ -3198,7 +3198,7 @@ isdn_tty_cmd_PLUSF(char **p, modem_info * info)
 						break;
 					case '?':
 						p[0]++;
-						strcpy(rs, "\r\n0,");
+						strlcpy(rs, "\r\n0,",sizeof(rs, "\r\n0));
 #ifdef CONFIG_ISDN_TTY_FAX
 						if (dev->global_features &
 							ISDN_FEATURE_L3_FCLASS1)

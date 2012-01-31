@@ -740,7 +740,7 @@ static void __devinit probe_gdrom_setupcd(void)
 {
 	gd.cd_info->ops = &gdrom_ops;
 	gd.cd_info->capacity = 1;
-	strcpy(gd.cd_info->name, GDROM_DEV_NAME);
+	strlcpy(gd.cd_info->name,GDROM_DEV_NAME,sizeof(gd.cd_info->name));
 	gd.cd_info->mask = CDC_CLOSE_TRAY|CDC_OPEN_TRAY|CDC_LOCK|
 		CDC_SELECT_DISC;
 }
@@ -750,7 +750,7 @@ static void __devinit probe_gdrom_setupdisk(void)
 	gd.disk->major = gdrom_major;
 	gd.disk->first_minor = 1;
 	gd.disk->minors = 1;
-	strcpy(gd.disk->disk_name, GDROM_DEV_NAME);
+	strlcpy(gd.disk->disk_name,GDROM_DEV_NAME,sizeof(gd.disk->disk_name));
 }
 
 static int __devinit probe_gdrom_setupqueue(void)

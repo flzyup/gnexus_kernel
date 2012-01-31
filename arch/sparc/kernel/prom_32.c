@@ -202,10 +202,10 @@ char * __init build_path_component(struct device_node *dp)
 	tmp_buf[0] = '\0';
 	__build_path_component(dp, tmp_buf);
 	if (tmp_buf[0] == '\0')
-		strcpy(tmp_buf, dp->name);
+		strlcpy(tmp_buf,dp->name,sizeof(tmp_buf));
 
 	n = prom_early_alloc(strlen(tmp_buf) + 1);
-	strcpy(n, tmp_buf);
+	strlcpy(n,tmp_buf,sizeof(n));
 
 	return n;
 }
@@ -256,7 +256,7 @@ void __init of_console_init(void)
 		}
 		of_console_device = dp;
 
-		strcpy(of_console_path, dp->full_name);
+		strlcpy(of_console_path,dp->full_name,sizeof(of_console_path));
 		if (!strcmp(type, "serial")) {
 			strcat(of_console_path,
 			       (skip ? ":b" : ":a"));
@@ -296,7 +296,7 @@ void __init of_console_init(void)
 		of_console_device = dp;
 
 		if (prom_vers == PROM_V2) {
-			strcpy(of_console_path, dp->full_name);
+			strlcpy(of_console_path,dp->full_name,sizeof(of_console_path));
 			switch (*romvec->pv_stdout) {
 			case PROMDEV_TTYA:
 				strcat(of_console_path, ":a");
@@ -314,7 +314,7 @@ void __init of_console_init(void)
 				prom_printf("No stdout-path in root node.\n");
 				prom_halt();
 			}
-			strcpy(of_console_path, path);
+			strlcpy(of_console_path,path,sizeof(of_console_path));
 		}
 		break;
 	}

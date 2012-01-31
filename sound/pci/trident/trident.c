@@ -116,11 +116,11 @@ static int __devinit snd_trident_probe(struct pci_dev *pci,
 	default:
 		str = "Unknown";
 	}
-	strcpy(card->driver, str);
+	strlcpy(card->driver,str,sizeof(card->driver));
 	if (trident->device == TRIDENT_DEVICE_ID_SI7018) {
-		strcpy(card->shortname, "SiS ");
+		strlcpy(card->shortname,"SiS ",sizeof(card->shortname));
 	} else {
-		strcpy(card->shortname, "Trident ");
+		strlcpy(card->shortname,"Trident ",sizeof(card->shortname));
 	}
 	strcat(card->shortname, card->driver);
 	sprintf(card->longname, "%s PCI Audio at 0x%lx, irq %d",

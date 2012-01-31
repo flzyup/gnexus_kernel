@@ -271,7 +271,7 @@ static int __devinit olympic_probe(struct pci_dev *pdev, const struct pci_device
 	printk("Olympic: %s registered as: %s\n",olympic_priv->olympic_card_name,dev->name);
 	if (olympic_priv->olympic_network_monitor) { /* Must go after register_netdev as we need the device name */ 
 		char proc_name[20] ; 
-		strcpy(proc_name,"olympic_") ;
+		strlcpy(proc_name,"olympic_",sizeof(proc_name)) ;
 		strcat(proc_name,dev->name) ; 
 		proc_create_data(proc_name, 0, init_net.proc_net, &olympic_proc_ops, dev);
 		printk("Olympic: Network Monitor information: /proc/%s\n",proc_name); 
@@ -1714,7 +1714,7 @@ static void __devexit olympic_remove_one(struct pci_dev *pdev)
 
 	if (olympic_priv->olympic_network_monitor) { 
 		char proc_name[20] ; 
-		strcpy(proc_name,"olympic_") ;
+		strlcpy(proc_name,"olympic_",sizeof(proc_name)) ;
 		strcat(proc_name,dev->name) ;
 		remove_proc_entry(proc_name,init_net.proc_net);
 	}

@@ -690,22 +690,22 @@ static int __init macfb_init(void)
 
 		switch(ndev->dr_hw) {
 		case NUBUS_DRHW_APPLE_MDC:
-			strcpy(macfb_fix.id, "Mac Disp. Card");
+			strlcpy(macfb_fix.id,"Mac Disp. Card",sizeof(macfb_fix.id));
 			macfb_setpalette = mdc_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
 			break;
 		case NUBUS_DRHW_APPLE_TFB:
-			strcpy(macfb_fix.id, "Toby");
+			strlcpy(macfb_fix.id,"Toby",sizeof(macfb_fix.id));
 			macfb_setpalette = toby_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
 			break;
 		case NUBUS_DRHW_APPLE_JET:
-			strcpy(macfb_fix.id, "Jet");
+			strlcpy(macfb_fix.id,"Jet",sizeof(macfb_fix.id));
 			macfb_setpalette = jet_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
 			break;
 		default:
-			strcpy(macfb_fix.id, "Generic NuBus");
+			strlcpy(macfb_fix.id,"Generic NuBus",sizeof(macfb_fix.id));
 			break;
 		}
 	}
@@ -732,7 +732,7 @@ static int __init macfb_init(void)
 		case MAC_MODEL_Q700:
 		case MAC_MODEL_Q900:
 		case MAC_MODEL_Q950:
-			strcpy(macfb_fix.id, "DAFB");
+			strlcpy(macfb_fix.id,"DAFB",sizeof(macfb_fix.id));
 			macfb_setpalette = dafb_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
 			dafb_cmap_regs = ioremap(DAFB_BASE, 0x1000);
@@ -742,7 +742,7 @@ static int __init macfb_init(void)
 		 * LC II uses the V8 framebuffer
 		 */
 		case MAC_MODEL_LCII:
-			strcpy(macfb_fix.id, "V8");
+			strlcpy(macfb_fix.id,"V8",sizeof(macfb_fix.id));
 			macfb_setpalette = v8_brazil_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
 			v8_brazil_cmap_regs = ioremap(DAC_BASE, 0x1000);
@@ -756,7 +756,7 @@ static int __init macfb_init(void)
 		case MAC_MODEL_IIVI:
 		case MAC_MODEL_IIVX:
 		case MAC_MODEL_P600:
-			strcpy(macfb_fix.id, "Brazil");
+			strlcpy(macfb_fix.id,"Brazil",sizeof(macfb_fix.id));
 			macfb_setpalette = v8_brazil_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
 			v8_brazil_cmap_regs = ioremap(DAC_BASE, 0x1000);
@@ -775,7 +775,7 @@ static int __init macfb_init(void)
 		case MAC_MODEL_P460:
 			macfb_setpalette = v8_brazil_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
-			strcpy(macfb_fix.id, "Sonora");
+			strlcpy(macfb_fix.id,"Sonora",sizeof(macfb_fix.id));
 			v8_brazil_cmap_regs = ioremap(DAC_BASE, 0x1000);
 			break;
 
@@ -788,7 +788,7 @@ static int __init macfb_init(void)
 		case MAC_MODEL_IISI:
 			macfb_setpalette = rbv_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
-			strcpy(macfb_fix.id, "RBV");
+			strlcpy(macfb_fix.id,"RBV",sizeof(macfb_fix.id));
 			rbv_cmap_regs = ioremap(DAC_BASE, 0x1000);
 			break;
 
@@ -799,7 +799,7 @@ static int __init macfb_init(void)
 		case MAC_MODEL_C660:
 			macfb_setpalette = civic_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
-			strcpy(macfb_fix.id, "Civic");
+			strlcpy(macfb_fix.id,"Civic",sizeof(macfb_fix.id));
 			civic_cmap_regs = ioremap(CIVIC_BASE, 0x1000);
 			break;
 
@@ -815,7 +815,7 @@ static int __init macfb_init(void)
 				v8_brazil_cmap_regs =
 					ioremap(DAC_BASE, 0x1000);
 			}
-			strcpy(macfb_fix.id, "LC");
+			strlcpy(macfb_fix.id,"LC",sizeof(macfb_fix.id));
 			break;
 
 		/*
@@ -828,14 +828,14 @@ static int __init macfb_init(void)
 				v8_brazil_cmap_regs =
 					ioremap(DAC_BASE, 0x1000);
 			}
-			strcpy(macfb_fix.id, "Color Classic");
+			strlcpy(macfb_fix.id,"Color Classic",sizeof(macfb_fix.id));
 			break;
 
 		/*
 		 * And we *do* mean "weirdos"
 		 */
 		case MAC_MODEL_TV:
-			strcpy(macfb_fix.id, "Mac TV");
+			strlcpy(macfb_fix.id,"Mac TV",sizeof(macfb_fix.id));
 			break;
 
 		/*
@@ -843,7 +843,7 @@ static int __init macfb_init(void)
 		 */
 		case MAC_MODEL_SE30:
 		case MAC_MODEL_CLII:
-			strcpy(macfb_fix.id, "Monochrome");
+			strlcpy(macfb_fix.id,"Monochrome",sizeof(macfb_fix.id));
 			break;
 
 		/*
@@ -861,7 +861,7 @@ static int __init macfb_init(void)
 		case MAC_MODEL_PB140:
 		case MAC_MODEL_PB145:
 		case MAC_MODEL_PB170:
-			strcpy(macfb_fix.id, "DDC");
+			strlcpy(macfb_fix.id,"DDC",sizeof(macfb_fix.id));
 			break;
 
 		/*
@@ -873,7 +873,7 @@ static int __init macfb_init(void)
 		case MAC_MODEL_PB180:
 		case MAC_MODEL_PB210:
 		case MAC_MODEL_PB230:
-			strcpy(macfb_fix.id, "GSC");
+			strlcpy(macfb_fix.id,"GSC",sizeof(macfb_fix.id));
 			break;
 
 		/*
@@ -881,7 +881,7 @@ static int __init macfb_init(void)
 		 */
 		case MAC_MODEL_PB165C:
 		case MAC_MODEL_PB180C:
-			strcpy(macfb_fix.id, "TIM");
+			strlcpy(macfb_fix.id,"TIM",sizeof(macfb_fix.id));
 			break;
 
 		/*
@@ -895,12 +895,12 @@ static int __init macfb_init(void)
 		case MAC_MODEL_PB280C:
 			macfb_setpalette = csc_setpalette;
 			macfb_defined.activate = FB_ACTIVATE_NOW;
-			strcpy(macfb_fix.id, "CSC");
+			strlcpy(macfb_fix.id,"CSC",sizeof(macfb_fix.id));
 			csc_cmap_regs = ioremap(CSC_BASE, 0x1000);
 			break;
 
 		default:
-			strcpy(macfb_fix.id, "Unknown");
+			strlcpy(macfb_fix.id,"Unknown",sizeof(macfb_fix.id));
 			break;
 		}
 

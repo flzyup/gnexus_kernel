@@ -1815,7 +1815,7 @@ static struct pxafb_info * __devinit pxafb_init_fbinfo(struct device *dev)
 		return NULL;
 	}
 
-	strcpy(fbi->fb.fix.id, PXA_NAME);
+	strlcpy(fbi->fb.fix.id,PXA_NAME,sizeof(fbi->fb.fix.id));
 
 	fbi->fb.fix.type	= FB_TYPE_PACKED_PIXELS;
 	fbi->fb.fix.type_aux	= 0;

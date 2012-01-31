@@ -742,7 +742,7 @@ static int __devinit vt8623_pci_probe(struct pci_dev *dev, const struct pci_devi
 	}
 
 	info->fix.smem_len = info->screen_size;
-	strcpy(info->fix.id, "VIA VT8623");
+	strlcpy(info->fix.id,"VIA VT8623",sizeof(info->fix.id));
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
 	info->fix.visual = FB_VISUAL_PSEUDOCOLOR;
 	info->fix.ypanstep = 0;

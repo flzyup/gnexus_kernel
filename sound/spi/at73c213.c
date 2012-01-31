@@ -342,7 +342,7 @@ static int __devinit snd_at73c213_pcm_new(struct snd_at73c213 *chip, int device)
 
 	pcm->private_data = chip;
 	pcm->info_flags = SNDRV_PCM_INFO_BLOCK_TRANSFER;
-	strcpy(pcm->name, "at73c213");
+	strlcpy(pcm->name,"at73c213",sizeof(pcm->name));
 	chip->pcm = pcm;
 
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &at73c213_playback_ops);
@@ -719,7 +719,7 @@ static int __devinit snd_at73c213_mixer(struct snd_at73c213 *chip)
 
 	card = chip->card;
 
-	strcpy(card->mixername, chip->pcm->name);
+	strlcpy(card->mixername,chip->pcm->name,sizeof(card->mixername));
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_at73c213_controls); idx++) {
 		errval = snd_ctl_add(card,
@@ -987,8 +987,8 @@ static int __devinit snd_at73c213_probe(struct spi_device *spi)
 	if (retval)
 		goto out_ssc;
 
-	strcpy(card->driver, "at73c213");
-	strcpy(card->shortname, board->shortname);
+	strlcpy(card->driver,"at73c213",sizeof(card->driver));
+	strlcpy(card->shortname,board->shortname,sizeof(card->shortname));
 	sprintf(card->longname, "%s on irq %d", card->shortname, chip->irq);
 
 	retval = snd_card_register(card);

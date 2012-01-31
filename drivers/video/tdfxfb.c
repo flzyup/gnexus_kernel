@@ -1414,15 +1414,15 @@ static int __devinit tdfxfb_probe(struct pci_dev *pdev,
 	/* Configure the default fb_fix_screeninfo first */
 	switch (pdev->device) {
 	case PCI_DEVICE_ID_3DFX_BANSHEE:
-		strcpy(info->fix.id, "3Dfx Banshee");
+		strlcpy(info->fix.id,"3Dfx Banshee",sizeof(info->fix.id));
 		default_par->max_pixclock = BANSHEE_MAX_PIXCLOCK;
 		break;
 	case PCI_DEVICE_ID_3DFX_VOODOO3:
-		strcpy(info->fix.id, "3Dfx Voodoo3");
+		strlcpy(info->fix.id,"3Dfx Voodoo3",sizeof(info->fix.id));
 		default_par->max_pixclock = VOODOO3_MAX_PIXCLOCK;
 		break;
 	case PCI_DEVICE_ID_3DFX_VOODOO5:
-		strcpy(info->fix.id, "3Dfx Voodoo5");
+		strlcpy(info->fix.id,"3Dfx Voodoo5",sizeof(info->fix.id));
 		default_par->max_pixclock = VOODOO5_MAX_PIXCLOCK;
 		break;
 	}

@@ -1223,9 +1223,9 @@ static void rtl8169_get_drvinfo(struct net_device *dev,
 {
 	struct rtl8169_private *tp = netdev_priv(dev);
 
-	strcpy(info->driver, MODULENAME);
-	strcpy(info->version, RTL8169_VERSION);
-	strcpy(info->bus_info, pci_name(tp->pci_dev));
+	strlcpy(info->driver,MODULENAME,sizeof(info->driver));
+	strlcpy(info->version,RTL8169_VERSION,sizeof(info->version));
+	strlcpy(info->bus_info,pci_name(tp->pci_dev,sizeof(info->bus_info)));
 	strncpy(info->fw_version, IS_ERR_OR_NULL(tp->fw) ? "N/A" :
 		rtl_lookup_firmware_name(tp), sizeof(info->fw_version) - 1);
 }

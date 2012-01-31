@@ -577,7 +577,7 @@ int cmtp_attach_device(struct cmtp_session *session)
 
 	session->ctrl.owner      = THIS_MODULE;
 	session->ctrl.driverdata = session;
-	strcpy(session->ctrl.name, session->name);
+	strlcpy(session->ctrl.name,session->name,sizeof(session->ctrl.name));
 
 	session->ctrl.driver_name   = "cmtp";
 	session->ctrl.load_firmware = cmtp_load_firmware;

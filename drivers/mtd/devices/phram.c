@@ -213,7 +213,7 @@ static int parse_name(char **pname, const char *token)
 	if (!name)
 		return -ENOMEM;
 
-	strcpy(name, token);
+	strlcpy(name,token,sizeof(name));
 
 	*pname = name;
 	return 0;
@@ -245,7 +245,7 @@ static int phram_setup(const char *val, struct kernel_param *kp)
 	if (strnlen(val, sizeof(buf)) >= sizeof(buf))
 		parse_err("parameter too long\n");
 
-	strcpy(str, val);
+	strlcpy(str,val,sizeof(str));
 	kill_final_newline(str);
 
 	for (i=0; i<3; i++)

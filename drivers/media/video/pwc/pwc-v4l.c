@@ -346,7 +346,7 @@ static int pwc_querycap(struct file *file, void *fh, struct v4l2_capability *cap
 	struct video_device *vdev = video_devdata(file);
 	struct pwc_device *pdev = video_drvdata(file);
 
-	strcpy(cap->driver, PWC_NAME);
+	strlcpy(cap->driver,PWC_NAME,sizeof(cap->driver));
 	strlcpy(cap->card, vdev->name, sizeof(cap->card));
 	usb_make_path(pdev->udev, cap->bus_info, sizeof(cap->bus_info));
 	cap->version = PWC_VERSION_CODE;
@@ -362,7 +362,7 @@ static int pwc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
 	if (i->index)	/* Only one INPUT is supported */
 		return -EINVAL;
 
-	strcpy(i->name, "usb");
+	strlcpy(i->name,"usb",sizeof(i->name));
 	return 0;
 }
 

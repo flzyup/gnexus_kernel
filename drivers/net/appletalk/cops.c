@@ -516,7 +516,7 @@ static void cops_load (struct net_device *dev)
         int ioaddr=dev->base_addr;
 	int length, i = 0;
 
-        strcpy(ifr.ifr_name,"lt0");
+        strlcpy(ifr.ifr_name,"lt0",sizeof(ifr.ifr_name));
 
         /* Get card's firmware code and do some checks on it. */
 #ifdef CONFIG_COPS_DAYNA        

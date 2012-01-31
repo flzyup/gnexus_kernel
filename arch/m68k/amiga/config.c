@@ -735,7 +735,7 @@ static void amiga_heartbeat(int on)
 
 static void amiga_get_model(char *model)
 {
-	strcpy(model, amiga_model_name);
+	strlcpy(model,amiga_model_name,sizeof(model));
 }
 
 

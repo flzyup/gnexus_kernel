@@ -1850,7 +1850,7 @@ static int nfs_validate_mount_data(void *options,
 			char *opts_str = kmalloc(sizeof(data->context) + 8, GFP_KERNEL);
 			if (!opts_str)
 				return -ENOMEM;
-			strcpy(opts_str, "context=");
+			strlcpy(opts_str,"context=",sizeof(opts_str));
 			data->context[NFS_MAX_CONTEXT_LEN] = '\0';
 			strcat(opts_str, &data->context[0]);
 			rc = security_sb_parse_opts_str(opts_str, &args->lsm_opts);

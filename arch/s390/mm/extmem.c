@@ -115,7 +115,7 @@ dcss_set_subcodes(void)
 	rx = (unsigned long) name;
 	ry = DCSS_FINDSEGX;
 
-	strcpy(name, "dummy");
+	strlcpy(name,"dummy",sizeof(name));
 	asm volatile(
 		"	diag	%0,%1,0x64\n"
 		"0:	ipm	%2\n"

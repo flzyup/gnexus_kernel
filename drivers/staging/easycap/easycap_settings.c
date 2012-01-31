@@ -590,7 +590,7 @@ int fillin_formats(void)
 					if (SETTINGS_MANY <= n)
 						return -5;
 
-					strcpy(easycap_format[n].name, name1);
+					strlcpy(easycap_format[n].name,name1,sizeof(easycap_format[n].name));
 					strcat(easycap_format[n].name, name2);
 					strcat(easycap_format[n].name, "_");
 					strcat(easycap_format[n].name, name3);

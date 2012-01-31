@@ -965,45 +965,45 @@ static int process_idi_event (diva_strace_context_t* pLib,
 
 		switch (l2_state) {
 			case 0:
-				strcpy (tmp, "Idle");
+				strlcpy(tmp,"Idle",sizeof(tmp));
 				break;
 			case 1:
-				strcpy (tmp, "Layer2 UP");
+				strlcpy(tmp,"Layer2 UP",sizeof(tmp));
 				break;
 			case 2:
-				strcpy (tmp, "Layer2 Disconnecting");
+				strlcpy(tmp,"Layer2 Disconnecting",sizeof(tmp));
 				break;
 			case 3:
-				strcpy (tmp, "Layer2 Connecting");
+				strlcpy(tmp,"Layer2 Connecting",sizeof(tmp));
 				break;
 			case 4:
-				strcpy (tmp, "SPID Initializing");
+				strlcpy(tmp,"SPID Initializing",sizeof(tmp));
 				break;
 			case 5:
-				strcpy (tmp, "SPID Initialised");
+				strlcpy(tmp,"SPID Initialised",sizeof(tmp));
 				break;
 			case 6:
-				strcpy (tmp, "Layer2 Connecting");
+				strlcpy(tmp,"Layer2 Connecting",sizeof(tmp));
 				break;
 
 			case  7:
-				strcpy (tmp, "Auto SPID Stopped");
+				strlcpy(tmp,"Auto SPID Stopped",sizeof(tmp));
 				break;
 
 			case  8:
-				strcpy (tmp, "Auto SPID Idle");
+				strlcpy(tmp,"Auto SPID Idle",sizeof(tmp));
 				break;
 
 			case  9:
-				strcpy (tmp, "Auto SPID Requested");
+				strlcpy(tmp,"Auto SPID Requested",sizeof(tmp));
 				break;
 
 			case  10:
-				strcpy (tmp, "Auto SPID Delivery");
+				strlcpy(tmp,"Auto SPID Delivery",sizeof(tmp));
 				break;
 
 			case 11:
-				strcpy (tmp, "Auto SPID Complete");
+				strlcpy(tmp,"Auto SPID Complete",sizeof(tmp));
 				break;
 
 			default:
@@ -1487,81 +1487,66 @@ static void diva_create_parse_table (diva_strace_context_t* pLib) {
 	/*
 		Outgoing Calls
 		*/
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Outgoing Calls\\Calls");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Outgoing Calls\\Calls");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.outg.Calls;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Outgoing Calls\\Connected");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Outgoing Calls\\Connected");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.outg.Connected;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Outgoing Calls\\User Busy");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Outgoing Calls\\User Busy");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.outg.User_Busy;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Outgoing Calls\\No Answer");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Outgoing Calls\\No Answer");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.outg.No_Answer;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Outgoing Calls\\Wrong Number");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Outgoing Calls\\Wrong Number");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.outg.Wrong_Number;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Outgoing Calls\\Call Rejected");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Outgoing Calls\\Call Rejected");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.outg.Call_Rejected;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Outgoing Calls\\Other Failures");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Outgoing Calls\\Other Failures");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.outg.Other_Failures;
 
 	/*
 		Incoming Calls
 		*/
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\Calls");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\Calls");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.Calls;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\Connected");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\Connected");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.Connected;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\User Busy");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\User Busy");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.User_Busy;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\Call Rejected");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\Call Rejected");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.Call_Rejected;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\Wrong Number");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\Wrong Number");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.Wrong_Number;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\Incompatible Dst");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\Incompatible Dst");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.Incompatible_Dst;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\Out of Order");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\Out of Order");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.Out_of_Order;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Incoming Calls\\Ignored");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Incoming Calls\\Ignored");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.inc.Ignored;
 
@@ -1570,48 +1555,39 @@ static void diva_create_parse_table (diva_strace_context_t* pLib) {
 		*/
 	pLib->mdm_statistic_parse_first = pLib->cur_parse_entry;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Normal");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Normal");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Normal;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Unspecified");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Unspecified");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Unspecified;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Busy Tone");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Busy Tone");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Busy_Tone;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Congestion");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Congestion");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Congestion;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Carr. Wait");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Carr. Wait");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Carr_Wait;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Trn Timeout");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Trn Timeout");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Trn_Timeout;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Incompat.");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Incompat.");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Incompat;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc Frame Rej.");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc Frame Rej.");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_Frame_Rej;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\Modem\\Disc V42bis");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\Modem\\Disc V42bis");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.mdm.Disc_V42bis;
 
@@ -1622,93 +1598,75 @@ static void diva_create_parse_table (diva_strace_context_t* pLib) {
 		*/
 	pLib->fax_statistic_parse_first = pLib->cur_parse_entry;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Normal");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Normal");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Normal;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Not Ident.");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Not Ident.");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Not_Ident;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc No Response");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc No Response");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_No_Response;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Retries");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Retries");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Retries;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Unexp. Msg.");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Unexp. Msg.");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Unexp_Msg;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc No Polling.");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc No Polling.");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_No_Polling;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Training");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Training");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Training;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Unexpected");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Unexpected");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Unexpected;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Application");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Application");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Application;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Incompat.");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Incompat.");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Incompat;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc No Command");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc No Command");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_No_Command;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Long Msg");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Long Msg");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Long_Msg;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Supervisor");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Supervisor");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Supervisor;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc SUB SEP PWD");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc SUB SEP PWD");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_SUB_SEP_PWD;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Invalid Msg");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Invalid Msg");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Invalid_Msg;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Page Coding");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Page Coding");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Page_Coding;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc App Timeout");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc App Timeout");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_App_Timeout;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\FAX\\Disc Unspecified");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\FAX\\Disc Unspecified");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.fax.Disc_Unspecified;
 
@@ -1717,132 +1675,108 @@ static void diva_create_parse_table (diva_strace_context_t* pLib) {
 	/*
 		B-Layer1"
 		*/
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer1\\X-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer1\\X-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b1.X_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer1\\X-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer1\\X-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b1.X_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer1\\X-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer1\\X-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b1.X_Errors;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer1\\R-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer1\\R-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b1.R_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer1\\R-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer1\\R-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b1.R_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer1\\R-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer1\\R-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b1.R_Errors;
 
 	/*
 		B-Layer2
 		*/
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer2\\X-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer2\\X-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b2.X_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer2\\X-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer2\\X-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b2.X_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer2\\X-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer2\\X-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b2.X_Errors;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer2\\R-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer2\\R-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b2.R_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer2\\R-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer2\\R-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b2.R_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\B-Layer2\\R-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\B-Layer2\\R-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.b2.R_Errors;
 
 	/*
 		D-Layer1
 		*/
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer1\\X-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer1\\X-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d1.X_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer1\\X-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer1\\X-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d1.X_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer1\\X-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer1\\X-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d1.X_Errors;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer1\\R-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer1\\R-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d1.R_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer1\\R-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer1\\R-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d1.R_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer1\\R-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer1\\R-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d1.R_Errors;
 
 	/*
 		D-Layer2
 		*/
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer2\\X-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer2\\X-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d2.X_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer2\\X-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer2\\X-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d2.X_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer2\\X-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer2\\X-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d2.X_Errors;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer2\\R-Frames");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer2\\R-Frames");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d2.R_Frames;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer2\\R-Bytes");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer2\\R-Bytes");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d2.R_Bytes;
 
-	strcpy (pLib->parse_table[pLib->cur_parse_entry].path,
-					"Statistics\\D-Layer2\\R-Errors");
+	strlcpy(pLib->parse_table[pLib->cur_parse_entry].path,,sizeof(pLib->parse_table[pLib->cur_parse_entry].path)					"Statistics\\D-Layer2\\R-Errors");
 	pLib->parse_table[pLib->cur_parse_entry++].variable = \
 																		&pLib->InterfaceStat.d2.R_Errors;
 

@@ -241,19 +241,18 @@ int lasat_init_board_info(void)
 	/* Base model stuff */
 	if (lasat_board_info.li_bmid > i_n_base_models)
 		lasat_board_info.li_bmid = i_n_base_models;
-	strcpy(lasat_board_info.li_bmstr,
-	       i_txt_base_models[lasat_board_info.li_bmid]);
+	strlcpy(lasat_board_info.li_bmstr,,sizeof(lasat_board_info.li_bmstr)	       i_txt_base_models[lasat_board_info.li_bmid]);
 
 	/* Product ID dependent values */
 	c = lasat_board_info.li_prid;
 	if (c >= i_n_prids) {
-		strcpy(lasat_board_info.li_namestr, "Unknown Model");
-		strcpy(lasat_board_info.li_typestr, "Unknown Type");
+		strlcpy(lasat_board_info.li_namestr,"Unknown Model",sizeof(lasat_board_info.li_namestr));
+		strlcpy(lasat_board_info.li_typestr,"Unknown Type",sizeof(lasat_board_info.li_typestr));
 	} else {
 		ppi = &vendor_info_table[0].vi_product_info[c];
-		strcpy(lasat_board_info.li_namestr, ppi->pi_name);
+		strlcpy(lasat_board_info.li_namestr,ppi->pi_name,sizeof(lasat_board_info.li_namestr));
 		if (ppi->pi_type)
-			strcpy(lasat_board_info.li_typestr, ppi->pi_type);
+			strlcpy(lasat_board_info.li_typestr,ppi->pi_type,sizeof(lasat_board_info.li_typestr));
 		else
 			sprintf(lasat_board_info.li_typestr, "%d", 10 * c);
 	}

@@ -381,8 +381,8 @@ static int __devinit snd_aw2_probe(struct pci_dev *pci,
 	/* init spinlock */
 	spin_lock_init(&chip->reg_lock);
 	/* (4) Define driver ID and name string */
-	strcpy(card->driver, "aw2");
-	strcpy(card->shortname, "Audiowerk2");
+	strlcpy(card->driver,"aw2",sizeof(card->driver));
+	strlcpy(card->shortname,"Audiowerk2",sizeof(card->shortname));
 
 	sprintf(card->longname, "%s with SAA7146 irq %i",
 		card->shortname, chip->irq);
@@ -628,7 +628,7 @@ static int __devinit snd_aw2_new_pcm(struct aw2 *chip)
 	pcm_device = &chip->device_playback[NUM_STREAM_PLAYBACK_ANA];
 
 	/* Set PCM device name */
-	strcpy(pcm_playback_ana->name, "Analog playback");
+	strlcpy(pcm_playback_ana->name,"Analog playback",sizeof(pcm_playback_ana->name));
 	/* Associate private data to PCM device */
 	pcm_playback_ana->private_data = pcm_device;
 	/* set operators of PCM device */
@@ -664,7 +664,7 @@ static int __devinit snd_aw2_new_pcm(struct aw2 *chip)
 	pcm_device = &chip->device_playback[NUM_STREAM_PLAYBACK_DIG];
 
 	/* Set PCM device name */
-	strcpy(pcm_playback_num->name, "Digital playback");
+	strlcpy(pcm_playback_num->name,"Digital playback",sizeof(pcm_playback_num->name));
 	/* Associate private data to PCM device */
 	pcm_playback_num->private_data = pcm_device;
 	/* set operators of PCM device */
@@ -704,7 +704,7 @@ static int __devinit snd_aw2_new_pcm(struct aw2 *chip)
 	pcm_device = &chip->device_capture[NUM_STREAM_CAPTURE_ANA];
 
 	/* Set PCM device name */
-	strcpy(pcm_capture->name, "Capture");
+	strlcpy(pcm_capture->name,"Capture",sizeof(pcm_capture->name));
 	/* Associate private data to PCM device */
 	pcm_capture->private_data = pcm_device;
 	/* set operators of PCM device */
@@ -754,8 +754,7 @@ static int snd_aw2_control_switch_capture_info(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 		    uinfo->value.enumerated.items - 1;
 	}
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 

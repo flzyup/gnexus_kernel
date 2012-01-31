@@ -875,7 +875,7 @@ static int ultrastor_abort(struct scsi_cmnd *SCpnt)
 	unsigned long flags;
 	
 	spin_lock_irqsave(host->host_lock, flags);
-	strcpy(out, "OGM %d:%x ICM %d:%x ports:  ");
+	strlcpy(out,"OGM %d:%x ICM %d:%x ports:  ",sizeof(out));
 	for (i = 0; i < 16; i++)
 	  {
 	    unsigned char p = inb(port0 + i);

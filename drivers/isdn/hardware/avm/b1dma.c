@@ -979,7 +979,7 @@ static int __init b1dma_init(void)
 		if ((p = strchr(rev, '$')) != NULL && p > rev)
 		   *(p-1) = 0;
 	} else
-		strcpy(rev, "1.0");
+		strlcpy(rev,"1.0",sizeof(rev));
 
 	printk(KERN_INFO "b1dma: revision %s\n", rev);
 

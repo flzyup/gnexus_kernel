@@ -1036,9 +1036,9 @@ static int __init pvr2fb_setup(char *options)
 		if (!strcmp(this_opt, "inverse")) {
 			fb_invert_cmaps();
 		} else if (!strncmp(this_opt, "cable:", 6)) {
-			strcpy(cable_arg, this_opt + 6);
+			strlcpy(cable_arg,this_opt + 6,sizeof(cable_arg));
 		} else if (!strncmp(this_opt, "output:", 7)) {
-			strcpy(output_arg, this_opt + 7);
+			strlcpy(output_arg,this_opt + 7,sizeof(output_arg));
 		} else if (!strncmp(this_opt, "nopan", 5)) {
 			nopan = 1;
 		} else if (!strncmp(this_opt, "nowrap", 6)) {

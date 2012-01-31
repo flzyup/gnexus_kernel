@@ -171,7 +171,7 @@ setup_hfcs(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strcpy(tmp, hfcs_revision);
+	strlcpy(tmp,hfcs_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: HFC-S driver Rev. %s\n", HiSax_getrev(tmp));
 
 #ifdef __ISAPNP__

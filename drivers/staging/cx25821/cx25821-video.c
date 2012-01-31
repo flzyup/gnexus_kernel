@@ -1166,7 +1166,7 @@ int cx25821_vidioc_querycap(struct file *file, void *priv, struct v4l2_capabilit
 {
 	struct cx25821_dev *dev = ((struct cx25821_fh *)priv)->dev;
 
-	strcpy(cap->driver, "cx25821");
+	strlcpy(cap->driver,"cx25821",sizeof(cap->driver));
 	strlcpy(cap->card, cx25821_boards[dev->board].name, sizeof(cap->card));
 	sprintf(cap->bus_info, "PCIe:%s", pci_name(dev->pci));
 	cap->version = CX25821_VERSION_CODE;
@@ -1274,7 +1274,7 @@ int cx25821_enum_input(struct cx25821_dev *dev, struct v4l2_input *i)
 		return -EINVAL;
 
 	i->type = V4L2_INPUT_TYPE_CAMERA;
-	strcpy(i->name, iname[INPUT(n)->type]);
+	strlcpy(i->name,iname[INPUT(n,sizeof(i->name))->type]);
 
 	i->std = CX25821_NORMS;
 	return 0;
@@ -1410,7 +1410,7 @@ int cx25821_vidioc_g_tuner(struct file *file, void *priv, struct v4l2_tuner *t)
 	if (0 != t->index)
 		return -EINVAL;
 
-	strcpy(t->name, "Television");
+	strlcpy(t->name,"Television",sizeof(t->name));
 	t->type = V4L2_TUNER_ANALOG_TV;
 	t->capability = V4L2_TUNER_CAP_NORM;
 	t->rangehigh = 0xffffffffUL;

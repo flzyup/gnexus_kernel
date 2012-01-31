@@ -450,7 +450,7 @@ start_kernel(void)
 	srm_printk("Preparing ZERO_PGE...\n");
 #endif
 	memset((char*)ZERO_PGE, 0, PAGE_SIZE);
-	strcpy((char*)ZERO_PGE, envval);
+	strlcpy((char*)ZERO_PGE,envval,sizeof((char*)ZERO_PGE));
 
 #ifdef INITRD_IMAGE_SIZE
 

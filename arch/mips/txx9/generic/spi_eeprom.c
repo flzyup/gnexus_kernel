@@ -32,7 +32,7 @@ int __init spi_eeprom_register(int busid, int chipid, int size)
 	eeprom = kzalloc(sizeof(*eeprom), GFP_KERNEL);
 	if (!eeprom)
 		return -ENOMEM;
-	strcpy(eeprom->name, "at250x0");
+	strlcpy(eeprom->name,"at250x0",sizeof(eeprom->name));
 	eeprom->byte_len = size;
 	eeprom->page_size = AT250X0_PAGE_SIZE;
 	eeprom->flags = EE_ADDR1;

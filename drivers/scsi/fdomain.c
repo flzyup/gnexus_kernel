@@ -1016,7 +1016,7 @@ static const char *fdomain_16x0_info( struct Scsi_Host *ignore )
    static char buffer[128];
    char        *pt;
    
-   strcpy( buffer, "Future Domain 16-bit SCSI Driver Version" );
+   strlcpy(buffer,"Future Domain 16-bit SCSI Driver Version" ,sizeof(buffer));
    if (strchr( VERSION, ':')) { /* Assume VERSION is an RCS Revision string */
       strcat( buffer, strchr( VERSION, ':' ) + 1 );
       pt = strrchr( buffer, '$') - 1;

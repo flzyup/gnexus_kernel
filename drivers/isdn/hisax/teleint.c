@@ -265,7 +265,7 @@ setup_TeleInt(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strcpy(tmp, TeleInt_revision);
+	strlcpy(tmp,TeleInt_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: TeleInt driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_TELEINT)
 		return (0);

@@ -2831,7 +2831,7 @@ static void ipr_dump_version_data(struct ipr_ioa_cfg *ioa_cfg,
 		sizeof(struct ipr_dump_entry_header);
 	driver_dump->version_entry.hdr.data_type = IPR_DUMP_DATA_TYPE_ASCII;
 	driver_dump->version_entry.hdr.id = IPR_DUMP_DRIVER_VERSION_ID;
-	strcpy(driver_dump->version_entry.version, IPR_DRIVER_VERSION);
+	strlcpy(driver_dump->version_entry.version,IPR_DRIVER_VERSION,sizeof(driver_dump->version_entry.version));
 	driver_dump->hdr.num_entries++;
 }
 
@@ -2873,7 +2873,7 @@ static void ipr_dump_location_data(struct ipr_ioa_cfg *ioa_cfg,
 		sizeof(struct ipr_dump_entry_header);
 	driver_dump->location_entry.hdr.data_type = IPR_DUMP_DATA_TYPE_ASCII;
 	driver_dump->location_entry.hdr.id = IPR_DUMP_LOCATION_ID;
-	strcpy(driver_dump->location_entry.location, dev_name(&ioa_cfg->pdev->dev));
+	strlcpy(driver_dump->location_entry.location,dev_name(&ioa_cfg->pdev->dev,sizeof(driver_dump->location_entry.location)));
 	driver_dump->hdr.num_entries++;
 }
 

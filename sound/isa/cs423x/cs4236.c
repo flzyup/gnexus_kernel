@@ -419,8 +419,8 @@ static int __devinit snd_cs423x_probe(struct snd_card *card, int dev)
 		if (err < 0)
 			return err;
 	}
-	strcpy(card->driver, pcm->name);
-	strcpy(card->shortname, pcm->name);
+	strlcpy(card->driver,pcm->name,sizeof(card->driver));
+	strlcpy(card->shortname,pcm->name,sizeof(card->shortname));
 	sprintf(card->longname, "%s at 0x%lx, irq %i, dma %i",
 		pcm->name,
 		chip->port,
@@ -572,7 +572,7 @@ static int __devinit snd_cs423x_pnpbios_detect(struct pnp_dev *pdev,
 		return -ENODEV;
 
 	/* prepare second id */
-	strcpy(cid, pdev->id[0].id);
+	strlcpy(cid,pdev->id[0].id,sizeof(cid));
 	cid[5] = '1';
 	cdev = NULL;
 	list_for_each_entry(cdev, &(pdev->protocol->devices), protocol_list) {

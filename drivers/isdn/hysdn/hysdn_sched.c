@@ -94,7 +94,7 @@ hysdn_sched_tx(hysdn_card *card, unsigned char *buf,
 	}			/* async request */
 	if ((card->err_log_state == ERRLOG_STATE_START) &&
 	    (maxlen >= ERRLOG_CMD_REQ_SIZE)) {
-		strcpy(buf, ERRLOG_CMD_REQ);	/* copy the command */
+		strlcpy(buf,ERRLOG_CMD_REQ,sizeof(buf));	/* copy the command */
 		*len = ERRLOG_CMD_REQ_SIZE;	/* buffer length */
 		*chan = CHAN_ERRLOG;	/* and channel */
 		card->err_log_state = ERRLOG_STATE_ON;	/* new state is on */
@@ -102,7 +102,7 @@ hysdn_sched_tx(hysdn_card *card, unsigned char *buf,
 	}			/* error log start and able to send */
 	if ((card->err_log_state == ERRLOG_STATE_STOP) &&
 	    (maxlen >= ERRLOG_CMD_STOP_SIZE)) {
-		strcpy(buf, ERRLOG_CMD_STOP);	/* copy the command */
+		strlcpy(buf,ERRLOG_CMD_STOP,sizeof(buf));	/* copy the command */
 		*len = ERRLOG_CMD_STOP_SIZE;	/* buffer length */
 		*chan = CHAN_ERRLOG;	/* and channel */
 		card->err_log_state = ERRLOG_STATE_OFF;		/* new state is off */
@@ -166,7 +166,7 @@ hysdn_tx_cfgline(hysdn_card *card, unsigned char *line, unsigned short chan)
 	}			/* wait for buffer to become free */
 
 	spin_lock_irqsave(&card->hysdn_lock, flags);
-	strcpy(card->async_data, line);
+	strlcpy(card->async_data,line,sizeof(card->async_data));
 	card->async_len = strlen(line) + 1;
 	card->async_channel = chan;
 	card->async_busy = 1;	/* request transfer */

@@ -589,14 +589,14 @@ int ufs_make_empty(struct inode * inode, struct inode *dir)
 	ufs_set_de_type(sb, de, inode->i_mode);
 	ufs_set_de_namlen(sb, de, 1);
 	de->d_reclen = cpu_to_fs16(sb, UFS_DIR_REC_LEN(1));
-	strcpy (de->d_name, ".");
+	strlcpy(de->d_name,".",sizeof(de->d_name));
 	de = (struct ufs_dir_entry *)
 		((char *)de + fs16_to_cpu(sb, de->d_reclen));
 	de->d_ino = cpu_to_fs32(sb, dir->i_ino);
 	ufs_set_de_type(sb, de, dir->i_mode);
 	de->d_reclen = cpu_to_fs16(sb, chunk_size - UFS_DIR_REC_LEN(1));
 	ufs_set_de_namlen(sb, de, 2);
-	strcpy (de->d_name, "..");
+	strlcpy(de->d_name,"..",sizeof(de->d_name));
 	kunmap(page);
 
 	err = ufs_commit_chunk(page, 0, chunk_size);

@@ -1308,7 +1308,7 @@ static int port_detect(unsigned long port_base, unsigned int j,
 
 	}
 
-	strcpy(ha->board_name, name);
+	strlcpy(ha->board_name,name,sizeof(ha->board_name));
 
 	/* DPT PM2012 does not allow to detect sg_tablesize correctly */
 	if (shost->sg_tablesize > MAX_SGLIST || shost->sg_tablesize < 2) {

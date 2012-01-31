@@ -226,8 +226,7 @@ static int snd_toneport_source_info(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= size)
 		uinfo->value.enumerated.item = size - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-	       toneport_source_info[uinfo->value.enumerated.item].name);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       toneport_source_info[uinfo->value.enumerated.item].name);
 
 	return 0;
 }

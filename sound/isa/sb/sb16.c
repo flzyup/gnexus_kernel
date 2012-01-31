@@ -376,12 +376,11 @@ static int __devinit snd_sb16_probe(struct snd_card *card, int dev)
 	if ((err = snd_sb16dsp_pcm(chip, 0, &chip->pcm)) < 0)
 		return err;
 
-	strcpy(card->driver,
-#ifdef SNDRV_SBAWE_EMU8000
+	strlcpy(card->driver,,sizeof(card->driver)#ifdef SNDRV_SBAWE_EMU8000
 			awe_port[dev] > 0 ? "SB AWE" :
 #endif
 			"SB16");
-	strcpy(card->shortname, chip->name);
+	strlcpy(card->shortname,chip->name,sizeof(card->shortname));
 	sprintf(card->longname, "%s at 0x%lx, irq %i, dma ",
 		chip->name,
 		chip->port,

@@ -376,7 +376,7 @@ int kgdb_arch_handle_exception(int vector, int signo,
 	case 'c':
 	case 's':
 		if (kgdb_contthread && kgdb_contthread != current) {
-			strcpy(remcom_out_buffer, "E00");
+			strlcpy(remcom_out_buffer,"E00",sizeof(remcom_out_buffer));
 			break;
 		}
 

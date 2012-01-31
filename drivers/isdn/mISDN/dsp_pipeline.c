@@ -256,7 +256,7 @@ int dsp_pipeline_build(struct dsp_pipeline *pipeline, const char *cfg)
 	dup = kmalloc(len + 1, GFP_ATOMIC);
 	if (!dup)
 		return 0;
-	strcpy(dup, cfg);
+	strlcpy(dup,cfg,sizeof(dup));
 	while ((tok = strsep(&dup, "|"))) {
 		if (!strlen(tok))
 			continue;

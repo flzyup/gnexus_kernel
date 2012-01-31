@@ -1971,7 +1971,7 @@ _snd_hda_find_mixer_ctl(struct hda_codec *codec,
 	id.index = idx;
 	if (snd_BUG_ON(strlen(name) >= sizeof(id.name)))
 		return NULL;
-	strcpy(id.name, name);
+	strlcpy(id.name,name,sizeof(id.name));
 	return snd_ctl_find_id(codec->bus->card, &id);
 }
 
@@ -4156,7 +4156,7 @@ int snd_hda_input_mux_info(const struct hda_input_mux *imux,
 	index = uinfo->value.enumerated.item;
 	if (index >= imux->num_items)
 		index = imux->num_items - 1;
-	strcpy(uinfo->value.enumerated.name, imux->items[index].label);
+	strlcpy(uinfo->value.enumerated.name,imux->items[index].label,sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 EXPORT_SYMBOL_HDA(snd_hda_input_mux_info);

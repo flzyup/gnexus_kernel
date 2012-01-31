@@ -953,7 +953,7 @@ p9_fd_create_unix(struct p9_client *client, const char *addr, char *args)
 	}
 
 	sun_server.sun_family = PF_UNIX;
-	strcpy(sun_server.sun_path, addr);
+	strlcpy(sun_server.sun_path,addr,sizeof(sun_server.sun_path));
 	err = __sock_create(read_pnet(&current->nsproxy->net_ns), PF_UNIX,
 			    SOCK_STREAM, 0, &csocket, 1);
 	if (err < 0) {

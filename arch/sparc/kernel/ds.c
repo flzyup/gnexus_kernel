@@ -788,9 +788,9 @@ void ldom_set_var(const char *var, const char *value)
 		pkt.header.data.handle = cp->handle;
 		pkt.header.msg.hdr.type = DS_VAR_SET_REQ;
 		base = p = &pkt.header.msg.name_and_value[0];
-		strcpy(p, var);
+		strlcpy(p,var,sizeof(p));
 		p += strlen(var) + 1;
-		strcpy(p, value);
+		strlcpy(p,value,sizeof(p));
 		p += strlen(value) + 1;
 
 		msg_len = (sizeof(struct ds_data) +
@@ -842,8 +842,8 @@ void ldom_reboot(const char *boot_command)
 	if (boot_command && strlen(boot_command)) {
 		unsigned long len;
 
-		strcpy(full_boot_str, "boot ");
-		strcpy(full_boot_str + strlen("boot "), boot_command);
+		strlcpy(full_boot_str,"boot ",sizeof(full_boot_str));
+		strlcpy(full_boot_str + strlen("boot "),boot_command,sizeof(full_boot_str + strlen("boot ")));
 		len = strlen(full_boot_str);
 
 		if (reboot_data_supported) {
@@ -901,7 +901,7 @@ static int register_services(struct ds_info *dp)
 		pbuf.req.handle = cp->handle;
 		pbuf.req.major = 1;
 		pbuf.req.minor = 0;
-		strcpy(pbuf.req.svc_id, cp->service_id);
+		strlcpy(pbuf.req.svc_id,cp->service_id,sizeof(pbuf.req.svc_id));
 
 		err = __ds_send(lp, &pbuf, msg_len);
 		if (err > 0)

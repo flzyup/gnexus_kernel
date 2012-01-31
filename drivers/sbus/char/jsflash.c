@@ -522,7 +522,7 @@ static int jsflash_init(void)
 		/* XXX Redo the userland interface. */
 		jsf->id.off = JSF_BASE_ALL;
 		jsf->id.size = 0x01000000;	/* 16M - all segments */
-		strcpy(jsf->id.name, "Krups_all");
+		strlcpy(jsf->id.name,"Krups_all",sizeof(jsf->id.name));
 
 		jsf->dv[0].dbase = jsf->base;
 		jsf->dv[0].dsize = jsf->size;

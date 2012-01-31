@@ -712,7 +712,7 @@ static void hycapi_fill_profile(hysdn_card *card)
 	cinfo = card->hyctrlinfo;
 	if(!cinfo) return;
 	ctrl = &cinfo->capi_ctrl;
-	strcpy(ctrl->manu, "Hypercope");	
+	strlcpy(ctrl->manu,"Hypercope",sizeof(ctrl->manu));	
 	ctrl->version.majorversion = 2;
 	ctrl->version.minorversion = 0;
 	ctrl->version.majormanuversion = 3;
@@ -758,12 +758,12 @@ hycapi_capi_create(hysdn_card *card)
 		INIT_LIST_HEAD(&cinfo->ncci_head);
 
 		switch (card->brdtype) {
-			case BD_PCCARD:  strcpy(cinfo->cardname,"HYSDN Hycard"); break;
-			case BD_ERGO: strcpy(cinfo->cardname,"HYSDN Ergo2"); break;
-			case BD_METRO: strcpy(cinfo->cardname,"HYSDN Metro4"); break;
-			case BD_CHAMP2: strcpy(cinfo->cardname,"HYSDN Champ2"); break;
-			case BD_PLEXUS: strcpy(cinfo->cardname,"HYSDN Plexus30"); break;
-			default: strcpy(cinfo->cardname,"HYSDN ???"); break;
+			case BD_PCCARD:  strlcpy(cinfo->cardname,"HYSDN Hycard",sizeof(cinfo->cardname)); break;
+			case BD_ERGO: strlcpy(cinfo->cardname,"HYSDN Ergo2",sizeof(cinfo->cardname)); break;
+			case BD_METRO: strlcpy(cinfo->cardname,"HYSDN Metro4",sizeof(cinfo->cardname)); break;
+			case BD_CHAMP2: strlcpy(cinfo->cardname,"HYSDN Champ2",sizeof(cinfo->cardname)); break;
+			case BD_PLEXUS: strlcpy(cinfo->cardname,"HYSDN Plexus30",sizeof(cinfo->cardname)); break;
+			default: strlcpy(cinfo->cardname,"HYSDN ???",sizeof(cinfo->cardname)); break;
 		}
 
 		ctrl = &cinfo->capi_ctrl;
@@ -776,7 +776,7 @@ hycapi_capi_create(hysdn_card *card)
 		ctrl->reset_ctr     = hycapi_reset_ctr;
 		ctrl->procinfo      = hycapi_procinfo;
 		ctrl->proc_fops = &hycapi_proc_fops;
-		strcpy(ctrl->name, cinfo->cardname);
+		strlcpy(ctrl->name,cinfo->cardname,sizeof(ctrl->name));
 		ctrl->owner = THIS_MODULE;
 
 		retval = attach_capi_ctr(ctrl);

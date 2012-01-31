@@ -79,7 +79,7 @@ main(void)
 			if (manufs)
 				fputs("ENDMANUF()\n\n", devf);
 			manufs++;
-			strcpy(manuf, line);
+			strlcpy(manuf,line,sizeof(manuf));
 			manuf_len = strlen(c);
 			if (manuf_len + 24 > MAX_NAME_SIZE) {
 				fprintf(stderr, "Line %d: manufacturer name too long\n", lino);

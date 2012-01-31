@@ -68,9 +68,9 @@ static void __cpuinit default_init(struct cpuinfo_x86 *c)
 	if (c->cpuid_level == -1) {
 		/* No cpuid. It must be an ancient CPU */
 		if (c->x86 == 4)
-			strcpy(c->x86_model_id, "486");
+			strlcpy(c->x86_model_id,"486",sizeof(c->x86_model_id));
 		else if (c->x86 == 3)
-			strcpy(c->x86_model_id, "386");
+			strlcpy(c->x86_model_id,"386",sizeof(c->x86_model_id));
 	}
 #endif
 }
@@ -845,7 +845,7 @@ static void __cpuinit identify_cpu(struct cpuinfo_x86 *c)
 		const char *p;
 		p = table_lookup_model(c);
 		if (p)
-			strcpy(c->x86_model_id, p);
+			strlcpy(c->x86_model_id,p,sizeof(c->x86_model_id));
 		else
 			/* Last resort... */
 			sprintf(c->x86_model_id, "%02x/%02x",

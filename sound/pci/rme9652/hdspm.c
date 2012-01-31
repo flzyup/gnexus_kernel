@@ -2070,8 +2070,7 @@ static int snd_hdspm_info_autosync_sample_rate(struct snd_kcontrol *kcontrol,
 
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-			texts_freq[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts_freq[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -2227,8 +2226,7 @@ static int snd_hdspm_info_system_clock_mode(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 		    uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -2329,8 +2327,7 @@ static int snd_hdspm_info_clock_source(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 		    uinfo->value.enumerated.items - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-	       texts_freq[uinfo->value.enumerated.item+1]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts_freq[uinfo->value.enumerated.item+1]);
 
 	return 0;
 }
@@ -2659,8 +2656,7 @@ static int snd_hdspm_info_pref_sync_ref(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-			hdspm->texts_autosync[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			hdspm->texts_autosync[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -2764,8 +2760,7 @@ static int snd_hdspm_info_autosync_ref(struct snd_kcontrol *kcontrol,
 		    uinfo->value.enumerated.items)
 			uinfo->value.enumerated.item =
 				uinfo->value.enumerated.items - 1;
-		strcpy(uinfo->value.enumerated.name,
-				texts[uinfo->value.enumerated.item]);
+		strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)				texts[uinfo->value.enumerated.item]);
 	} else if (MADI == hdspm->io_type) {
 		static char *texts[] = {"Word Clock", "MADI", "TCO",
 			"Sync In", "None" };
@@ -2777,8 +2772,7 @@ static int snd_hdspm_info_autosync_ref(struct snd_kcontrol *kcontrol,
 				uinfo->value.enumerated.items)
 			uinfo->value.enumerated.item =
 				uinfo->value.enumerated.items - 1;
-		strcpy(uinfo->value.enumerated.name,
-				texts[uinfo->value.enumerated.item]);
+		strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)				texts[uinfo->value.enumerated.item]);
 	}
 	return 0;
 }
@@ -3222,8 +3216,7 @@ static int snd_hdspm_info_input_select(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 		    uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -3294,8 +3287,7 @@ static int snd_hdspm_info_ds_wire(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 		    uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -3377,8 +3369,7 @@ static int snd_hdspm_info_qs_wire(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 		    uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -3611,8 +3602,7 @@ static int snd_hdspm_info_sync_check(struct snd_kcontrol *kcontrol,
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-			texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -3964,8 +3954,7 @@ static int snd_hdspm_info_tco_sample_rate(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-			texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -4020,8 +4009,7 @@ static int snd_hdspm_info_tco_pull(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-			texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -4075,8 +4063,7 @@ static int snd_hdspm_info_tco_wck_conversion(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-			texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -4132,8 +4119,7 @@ static int snd_hdspm_info_tco_frame_rate(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-			texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -4188,8 +4174,7 @@ static int snd_hdspm_info_tco_sync_source(struct snd_kcontrol *kcontrol,
 		uinfo->value.enumerated.item =
 			uinfo->value.enumerated.items - 1;
 
-	strcpy(uinfo->value.enumerated.name,
-			texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)			texts[uinfo->value.enumerated.item]);
 
 	return 0;
 }
@@ -6211,7 +6196,7 @@ static int __devinit snd_hdspm_create_hwdep(struct snd_card *card,
 
 	hdspm->hwdep = hw;
 	hw->private_data = hdspm;
-	strcpy(hw->name, "HDSPM hwdep interface");
+	strlcpy(hw->name,"HDSPM hwdep interface",sizeof(hw->name));
 
 	hw->ops.open = snd_hdspm_hwdep_dummy_op;
 	hw->ops.ioctl = snd_hdspm_hwdep_ioctl;
@@ -6277,7 +6262,7 @@ static int __devinit snd_hdspm_create_pcm(struct snd_card *card,
 
 	hdspm->pcm = pcm;
 	pcm->private_data = hdspm;
-	strcpy(pcm->name, hdspm->card_name);
+	strlcpy(pcm->name,hdspm->card_name,sizeof(pcm->name));
 
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,
 			&snd_hdspm_playback_ops);
@@ -6375,8 +6360,8 @@ static int __devinit snd_hdspm_create(struct snd_card *card,
 	pci_read_config_word(hdspm->pci,
 			PCI_CLASS_REVISION, &hdspm->firmware_rev);
 
-	strcpy(card->mixername, "Xilinx FPGA");
-	strcpy(card->driver, "HDSPM");
+	strlcpy(card->mixername,"Xilinx FPGA",sizeof(card->mixername));
+	strlcpy(card->driver,"HDSPM",sizeof(card->driver));
 
 	switch (hdspm->firmware_rev) {
 	case HDSPM_MADI_REV:

@@ -431,7 +431,7 @@ static void __cpuinit init_intel(struct cpuinfo_x86 *c)
 		}
 
 		if (p)
-			strcpy(c->x86_model_id, p);
+			strlcpy(c->x86_model_id,p,sizeof(c->x86_model_id));
 	}
 
 	if (c->x86 == 15)

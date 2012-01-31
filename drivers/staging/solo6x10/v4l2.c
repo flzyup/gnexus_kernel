@@ -574,8 +574,8 @@ static int solo_querycap(struct file *file, void  *priv,
 	struct solo_filehandle  *fh  = priv;
 	struct solo_dev *solo_dev = fh->solo_dev;
 
-	strcpy(cap->driver, SOLO6X10_NAME);
-	strcpy(cap->card, "Softlogic 6x10");
+	strlcpy(cap->driver,SOLO6X10_NAME,sizeof(cap->driver));
+	strlcpy(cap->card,"Softlogic 6x10",sizeof(cap->card));
 	snprintf(cap->bus_info, sizeof(cap->bus_info), "PCI %s",
 		 pci_name(solo_dev->pdev));
 	cap->version = SOLO6X10_VER_NUM;

@@ -137,8 +137,8 @@ static int __devinit snd_card_cs46xx_probe(struct pci_dev *pci,
 
 	snd_cs46xx_gameport(chip);
 
-	strcpy(card->driver, "CS46xx");
-	strcpy(card->shortname, "Sound Fusion CS46xx");
+	strlcpy(card->driver,"CS46xx",sizeof(card->driver));
+	strlcpy(card->shortname,"Sound Fusion CS46xx",sizeof(card->shortname));
 	sprintf(card->longname, "%s at 0x%lx/0x%lx, irq %i",
 		card->shortname,
 		chip->ba0_addr,

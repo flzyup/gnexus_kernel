@@ -421,7 +421,7 @@ static void init_node(struct gcov_node *node, struct gcov_info *info,
 	}
 	node->parent = parent;
 	if (name)
-		strcpy(node->name, name);
+		strlcpy(node->name,name,sizeof(node->name));
 }
 
 /*

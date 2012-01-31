@@ -636,7 +636,7 @@ static int alc_pin_mode_info(struct snd_kcontrol *kcontrol,
 
 	if (item_num<alc_pin_mode_min(dir) || item_num>alc_pin_mode_max(dir))
 		item_num = alc_pin_mode_min(dir);
-	strcpy(uinfo->value.enumerated.name, alc_pin_mode_names[item_num]);
+	strlcpy(uinfo->value.enumerated.name,alc_pin_mode_names[item_num],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -1483,8 +1483,7 @@ static int alc_automute_mode_info(struct snd_kcontrol *kcontrol,
 	}
 	if (uinfo->value.enumerated.item >= uinfo->value.enumerated.items)
 		uinfo->value.enumerated.item = uinfo->value.enumerated.items - 1;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -4643,7 +4642,7 @@ static int alc_test_pin_ctl_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 8;
 	if (uinfo->value.enumerated.item >= 8)
 		uinfo->value.enumerated.item = 7;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -4717,7 +4716,7 @@ static int alc_test_pin_src_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item >= 4)
 		uinfo->value.enumerated.item = 3;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 

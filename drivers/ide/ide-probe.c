@@ -479,7 +479,7 @@ static u8 probe_for_drive(ide_drive_t *drive)
 	drive->dev_flags &= ~IDE_DFLAG_ID_READ;
 
 	m = (char *)&drive->id[ATA_ID_PROD];
-	strcpy(m, "UNKNOWN");
+	strlcpy(m,"UNKNOWN",sizeof(m));
 
 	/* skip probing? */
 	if ((drive->dev_flags & IDE_DFLAG_NOPROBE) == 0) {

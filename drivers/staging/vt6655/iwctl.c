@@ -147,7 +147,7 @@ int iwctl_giwname(struct net_device *dev,
 			 char *wrq,
 			 char *extra)
 {
-	strcpy(wrq, "802.11-a/b/g");
+	strlcpy(wrq,"802.11-a/b/g",sizeof(wrq));
 	return 0;
 }
 

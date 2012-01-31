@@ -696,7 +696,7 @@ static struct ctl_table_header *ocfs2_table_header = NULL;
 
 static int __init ocfs2_stack_glue_init(void)
 {
-	strcpy(cluster_stack_name, OCFS2_STACK_PLUGIN_O2CB);
+	strlcpy(cluster_stack_name,OCFS2_STACK_PLUGIN_O2CB,sizeof(cluster_stack_name));
 
 	ocfs2_table_header = register_sysctl_table(ocfs2_root_table);
 	if (!ocfs2_table_header) {

@@ -424,8 +424,8 @@ int tm6000_audio_init(struct tm6000_core *dev)
 		snd_printk(KERN_ERR "cannot create card instance %d\n", devnr);
 		return rc;
 	}
-	strcpy(card->driver, "tm6000-alsa");
-	strcpy(card->shortname, "TM5600/60x0");
+	strlcpy(card->driver,"tm6000-alsa",sizeof(card->driver));
+	strlcpy(card->shortname,"TM5600/60x0",sizeof(card->shortname));
 	sprintf(card->longname, "TM5600/60x0 Audio at bus %d device %d",
 		dev->udev->bus->busnum, dev->udev->devnum);
 
@@ -452,7 +452,7 @@ int tm6000_audio_init(struct tm6000_core *dev)
 
 	pcm->info_flags = 0;
 	pcm->private_data = chip;
-	strcpy(pcm->name, "Trident TM5600/60x0");
+	strlcpy(pcm->name,"Trident TM5600/60x0",sizeof(pcm->name));
 
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_tm6000_pcm_ops);
 

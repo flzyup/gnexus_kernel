@@ -361,7 +361,7 @@ static int recent_mt_check(const struct xt_mtchk_param *par)
 		goto out;
 	}
 	t->refcnt = 1;
-	strcpy(t->name, info->name);
+	strlcpy(t->name,info->name,sizeof(t->name));
 	INIT_LIST_HEAD(&t->lru_list);
 	for (i = 0; i < ip_list_hash_size; i++)
 		INIT_LIST_HEAD(&t->iphash[i]);

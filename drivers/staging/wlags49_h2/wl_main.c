@@ -597,26 +597,26 @@ int wl_insert( struct net_device *dev )
 		lp->MicrowaveRobustness = 0;
 	}
 	if ( PARM_DESIRED_SSID && ( strlen( PARM_DESIRED_SSID ) <= HCF_MAX_NAME_LEN )) {
-		strcpy( lp->NetworkName, PARM_DESIRED_SSID );
+		strlcpy(lp->NetworkName,PARM_DESIRED_SSID ,sizeof(lp->NetworkName));
 	}
 	if ( PARM_OWN_SSID && ( strlen( PARM_OWN_SSID ) <= HCF_MAX_NAME_LEN )) {
-		strcpy( lp->NetworkName, PARM_OWN_SSID );
+		strlcpy(lp->NetworkName,PARM_OWN_SSID ,sizeof(lp->NetworkName));
 	}
 	if ( PARM_OWN_NAME && ( strlen( PARM_OWN_NAME ) <= HCF_MAX_NAME_LEN )) {
-		strcpy( lp->StationName, PARM_OWN_NAME );
+		strlcpy(lp->StationName,PARM_OWN_NAME ,sizeof(lp->StationName));
 	}
 	lp->EnableEncryption = PARM_ENABLE_ENCRYPTION;
 	if ( PARM_KEY1 && ( strlen( PARM_KEY1 ) <= MAX_KEY_LEN )) {
-		strcpy( lp->Key1, PARM_KEY1 );
+		strlcpy(lp->Key1,PARM_KEY1 ,sizeof(lp->Key1));
 	}
 	if ( PARM_KEY2 && ( strlen( PARM_KEY2 ) <= MAX_KEY_LEN )) {
-		strcpy( lp->Key2, PARM_KEY2 );
+		strlcpy(lp->Key2,PARM_KEY2 ,sizeof(lp->Key2));
 	}
 	if ( PARM_KEY3 && ( strlen( PARM_KEY3 ) <= MAX_KEY_LEN )) {
-		strcpy( lp->Key3, PARM_KEY3 );
+		strlcpy(lp->Key3,PARM_KEY3 ,sizeof(lp->Key3));
 	}
 	if ( PARM_KEY4 && ( strlen( PARM_KEY4 ) <= MAX_KEY_LEN )) {
-		strcpy( lp->Key4, PARM_KEY4 );
+		strlcpy(lp->Key4,PARM_KEY4 ,sizeof(lp->Key4));
 	}
 
 	lp->TransmitKeyID = PARM_TX_KEY;

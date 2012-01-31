@@ -272,8 +272,8 @@ static int acpi_smbus_hc_add(struct acpi_device *device)
 		return -EIO;
 	}
 
-	strcpy(acpi_device_name(device), ACPI_SMB_HC_DEVICE_NAME);
-	strcpy(acpi_device_class(device), ACPI_SMB_HC_CLASS);
+	strlcpy(acpi_device_name(device),ACPI_SMB_HC_DEVICE_NAME,sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_SMB_HC_CLASS,sizeof(acpi_device_class(device)));
 
 	hc = kzalloc(sizeof(struct acpi_smb_hc), GFP_KERNEL);
 	if (!hc)

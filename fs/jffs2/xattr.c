@@ -364,7 +364,7 @@ static struct jffs2_xattr_datum *create_xattr_datum(struct jffs2_sb_info *c,
 		jffs2_free_xattr_datum(xd);
 		return ERR_PTR(-ENOMEM);
 	}
-	strcpy(data, xname);
+	strlcpy(data,xname,sizeof(data));
 	memcpy(data + name_len + 1, xvalue, xsize);
 
 	atomic_set(&xd->refcnt, 1);

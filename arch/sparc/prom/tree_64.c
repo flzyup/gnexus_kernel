@@ -271,7 +271,7 @@ inline char *prom_nextprop(phandle node, const char *oprop, char *buffer)
 		return buffer;
 	}
 	if (oprop == buffer) {
-		strcpy (buf, oprop);
+		strlcpy(buf,oprop,sizeof(buf));
 		oprop = buf;
 	}
 

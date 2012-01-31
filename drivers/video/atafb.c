@@ -591,7 +591,7 @@ static int tt_encode_fix(struct fb_fix_screeninfo *fix, struct atafb_par *par)
 {
 	int mode;
 
-	strcpy(fix->id, "Atari Builtin");
+	strlcpy(fix->id,"Atari Builtin",sizeof(fix->id));
 	fix->smem_start = (unsigned long)real_screen_base;
 	fix->smem_len = screen_len;
 	fix->type = FB_TYPE_INTERLEAVED_PLANES;
@@ -887,7 +887,7 @@ static inline int hxx_prescale(struct falcon_hw *hw)
 static int falcon_encode_fix(struct fb_fix_screeninfo *fix,
 			     struct atafb_par *par)
 {
-	strcpy(fix->id, "Atari Builtin");
+	strlcpy(fix->id,"Atari Builtin",sizeof(fix->id));
 	fix->smem_start = (unsigned long)real_screen_base;
 	fix->smem_len = screen_len;
 	fix->type = FB_TYPE_INTERLEAVED_PLANES;
@@ -1813,7 +1813,7 @@ static int stste_encode_fix(struct fb_fix_screeninfo *fix,
 {
 	int mode;
 
-	strcpy(fix->id, "Atari Builtin");
+	strlcpy(fix->id,"Atari Builtin",sizeof(fix->id));
 	fix->smem_start = (unsigned long)real_screen_base;
 	fix->smem_len = screen_len;
 	fix->type = FB_TYPE_INTERLEAVED_PLANES;
@@ -2112,7 +2112,7 @@ static void st_ovsc_switch(void)
 
 static int ext_encode_fix(struct fb_fix_screeninfo *fix, struct atafb_par *par)
 {
-	strcpy(fix->id, "Unknown Extern");
+	strlcpy(fix->id,"Unknown Extern",sizeof(fix->id));
 	fix->smem_start = (unsigned long)external_addr;
 	fix->smem_len = PAGE_ALIGN(external_len);
 	if (external_depth == 1) {
@@ -3195,7 +3195,7 @@ int __init atafb_init(void)
 	}
 #endif /* ATAFB_EXT */
 
-//	strcpy(fb_info.mode->name, "Atari Builtin ");
+//	strlcpy(fb_info.mode->name,"Atari Builtin ",sizeof(fb_info.mode->name));
 	fb_info.fbops = &atafb_ops;
 	// try to set default (detected; requested) var
 	do_fb_set_var(&atafb_predefined[default_par - 1], 1);

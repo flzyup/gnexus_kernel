@@ -1058,8 +1058,8 @@ static void fjn_rx(struct net_device *dev)
 static void netdev_get_drvinfo(struct net_device *dev,
 			       struct ethtool_drvinfo *info)
 {
-	strcpy(info->driver, DRV_NAME);
-	strcpy(info->version, DRV_VERSION);
+	strlcpy(info->driver,DRV_NAME,sizeof(info->driver));
+	strlcpy(info->version,DRV_VERSION,sizeof(info->version));
 	sprintf(info->bus_info, "PCMCIA 0x%lx", dev->base_addr);
 }
 

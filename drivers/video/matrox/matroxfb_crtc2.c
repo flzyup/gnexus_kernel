@@ -298,7 +298,7 @@ static void matroxfb_dh_init_fix(struct matroxfb_dh_fb_info *m2info)
 {
 	struct fb_fix_screeninfo *fix = &m2info->fbcon.fix;
 
-	strcpy(fix->id, "MATROX DH");
+	strlcpy(fix->id,"MATROX DH",sizeof(fix->id));
 
 	fix->smem_start = m2info->video.base;
 	fix->smem_len = m2info->video.len_usable;

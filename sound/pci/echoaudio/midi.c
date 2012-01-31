@@ -316,7 +316,7 @@ static int __devinit snd_echo_midi_create(struct snd_card *card,
 				   &chip->rmidi)) < 0)
 		return err;
 
-	strcpy(chip->rmidi->name, card->shortname);
+	strlcpy(chip->rmidi->name,card->shortname,sizeof(chip->rmidi->name));
 	chip->rmidi->private_data = chip;
 
 	snd_rawmidi_set_ops(chip->rmidi, SNDRV_RAWMIDI_STREAM_INPUT,

@@ -1571,7 +1571,7 @@ sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn)
         }
         strncpy (bip->first_iname, np, CHNM_STRLEN - 1);
     } else
-        strcpy (bip->first_iname, "<NULL>");
+        strlcpy(bip->first_iname,"<NULL>",sizeof(bip->first_iname));
     if (ci->last_if)
     {
         {
@@ -1582,7 +1582,7 @@ sbecom_get_brdinfo (ci_t * ci, struct sbe_brd_info * bip, u_int8_t *bsn)
         }
         strncpy (bip->last_iname, np, CHNM_STRLEN - 1);
     } else
-        strcpy (bip->last_iname, "<NULL>");
+        strlcpy(bip->last_iname,"<NULL>",sizeof(bip->last_iname));
 
     if (bsn)
     {

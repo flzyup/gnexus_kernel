@@ -289,8 +289,8 @@ struct p9_fid *v9fs_session_init(struct v9fs_session_info *v9ses,
 	list_add(&v9ses->slist, &v9fs_sessionlist);
 	spin_unlock(&v9fs_sessionlist_lock);
 
-	strcpy(v9ses->uname, V9FS_DEFUSER);
-	strcpy(v9ses->aname, V9FS_DEFANAME);
+	strlcpy(v9ses->uname,V9FS_DEFUSER,sizeof(v9ses->uname));
+	strlcpy(v9ses->aname,V9FS_DEFANAME,sizeof(v9ses->aname));
 	v9ses->uid = ~0;
 	v9ses->dfltuid = V9FS_DEFUID;
 	v9ses->dfltgid = V9FS_DEFGID;

@@ -784,8 +784,8 @@ static int acpi_ec_add(struct acpi_device *device)
 	struct acpi_ec *ec = NULL;
 	int ret;
 
-	strcpy(acpi_device_name(device), ACPI_EC_DEVICE_NAME);
-	strcpy(acpi_device_class(device), ACPI_EC_CLASS);
+	strlcpy(acpi_device_name(device),ACPI_EC_DEVICE_NAME,sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_EC_CLASS,sizeof(acpi_device_class(device)));
 
 	/* Check for boot EC */
 	if (boot_ec &&

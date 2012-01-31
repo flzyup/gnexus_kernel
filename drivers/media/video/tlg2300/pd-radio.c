@@ -360,7 +360,7 @@ static int vidioc_g_audio(struct file *file, void *priv, struct v4l2_audio *a)
 	a->index    = 0;
 	a->mode    = 0;
 	a->capability = V4L2_AUDCAP_STEREO;
-	strcpy(a->name, "Radio");
+	strlcpy(a->name,"Radio",sizeof(a->name));
 	return 0;
 }
 

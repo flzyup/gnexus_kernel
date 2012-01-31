@@ -127,16 +127,16 @@ static int __init davinci_cpuidle_probe(struct platform_device *pdev)
 	device->states[0].exit_latency = 1;
 	device->states[0].target_residency = 10000;
 	device->states[0].flags = CPUIDLE_FLAG_TIME_VALID;
-	strcpy(device->states[0].name, "WFI");
-	strcpy(device->states[0].desc, "Wait for interrupt");
+	strlcpy(device->states[0].name,"WFI",sizeof(device->states[0].name));
+	strlcpy(device->states[0].desc,"Wait for interrupt",sizeof(device->states[0].desc));
 
 	/* Wait for interrupt and DDR self refresh state */
 	device->states[1].enter = davinci_enter_idle;
 	device->states[1].exit_latency = 10;
 	device->states[1].target_residency = 10000;
 	device->states[1].flags = CPUIDLE_FLAG_TIME_VALID;
-	strcpy(device->states[1].name, "DDR SR");
-	strcpy(device->states[1].desc, "WFI and DDR Self Refresh");
+	strlcpy(device->states[1].name,"DDR SR",sizeof(device->states[1].name));
+	strlcpy(device->states[1].desc,"WFI and DDR Self Refresh",sizeof(device->states[1].desc));
 	if (pdata->ddr2_pdown)
 		davinci_states[1].flags |= DAVINCI_CPUIDLE_FLAGS_DDR2_PWDN;
 	cpuidle_set_statedata(&device->states[1], &davinci_states[1]);

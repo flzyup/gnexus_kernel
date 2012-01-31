@@ -899,8 +899,8 @@ static int acpi_power_meter_add(struct acpi_device *device)
 	resource->sensors_valid = 0;
 	resource->acpi_dev = device;
 	mutex_init(&resource->lock);
-	strcpy(acpi_device_name(device), ACPI_POWER_METER_DEVICE_NAME);
-	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
+	strlcpy(acpi_device_name(device),ACPI_POWER_METER_DEVICE_NAME,sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_POWER_METER_CLASS,sizeof(acpi_device_class(device)));
 	device->driver_data = resource;
 
 	free_capabilities(resource);

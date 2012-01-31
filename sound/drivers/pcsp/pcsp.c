@@ -128,8 +128,8 @@ static int __devinit snd_card_pcsp_probe(int devnum, struct device *dev)
 
 	snd_card_set_dev(pcsp_chip.card, dev);
 
-	strcpy(card->driver, "PC-Speaker");
-	strcpy(card->shortname, "pcsp");
+	strlcpy(card->driver,"PC-Speaker",sizeof(card->driver));
+	strlcpy(card->shortname,"pcsp",sizeof(card->shortname));
 	sprintf(card->longname, "Internal PC-Speaker at port 0x%x",
 		pcsp_chip.port);
 

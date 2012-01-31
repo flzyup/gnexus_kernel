@@ -3459,7 +3459,7 @@ struct cx88_core *cx88_core_create(struct pci_dev *pci, int nr)
 	core->nr = nr;
 	sprintf(core->name, "cx88[%d]", core->nr);
 
-	strcpy(core->v4l2_dev.name, core->name);
+	strlcpy(core->v4l2_dev.name,core->name,sizeof(core->v4l2_dev.name));
 	if (v4l2_device_register(NULL, &core->v4l2_dev)) {
 		kfree(core);
 		return NULL;

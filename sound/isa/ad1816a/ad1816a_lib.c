@@ -671,7 +671,7 @@ int __devinit snd_ad1816a_pcm(struct snd_ad1816a *chip, int device, struct snd_p
 	pcm->private_data = chip;
 	pcm->info_flags = (chip->dma1 == chip->dma2 ) ? SNDRV_PCM_INFO_JOINT_DUPLEX : 0;
 
-	strcpy(pcm->name, snd_ad1816a_chip_id(chip));
+	strlcpy(pcm->name,snd_ad1816a_chip_id(chip,sizeof(pcm->name)));
 	snd_ad1816a_init(chip);
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -697,7 +697,7 @@ int __devinit snd_ad1816a_timer(struct snd_ad1816a *chip, int device, struct snd
 	tid.subdevice = 0;
 	if ((error = snd_timer_new(chip->card, "AD1816A", &tid, &timer)) < 0)
 		return error;
-	strcpy(timer->name, snd_ad1816a_chip_id(chip));
+	strlcpy(timer->name,snd_ad1816a_chip_id(chip,sizeof(timer->name)));
 	timer->private_data = chip;
 	chip->timer = timer;
 	timer->hw = snd_ad1816a_timer_table;
@@ -722,7 +722,7 @@ static int snd_ad1816a_info_mux(struct snd_kcontrol *kcontrol, struct snd_ctl_el
 	uinfo->value.enumerated.items = 7;
 	if (uinfo->value.enumerated.item > 6)
 		uinfo->value.enumerated.item = 6;
-	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,texts[uinfo->value.enumerated.item],sizeof(uinfo->value.enumerated.name));
 	return 0;
 }
 
@@ -962,7 +962,7 @@ int __devinit snd_ad1816a_mixer(struct snd_ad1816a *chip)
 
 	card = chip->card;
 
-	strcpy(card->mixername, snd_ad1816a_chip_id(chip));
+	strlcpy(card->mixername,snd_ad1816a_chip_id(chip,sizeof(card->mixername)));
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_ad1816a_controls); idx++) {
 		if ((err = snd_ctl_add(card, snd_ctl_new1(&snd_ad1816a_controls[idx], chip))) < 0)

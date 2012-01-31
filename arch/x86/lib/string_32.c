@@ -14,7 +14,7 @@
 #include <linux/module.h>
 
 #ifdef __HAVE_ARCH_STRCPY
-char *strcpy(char *dest, const char *src)
+char *strlcpy(char *dest,const char *src,sizeof(char *dest))
 {
 	int d0, d1, d2;
 	asm volatile("1:\tlodsb\n\t"

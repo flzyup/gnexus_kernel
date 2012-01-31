@@ -645,7 +645,7 @@ static int __devinit pluto2_probe(struct pci_dev *pdev,
 
 	/* i2c */
 	i2c_set_adapdata(&pluto->i2c_adap, pluto);
-	strcpy(pluto->i2c_adap.name, DRIVER_NAME);
+	strlcpy(pluto->i2c_adap.name,DRIVER_NAME,sizeof(pluto->i2c_adap.name));
 	pluto->i2c_adap.owner = THIS_MODULE;
 	pluto->i2c_adap.dev.parent = &pdev->dev;
 	pluto->i2c_adap.algo_data = &pluto->i2c_bit;

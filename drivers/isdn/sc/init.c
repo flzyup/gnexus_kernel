@@ -283,7 +283,7 @@ static int __init sc_init(void)
 		interface->writebuf_skb = sndpkt;
 		interface->writecmd = NULL;
 		interface->command = command;
-		strcpy(interface->id, devname);
+		strlcpy(interface->id,devname,sizeof(interface->id));
 		interface->id[2] = '0' + cinst;
 
 		/*
@@ -310,7 +310,7 @@ static int __init sc_init(void)
 
 		sc_adapter[cinst]->card = interface;
 		sc_adapter[cinst]->driverId = interface->channels;
-		strcpy(sc_adapter[cinst]->devicename, interface->id);
+		strlcpy(sc_adapter[cinst]->devicename,interface->id,sizeof(sc_adapter[cinst]->devicename));
 		sc_adapter[cinst]->nChannels = channels;
 		sc_adapter[cinst]->ramsize = memsize;
 		sc_adapter[cinst]->shmem_magic = magic;

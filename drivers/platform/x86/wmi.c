@@ -403,7 +403,7 @@ struct acpi_buffer *out)
 				&wc_input, NULL);
 	}
 
-	strcpy(method, "WQ");
+	strlcpy(method,"WQ",sizeof(method));
 	strncat(method, block->object_id, 2);
 
 	status = acpi_evaluate_object(handle, method, &input, out);
@@ -713,7 +713,7 @@ static int wmi_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
 
 	wmi_gtoa(wblock->gblock.guid, guid_string);
 
-	strcpy(&env->buf[env->buflen - 1], "wmi:");
+	strlcpy(&env->buf[env->buflen - 1],"wmi:",sizeof(&env->buf[env->buflen - 1]));
 	memcpy(&env->buf[env->buflen - 1 + 4], guid_string, 36);
 	env->buflen += 40;
 

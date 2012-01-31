@@ -499,7 +499,7 @@ static struct snd_kcontrol *snd_mixer_oss_test_id(struct snd_mixer_oss *mixer, c
 	
 	memset(&id, 0, sizeof(id));
 	id.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
-	strcpy(id.name, name);
+	strlcpy(id.name,name,sizeof(id.name));
 	id.index = index;
 	return snd_ctl_find_id(card, &id);
 }
@@ -1047,11 +1047,11 @@ static int snd_mixer_oss_build_input(struct snd_mixer_oss *mixer, struct snd_mix
 			up_read(&mixer->card->controls_rwsem);
 			return 0;
 		}
-		strcpy(str, ptr->name);
+		strlcpy(str,ptr->name,sizeof(str));
 		if (!strcmp(str, "Master"))
-			strcpy(str, "Mix");
+			strlcpy(str,"Mix",sizeof(str));
 		if (!strcmp(str, "Master Mono"))
-			strcpy(str, "Mix Mono");
+			strlcpy(str,"Mix Mono",sizeof(str));
 		slot.capture_item = 0;
 		if (!strcmp(uinfo->value.enumerated.name, str)) {
 			slot.present |= SNDRV_MIXER_OSS_PRESENT_CAPTURE;

@@ -413,7 +413,7 @@ do_kdgkb_ioctl(int cmd, struct kbsentry __user *user_kdgkb, int perm)
 		    funcbufleft = funcbufleft - delta + sz - funcbufsize;
 		    funcbufsize = sz;
 		}
-		strcpy(func_table[i], kbs->kb_string);
+		strlcpy(func_table[i],kbs->kb_string,sizeof(func_table[i]));
 		break;
 	}
 	ret = 0;

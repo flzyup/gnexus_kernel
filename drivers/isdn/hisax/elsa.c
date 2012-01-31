@@ -1219,7 +1219,7 @@ setup_elsa(struct IsdnCard *card)
 	struct IsdnCardState *cs = card->cs;
 	char tmp[64];
 
-	strcpy(tmp, Elsa_revision);
+	strlcpy(tmp,Elsa_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: Elsa driver Rev. %s\n", HiSax_getrev(tmp));
 	cs->hw.elsa.ctrl_reg = 0;
 	cs->hw.elsa.status = 0;

@@ -385,7 +385,7 @@ static int cycx_wan_new_if(struct wan_device *wandev, struct net_device *dev,
 		return -ENOMEM;
 
 	chan = netdev_priv(dev);
-	strcpy(chan->name, conf->name);
+	strlcpy(chan->name,conf->name,sizeof(chan->name));
 	chan->card = card;
 	chan->link = conf->port;
 	chan->protocol = conf->protocol ? ETH_P_X25 : ETH_P_IP;

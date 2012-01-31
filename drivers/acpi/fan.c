@@ -128,8 +128,8 @@ static int acpi_fan_add(struct acpi_device *device)
 	if (!device)
 		return -EINVAL;
 
-	strcpy(acpi_device_name(device), "Fan");
-	strcpy(acpi_device_class(device), ACPI_FAN_CLASS);
+	strlcpy(acpi_device_name(device),"Fan",sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_FAN_CLASS,sizeof(acpi_device_class(device)));
 
 	result = acpi_bus_update_power(device->handle, NULL);
 	if (result) {

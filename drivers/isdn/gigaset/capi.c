@@ -931,7 +931,7 @@ void gigaset_isdn_start(struct cardstate *cs)
 	struct gigaset_capi_ctr *iif = cs->iif;
 
 	/* fill profile data: manufacturer name */
-	strcpy(iif->ctr.manu, "Siemens");
+	strlcpy(iif->ctr.manu,"Siemens",sizeof(iif->ctr.manu));
 	/* CAPI and device version */
 	iif->ctr.version.majorversion = 2;		/* CAPI 2.0 */
 	iif->ctr.version.minorversion = 0;
@@ -950,7 +950,7 @@ void gigaset_isdn_start(struct cardstate *cs)
 	/* B3 protocols: transparent only */
 	iif->ctr.profile.support3 =  0x01;
 	/* no serial number */
-	strcpy(iif->ctr.serial, "0");
+	strlcpy(iif->ctr.serial,"0",sizeof(iif->ctr.serial));
 	capi_ctr_ready(&iif->ctr);
 }
 
@@ -1449,23 +1449,21 @@ static void do_connect_req(struct gigaset_capi_ctr *iif,
 		commands[AT_BC] = kmalloc(l, GFP_KERNEL);
 		if (!commands[AT_BC])
 			goto oom;
-		strcpy(commands[AT_BC], "^SBC=");
+		strlcpy(commands[AT_BC],"^SBC=",sizeof(commands[AT_BC]));
 		if (cmsg->BC && cmsg->BC[0])	/* BC specified explicitly */
 			decode_ie(cmsg->BC, commands[AT_BC] + 5);
 		else				/* BC derived from CIP */
-			strcpy(commands[AT_BC] + 5,
-			       cip2bchlc[cmsg->CIPValue].bc);
+			strlcpy(commands[AT_BC] + 5,,sizeof(commands[AT_BC] + 5)			       cip2bchlc[cmsg->CIPValue].bc);
 		if (lhlc) {
-			strcpy(commands[AT_BC] + lbc + 5, ";^SHLC=");
+			strlcpy(commands[AT_BC] + lbc + 5,";^SHLC=",sizeof(commands[AT_BC] + lbc + 5));
 			if (cmsg->HLC && cmsg->HLC[0])
 				/* HLC specified explicitly */
 				decode_ie(cmsg->HLC,
 					  commands[AT_BC] + lbc + 12);
 			else	/* HLC derived from CIP */
-				strcpy(commands[AT_BC] + lbc + 12,
-				       cip2bchlc[cmsg->CIPValue].hlc);
+				strlcpy(commands[AT_BC] + lbc + 12,,sizeof(commands[AT_BC] + lbc + 12)				       cip2bchlc[cmsg->CIPValue].hlc);
 		}
-		strcpy(commands[AT_BC] + l - 2, "\r");
+		strlcpy(commands[AT_BC] + l - 2,"\r",sizeof(commands[AT_BC] + l - 2));
 	} else {
 		/* no BC */
 		if (lhlc) {

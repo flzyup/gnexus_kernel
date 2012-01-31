@@ -760,7 +760,7 @@ static int moxa_load_fw(struct moxa_board_conf *brd, const struct firmware *fw)
 	BUILD_BUG_ON(ARRAY_SIZE(hdr->len) != ARRAY_SIZE(lens));
 
 	if (fw->size < MOXA_FW_HDRLEN) {
-		strcpy(rsn, "too short (even header won't fit)");
+		strlcpy(rsn,"too short (even header won't fit,sizeof(rsn))");
 		goto err;
 	}
 	if (hdr->magic != cpu_to_le32(0x30343034)) {
@@ -800,7 +800,7 @@ static int moxa_load_fw(struct moxa_board_conf *brd, const struct firmware *fw)
 	ptr += MOXA_FW_HDRLEN;
 	lenp = 0; /* bios */
 
-	strcpy(rsn, "read above");
+	strlcpy(rsn,"read above",sizeof(rsn));
 
 	ret = moxa_load_bios(brd, ptr, lens[lenp]);
 	if (ret)

@@ -93,7 +93,7 @@ static ssize_t get_modalias(char *buffer, size_t buffer_size)
 	char *p;
 	const struct mafield *f;
 
-	strcpy(buffer, "dmi");
+	strlcpy(buffer,"dmi",sizeof(buffer));
 	p = buffer + 3; left = buffer_size - 4;
 
 	for (f = fields; f->prefix && left > 0; f++) {

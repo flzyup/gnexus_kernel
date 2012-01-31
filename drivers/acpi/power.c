@@ -550,9 +550,9 @@ static int acpi_power_add(struct acpi_device *device)
 
 	resource->device = device;
 	mutex_init(&resource->resource_lock);
-	strcpy(resource->name, device->pnp.bus_id);
-	strcpy(acpi_device_name(device), ACPI_POWER_DEVICE_NAME);
-	strcpy(acpi_device_class(device), ACPI_POWER_CLASS);
+	strlcpy(resource->name,device->pnp.bus_id,sizeof(resource->name));
+	strlcpy(acpi_device_name(device),ACPI_POWER_DEVICE_NAME,sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_POWER_CLASS,sizeof(acpi_device_class(device)));
 	device->driver_data = resource;
 
 	/* Evalute the object to get the system level and resource order. */

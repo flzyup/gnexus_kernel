@@ -587,7 +587,7 @@ static int __devinit bfin_lq035q1_probe(struct platform_device *pdev)
 		goto out3;
 	}
 
-	strcpy(fbinfo->fix.id, DRIVER_NAME);
+	strlcpy(fbinfo->fix.id,DRIVER_NAME,sizeof(fbinfo->fix.id));
 
 	fbinfo->fix.type = FB_TYPE_PACKED_PIXELS;
 	fbinfo->fix.type_aux = 0;

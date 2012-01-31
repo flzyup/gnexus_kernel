@@ -299,7 +299,7 @@ omap_hwmod_mux_init(struct omap_device_pad *bpads, int nr_pads)
 				kfree(hmux->pads[j].name);
 			goto err3;
 		}
-		strcpy(pad->name, bpad->name);
+		strlcpy(pad->name,bpad->name,sizeof(pad->name));
 
 		pad->flags = bpad->flags;
 		pad->enable = bpad->enable;
@@ -855,7 +855,7 @@ static void __init omap_mux_set_cmdline_signals(void)
 	if (!options)
 		return;
 
-	strcpy(options, omap_mux_options);
+	strlcpy(options,omap_mux_options,sizeof(options));
 	next_opt = options;
 
 	while ((token = strsep(&next_opt, ",")) != NULL) {
@@ -890,7 +890,7 @@ static int __init omap_mux_copy_names(struct omap_mux *src,
 					GFP_KERNEL);
 			if (!dst->muxnames[i])
 				goto free;
-			strcpy(dst->muxnames[i], src->muxnames[i]);
+			strlcpy(dst->muxnames[i],src->muxnames[i],sizeof(dst->muxnames[i]));
 		}
 	}
 
@@ -902,7 +902,7 @@ static int __init omap_mux_copy_names(struct omap_mux *src,
 					GFP_KERNEL);
 			if (!dst->balls[i])
 				goto free;
-			strcpy(dst->balls[i], src->balls[i]);
+			strlcpy(dst->balls[i],src->balls[i],sizeof(dst->balls[i]));
 		}
 	}
 #endif

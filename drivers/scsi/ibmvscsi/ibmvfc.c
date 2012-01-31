@@ -4734,7 +4734,7 @@ static int ibmvfc_probe(struct vio_dev *vdev, const struct vio_device_id *id)
 	vhost->partition_number = -1;
 	vhost->log_level = log_level;
 	vhost->task_set = 1;
-	strcpy(vhost->partition_name, "UNKNOWN");
+	strlcpy(vhost->partition_name,"UNKNOWN",sizeof(vhost->partition_name));
 	init_waitqueue_head(&vhost->work_wait_q);
 	init_waitqueue_head(&vhost->init_wait_q);
 	INIT_WORK(&vhost->rport_add_work_q, ibmvfc_rport_add_thread);

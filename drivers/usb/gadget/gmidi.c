@@ -1108,9 +1108,9 @@ static int gmidi_register_card(struct gmidi_device *dev)
 		goto fail;
 	}
 
-	strcpy(card->driver, longname);
-	strcpy(card->longname, longname);
-	strcpy(card->shortname, shortname);
+	strlcpy(card->driver,longname,sizeof(card->driver));
+	strlcpy(card->longname,longname,sizeof(card->longname));
+	strlcpy(card->shortname,shortname,sizeof(card->shortname));
 
 	/* Set up rawmidi */
 	dev->in_port.dev = dev;
@@ -1123,7 +1123,7 @@ static int gmidi_register_card(struct gmidi_device *dev)
 		goto fail;
 	}
 	dev->rmidi = rmidi;
-	strcpy(rmidi->name, card->shortname);
+	strlcpy(rmidi->name,card->shortname,sizeof(rmidi->name));
 	rmidi->info_flags = SNDRV_RAWMIDI_INFO_OUTPUT |
 			    SNDRV_RAWMIDI_INFO_INPUT |
 			    SNDRV_RAWMIDI_INFO_DUPLEX;

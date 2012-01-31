@@ -1002,7 +1002,7 @@ setup_w6692(struct IsdnCard *card)
 	u_char pci_irq = 0;
 	u_int pci_ioaddr = 0;
 
-	strcpy(tmp, w6692_revision);
+	strlcpy(tmp,w6692_revision,sizeof(tmp));
 	printk(KERN_INFO "HiSax: W6692 driver Rev. %s\n", HiSax_getrev(tmp));
 	if (cs->typ != ISDN_CTYPE_W6692)
 		return (0);

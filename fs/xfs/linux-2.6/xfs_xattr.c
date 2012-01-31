@@ -186,7 +186,7 @@ list_one_attr(const char *name, const size_t len, void *data,
 	if (*result > size)
 		return -ERANGE;
 
-	strcpy(p, name);
+	strlcpy(p,name,sizeof(p));
 	return 0;
 }
 

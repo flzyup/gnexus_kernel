@@ -1604,7 +1604,7 @@ static void bnx2i_conn_get_stats(struct iscsi_cls_conn *cls_conn,
 	stats->tmfcmd_pdus = conn->tmfcmd_pdus_cnt;
 	stats->tmfrsp_pdus = conn->tmfrsp_pdus_cnt;
 	stats->custom_length = 3;
-	strcpy(stats->custom[2].desc, "eh_abort_cnt");
+	strlcpy(stats->custom[2].desc,"eh_abort_cnt",sizeof(stats->custom[2].desc));
 	stats->custom[2].value = conn->eh_abort_cnt;
 	stats->digest_err = 0;
 	stats->timeout_err = 0;

@@ -1636,7 +1636,7 @@ static int ca91cx42_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	mutex_init(&ca91cx42_device->vme_rmw);
 
 	ca91cx42_bridge->parent = &pdev->dev;
-	strcpy(ca91cx42_bridge->name, driver_name);
+	strlcpy(ca91cx42_bridge->name,driver_name,sizeof(ca91cx42_bridge->name));
 
 	/* Setup IRQ */
 	retval = ca91cx42_irq_init(ca91cx42_bridge);

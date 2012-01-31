@@ -1025,8 +1025,8 @@ static int meyeioc_stilljcapt(int *len)
 static int vidioc_querycap(struct file *file, void *fh,
 				struct v4l2_capability *cap)
 {
-	strcpy(cap->driver, "meye");
-	strcpy(cap->card, "meye");
+	strlcpy(cap->driver,"meye",sizeof(cap->driver));
+	strlcpy(cap->card,"meye",sizeof(cap->card));
 	sprintf(cap->bus_info, "PCI:%s", pci_name(meye.mchip_dev));
 
 	cap->version = (MEYE_DRIVER_MAJORVERSION << 8) +
@@ -1043,7 +1043,7 @@ static int vidioc_enum_input(struct file *file, void *fh, struct v4l2_input *i)
 	if (i->index != 0)
 		return -EINVAL;
 
-	strcpy(i->name, "Camera");
+	strlcpy(i->name,"Camera",sizeof(i->name));
 	i->type = V4L2_INPUT_TYPE_CAMERA;
 
 	return 0;
@@ -1070,7 +1070,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 
 	case V4L2_CID_BRIGHTNESS:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Brightness");
+		strlcpy(c->name,"Brightness",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 63;
 		c->step = 1;
@@ -1079,7 +1079,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 		break;
 	case V4L2_CID_HUE:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Hue");
+		strlcpy(c->name,"Hue",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 63;
 		c->step = 1;
@@ -1088,7 +1088,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 		break;
 	case V4L2_CID_CONTRAST:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Contrast");
+		strlcpy(c->name,"Contrast",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 63;
 		c->step = 1;
@@ -1097,7 +1097,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 		break;
 	case V4L2_CID_SATURATION:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Saturation");
+		strlcpy(c->name,"Saturation",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 63;
 		c->step = 1;
@@ -1106,7 +1106,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 		break;
 	case V4L2_CID_AGC:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Agc");
+		strlcpy(c->name,"Agc",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 63;
 		c->step = 1;
@@ -1116,7 +1116,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 	case V4L2_CID_MEYE_SHARPNESS:
 	case V4L2_CID_SHARPNESS:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Sharpness");
+		strlcpy(c->name,"Sharpness",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 63;
 		c->step = 1;
@@ -1130,7 +1130,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 		break;
 	case V4L2_CID_PICTURE:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Picture");
+		strlcpy(c->name,"Picture",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 63;
 		c->step = 1;
@@ -1139,7 +1139,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 		break;
 	case V4L2_CID_JPEGQUAL:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "JPEG quality");
+		strlcpy(c->name,"JPEG quality",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 10;
 		c->step = 1;
@@ -1148,7 +1148,7 @@ static int vidioc_queryctrl(struct file *file, void *fh,
 		break;
 	case V4L2_CID_FRAMERATE:
 		c->type = V4L2_CTRL_TYPE_INTEGER;
-		strcpy(c->name, "Framerate");
+		strlcpy(c->name,"Framerate",sizeof(c->name));
 		c->minimum = 0;
 		c->maximum = 31;
 		c->step = 1;
@@ -1267,12 +1267,12 @@ static int vidioc_enum_fmt_vid_cap(struct file *file, void *fh,
 	if (f->index == 0) {
 		/* standard YUV 422 capture */
 		f->flags = 0;
-		strcpy(f->description, "YUV422");
+		strlcpy(f->description,"YUV422",sizeof(f->description));
 		f->pixelformat = V4L2_PIX_FMT_YUYV;
 	} else {
 		/* compressed MJPEG capture */
 		f->flags = V4L2_FMT_FLAG_COMPRESSED;
-		strcpy(f->description, "MJPEG");
+		strlcpy(f->description,"MJPEG",sizeof(f->description));
 		f->pixelformat = V4L2_PIX_FMT_MJPEG;
 	}
 

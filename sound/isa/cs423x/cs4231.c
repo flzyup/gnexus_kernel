@@ -110,8 +110,8 @@ static int __devinit snd_cs4231_probe(struct device *dev, unsigned int n)
 	if (error < 0)
 		goto out;
 
-	strcpy(card->driver, "CS4231");
-	strcpy(card->shortname, pcm->name);
+	strlcpy(card->driver,"CS4231",sizeof(card->driver));
+	strlcpy(card->shortname,pcm->name,sizeof(card->shortname));
 
 	sprintf(card->longname, "%s at 0x%lx, irq %d, dma %d",
 		pcm->name, chip->port, irq[n], dma1[n]);

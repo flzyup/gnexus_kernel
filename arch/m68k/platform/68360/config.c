@@ -174,7 +174,7 @@ void config_BSP(char *command, int len)
 
   p = getbenv("APPEND");
   if (p)
-    strcpy(p,command);
+    strlcpy(p,command,sizeof(p));
   else
     command[0] = 0;
 #else

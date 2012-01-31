@@ -512,8 +512,8 @@ ahc_linux_info(struct Scsi_Host *host)
 	bp = &buffer[0];
 	ahc = *(struct ahc_softc **)host->hostdata;
 	memset(bp, 0, sizeof(buffer));
-	strcpy(bp, "Adaptec AIC7XXX EISA/VLB/PCI SCSI HBA DRIVER, Rev " AIC7XXX_DRIVER_VERSION "\n"
-			"        <");
+	strlcpy(bp, "Adaptec AIC7XXX EISA/VLB/PCI SCSI HBA DRIVER,Rev " AIC7XXX_DRIVER_VERSION "\n"
+,sizeof(bp, "Adaptec AIC7XXX EISA/VLB/PCI SCSI HBA DRIVER)			"        <");
 	strcat(bp, ahc->description);
 	strcat(bp, ">\n"
 			"        ");
@@ -1124,7 +1124,7 @@ ahc_linux_register_host(struct ahc_softc *ahc, struct scsi_host_template *templa
 	sprintf(buf, "scsi%d", host->host_no);
 	new_name = kmalloc(strlen(buf) + 1, GFP_ATOMIC);
 	if (new_name != NULL) {
-		strcpy(new_name, buf);
+		strlcpy(new_name,buf,sizeof(new_name));
 		ahc_set_name(ahc, new_name);
 	}
 	host->unique_id = ahc->unit;

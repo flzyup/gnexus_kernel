@@ -249,7 +249,7 @@ static int __init dio_init(void)
                         dev->id = prid;
 
                 dev->ipl = DIO_IPL(va);
-                strcpy(dev->name,dio_getname(dev->id));
+                strlcpy(dev->name,dio_getname(dev->id,sizeof(dev->name)));
                 printk(KERN_INFO "select code %3d: ipl %d: ID %02X", dev->scode, dev->ipl, prid);
                 if (DIO_NEEDSSECID(prid))
                         printk(":%02X", secid);

@@ -3417,7 +3417,7 @@ static int __devinit ixgbevf_probe(struct pci_dev *pdev,
 	if (hw->mac.ops.get_bus_info)
 		hw->mac.ops.get_bus_info(hw);
 
-	strcpy(netdev->name, "eth%d");
+	strlcpy(netdev->name,"eth%d",sizeof(netdev->name));
 
 	err = register_netdev(netdev);
 	if (err)

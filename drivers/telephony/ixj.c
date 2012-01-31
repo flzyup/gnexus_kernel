@@ -3190,12 +3190,12 @@ static void ixj_write_cid(IXJ *j)
 
 	ixj_fsk_alloc(j);
 
-	strcpy(sdmf1, j->cid_send.month);
+	strlcpy(sdmf1,j->cid_send.month,sizeof(sdmf1));
 	strcat(sdmf1, j->cid_send.day);
 	strcat(sdmf1, j->cid_send.hour);
 	strcat(sdmf1, j->cid_send.min);
-	strcpy(sdmf2, j->cid_send.number);
-	strcpy(sdmf3, j->cid_send.name);
+	strlcpy(sdmf2,j->cid_send.number,sizeof(sdmf2));
+	strlcpy(sdmf3,j->cid_send.name,sizeof(sdmf3));
 
 	len1 = strlen(sdmf1);
 	len2 = strlen(sdmf2);
@@ -3340,12 +3340,12 @@ static void ixj_write_cidcw(IXJ *j)
 		ixj_pre_cid(j);
 	}
 	j->flags.cidcw_ack = 0;
-	strcpy(sdmf1, j->cid_send.month);
+	strlcpy(sdmf1,j->cid_send.month,sizeof(sdmf1));
 	strcat(sdmf1, j->cid_send.day);
 	strcat(sdmf1, j->cid_send.hour);
 	strcat(sdmf1, j->cid_send.min);
-	strcpy(sdmf2, j->cid_send.number);
-	strcpy(sdmf3, j->cid_send.name);
+	strlcpy(sdmf2,j->cid_send.number,sizeof(sdmf2));
+	strlcpy(sdmf3,j->cid_send.name,sizeof(sdmf3));
 
 	len1 = strlen(sdmf1);
 	len2 = strlen(sdmf2);
@@ -5925,30 +5925,30 @@ static void add_caps(IXJ *j)
 {
 	j->caps = 0;
 	j->caplist[j->caps].cap = PHONE_VENDOR_QUICKNET;
-	strcpy(j->caplist[j->caps].desc, "Quicknet Technologies, Inc. (www.quicknet.net)");
+	strlcpy(j->caplist[j->caps].desc, "Quicknet Technologies,Inc. (www.quicknet.net,sizeof(j->caplist[j->caps].desc, "Quicknet Technologies))");
 	j->caplist[j->caps].captype = vendor;
 	j->caplist[j->caps].handle = j->caps++;
 	j->caplist[j->caps].captype = device;
 	switch (j->cardtype) {
 	case QTI_PHONEJACK:
-		strcpy(j->caplist[j->caps].desc, "Quicknet Internet PhoneJACK");
+		strlcpy(j->caplist[j->caps].desc,"Quicknet Internet PhoneJACK",sizeof(j->caplist[j->caps].desc));
 		break;
 	case QTI_LINEJACK:
-		strcpy(j->caplist[j->caps].desc, "Quicknet Internet LineJACK");
+		strlcpy(j->caplist[j->caps].desc,"Quicknet Internet LineJACK",sizeof(j->caplist[j->caps].desc));
 		break;
 	case QTI_PHONEJACK_LITE:
-		strcpy(j->caplist[j->caps].desc, "Quicknet Internet PhoneJACK Lite");
+		strlcpy(j->caplist[j->caps].desc,"Quicknet Internet PhoneJACK Lite",sizeof(j->caplist[j->caps].desc));
 		break;
 	case QTI_PHONEJACK_PCI:
-		strcpy(j->caplist[j->caps].desc, "Quicknet Internet PhoneJACK PCI");
+		strlcpy(j->caplist[j->caps].desc,"Quicknet Internet PhoneJACK PCI",sizeof(j->caplist[j->caps].desc));
 		break;
 	case QTI_PHONECARD:
-		strcpy(j->caplist[j->caps].desc, "Quicknet Internet PhoneCARD");
+		strlcpy(j->caplist[j->caps].desc,"Quicknet Internet PhoneCARD",sizeof(j->caplist[j->caps].desc));
 		break;
 	}
 	j->caplist[j->caps].cap = j->cardtype;
 	j->caplist[j->caps].handle = j->caps++;
-	strcpy(j->caplist[j->caps].desc, "POTS");
+	strlcpy(j->caplist[j->caps].desc,"POTS",sizeof(j->caplist[j->caps].desc));
 	j->caplist[j->caps].captype = port;
 	j->caplist[j->caps].cap = pots;
 	j->caplist[j->caps].handle = j->caps++;
@@ -5959,7 +5959,7 @@ static void add_caps(IXJ *j)
 	case QTI_LINEJACK:
 	case QTI_PHONEJACK_PCI:
 	case QTI_PHONECARD:
-		strcpy(j->caplist[j->caps].desc, "SPEAKER");
+		strlcpy(j->caplist[j->caps].desc,"SPEAKER",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = port;
 		j->caplist[j->caps].cap = speaker;
 		j->caplist[j->caps].handle = j->caps++;
@@ -5970,7 +5970,7 @@ static void add_caps(IXJ *j)
  	/* add devices that can do handset */
 	switch (j->cardtype) {
 	case QTI_PHONEJACK:
-		strcpy(j->caplist[j->caps].desc, "HANDSET");
+		strlcpy(j->caplist[j->caps].desc,"HANDSET",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = port;
 		j->caplist[j->caps].cap = handset;
 		j->caplist[j->caps].handle = j->caps++;
@@ -5982,7 +5982,7 @@ static void add_caps(IXJ *j)
  	/* add devices that can do PSTN */
 	switch (j->cardtype) {
 	case QTI_LINEJACK:
-		strcpy(j->caplist[j->caps].desc, "PSTN");
+		strlcpy(j->caplist[j->caps].desc,"PSTN",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = port;
 		j->caplist[j->caps].cap = pstn;
 		j->caplist[j->caps].handle = j->caps++;
@@ -5992,50 +5992,50 @@ static void add_caps(IXJ *j)
 	}
 
 	/* add codecs - all cards can do uLaw, linear 8/16, and Windows sound system */
-	strcpy(j->caplist[j->caps].desc, "ULAW");
+	strlcpy(j->caplist[j->caps].desc,"ULAW",sizeof(j->caplist[j->caps].desc));
 	j->caplist[j->caps].captype = codec;
 	j->caplist[j->caps].cap = ULAW;
 	j->caplist[j->caps].handle = j->caps++;
 
-	strcpy(j->caplist[j->caps].desc, "LINEAR 16 bit");
+	strlcpy(j->caplist[j->caps].desc,"LINEAR 16 bit",sizeof(j->caplist[j->caps].desc));
 	j->caplist[j->caps].captype = codec;
 	j->caplist[j->caps].cap = LINEAR16;
 	j->caplist[j->caps].handle = j->caps++;
 
-	strcpy(j->caplist[j->caps].desc, "LINEAR 8 bit");
+	strlcpy(j->caplist[j->caps].desc,"LINEAR 8 bit",sizeof(j->caplist[j->caps].desc));
 	j->caplist[j->caps].captype = codec;
 	j->caplist[j->caps].cap = LINEAR8;
 	j->caplist[j->caps].handle = j->caps++;
 
-	strcpy(j->caplist[j->caps].desc, "Windows Sound System");
+	strlcpy(j->caplist[j->caps].desc,"Windows Sound System",sizeof(j->caplist[j->caps].desc));
 	j->caplist[j->caps].captype = codec;
 	j->caplist[j->caps].cap = WSS;
 	j->caplist[j->caps].handle = j->caps++;
 
 	/* software ALAW codec, made from ULAW */
-	strcpy(j->caplist[j->caps].desc, "ALAW");
+	strlcpy(j->caplist[j->caps].desc,"ALAW",sizeof(j->caplist[j->caps].desc));
 	j->caplist[j->caps].captype = codec;
 	j->caplist[j->caps].cap = ALAW;
 	j->caplist[j->caps].handle = j->caps++;
 
 	/* version 12 of the 8020 does the following codecs in a broken way */
 	if (j->dsp.low != 0x20 || j->ver.low != 0x12) {
-		strcpy(j->caplist[j->caps].desc, "G.723.1 6.3kbps");
+		strlcpy(j->caplist[j->caps].desc,"G.723.1 6.3kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = G723_63;
 		j->caplist[j->caps].handle = j->caps++;
 
-		strcpy(j->caplist[j->caps].desc, "G.723.1 5.3kbps");
+		strlcpy(j->caplist[j->caps].desc,"G.723.1 5.3kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = G723_53;
 		j->caplist[j->caps].handle = j->caps++;
 
-		strcpy(j->caplist[j->caps].desc, "TrueSpeech 4.8kbps");
+		strlcpy(j->caplist[j->caps].desc,"TrueSpeech 4.8kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = TS48;
 		j->caplist[j->caps].handle = j->caps++;
 
-		strcpy(j->caplist[j->caps].desc, "TrueSpeech 4.1kbps");
+		strlcpy(j->caplist[j->caps].desc,"TrueSpeech 4.1kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = TS41;
 		j->caplist[j->caps].handle = j->caps++;
@@ -6043,7 +6043,7 @@ static void add_caps(IXJ *j)
 
 	/* 8020 chips can do TS8.5 native, and 8021/8022 can load it */
 	if (j->dsp.low == 0x20 || j->flags.ts85_loaded) {
-		strcpy(j->caplist[j->caps].desc, "TrueSpeech 8.5kbps");
+		strlcpy(j->caplist[j->caps].desc,"TrueSpeech 8.5kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = TS85;
 		j->caplist[j->caps].handle = j->caps++;
@@ -6051,7 +6051,7 @@ static void add_caps(IXJ *j)
 
 	/* 8021 chips can do G728 */
 	if (j->dsp.low == 0x21) {
-		strcpy(j->caplist[j->caps].desc, "G.728 16kbps");
+		strlcpy(j->caplist[j->caps].desc,"G.728 16kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = G728;
 		j->caplist[j->caps].handle = j->caps++;
@@ -6059,13 +6059,13 @@ static void add_caps(IXJ *j)
 
 	/* 8021/8022 chips can do G729 if loaded */
 	if (j->dsp.low != 0x20 && j->flags.g729_loaded) {
-		strcpy(j->caplist[j->caps].desc, "G.729A 8kbps");
+		strlcpy(j->caplist[j->caps].desc,"G.729A 8kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = G729;
 		j->caplist[j->caps].handle = j->caps++;
 	}
 	if (j->dsp.low != 0x20 && j->flags.g729_loaded) {
-		strcpy(j->caplist[j->caps].desc, "G.729B 8kbps");
+		strlcpy(j->caplist[j->caps].desc,"G.729B 8kbps",sizeof(j->caplist[j->caps].desc));
 		j->caplist[j->caps].captype = codec;
 		j->caplist[j->caps].cap = G729B;
 		j->caplist[j->caps].handle = j->caps++;

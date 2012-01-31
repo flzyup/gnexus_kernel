@@ -220,7 +220,7 @@ void gdbstub_printk(const char *fmt, ...)
 
 #endif
 
-static inline char *gdbstub_strcpy(char *dst, const char *src)
+static inline char *gdbstub_strlcpy(char *dst,const char *src,sizeof(char *dst))
 {
 	int loop = 0;
 	while ((dst[loop] = src[loop]))
@@ -1478,7 +1478,7 @@ packet_waiting:
 				sp = memcpy(newsp, sp, 16 * 4);
 #endif
 
-			gdbstub_strcpy(output_buffer, "OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 		}
 		break;
 
@@ -1495,9 +1495,9 @@ packet_waiting:
 				if (mem2hex((char *) addr, output_buffer,
 					    length, 1))
 					break;
-				gdbstub_strcpy(output_buffer, "E03");
+				gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 			} else {
-				gdbstub_strcpy(output_buffer, "E01");
+				gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 			}
 			break;
 
@@ -1514,13 +1514,13 @@ packet_waiting:
 			    *ptr++ == ':'
 			    ) {
 				if (hex2mem(ptr, (char *) addr, length, 1))
-					gdbstub_strcpy(output_buffer, "OK");
+					gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 				else
-					gdbstub_strcpy(output_buffer, "E03");
+					gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 
 				gdbstub_flush_caches = 1;
 			} else {
-				gdbstub_strcpy(output_buffer, "E02");
+				gdbstub_strlcpy(output_buffer,"E02",sizeof(output_buffer));
 			}
 			break;
 
@@ -1564,7 +1564,7 @@ packet_waiting:
 					       " bp\n");
 			goto done;
 #else
-			gdbstub_strcpy(output_buffer, "E01");
+			gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 			break;
 #endif
 
@@ -1577,7 +1577,7 @@ packet_waiting:
 
 				ptr = &input_buffer[1];
 				if (!hexToInt(&ptr, &baudrate)) {
-					gdbstub_strcpy(output_buffer, "B01");
+					gdbstub_strlcpy(output_buffer,"B01",sizeof(output_buffer));
 					break;
 				}
 
@@ -1599,12 +1599,12 @@ packet_waiting:
 			    !hexToInt(&ptr, &addr) || *ptr++ != ',' ||
 			    !hexToInt(&ptr, &length)
 			    ) {
-				gdbstub_strcpy(output_buffer, "E01");
+				gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 				break;
 			}
 
 			/* only support software breakpoints */
-			gdbstub_strcpy(output_buffer, "E03");
+			gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 			if (loop != 0 ||
 			    length < 1 ||
 			    length > 7 ||
@@ -1614,7 +1614,7 @@ packet_waiting:
 			if (gdbstub_set_breakpoint((u8 *) addr, length) < 0)
 				break;
 
-			gdbstub_strcpy(output_buffer, "OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			break;
 
 			/*
@@ -1627,12 +1627,12 @@ packet_waiting:
 			    !hexToInt(&ptr, &addr) || *ptr++ != ',' ||
 			    !hexToInt(&ptr, &length)
 			    ) {
-				gdbstub_strcpy(output_buffer, "E01");
+				gdbstub_strlcpy(output_buffer,"E01",sizeof(output_buffer));
 				break;
 			}
 
 			/* only support software breakpoints */
-			gdbstub_strcpy(output_buffer, "E03");
+			gdbstub_strlcpy(output_buffer,"E03",sizeof(output_buffer));
 			if (loop != 0 ||
 			    length < 1 ||
 			    length > 7 ||
@@ -1642,7 +1642,7 @@ packet_waiting:
 			if (gdbstub_clear_breakpoint((u8 *) addr, length) < 0)
 				break;
 
-			gdbstub_strcpy(output_buffer, "OK");
+			gdbstub_strlcpy(output_buffer,"OK",sizeof(output_buffer));
 			break;
 
 		default:

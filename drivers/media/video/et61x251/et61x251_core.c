@@ -1608,7 +1608,7 @@ et61x251_vidioc_enuminput(struct et61x251_device* cam, void __user * arg)
 		return -EINVAL;
 
 	memset(&i, 0, sizeof(i));
-	strcpy(i.name, "Camera");
+	strlcpy(i.name,"Camera",sizeof(i.name));
 	i.type = V4L2_INPUT_TYPE_CAMERA;
 	i.capabilities = V4L2_IN_CAP_STD;
 
@@ -1922,10 +1922,10 @@ et61x251_vidioc_enum_fmt(struct et61x251_device* cam, void __user * arg)
 		return -EINVAL;
 
 	if (fmtd.index == 0) {
-		strcpy(fmtd.description, "bayer rgb");
+		strlcpy(fmtd.description,"bayer rgb",sizeof(fmtd.description));
 		fmtd.pixelformat = V4L2_PIX_FMT_SBGGR8;
 	} else if (fmtd.index == 1) {
-		strcpy(fmtd.description, "compressed");
+		strlcpy(fmtd.description,"compressed",sizeof(fmtd.description));
 		fmtd.pixelformat = V4L2_PIX_FMT_ET61X251;
 		fmtd.flags = V4L2_FMT_FLAG_COMPRESSED;
 	} else
@@ -2588,7 +2588,7 @@ et61x251_usb_probe(struct usb_interface* intf, const struct usb_device_id* id)
 		cam->state |= DEV_MISCONFIGURED;
 	}
 
-	strcpy(cam->v4ldev->name, "ET61X[12]51 PC Camera");
+	strlcpy(cam->v4ldev->name,"ET61X[12]51 PC Camera",sizeof(cam->v4ldev->name));
 	cam->v4ldev->fops = &et61x251_fops;
 	cam->v4ldev->release = video_device_release;
 	cam->v4ldev->parent = &udev->dev;

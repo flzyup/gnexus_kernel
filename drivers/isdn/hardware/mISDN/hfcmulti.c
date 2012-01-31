@@ -365,7 +365,7 @@ HFC_outb_debug(struct hfc_multi *hc, u_char reg, u_char val,
 			strcat(regname, hfc_register_names[i].name);
 	}
 	if (regname[0] == '\0')
-		strcpy(regname, "register");
+		strlcpy(regname,"register",sizeof(regname));
 
 	bits[7] = '0' + (!!(val & 1));
 	bits[6] = '0' + (!!(val & 2));
@@ -395,7 +395,7 @@ HFC_inb_debug(struct hfc_multi *hc, u_char reg, const char *function, int line)
 			strcat(regname, hfc_register_names[i].name);
 	}
 	if (regname[0] == '\0')
-		strcpy(regname, "register");
+		strlcpy(regname,"register",sizeof(regname));
 
 	bits[7] = '0' + (!!(val & 1));
 	bits[6] = '0' + (!!(val & 2));
@@ -425,7 +425,7 @@ HFC_inw_debug(struct hfc_multi *hc, u_char reg, const char *function, int line)
 			strcat(regname, hfc_register_names[i].name);
 	}
 	if (regname[0] == '\0')
-		strcpy(regname, "register");
+		strlcpy(regname,"register",sizeof(regname));
 
 	printk(KERN_DEBUG
 	    "HFC_inw(chip %d, %02x=%s) = 0x%04x; in %s() line %d\n",

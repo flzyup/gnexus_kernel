@@ -174,7 +174,7 @@ static int opl3_detect(int ioaddr)
 		return 0;
 	}
 
-	strcpy(devc->fm_info.name, "OPL2");
+	strlcpy(devc->fm_info.name,"OPL2",sizeof(devc->fm_info.name));
 
 	if (!request_region(ioaddr, 4, devc->fm_info.name)) {
 		printk(KERN_WARNING "opl3: I/O port 0x%x already in use\n", ioaddr);
@@ -1163,9 +1163,9 @@ static int opl3_init(int ioaddr, struct module *owner)
 	if (devc->model == 2)
 	{
 		if (devc->is_opl4) 
-			strcpy(devc->fm_info.name, "Yamaha OPL4/OPL3 FM");
+			strlcpy(devc->fm_info.name,"Yamaha OPL4/OPL3 FM",sizeof(devc->fm_info.name));
 		else 
-			strcpy(devc->fm_info.name, "Yamaha OPL3");
+			strlcpy(devc->fm_info.name,"Yamaha OPL3",sizeof(devc->fm_info.name));
 
 		devc->v_alloc->max_voice = devc->nr_voice = 18;
 		devc->fm_info.nr_drums = 0;
@@ -1184,7 +1184,7 @@ static int opl3_init(int ioaddr, struct module *owner)
 	}
 	else
 	{
-		strcpy(devc->fm_info.name, "Yamaha OPL2");
+		strlcpy(devc->fm_info.name,"Yamaha OPL2",sizeof(devc->fm_info.name));
 		devc->v_alloc->max_voice = devc->nr_voice = 9;
 		devc->fm_info.nr_drums = 0;
 

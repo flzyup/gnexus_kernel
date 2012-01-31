@@ -408,7 +408,7 @@ static void __init offb_init_fb(const char *name, const char *full_name,
 	var = &info->var;
 	info->par = par;
 
-	strcpy(fix->id, "OFfb ");
+	strlcpy(fix->id,"OFfb ",sizeof(fix->id));
 	strncat(fix->id, name, sizeof(fix->id) - sizeof("OFfb "));
 	fix->id[sizeof(fix->id) - 1] = '\0';
 

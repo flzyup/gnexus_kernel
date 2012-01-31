@@ -73,7 +73,7 @@ snd_emux_init_seq_oss(struct snd_emux *emu)
 		return;
 
 	emu->oss_synth = dev;
-	strcpy(dev->name, emu->name);
+	strlcpy(dev->name,emu->name,sizeof(dev->name));
 	arg = SNDRV_SEQ_DEVICE_ARGPTR(dev);
 	arg->type = SYNTH_TYPE_SAMPLE;
 	arg->subtype = SAMPLE_TYPE_AWE32;

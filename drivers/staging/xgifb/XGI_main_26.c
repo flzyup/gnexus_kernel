@@ -1490,7 +1490,7 @@ static int XGIfb_get_fix(struct fb_fix_screeninfo *fix, int con,
 	DEBUGPRN("inside get_fix");
 	memset(fix, 0, sizeof(struct fb_fix_screeninfo));
 
-	strcpy(fix->id, myid);
+	strlcpy(fix->id,myid,sizeof(fix->id));
 
 	fix->smem_start = xgi_video_info.video_base;
 

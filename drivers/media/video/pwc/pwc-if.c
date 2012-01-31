@@ -1656,7 +1656,7 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 	pdev->type = type_id;
 	pdev->vsize = default_size;
 	pdev->vframes = default_fps;
-	strcpy(pdev->serial, serial_number);
+	strlcpy(pdev->serial,serial_number,sizeof(pdev->serial));
 	pdev->features = features;
 	if (vendor_id == 0x046D && product_id == 0x08B5) {
 		/* Logitech QuickCam Orbit
@@ -1680,7 +1680,7 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 	memcpy(&pdev->vdev, &pwc_template, sizeof(pwc_template));
 	pdev->vdev.parent = &intf->dev;
 	pdev->vdev.lock = &pdev->modlock;
-	strcpy(pdev->vdev.name, name);
+	strlcpy(pdev->vdev.name,name,sizeof(pdev->vdev.name));
 	video_set_drvdata(&pdev->vdev, pdev);
 
 	pdev->release = le16_to_cpu(udev->descriptor.bcdDevice);
@@ -1933,7 +1933,7 @@ static int __init usb_pwc_init(void)
 		s = dev_hint[i];
 		if (s != NULL && *s != '\0') {
 			device_hint[i].type = -1; /* wildcard */
-			strcpy(device_hint[i].serial_number, "*");
+			strlcpy(device_hint[i].serial_number,"*",sizeof(device_hint[i].serial_number));
 
 			/* parse string: chop at ':' & '/' */
 			colon = dot = s;

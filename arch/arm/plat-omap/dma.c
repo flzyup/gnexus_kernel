@@ -2055,7 +2055,7 @@ static int __devinit omap_system_dma_probe(struct platform_device *pdev)
 				DMA_DEFAULT_FIFO_DEPTH, 0);
 
 	if (cpu_class_is_omap2()) {
-		strcpy(irq_name, "0");
+		strlcpy(irq_name,"0",sizeof(irq_name));
 		dma_irq = platform_get_irq_byname(pdev, irq_name);
 		if (dma_irq < 0) {
 			dev_err(&pdev->dev, "failed: request IRQ %d", dma_irq);
@@ -2101,7 +2101,7 @@ static int __devexit omap_system_dma_remove(struct platform_device *pdev)
 
 	if (cpu_class_is_omap2()) {
 		char irq_name[4];
-		strcpy(irq_name, "0");
+		strlcpy(irq_name,"0",sizeof(irq_name));
 		dma_irq = platform_get_irq_byname(pdev, irq_name);
 		remove_irq(dma_irq, &omap24xx_dma_irq);
 	} else {

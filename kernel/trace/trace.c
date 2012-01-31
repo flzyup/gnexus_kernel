@@ -1067,17 +1067,17 @@ void trace_find_cmdline(int pid, char comm[])
 	unsigned map;
 
 	if (!pid) {
-		strcpy(comm, "<idle>");
+		strlcpy(comm,"<idle>",sizeof(comm));
 		return;
 	}
 
 	if (WARN_ON_ONCE(pid < 0)) {
-		strcpy(comm, "<XXX>");
+		strlcpy(comm,"<XXX>",sizeof(comm));
 		return;
 	}
 
 	if (pid > PID_MAX_DEFAULT) {
-		strcpy(comm, "<...>");
+		strlcpy(comm,"<...>",sizeof(comm));
 		return;
 	}
 
@@ -1085,9 +1085,9 @@ void trace_find_cmdline(int pid, char comm[])
 	arch_spin_lock(&trace_cmdline_lock);
 	map = map_pid_to_cmdline[pid];
 	if (map != NO_CMDLINE_MAP)
-		strcpy(comm, saved_cmdlines[map]);
+		strlcpy(comm,saved_cmdlines[map],sizeof(comm));
 	else
-		strcpy(comm, "<...>");
+		strlcpy(comm,"<...>",sizeof(comm));
 
 	arch_spin_unlock(&trace_cmdline_lock);
 	preempt_enable();

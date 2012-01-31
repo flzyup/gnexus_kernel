@@ -164,7 +164,7 @@ act2000_set_msn(act2000_card *card, char *eazmsn)
 		/* Found in list, replace MSN */
 		if (p->eaz == eazmsn[0]) {
 			spin_lock_irqsave(&card->lock, flags);
-			strcpy(p->msn, &eazmsn[1]);
+			strlcpy(p->msn,&eazmsn[1],sizeof(p->msn));
 			spin_unlock_irqrestore(&card->lock, flags);
 			printk(KERN_DEBUG
 			       "Mapping for EAZ %c changed to %s\n",
@@ -179,7 +179,7 @@ act2000_set_msn(act2000_card *card, char *eazmsn)
 	if (!p)
 		return -ENOMEM;
 	p->eaz = eazmsn[0];
-	strcpy(p->msn, &eazmsn[1]);
+	strlcpy(p->msn,&eazmsn[1],sizeof(p->msn));
 	p->next = card->msn_list;
 	spin_lock_irqsave(&card->lock, flags);
 	card->msn_list = p;

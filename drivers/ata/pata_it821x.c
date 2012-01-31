@@ -632,7 +632,7 @@ static void it821x_display_disk(int n, u8 *buf)
 	if (mode)
 		snprintf(mbuf, 8, "%5s%d", mtype, mode - 1);
 	else
-		strcpy(mbuf, "PIO");
+		strlcpy(mbuf,"PIO",sizeof(mbuf));
 	if (buf[52] == 4)
 		printk(KERN_INFO "%d: %-6s %-8s          %s %s\n",
 				n, mbuf, types[buf[52]], id, cbl);

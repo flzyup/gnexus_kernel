@@ -573,7 +573,7 @@ static int __devinit nuc900fb_probe(struct platform_device *pdev)
 	writel(0, fbi->io + REG_LCM_DCCS);
 
 	/* fill the fbinfo*/
-	strcpy(fbinfo->fix.id, driver_name);
+	strlcpy(fbinfo->fix.id,driver_name,sizeof(fbinfo->fix.id));
 	fbinfo->fix.type		= FB_TYPE_PACKED_PIXELS;
 	fbinfo->fix.type_aux		= 0;
 	fbinfo->fix.xpanstep		= 0;

@@ -64,7 +64,7 @@ void hold_module_trace_bprintk_format(const char **start, const char **end)
 			fmt = kmalloc(strlen(*iter) + 1, GFP_KERNEL);
 		if (tb_fmt && fmt) {
 			list_add_tail(&tb_fmt->list, &trace_bprintk_fmt_list);
-			strcpy(fmt, *iter);
+			strlcpy(fmt,*iter,sizeof(fmt));
 			tb_fmt->fmt = fmt;
 			*iter = tb_fmt->fmt;
 		} else {

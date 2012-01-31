@@ -745,7 +745,7 @@ static struct net_device *c2_pseudo_netdev_init(struct c2_dev *c2dev)
 	struct net_device *netdev;
 
 	/* change ethxxx to iwxxx */
-	strcpy(name, "iw");
+	strlcpy(name,"iw",sizeof(name));
 	strcat(name, &c2dev->netdev->name[3]);
 	netdev = alloc_netdev(0, name, setup);
 	if (!netdev) {

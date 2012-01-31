@@ -67,7 +67,7 @@ static int divadidd_proc_show(struct seq_file *m, void *v)
 {
 	char tmprev[32];
 
-	strcpy(tmprev, main_revision);
+	strlcpy(tmprev,main_revision,sizeof(tmprev));
 	seq_printf(m, "%s\n", DRIVERNAME);
 	seq_printf(m, "name     : %s\n", DRIVERLNAME);
 	seq_printf(m, "release  : %s\n", DRIVERRELEASE_DIDD);
@@ -116,7 +116,7 @@ static int DIVA_INIT_FUNCTION divadidd_init(void)
 
 	printk(KERN_INFO "%s\n", DRIVERNAME);
 	printk(KERN_INFO "%s: Rel:%s  Rev:", DRIVERLNAME, DRIVERRELEASE_DIDD);
-	strcpy(tmprev, main_revision);
+	strlcpy(tmprev,main_revision,sizeof(tmprev));
 	printk("%s  Build:%s(%s)\n", getrev(tmprev),
 	       diva_didd_common_code_build, DIVA_BUILD);
 

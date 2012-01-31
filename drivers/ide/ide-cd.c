@@ -1194,7 +1194,7 @@ static int ide_cdrom_register(ide_drive_t *drive, int nslots)
 	devinfo->speed = info->current_speed;
 	devinfo->capacity = nslots;
 	devinfo->handle = drive;
-	strcpy(devinfo->name, drive->name);
+	strlcpy(devinfo->name,drive->name,sizeof(devinfo->name));
 
 	if (drive->atapi_flags & IDE_AFLAG_NO_SPEED_SELECT)
 		devinfo->mask |= CDC_SELECT_SPEED;

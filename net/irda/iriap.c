@@ -277,9 +277,9 @@ static int iriap_register_lsap(struct iriap_cb *self, __u8 slsap_sel, int mode)
 	notify.data_indication       = iriap_data_indication;
 	notify.instance = self;
 	if (mode == IAS_CLIENT)
-		strcpy(notify.name, "IrIAS cli");
+		strlcpy(notify.name,"IrIAS cli",sizeof(notify.name));
 	else
-		strcpy(notify.name, "IrIAS srv");
+		strlcpy(notify.name,"IrIAS srv",sizeof(notify.name));
 
 	self->lsap = irlmp_open_lsap(slsap_sel, &notify, 0);
 	if (self->lsap == NULL) {

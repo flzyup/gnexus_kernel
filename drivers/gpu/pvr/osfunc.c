@@ -421,7 +421,7 @@ IMG_VOID OSMemSet(IMG_VOID *pvDest, IMG_UINT8 ui8Value, IMG_UINT32 ui32Size)
 
 IMG_CHAR *OSStringCopy(IMG_CHAR *pszDest, const IMG_CHAR *pszSrc)
 {
-    return (strcpy(pszDest, pszSrc));
+    return (strlcpy(pszDest,pszSrc,sizeof(pszDest)));
 }
 
 IMG_INT32 OSSNPrintf(IMG_CHAR *pStr, IMG_UINT32 ui32Size, const IMG_CHAR *pszFormat, ...)

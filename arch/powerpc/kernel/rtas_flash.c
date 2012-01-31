@@ -246,7 +246,7 @@ static void get_flash_status_msg(int status, char *buf)
 		return;
 	}
 
-	strcpy(buf, msg);	
+	strlcpy(buf,msg,sizeof(buf));	
 }
 
 /* Reading the proc file will show status (not the firmware contents) */

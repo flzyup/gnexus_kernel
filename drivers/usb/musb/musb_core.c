@@ -1395,7 +1395,7 @@ static int __init musb_core_init(u16 musb_type, struct musb *musb)
 	/* log core options (read using indexed model) */
 	reg = musb_read_configdata(mbase);
 
-	strcpy(aInfo, (reg & MUSB_CONFIGDATA_UTMIDW) ? "UTMI-16" : "UTMI-8");
+	strlcpy(aInfo, (reg & MUSB_CONFIGDATA_UTMIDW) ? "UTMI-16" : "UTMI-8",sizeof(aInfo));
 	if (reg & MUSB_CONFIGDATA_DYNFIFO) {
 		strcat(aInfo, ", dyn FIFOs");
 		musb->dyn_fifo = true;

@@ -715,7 +715,7 @@ static int __devinit tmiofb_probe(struct platform_device *dev)
 
 	info->fbops = &tmiofb_ops;
 
-	strcpy(info->fix.id, "tmio-fb");
+	strlcpy(info->fix.id,"tmio-fb",sizeof(info->fix.id));
 	info->fix.smem_start = vram->start;
 	info->fix.smem_len = resource_size(vram);
 	info->fix.type = FB_TYPE_PACKED_PIXELS;

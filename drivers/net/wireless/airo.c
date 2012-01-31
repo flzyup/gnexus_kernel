@@ -2856,7 +2856,7 @@ static struct net_device *_init_airo_card( unsigned short irq, int port,
 		set_bit(FLAG_FLASHING, &ai->flags);
 	}
 
-	strcpy(dev->name, "eth%d");
+	strlcpy(dev->name,"eth%d",sizeof(dev->name));
 	rc = register_netdev(dev);
 	if (rc) {
 		airo_print_err(dev->name, "Couldn't register_netdev");
@@ -4501,7 +4501,7 @@ static int setup_proc_entry( struct net_device *dev,
 			     struct airo_info *apriv ) {
 	struct proc_dir_entry *entry;
 	/* First setup the device directory */
-	strcpy(apriv->proc_name,dev->name);
+	strlcpy(apriv->proc_name,dev->name,sizeof(apriv->proc_name));
 	apriv->proc_entry = proc_mkdir_mode(apriv->proc_name, airo_perm,
 					    airo_entry);
 	if (!apriv->proc_entry)
@@ -5361,7 +5361,7 @@ static int proc_wepkey_open( struct inode *inode, struct file *file )
 	data->on_close = proc_wepkey_on_close;
 
 	ptr = data->rbuffer;
-	strcpy(ptr, "No wep keys\n");
+	strlcpy(ptr,"No wep keys\n",sizeof(ptr));
 	rc = readWepKeyRid(ai, &wkr, 1, 1);
 	if (rc == SUCCESS) do {
 		lastindex = wkr.kindex;
@@ -5815,7 +5815,7 @@ static int airo_get_name(struct net_device *dev,
 			 char *cwrq,
 			 char *extra)
 {
-	strcpy(cwrq, "IEEE 802.11-DS");
+	strlcpy(cwrq,"IEEE 802.11-DS",sizeof(cwrq));
 	return 0;
 }
 

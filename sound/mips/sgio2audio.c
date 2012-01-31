@@ -208,8 +208,7 @@ static int sgio2audio_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.enumerated.items = 3;
 	if (uinfo->value.enumerated.item >= 3)
 		uinfo->value.enumerated.item = 1;
-	strcpy(uinfo->value.enumerated.name,
-	       texts[uinfo->value.enumerated.item]);
+	strlcpy(uinfo->value.enumerated.name,,sizeof(uinfo->value.enumerated.name)	       texts[uinfo->value.enumerated.item]);
 	return 0;
 }
 
@@ -736,7 +735,7 @@ static int __devinit snd_sgio2audio_new_pcm(struct snd_sgio2audio *chip)
 		return err;
 
 	pcm->private_data = chip;
-	strcpy(pcm->name, "SGI O2 DAC1");
+	strlcpy(pcm->name,"SGI O2 DAC1",sizeof(pcm->name));
 
 	/* set operators */
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,
@@ -750,7 +749,7 @@ static int __devinit snd_sgio2audio_new_pcm(struct snd_sgio2audio *chip)
 		return err;
 
 	pcm->private_data = chip;
-	strcpy(pcm->name, "SGI O2 DAC2");
+	strlcpy(pcm->name,"SGI O2 DAC2",sizeof(pcm->name));
 
 	/* set operators */
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,
@@ -941,8 +940,8 @@ static int __devinit snd_sgio2audio_probe(struct platform_device *pdev)
 		return err;
 	}
 
-	strcpy(card->driver, "SGI O2 Audio");
-	strcpy(card->shortname, "SGI O2 Audio");
+	strlcpy(card->driver,"SGI O2 Audio",sizeof(card->driver));
+	strlcpy(card->shortname,"SGI O2 Audio",sizeof(card->shortname));
 	sprintf(card->longname, "%s irq %i-%i",
 		card->shortname,
 		MACEISA_AUDIO1_DMAT_IRQ,

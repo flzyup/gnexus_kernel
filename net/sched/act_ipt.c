@@ -156,7 +156,7 @@ static int tcf_ipt_init(struct nlattr *nla, struct nlattr *est,
 		goto err1;
 	if (tb[TCA_IPT_TABLE] == NULL ||
 	    nla_strlcpy(tname, tb[TCA_IPT_TABLE], IFNAMSIZ) >= IFNAMSIZ)
-		strcpy(tname, "mangle");
+		strlcpy(tname,"mangle",sizeof(tname));
 
 	t = kmemdup(td, td->u.target_size, GFP_KERNEL);
 	if (unlikely(!t))
@@ -265,7 +265,7 @@ static int tcf_ipt_dump(struct sk_buff *skb, struct tc_action *a, int bind, int 
 
 	c.bindcnt = ipt->tcf_bindcnt - bind;
 	c.refcnt = ipt->tcf_refcnt - ref;
-	strcpy(t->u.user.name, ipt->tcfi_t->u.kernel.target->name);
+	strlcpy(t->u.user.name,ipt->tcfi_t->u.kernel.target->name,sizeof(t->u.user.name));
 
 	NLA_PUT(skb, TCA_IPT_TARG, ipt->tcfi_t->u.user.target_size, t);
 	NLA_PUT_U32(skb, TCA_IPT_INDEX, ipt->tcf_index);

@@ -2384,7 +2384,7 @@ static int selinux_sb_copy_data(char *orig, char *copy)
 		}
 	} while (*in_end++);
 
-	strcpy(in_save, nosec_save);
+	strlcpy(in_save,nosec_save,sizeof(in_save));
 	free_page((unsigned long)nosec_save);
 out:
 	return rc;

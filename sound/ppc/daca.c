@@ -267,7 +267,7 @@ int __devinit snd_pmac_daca_init(struct snd_pmac *chip)
 	/*
 	 * build mixers
 	 */
-	strcpy(chip->card->mixername, "PowerMac DACA");
+	strlcpy(chip->card->mixername,"PowerMac DACA",sizeof(chip->card->mixername));
 
 	for (i = 0; i < ARRAY_SIZE(daca_mixers); i++) {
 		if ((err = snd_ctl_add(chip->card, snd_ctl_new1(&daca_mixers[i], chip))) < 0)

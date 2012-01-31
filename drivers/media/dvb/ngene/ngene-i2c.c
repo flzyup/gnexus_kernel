@@ -165,7 +165,7 @@ int ngene_i2c_init(struct ngene *dev, int dev_nr)
 
 	i2c_set_adapdata(adap, &(dev->channel[dev_nr]));
 
-	strcpy(adap->name, "nGene");
+	strlcpy(adap->name,"nGene",sizeof(adap->name));
 
 	adap->algo = &ngene_i2c_algo;
 	adap->algo_data = (void *)&(dev->channel[dev_nr]);

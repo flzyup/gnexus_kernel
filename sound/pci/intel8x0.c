@@ -1497,7 +1497,7 @@ static int __devinit snd_intel8x0_pcm1(struct intel8x0 *chip, int device,
 	if (rec->suffix)
 		sprintf(name, "Intel ICH - %s", rec->suffix);
 	else
-		strcpy(name, "Intel ICH");
+		strlcpy(name,"Intel ICH",sizeof(name));
 	err = snd_pcm_new(chip->card, name, device,
 			  rec->playback_ops ? 1 : 0,
 			  rec->capture_ops ? 1 : 0, &pcm);
@@ -1514,7 +1514,7 @@ static int __devinit snd_intel8x0_pcm1(struct intel8x0 *chip, int device,
 	if (rec->suffix)
 		sprintf(pcm->name, "%s - %s", chip->card->shortname, rec->suffix);
 	else
-		strcpy(pcm->name, chip->card->shortname);
+		strlcpy(pcm->name,chip->card->shortname,sizeof(pcm->name));
 	chip->pcm[device] = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -3191,21 +3191,21 @@ static int __devinit snd_intel8x0_probe(struct pci_dev *pci,
 	if (spdif_aclink < 0)
 		spdif_aclink = check_default_spdif_aclink(pci);
 
-	strcpy(card->driver, "ICH");
+	strlcpy(card->driver,"ICH",sizeof(card->driver));
 	if (!spdif_aclink) {
 		switch (pci_id->driver_data) {
 		case DEVICE_NFORCE:
-			strcpy(card->driver, "NFORCE");
+			strlcpy(card->driver,"NFORCE",sizeof(card->driver));
 			break;
 		case DEVICE_INTEL_ICH4:
-			strcpy(card->driver, "ICH4");
+			strlcpy(card->driver,"ICH4",sizeof(card->driver));
 		}
 	}
 
-	strcpy(card->shortname, "Intel ICH");
+	strlcpy(card->shortname,"Intel ICH",sizeof(card->shortname));
 	for (name = shortnames; name->id; name++) {
 		if (pci->device == name->id) {
-			strcpy(card->shortname, name->s);
+			strlcpy(card->shortname,name->s,sizeof(card->shortname));
 			break;
 		}
 	}

@@ -2876,7 +2876,7 @@ static int pkt_setup_dev(dev_t dev, dev_t* pkt_dev)
 	disk->first_minor = idx;
 	disk->fops = &pktcdvd_ops;
 	disk->flags = GENHD_FL_REMOVABLE;
-	strcpy(disk->disk_name, pd->name);
+	strlcpy(disk->disk_name,pd->name,sizeof(disk->disk_name));
 	disk->devnode = pktcdvd_devnode;
 	disk->private_data = pd;
 	disk->queue = blk_alloc_queue(GFP_KERNEL);

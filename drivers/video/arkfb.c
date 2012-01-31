@@ -1022,7 +1022,7 @@ static int __devinit ark_pci_probe(struct pci_dev *dev, const struct pci_device_
 	info->screen_size = (1 << (regval >> 6)) << 20;
 	info->fix.smem_len = info->screen_size;
 
-	strcpy(info->fix.id, "ARK 2000PV");
+	strlcpy(info->fix.id,"ARK 2000PV",sizeof(info->fix.id));
 	info->fix.mmio_start = 0;
 	info->fix.mmio_len = 0;
 	info->fix.type = FB_TYPE_PACKED_PIXELS;

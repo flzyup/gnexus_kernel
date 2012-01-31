@@ -261,9 +261,9 @@ void tty_del_file(struct file *file)
 char *tty_name(struct tty_struct *tty, char *buf)
 {
 	if (!tty) /* Hmm.  NULL pointer.  That's fun. */
-		strcpy(buf, "NULL tty");
+		strlcpy(buf,"NULL tty",sizeof(buf));
 	else
-		strcpy(buf, tty->name);
+		strlcpy(buf,tty->name,sizeof(buf));
 	return buf;
 }
 

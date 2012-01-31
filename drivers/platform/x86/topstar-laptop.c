@@ -139,8 +139,8 @@ static int acpi_topstar_add(struct acpi_device *device)
 	if (!tps_hkey)
 		return -ENOMEM;
 
-	strcpy(acpi_device_name(device), "Topstar TPSACPI");
-	strcpy(acpi_device_class(device), ACPI_TOPSTAR_CLASS);
+	strlcpy(acpi_device_name(device),"Topstar TPSACPI",sizeof(acpi_device_name(device)));
+	strlcpy(acpi_device_class(device),ACPI_TOPSTAR_CLASS,sizeof(acpi_device_class(device)));
 
 	if (acpi_topstar_fncx_switch(device, true))
 		goto add_err;

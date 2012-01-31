@@ -495,7 +495,7 @@ static int p54u_upload_firmware_3887(struct ieee80211_hw *dev)
 	}
 
 	left = block_size = min((size_t)P54U_FW_BLOCK, priv->fw->size);
-	strcpy(buf, p54u_firmware_upload_3887);
+	strlcpy(buf,p54u_firmware_upload_3887,sizeof(buf));
 	left -= strlen(p54u_firmware_upload_3887);
 	tmp += strlen(p54u_firmware_upload_3887);
 

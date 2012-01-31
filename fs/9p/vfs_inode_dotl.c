@@ -919,7 +919,7 @@ v9fs_vfs_follow_link_dotl(struct dentry *dentry, struct nameidata *nd)
 	}
 	retval = p9_client_readlink(fid, &target);
 	if (!retval) {
-		strcpy(link, target);
+		strlcpy(link,target,sizeof(link));
 		kfree(target);
 		goto ndset;
 	}

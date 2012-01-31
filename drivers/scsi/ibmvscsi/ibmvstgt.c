@@ -339,7 +339,7 @@ int send_adapter_info(struct iu_entry *iue,
 
 	memset(info, 0, sizeof(*info));
 
-	strcpy(info->srp_version, "16.a");
+	strlcpy(info->srp_version,"16.a",sizeof(info->srp_version));
 	strncpy(info->partition_name, partition_name,
 		sizeof(info->partition_name));
 	info->partition_number = partition_number;

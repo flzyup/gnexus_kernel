@@ -149,7 +149,7 @@ extern "C"
 		}
 	}
 
-	IMG_VOID debug_strcpy(IMG_CHAR *pDest, const IMG_CHAR *pSrc)
+	IMG_VOID debug_strlcpy(IMG_CHAR *pDest,const IMG_CHAR *pSrc,sizeof(IMG_CHAR *pDest))
 	{
 		IMG_SIZE_T i = 0;
 
@@ -192,7 +192,7 @@ extern "C"
 		psInfo = (OSMEM_DEBUG_INFO *)(*ppvCpuVAddr);
 
 		OSMemSet(psInfo->sGuardRegionBefore, 0xB1, sizeof(psInfo->sGuardRegionBefore));
-		debug_strcpy(psInfo->sFileName, pszFilename);
+		debug_strlcpy(psInfo->sFileName,pszFilename,sizeof(psInfo->sFileName));
 		psInfo->uLineNo = ui32Line;
 		psInfo->eValid = isAllocated;
 		psInfo->uSize = ui32Size;
@@ -232,7 +232,7 @@ extern "C"
 		psInfo->uSizeParityCheck = 0;
 		psInfo->eValid = isFree;
 		psInfo->uLineNo = ui32Line;
-		debug_strcpy(psInfo->sFileName, pszFilename);
+		debug_strlcpy(psInfo->sFileName,pszFilename,sizeof(psInfo->sFileName));
 
 		return OSFreeMem_Debug_Linux_Memory_Allocations(ui32Flags, ui32Size + TEST_BUFFER_PADDING, psInfo, hBlockAlloc, pszFilename, ui32Line);
 	}

@@ -704,7 +704,7 @@ static void _dhd_set_multicast_list(dhd_info_t *dhd, int ifidx)
 		return;
 	}
 
-	strcpy(bufp, "mcast_list");
+	strlcpy(bufp,"mcast_list",sizeof(bufp));
 	bufp += strlen("mcast_list") + 1;
 
 	cnt = cpu_to_le32(cnt);
@@ -859,7 +859,7 @@ static void dhd_op_if(dhd_if_t *ifp)
 			ret = -ENOMEM;
 		}
 		if (ret == 0) {
-			strcpy(ifp->net->name, ifp->name);
+			strlcpy(ifp->net->name,ifp->name,sizeof(ifp->net->name));
 			memcpy(netdev_priv(ifp->net), &dhd, sizeof(dhd));
 			err = dhd_net_attach(&dhd->pub, ifp->idx);
 			if (err != 0) {
@@ -1421,7 +1421,7 @@ static int dhd_toe_get(dhd_info_t *dhd, int ifidx, u32 *toe_ol)
 	ioc.len = (uint) sizeof(buf);
 	ioc.set = false;
 
-	strcpy(buf, "toe_ol");
+	strlcpy(buf,"toe_ol",sizeof(buf));
 	ret = dhd_prot_ioctl(&dhd->pub, ifidx, &ioc, ioc.buf, ioc.len);
 	if (ret < 0) {
 		/* Check for older dongle image that doesn't support toe_ol */
@@ -1457,7 +1457,7 @@ static int dhd_toe_set(dhd_info_t *dhd, int ifidx, u32 toe_ol)
 
 	/* Set toe_ol as requested */
 
-	strcpy(buf, "toe_ol");
+	strlcpy(buf,"toe_ol",sizeof(buf));
 	memcpy(&buf[sizeof("toe_ol")], &toe_ol, sizeof(u32));
 
 	ret = dhd_prot_ioctl(&dhd->pub, ifidx, &ioc, ioc.buf, ioc.len);
@@ -1471,7 +1471,7 @@ static int dhd_toe_set(dhd_info_t *dhd, int ifidx, u32 toe_ol)
 
 	toe = (toe_ol != 0);
 
-	strcpy(buf, "toe");
+	strlcpy(buf,"toe",sizeof(buf));
 	memcpy(&buf[sizeof("toe")], &toe, sizeof(u32));
 
 	ret = dhd_prot_ioctl(&dhd->pub, ifidx, &ioc, ioc.buf, ioc.len);
@@ -1532,7 +1532,7 @@ static int dhd_ethtool(dhd_info_t *dhd, void *uaddr)
 		/* if dhd requested, identify ourselves */
 		if (strcmp(drvname, "?dhd") == 0) {
 			sprintf(info.driver, "dhd");
-			strcpy(info.version, EPI_VERSION_STR);
+			strlcpy(info.version,EPI_VERSION_STR,sizeof(info.version));
 		}
 
 		/* otherwise, require dongle to be up */
@@ -1867,9 +1867,9 @@ dhd_pub_t *dhd_attach(struct dhd_bus *bus, uint bus_hdrlen)
 	/* updates firmware nvram path if it was provided as module
 		 paramters */
 	if ((firmware_path != NULL) && (firmware_path[0] != '\0'))
-		strcpy(fw_path, firmware_path);
+		strlcpy(fw_path,firmware_path,sizeof(fw_path));
 	if ((nvram_path != NULL) && (nvram_path[0] != '\0'))
-		strcpy(nv_path, nvram_path);
+		strlcpy(nv_path,nvram_path,sizeof(nv_path));
 
 	/* Allocate etherdev, including space for private structure */
 	net = alloc_etherdev(sizeof(dhd));
@@ -1943,8 +1943,8 @@ dhd_pub_t *dhd_attach(struct dhd_bus *bus, uint bus_hdrlen)
 			goto fail;
 		}
 		if (!NO_FW_REQ()) {
-			strcpy(fw_path, wl_cfg80211_get_fwname());
-			strcpy(nv_path, wl_cfg80211_get_nvramname());
+			strlcpy(fw_path,wl_cfg80211_get_fwname(,sizeof(fw_path)));
+			strlcpy(nv_path,wl_cfg80211_get_nvramname(,sizeof(nv_path)));
 		}
 	}
 

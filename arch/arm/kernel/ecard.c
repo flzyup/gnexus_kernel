@@ -737,7 +737,7 @@ static int ecard_prints(struct seq_file *m, ecard_t *ec)
 			ec->card_desc = kmalloc(strlen(incd.d.string)+1, GFP_KERNEL);
 
 			if (ec->card_desc)
-				strcpy((char *)ec->card_desc, incd.d.string);
+				strlcpy((char *)ec->card_desc,incd.d.string,sizeof((char *)ec->card_desc));
 		}
 
 		seq_printf(m, "%s\n", ec->card_desc ? ec->card_desc : "*unknown*");

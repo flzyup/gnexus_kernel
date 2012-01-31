@@ -77,7 +77,7 @@ kvp_register(void)
 		msg->id.idx =  CN_KVP_IDX;
 		msg->id.val = CN_KVP_VAL;
 		msg->seq = KVP_REGISTER;
-		strcpy(msg->data, HV_DRV_VERSION);
+		strlcpy(msg->data,HV_DRV_VERSION,sizeof(msg->data));
 		msg->len = strlen(HV_DRV_VERSION) + 1;
 		cn_netlink_send(msg, 0, GFP_ATOMIC);
 		kfree(msg);

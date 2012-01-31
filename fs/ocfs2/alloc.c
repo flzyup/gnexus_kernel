@@ -1042,7 +1042,7 @@ static int ocfs2_create_new_meta_bhs(handle_t *handle,
 			memset(bhs[i]->b_data, 0, osb->sb->s_blocksize);
 			eb = (struct ocfs2_extent_block *) bhs[i]->b_data;
 			/* Ok, setup the minimal stuff here. */
-			strcpy(eb->h_signature, OCFS2_EXTENT_BLOCK_SIGNATURE);
+			strlcpy(eb->h_signature,OCFS2_EXTENT_BLOCK_SIGNATURE,sizeof(eb->h_signature));
 			eb->h_blkno = cpu_to_le64(first_blkno);
 			eb->h_fs_generation = cpu_to_le32(osb->fs_generation);
 			eb->h_suballoc_slot =

@@ -952,7 +952,7 @@ static const char *nlmdbg_cookie2a(const struct nlm_cookie *cookie)
 		return "???";
 	for (i = 0 ; i < cookie->len ; i++) {
 		if (len < 2) {
-			strcpy(p-3, "...");
+			strlcpy(p-3,"...",sizeof(p-3));
 			break;
 		}
 		sprintf(p, "%02x", cookie->data[i]);

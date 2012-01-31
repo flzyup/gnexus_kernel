@@ -705,7 +705,7 @@ static int __devinit snd_card_dummy_pcm(struct snd_dummy *dummy, int device,
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, ops);
 	pcm->private_data = dummy;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "Dummy PCM");
+	strlcpy(pcm->name,"Dummy PCM",sizeof(pcm->name));
 	if (!fake_buffer) {
 		snd_pcm_lib_preallocate_pages_for_all(pcm,
 			SNDRV_DMA_TYPE_CONTINUOUS,
@@ -837,7 +837,7 @@ static int __devinit snd_card_dummy_new_mixer(struct snd_dummy *dummy)
 	int err;
 
 	spin_lock_init(&dummy->mixer_lock);
-	strcpy(card->mixername, "Dummy Mixer");
+	strlcpy(card->mixername,"Dummy Mixer",sizeof(card->mixername));
 
 	for (idx = 0; idx < ARRAY_SIZE(snd_dummy_controls); idx++) {
 		err = snd_ctl_add(card, snd_ctl_new1(&snd_dummy_controls[idx], dummy));
@@ -1039,8 +1039,8 @@ static int __devinit snd_dummy_probe(struct platform_device *devptr)
 	err = snd_card_dummy_new_mixer(dummy);
 	if (err < 0)
 		goto __nodev;
-	strcpy(card->driver, "Dummy");
-	strcpy(card->shortname, "Dummy");
+	strlcpy(card->driver,"Dummy",sizeof(card->driver));
+	strlcpy(card->shortname,"Dummy",sizeof(card->shortname));
 	sprintf(card->longname, "Dummy %i", dev + 1);
 
 	dummy_proc_init(dummy);

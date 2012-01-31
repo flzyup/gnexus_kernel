@@ -42,7 +42,7 @@
 	do { \
 		struct bfin_##peri##_regs r; \
 		void *addr = (void *)(base + REGS_OFF(peri, rname)); \
-		strcpy(_buf, sname); \
+		strlcpy(_buf,sname,sizeof(_buf)); \
 		if (sizeof(r.rname) == 2) \
 			debugfs_create_x16(buf, S_IRUSR|S_IWUSR, parent, addr); \
 		else \
@@ -414,7 +414,7 @@ DEFINE_SIMPLE_ATTRIBUTE(fops_sport_wo, NULL, sport_set, "0x%08llx\n");
 #define SPORT_OFF(mmr) (SPORT0_##mmr - SPORT0_TCR1)
 #define _D_SPORT(name, perms, fops) \
 	do { \
-		strcpy(_buf, #name); \
+		strlcpy(_buf,#name,sizeof(_buf)); \
 		debugfs_create_file(buf, perms, parent, (void *)(base + SPORT_OFF(name)), fops); \
 	} while (0)
 #define __SPORT_RW(name) _D_SPORT(name, S_IRUSR|S_IWUSR, &fops_sport)
@@ -422,7 +422,7 @@ DEFINE_SIMPLE_ATTRIBUTE(fops_sport_wo, NULL, sport_set, "0x%08llx\n");
 #define __SPORT_WO(name) _D_SPORT(name, S_IWUSR, &fops_sport_wo)
 #define __SPORT(name, bits) \
 	do { \
-		strcpy(_buf, #name); \
+		strlcpy(_buf,#name,sizeof(_buf)); \
 		debugfs_create_x##bits(buf, S_IRUSR|S_IWUSR, parent, (u##bits *)(base + SPORT_OFF(name))); \
 	} while (0)
 static void __init __maybe_unused

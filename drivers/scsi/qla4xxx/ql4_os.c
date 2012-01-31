@@ -2594,7 +2594,7 @@ static int __init qla4xxx_module_init(void)
 	}
 
 	/* Derive version string. */
-	strcpy(qla4xxx_version_str, QLA4XXX_DRIVER_VERSION);
+	strlcpy(qla4xxx_version_str,QLA4XXX_DRIVER_VERSION,sizeof(qla4xxx_version_str));
 	if (ql4xextended_error_logging)
 		strcat(qla4xxx_version_str, "-debug");
 

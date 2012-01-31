@@ -69,7 +69,7 @@ static struct property *new_property(const char *name, int length,
 		return NULL;
 	np->name = (char *)(np + 1);
 	np->value = np->name + strlen(name) + 1;
-	strcpy(np->name, name);
+	strlcpy(np->name,name,sizeof(np->name));
 	memcpy(np->value, value, length);
 	np->length = length;
 	return np;

@@ -427,11 +427,11 @@ int xenbus_probe_node(struct xen_bus_type *bus,
 	/* Copy the strings into the extra space. */
 
 	tmpstring = (char *)(xendev + 1);
-	strcpy(tmpstring, nodename);
+	strlcpy(tmpstring,nodename,sizeof(tmpstring));
 	xendev->nodename = tmpstring;
 
 	tmpstring += strlen(tmpstring) + 1;
-	strcpy(tmpstring, type);
+	strlcpy(tmpstring,type,sizeof(tmpstring));
 	xendev->devicetype = tmpstring;
 	init_completion(&xendev->down);
 

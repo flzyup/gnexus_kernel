@@ -3301,7 +3301,7 @@ static void rndis_copy_module_params(struct usbnet *usbdev, int device_type)
 	priv->param_country[1] = toupper(priv->param_country[1]);
 	/* doesn't support EU as country code, use FI instead */
 	if (!strcmp(priv->param_country, "EU"))
-		strcpy(priv->param_country, "FI");
+		strlcpy(priv->param_country,"FI",sizeof(priv->param_country));
 
 	if (priv->param_power_save < 0)
 		priv->param_power_save = 0;

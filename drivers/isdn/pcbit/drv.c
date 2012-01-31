@@ -182,7 +182,7 @@ int pcbit_init_dev(int board, int mem_base, int irq)
 	dev_if->readstat = pcbit_stat;
 
 
-	strcpy(dev_if->id, pcbit_devname[board]);
+	strlcpy(dev_if->id,pcbit_devname[board],sizeof(dev_if->id));
 
 	if (!register_isdn(dev_if)) {
 		free_irq(irq, dev);

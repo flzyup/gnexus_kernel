@@ -498,7 +498,7 @@ isdn_status_callback(isdn_ctrl * c)
 					for ( p = dev->netdev; p; p = p->next )
 						if ( p->local->isdn_channel == cmd.arg )
 						{
-							strcpy( cmd.parm.setup.eazmsn, p->local->msn );
+							strlcpy(cmd.parm.setup.eazmsn,p->local->msn ,sizeof(cmd.parm.setup.eazmsn));
 							isdn_command(&cmd);
 							retval = 1;
 							break;
@@ -1628,7 +1628,7 @@ isdn_ioctl(struct file *file, uint cmd, ulong arg)
 										/* Fall through */
 									case ',':
 										bname[j] = '\0';
-										strcpy(dev->drv[drvidx]->msn2eaz[i], bname);
+										strlcpy(dev->drv[drvidx]->msn2eaz[i],bname,sizeof(dev->drv[drvidx]->msn2eaz[i]));
 										j = ISDN_MSNLEN;
 										break;
 									default:
@@ -1940,7 +1940,7 @@ isdn_free_channel(int di, int ch, int usage)
 		    (dev->drvmap[i] == di) &&
 		    (dev->chanmap[i] == ch)) {
 			dev->usage[i] &= (ISDN_USAGE_NONE | ISDN_USAGE_EXCLUSIVE);
-			strcpy(dev->num[i], "???");
+			strlcpy(dev->num[i],"???",sizeof(dev->num[i]));
 			dev->ibytes[i] = 0;
 			dev->obytes[i] = 0;
 // 20.10.99 JIM, try to reinitialize v110 !
@@ -2271,7 +2271,7 @@ register_isdn(isdn_if * i)
 		if (!strcmp(i->id, dev->drvid[j]))
 			sprintf(i->id, "line%d", drvidx);
 	dev->drv[drvidx] = d;
-	strcpy(dev->drvid[drvidx], i->id);
+	strlcpy(dev->drvid[drvidx],i->id,sizeof(dev->drvid[drvidx]));
 	isdn_info_update();
 	dev->drivers++;
 	set_global_features();
@@ -2326,7 +2326,7 @@ static int __init isdn_init(void)
 		dev->drvmap[i] = -1;
 		dev->chanmap[i] = -1;
 		dev->m_idx[i] = -1;
-		strcpy(dev->num[i], "???");
+		strlcpy(dev->num[i],"???",sizeof(dev->num[i]));
 		init_waitqueue_head(&dev->mdm.info[i].open_wait);
 		init_waitqueue_head(&dev->mdm.info[i].close_wait);
 	}
@@ -2351,17 +2351,17 @@ static int __init isdn_init(void)
 	}
 #endif                          /* CONFIG_ISDN_PPP */
 
-	strcpy(tmprev, isdn_revision);
+	strlcpy(tmprev,isdn_revision,sizeof(tmprev));
 	printk(KERN_NOTICE "ISDN subsystem Rev: %s/", isdn_getrev(tmprev));
-	strcpy(tmprev, isdn_tty_revision);
+	strlcpy(tmprev,isdn_tty_revision,sizeof(tmprev));
 	printk("%s/", isdn_getrev(tmprev));
-	strcpy(tmprev, isdn_net_revision);
+	strlcpy(tmprev,isdn_net_revision,sizeof(tmprev));
 	printk("%s/", isdn_getrev(tmprev));
-	strcpy(tmprev, isdn_ppp_revision);
+	strlcpy(tmprev,isdn_ppp_revision,sizeof(tmprev));
 	printk("%s/", isdn_getrev(tmprev));
-	strcpy(tmprev, isdn_audio_revision);
+	strlcpy(tmprev,isdn_audio_revision,sizeof(tmprev));
 	printk("%s/", isdn_getrev(tmprev));
-	strcpy(tmprev, isdn_v110_revision);
+	strlcpy(tmprev,isdn_v110_revision,sizeof(tmprev));
 	printk("%s", isdn_getrev(tmprev));
 
 #ifdef MODULE

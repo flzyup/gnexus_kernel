@@ -631,7 +631,7 @@ static void new_to_cur(struct v4l2_ctrl *ctrl)
 	switch (ctrl->type) {
 	case V4L2_CTRL_TYPE_STRING:
 		/* strings are always 0-terminated */
-		strcpy(ctrl->cur.string, ctrl->string);
+		strlcpy(ctrl->cur.string,ctrl->string,sizeof(ctrl->cur.string));
 		break;
 	case V4L2_CTRL_TYPE_INTEGER64:
 		ctrl->cur.val64 = ctrl->val64;
@@ -650,7 +650,7 @@ static void cur_to_new(struct v4l2_ctrl *ctrl)
 	switch (ctrl->type) {
 	case V4L2_CTRL_TYPE_STRING:
 		/* strings are always 0-terminated */
-		strcpy(ctrl->string, ctrl->cur.string);
+		strlcpy(ctrl->string,ctrl->cur.string,sizeof(ctrl->string));
 		break;
 	case V4L2_CTRL_TYPE_INTEGER64:
 		ctrl->val64 = ctrl->cur.val64;

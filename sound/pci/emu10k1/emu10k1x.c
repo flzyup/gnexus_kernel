@@ -860,13 +860,13 @@ static int __devinit snd_emu10k1x_pcm(struct emu10k1x *emu, int device, struct s
 	pcm->info_flags = 0;
 	switch(device) {
 	case 0:
-		strcpy(pcm->name, "EMU10K1X Front");
+		strlcpy(pcm->name,"EMU10K1X Front",sizeof(pcm->name));
 		break;
 	case 1:
-		strcpy(pcm->name, "EMU10K1X Rear");
+		strlcpy(pcm->name,"EMU10K1X Rear",sizeof(pcm->name));
 		break;
 	case 2:
-		strcpy(pcm->name, "EMU10K1X Center/LFE");
+		strlcpy(pcm->name,"EMU10K1X Center/LFE",sizeof(pcm->name));
 		break;
 	}
 	emu->pcm = pcm;
@@ -1498,7 +1498,7 @@ static int __devinit emu10k1x_midi_init(struct emu10k1x *emu,
 	spin_lock_init(&midi->open_lock);
 	spin_lock_init(&midi->input_lock);
 	spin_lock_init(&midi->output_lock);
-	strcpy(rmidi->name, name);
+	strlcpy(rmidi->name,name,sizeof(rmidi->name));
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_OUTPUT, &snd_emu10k1x_midi_output);
 	snd_rawmidi_set_ops(rmidi, SNDRV_RAWMIDI_STREAM_INPUT, &snd_emu10k1x_midi_input);
 	rmidi->info_flags |= SNDRV_RAWMIDI_INFO_OUTPUT |
@@ -1581,8 +1581,8 @@ static int __devinit snd_emu10k1x_probe(struct pci_dev *pci,
 
 	snd_emu10k1x_proc_init(chip);
 
-	strcpy(card->driver, "EMU10K1X");
-	strcpy(card->shortname, "Dell Sound Blaster Live!");
+	strlcpy(card->driver,"EMU10K1X",sizeof(card->driver));
+	strlcpy(card->shortname,"Dell Sound Blaster Live!",sizeof(card->shortname));
 	sprintf(card->longname, "%s at 0x%lx irq %i",
 		card->shortname, chip->port, chip->irq);
 

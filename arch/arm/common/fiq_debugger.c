@@ -636,7 +636,7 @@ static bool debug_fiq_exec(struct fiq_debugger_state *state,
 				"command processor busy. trying to abort.\n");
 			state->debug_abort = -1;
 		} else {
-			strcpy(state->debug_cmd, cmd);
+			strlcpy(state->debug_cmd,cmd,sizeof(state->debug_cmd));
 			state->debug_busy = 1;
 		}
 

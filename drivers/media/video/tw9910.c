@@ -557,7 +557,7 @@ static int tw9910_enum_input(struct soc_camera_device *icd,
 {
 	inp->type = V4L2_INPUT_TYPE_TUNER;
 	inp->std  = V4L2_STD_UNKNOWN;
-	strcpy(inp->name, "Video");
+	strlcpy(inp->name,"Video",sizeof(inp->name));
 
 	return 0;
 }

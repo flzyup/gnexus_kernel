@@ -996,7 +996,7 @@ static int vidioc_querycap(struct file *file, void  *priv,
 {
 	struct cx23885_dev *dev  = ((struct cx23885_fh *)priv)->dev;
 
-	strcpy(cap->driver, "cx23885");
+	strlcpy(cap->driver,"cx23885",sizeof(cap->driver));
 	strlcpy(cap->card, cx23885_boards[dev->board].name,
 		sizeof(cap->card));
 	sprintf(cap->bus_info, "PCIe:%s", pci_name(dev->pci));
@@ -1128,7 +1128,7 @@ static int cx23885_enum_input(struct cx23885_dev *dev, struct v4l2_input *i)
 
 	i->index = n;
 	i->type  = V4L2_INPUT_TYPE_CAMERA;
-	strcpy(i->name, iname[INPUT(n)->type]);
+	strlcpy(i->name,iname[INPUT(n,sizeof(i->name))->type]);
 	if ((CX23885_VMUX_TELEVISION == INPUT(n)->type) ||
 		(CX23885_VMUX_CABLE == INPUT(n)->type)) {
 		i->type = V4L2_INPUT_TYPE_TUNER;
@@ -1221,7 +1221,7 @@ static int vidioc_g_tuner(struct file *file, void *priv,
 	if (0 != t->index)
 		return -EINVAL;
 
-	strcpy(t->name, "Television");
+	strlcpy(t->name,"Television",sizeof(t->name));
 	t->type       = V4L2_TUNER_ANALOG_TV;
 	t->capability = V4L2_TUNER_CAP_NORM;
 	t->rangehigh  = 0xffffffffUL;
@@ -1451,7 +1451,7 @@ int cx23885_video_register(struct cx23885_dev *dev)
 	/* Initialize VBI template */
 	memcpy(&cx23885_vbi_template, &cx23885_video_template,
 		sizeof(cx23885_vbi_template));
-	strcpy(cx23885_vbi_template.name, "cx23885-vbi");
+	strlcpy(cx23885_vbi_template.name,"cx23885-vbi",sizeof(cx23885_vbi_template.name));
 
 	dev->tvnorm = cx23885_video_template.current_norm;
 

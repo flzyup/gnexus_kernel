@@ -150,9 +150,9 @@ static char *bcm_proc_getifname(char *result, int ifindex)
 	rcu_read_lock();
 	dev = dev_get_by_index_rcu(&init_net, ifindex);
 	if (dev)
-		strcpy(result, dev->name);
+		strlcpy(result,dev->name,sizeof(result));
 	else
-		strcpy(result, "???");
+		strlcpy(result,"???",sizeof(result));
 	rcu_read_unlock();
 
 	return result;

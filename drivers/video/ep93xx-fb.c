@@ -531,7 +531,7 @@ static int __devinit ep93xxfb_probe(struct platform_device *pdev)
 		goto failed;
 	}
 
-	strcpy(info->fix.id, pdev->name);
+	strlcpy(info->fix.id,pdev->name,sizeof(info->fix.id));
 	info->fbops		= &ep93xxfb_ops;
 	info->fix.type		= FB_TYPE_PACKED_PIXELS;
 	info->fix.accel		= FB_ACCEL_NONE;

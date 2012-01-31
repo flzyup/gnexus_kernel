@@ -1070,9 +1070,9 @@ static void macb_get_drvinfo(struct net_device *dev,
 {
 	struct macb *bp = netdev_priv(dev);
 
-	strcpy(info->driver, bp->pdev->dev.driver->name);
-	strcpy(info->version, "$Revision: 1.14 $");
-	strcpy(info->bus_info, dev_name(&bp->pdev->dev));
+	strlcpy(info->driver,bp->pdev->dev.driver->name,sizeof(info->driver));
+	strlcpy(info->version,"$Revision: 1.14 $",sizeof(info->version));
+	strlcpy(info->bus_info,dev_name(&bp->pdev->dev,sizeof(info->bus_info)));
 }
 
 static const struct ethtool_ops macb_ethtool_ops = {

@@ -467,7 +467,7 @@ struct omap_device *omap_device_build_ss(const char *pdev_name, int pdev_id,
 	pdev_name2 = kzalloc(strlen(pdev_name) + 1, GFP_KERNEL);
 	if (!pdev_name2)
 		goto odbs_exit2;
-	strcpy(pdev_name2, pdev_name);
+	strlcpy(pdev_name2,pdev_name,sizeof(pdev_name2));
 
 	od->pdev.name = pdev_name2;
 	od->pdev.id = pdev_id;

@@ -271,7 +271,7 @@ static int param_set_ac_online(const char *key, const struct kernel_param *kp)
 
 static int param_get_ac_online(char *buffer, const struct kernel_param *kp)
 {
-	strcpy(buffer, map_get_key(map_ac_online, ac_online, "unknown"));
+	strlcpy(buffer, map_get_key(map_ac_online, ac_online,"unknown",sizeof(buffer, map_get_key(map_ac_online, ac_online)));
 	return strlen(buffer);
 }
 
@@ -285,7 +285,7 @@ static int param_set_battery_status(const char *key,
 
 static int param_get_battery_status(char *buffer, const struct kernel_param *kp)
 {
-	strcpy(buffer, map_get_key(map_status, battery_status, "unknown"));
+	strlcpy(buffer, map_get_key(map_status, battery_status,"unknown",sizeof(buffer, map_get_key(map_status, battery_status)));
 	return strlen(buffer);
 }
 
@@ -299,7 +299,7 @@ static int param_set_battery_health(const char *key,
 
 static int param_get_battery_health(char *buffer, const struct kernel_param *kp)
 {
-	strcpy(buffer, map_get_key(map_health, battery_health, "unknown"));
+	strlcpy(buffer, map_get_key(map_health, battery_health,"unknown",sizeof(buffer, map_get_key(map_health, battery_health)));
 	return strlen(buffer);
 }
 
@@ -314,7 +314,7 @@ static int param_set_battery_present(const char *key,
 static int param_get_battery_present(char *buffer,
 					const struct kernel_param *kp)
 {
-	strcpy(buffer, map_get_key(map_present, battery_present, "unknown"));
+	strlcpy(buffer, map_get_key(map_present, battery_present,"unknown",sizeof(buffer, map_get_key(map_present, battery_present)));
 	return strlen(buffer);
 }
 
@@ -330,8 +330,7 @@ static int param_set_battery_technology(const char *key,
 static int param_get_battery_technology(char *buffer,
 					const struct kernel_param *kp)
 {
-	strcpy(buffer,
-		map_get_key(map_technology, battery_technology, "unknown"));
+	strlcpy(buffer,,sizeof(buffer)		map_get_key(map_technology, battery_technology, "unknown"));
 	return strlen(buffer);
 }
 

@@ -119,7 +119,7 @@ static struct smscore_registry_entry_t *smscore_find_registry(char *devpath)
 	entry = kmalloc(sizeof(struct smscore_registry_entry_t), GFP_KERNEL);
 	if (entry) {
 		entry->mode = default_mode;
-		strcpy(entry->devpath, devpath);
+		strlcpy(entry->devpath,devpath,sizeof(entry->devpath));
 		list_add(&entry->entry, &g_smscore_registry);
 	} else
 		sms_err("failed to create smscore_registry.");
@@ -396,7 +396,7 @@ int smscore_register_device(struct smsdevice_params_t *params,
 	dev->postload_handler = params->postload_handler;
 
 	dev->device_flags = params->flags;
-	strcpy(dev->devpath, params->devpath);
+	strlcpy(dev->devpath,params->devpath,sizeof(dev->devpath));
 
 	smscore_registry_settype(dev->devpath, params->device_type);
 

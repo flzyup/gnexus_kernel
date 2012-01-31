@@ -790,7 +790,7 @@ static int sasem_probe(struct usb_interface *interface,
 
 	mutex_init(&context->ctx_lock);
 
-	strcpy(driver->name, MOD_NAME);
+	strlcpy(driver->name,MOD_NAME,sizeof(driver->name));
 	driver->minor = -1;
 	driver->code_length = 64;
 	driver->sample_rate = 0;

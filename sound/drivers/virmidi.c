@@ -110,12 +110,12 @@ static int __devinit snd_virmidi_probe(struct platform_device *devptr)
 			goto __nodev;
 		rdev = rmidi->private_data;
 		vmidi->midi[idx] = rmidi;
-		strcpy(rmidi->name, "Virtual Raw MIDI");
+		strlcpy(rmidi->name,"Virtual Raw MIDI",sizeof(rmidi->name));
 		rdev->seq_mode = SNDRV_VIRMIDI_SEQ_DISPATCH;
 	}
 	
-	strcpy(card->driver, "VirMIDI");
-	strcpy(card->shortname, "VirMIDI");
+	strlcpy(card->driver,"VirMIDI",sizeof(card->driver));
+	strlcpy(card->shortname,"VirMIDI",sizeof(card->shortname));
 	sprintf(card->longname, "Virtual MIDI Card %i", dev + 1);
 
 	snd_card_set_dev(card, &devptr->dev);

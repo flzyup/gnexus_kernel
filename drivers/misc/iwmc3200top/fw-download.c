@@ -130,7 +130,7 @@ static int iwmct_parse_next_section(struct iwmct_priv *priv, const u8 **p_sec,
 		if (strcmp(sec_hdr->type, "ENT") == 0)
 			parser->entry_point = le32_to_cpu(sec_hdr->target_addr);
 		else if (strcmp(sec_hdr->type, "LBL") == 0)
-			strcpy(dbg->label_fw, parser->file + parser->cur_pos);
+			strlcpy(dbg->label_fw,parser->file + parser->cur_pos,sizeof(dbg->label_fw));
 		else if (((strcmp(sec_hdr->type, "TOP") == 0) &&
 			  (priv->barker & BARKER_DNLOAD_TOP_MSK)) ||
 			 ((strcmp(sec_hdr->type, "GPS") == 0) &&

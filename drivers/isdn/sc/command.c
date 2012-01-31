@@ -169,7 +169,7 @@ static int dial(int card, unsigned long channel, setup_parm setup)
 	}
 
 	/*extract ISDN number to dial from eaz/msn string*/ 
-	strcpy(Phone,setup.phone); 
+	strlcpy(Phone,setup.phone,sizeof(Phone)); 
 
 	/*send the connection message*/
 	status = sendmessage(card, CEPID,ceReqTypePhy,
@@ -303,7 +303,7 @@ static int clreaz(int card, unsigned long arg)
 		return -ENODEV;
 	}
 
-	strcpy(sc_adapter[card]->channel[arg].eazlist, "");
+	strlcpy(sc_adapter[card]->channel[arg].eazlist,"",sizeof(sc_adapter[card]->channel[arg].eazlist));
 	sc_adapter[card]->channel[arg].eazclear = 1;
 	pr_debug("%s: EAZ List cleared for channel %lu\n",
 		sc_adapter[card]->devicename, arg+1);
@@ -317,7 +317,7 @@ static int seteaz(int card, unsigned long arg, char *num)
 		return -ENODEV;
 	}
 
-	strcpy(sc_adapter[card]->channel[arg].eazlist, num);
+	strlcpy(sc_adapter[card]->channel[arg].eazlist,num,sizeof(sc_adapter[card]->channel[arg].eazlist));
 	sc_adapter[card]->channel[arg].eazclear = 0;
 	pr_debug("%s: EAZ list for channel %lu set to: %s\n",
 		sc_adapter[card]->devicename, arg+1,

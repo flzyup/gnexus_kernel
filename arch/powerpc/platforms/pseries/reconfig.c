@@ -279,7 +279,7 @@ static struct property *new_property(const char *name, const int length,
 	if (!(new->value = kmalloc(length + 1, GFP_KERNEL)))
 		goto cleanup;
 
-	strcpy(new->name, name);
+	strlcpy(new->name,name,sizeof(new->name));
 	memcpy(new->value, value, length);
 	*(((char *)new->value) + length) = 0;
 	new->length = length;

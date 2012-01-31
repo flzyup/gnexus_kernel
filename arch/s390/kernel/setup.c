@@ -709,29 +709,29 @@ static void __init setup_hwcaps(void)
 #if !defined(CONFIG_64BIT)
 	default:	/* Use "g5" as default for 31 bit kernels. */
 #endif
-		strcpy(elf_platform, "g5");
+		strlcpy(elf_platform,"g5",sizeof(elf_platform));
 		break;
 	case 0x2064:
 	case 0x2066:
 #if defined(CONFIG_64BIT)
 	default:	/* Use "z900" as default for 64 bit kernels. */
 #endif
-		strcpy(elf_platform, "z900");
+		strlcpy(elf_platform,"z900",sizeof(elf_platform));
 		break;
 	case 0x2084:
 	case 0x2086:
-		strcpy(elf_platform, "z990");
+		strlcpy(elf_platform,"z990",sizeof(elf_platform));
 		break;
 	case 0x2094:
 	case 0x2096:
-		strcpy(elf_platform, "z9-109");
+		strlcpy(elf_platform,"z9-109",sizeof(elf_platform));
 		break;
 	case 0x2097:
 	case 0x2098:
-		strcpy(elf_platform, "z10");
+		strlcpy(elf_platform,"z10",sizeof(elf_platform));
 		break;
 	case 0x2817:
-		strcpy(elf_platform, "z196");
+		strlcpy(elf_platform,"z196",sizeof(elf_platform));
 		break;
 	}
 }

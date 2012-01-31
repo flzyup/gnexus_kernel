@@ -785,7 +785,7 @@ int __jfs_setxattr(tid_t tid, struct inode *inode, const char *name,
 				  GFP_KERNEL);
 		if (!os2name)
 			return -ENOMEM;
-		strcpy(os2name, name + XATTR_OS2_PREFIX_LEN);
+		strlcpy(os2name,name + XATTR_OS2_PREFIX_LEN,sizeof(os2name));
 		name = os2name;
 		namelen -= XATTR_OS2_PREFIX_LEN;
 	}
@@ -1113,8 +1113,8 @@ int jfs_init_security(tid_t tid, struct inode *inode, struct inode *dir,
 		rc = -ENOMEM;
 		goto kmalloc_failed;
 	}
-	strcpy(name, XATTR_SECURITY_PREFIX);
-	strcpy(name + XATTR_SECURITY_PREFIX_LEN, suffix);
+	strlcpy(name,XATTR_SECURITY_PREFIX,sizeof(name));
+	strlcpy(name + XATTR_SECURITY_PREFIX_LEN,suffix,sizeof(name + XATTR_SECURITY_PREFIX_LEN));
 
 	rc = __jfs_setxattr(tid, inode, name, value, len, 0);
 

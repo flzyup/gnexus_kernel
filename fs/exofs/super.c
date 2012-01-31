@@ -716,7 +716,7 @@ static int exofs_fill_super(struct super_block *sb, void *data, int silent)
 
 	/* fill in some other data by hand */
 	memset(sb->s_id, 0, sizeof(sb->s_id));
-	strcpy(sb->s_id, "exofs");
+	strlcpy(sb->s_id,"exofs",sizeof(sb->s_id));
 	sb->s_blocksize = EXOFS_BLKSIZE;
 	sb->s_blocksize_bits = EXOFS_BLKSHIFT;
 	sb->s_maxbytes = MAX_LFS_FILESIZE;

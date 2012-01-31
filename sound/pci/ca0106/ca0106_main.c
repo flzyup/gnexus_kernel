@@ -1366,7 +1366,7 @@ static int __devinit snd_ca0106_pcm(struct snd_ca0106 *emu, int device)
         }
 
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "CA0106");
+	strlcpy(pcm->name,"CA0106",sizeof(pcm->name));
 
 	for(substream = pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream; 
 	    substream; 
@@ -1686,8 +1686,8 @@ static int __devinit snd_ca0106_create(int dev, struct snd_card *card,
 	pci_read_config_word(pci, PCI_SUBSYSTEM_ID, &chip->model);
 	printk(KERN_INFO "snd-ca0106: Model %04x Rev %08x Serial %08x\n",
 	       chip->model, pci->revision, chip->serial);
-	strcpy(card->driver, "CA0106");
-	strcpy(card->shortname, "CA0106");
+	strlcpy(card->driver,"CA0106",sizeof(card->driver));
+	strlcpy(card->shortname,"CA0106",sizeof(card->shortname));
 
 	for (c = ca0106_chip_details; c->serial; c++) {
 		if (subsystem[dev]) {

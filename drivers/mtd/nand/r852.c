@@ -617,7 +617,7 @@ ssize_t r852_media_type_show(struct device *sys_dev,
 	struct r852_device *dev = r852_get_dev(mtd);
 	char *data = dev->sm ? "smartmedia" : "xd";
 
-	strcpy(buf, data);
+	strlcpy(buf,data,sizeof(buf));
 	return strlen(data);
 }
 

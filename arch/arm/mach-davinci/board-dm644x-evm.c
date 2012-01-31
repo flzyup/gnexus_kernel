@@ -347,7 +347,7 @@ sw_show(struct device *d, struct device_attribute *a, char *buf)
 {
 	char *s = gpio_get_value_cansleep(sw_gpio) ? "on\n" : "off\n";
 
-	strcpy(buf, s);
+	strlcpy(buf,s,sizeof(buf));
 	return strlen(s);
 }
 

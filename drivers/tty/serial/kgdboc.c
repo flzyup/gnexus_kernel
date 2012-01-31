@@ -135,7 +135,7 @@ static int kgdboc_option_setup(char *opt)
 		printk(KERN_ERR "kgdboc: config string too long\n");
 		return -ENOSPC;
 	}
-	strcpy(config, opt);
+	strlcpy(config,opt,sizeof(config));
 
 	return 0;
 }
@@ -245,7 +245,7 @@ static int param_set_kgdboc_var(const char *kmessage, struct kernel_param *kp)
 
 	/* Only copy in the string if the init function has not run yet */
 	if (configured < 0) {
-		strcpy(config, kmessage);
+		strlcpy(config,kmessage,sizeof(config));
 		return 0;
 	}
 
@@ -256,7 +256,7 @@ static int param_set_kgdboc_var(const char *kmessage, struct kernel_param *kp)
 		return -EBUSY;
 	}
 
-	strcpy(config, kmessage);
+	strlcpy(config,kmessage,sizeof(config));
 	/* Chop out \n char as a result of echo */
 	if (config[len - 1] == '\n')
 		config[len - 1] = '\0';

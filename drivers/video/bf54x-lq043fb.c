@@ -530,7 +530,7 @@ static int __devinit bfin_bf54x_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, fbinfo);
 
-	strcpy(fbinfo->fix.id, driver_name);
+	strlcpy(fbinfo->fix.id,driver_name,sizeof(fbinfo->fix.id));
 
 	info->mach_info = pdev->dev.platform_data;
 

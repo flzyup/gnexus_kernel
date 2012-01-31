@@ -1005,7 +1005,7 @@ static int __devinit snd_atiixp_pcm_new(struct atiixp_modem *chip)
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_atiixp_capture_ops);
 	pcm->dev_class = SNDRV_PCM_CLASS_MODEM;
 	pcm->private_data = chip;
-	strcpy(pcm->name, "ATI IXP MC97");
+	strlcpy(pcm->name,"ATI IXP MC97",sizeof(pcm->name));
 	chip->pcmdevs[ATI_PCMDEV_ANALOG] = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
@@ -1292,8 +1292,8 @@ static int __devinit snd_atiixp_probe(struct pci_dev *pci,
 	if (err < 0)
 		return err;
 
-	strcpy(card->driver, "ATIIXP-MODEM");
-	strcpy(card->shortname, "ATI IXP Modem");
+	strlcpy(card->driver,"ATIIXP-MODEM",sizeof(card->driver));
+	strlcpy(card->shortname,"ATI IXP Modem",sizeof(card->shortname));
 	if ((err = snd_atiixp_create(card, pci, &chip)) < 0)
 		goto __error;
 	card->private_data = chip;

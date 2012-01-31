@@ -387,11 +387,11 @@ static int mwifiex_init_hw_fw(struct mwifiex_adapter *adapter)
 	switch (adapter->revision_id) {
 	case SD8787_W0:
 	case SD8787_W1:
-		strcpy(fw_name, SD8787_W1_FW_NAME);
+		strlcpy(fw_name,SD8787_W1_FW_NAME,sizeof(fw_name));
 		break;
 	case SD8787_A0:
 	case SD8787_A1:
-		strcpy(fw_name, SD8787_AX_FW_NAME);
+		strlcpy(fw_name,SD8787_AX_FW_NAME,sizeof(fw_name));
 		break;
 	default:
 		break;

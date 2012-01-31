@@ -1738,7 +1738,7 @@ static int __devinit gdth_search_drives(gdth_ha_str *ha)
         }
     } else {
         TRACE2(("BOARD_INFO requires firmware >= 1.10/2.08\n"));
-        strcpy(ha->binfo.type_string, gdth_ctr_name(ha));
+        strlcpy(ha->binfo.type_string,gdth_ctr_name(ha,sizeof(ha->binfo.type_string)));
     }
     TRACE2(("Controller name: %s\n",ha->binfo.type_string));
 
@@ -2362,9 +2362,9 @@ static int gdth_internal_cache_cmd(gdth_ha_str *ha, Scsi_Cmnd *scp)
         inq.version   = 2;
         inq.resp_aenc = 2;
         inq.add_length= 32;
-        strcpy(inq.vendor,ha->oem_name);
+        strlcpy(inq.vendor,ha->oem_name,sizeof(inq.vendor));
         sprintf(inq.product,"Host Drive  #%02d",t);
-        strcpy(inq.revision,"   ");
+        strlcpy(inq.revision,"   ",sizeof(inq.revision));
         gdth_copy_internal_data(ha, scp, (char*)&inq, sizeof(gdth_inq_data));
         break;
 

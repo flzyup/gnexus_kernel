@@ -2371,7 +2371,7 @@ static int bond_slave_info_query(struct net_device *bond_dev, struct ifslave *in
 	bond_for_each_slave(bond, slave, i) {
 		if (i == (int)info->slave_id) {
 			res = 0;
-			strcpy(info->slave_name, slave->dev->name);
+			strlcpy(info->slave_name,slave->dev->name,sizeof(info->slave_name));
 			info->link = slave->link;
 			info->state = bond_slave_state(slave);
 			info->link_failure_count = slave->link_failure_count;

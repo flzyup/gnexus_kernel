@@ -629,7 +629,7 @@ setup_gazel(struct IsdnCard *card)
 	char tmp[64];
 	u_char val;
 
-	strcpy(tmp, gazel_revision);
+	strlcpy(tmp,gazel_revision,sizeof(tmp));
 	printk(KERN_INFO "Gazel: Driver Revision %s\n", HiSax_getrev(tmp));
 
 	if (cs->typ != ISDN_CTYPE_GAZEL)

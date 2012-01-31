@@ -608,8 +608,8 @@ static struct videobuf_queue_ops viu_video_qops = {
 static int vidioc_querycap(struct file *file, void *priv,
 			   struct v4l2_capability *cap)
 {
-	strcpy(cap->driver, "viu");
-	strcpy(cap->card, "viu");
+	strlcpy(cap->driver,"viu",sizeof(cap->driver));
+	strlcpy(cap->card,"viu",sizeof(cap->card));
 	cap->version = VIU_VERSION;
 	cap->capabilities =	V4L2_CAP_VIDEO_CAPTURE |
 				V4L2_CAP_STREAMING     |
@@ -994,7 +994,7 @@ static int vidioc_enum_input(struct file *file, void *priv,
 
 	inp->type = V4L2_INPUT_TYPE_CAMERA;
 	inp->std = fh->dev->vdev->tvnorms;
-	strcpy(inp->name, "Camera");
+	strlcpy(inp->name,"Camera",sizeof(inp->name));
 	return 0;
 }
 

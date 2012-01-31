@@ -458,7 +458,7 @@ snd_au1000_pcm_new(struct snd_au1000 *au1000)
 
 	pcm->private_data = au1000;
 	pcm->info_flags = 0;
-	strcpy(pcm->name, "Au1000 AC97 PCM");
+	strlcpy(pcm->name,"Au1000 AC97 PCM",sizeof(pcm->name));
 
 	spin_lock_init(&au1000->stream[PLAYBACK]->dma_lock);
 	spin_lock_init(&au1000->stream[CAPTURE]->dma_lock);
@@ -671,8 +671,8 @@ au1000_init(void)
 		return err;
 	}
 
-	strcpy(card->driver, "Au1000-AC97");
-	strcpy(card->shortname, "AMD Au1000-AC97");
+	strlcpy(card->driver,"Au1000-AC97",sizeof(card->driver));
+	strlcpy(card->shortname,"AMD Au1000-AC97",sizeof(card->shortname));
 	sprintf(card->longname, "AMD Au1000--AC97 ALSA Driver");
 
 	if ((err = snd_card_register(card)) < 0) {

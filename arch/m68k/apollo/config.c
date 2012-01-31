@@ -260,7 +260,7 @@ void dn_dummy_waitbut(void) {
 
 static void dn_get_model(char *model)
 {
-    strcpy(model, "Apollo ");
+    strlcpy(model,"Apollo ",sizeof(model));
     if (apollo_model >= APOLLO_DN3000 && apollo_model <= APOLLO_DN4500)
         strcat(model, apollo_models[apollo_model - APOLLO_DN3000]);
 }

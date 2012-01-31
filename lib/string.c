@@ -91,7 +91,7 @@ EXPORT_SYMBOL(strncasecmp);
  * @src: Where to copy the string from
  */
 #undef strcpy
-char *strcpy(char *dest, const char *src)
+char *strcpy(char *dest,const char *src)
 {
 	char *tmp = dest;
 

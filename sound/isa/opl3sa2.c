@@ -508,27 +508,27 @@ static int __devinit snd_opl3sa2_mixer(struct snd_card *card)
 	memset(&id2, 0, sizeof(id2));
 	id1.iface = id2.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	/* reassign AUX0 to CD */
-        strcpy(id1.name, "Aux Playback Switch");
-        strcpy(id2.name, "CD Playback Switch");
+        strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name));
+        strlcpy(id2.name,"CD Playback Switch",sizeof(id2.name));
         if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
                 return err;
 	}
-        strcpy(id1.name, "Aux Playback Volume");
-        strcpy(id2.name, "CD Playback Volume");
+        strlcpy(id1.name,"Aux Playback Volume",sizeof(id1.name));
+        strlcpy(id2.name,"CD Playback Volume",sizeof(id2.name));
         if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
                 return err;
 	}
 	/* reassign AUX1 to FM */
-        strcpy(id1.name, "Aux Playback Switch"); id1.index = 1;
-        strcpy(id2.name, "FM Playback Switch");
+        strlcpy(id1.name,"Aux Playback Switch",sizeof(id1.name)); id1.index = 1;
+        strlcpy(id2.name,"FM Playback Switch",sizeof(id2.name));
         if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
                 return err;
 	}
-        strcpy(id1.name, "Aux Playback Volume");
-        strcpy(id2.name, "FM Playback Volume");
+        strlcpy(id1.name,"Aux Playback Volume",sizeof(id1.name));
+        strlcpy(id2.name,"FM Playback Volume",sizeof(id2.name));
         if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
                 return err;
@@ -637,8 +637,8 @@ static int snd_opl3sa2_card_new(int dev, struct snd_card **cardp)
 			      sizeof(struct snd_opl3sa2), &card);
 	if (err < 0)
 		return err;
-	strcpy(card->driver, "OPL3SA2");
-	strcpy(card->shortname, "Yamaha OPL3-SA");
+	strlcpy(card->driver,"OPL3SA2",sizeof(card->driver));
+	strlcpy(card->shortname,"Yamaha OPL3-SA",sizeof(card->shortname));
 	chip = card->private_data;
 	spin_lock_init(&chip->reg_lock);
 	chip->irq = -1;

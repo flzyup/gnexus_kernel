@@ -51,7 +51,7 @@ put_info_buffer(char *cp)
 		return;
 	if (!(ib = kmalloc(sizeof(struct divert_info) + strlen(cp), GFP_ATOMIC)))
 		 return;	/* no memory */
-	strcpy(ib->info_start, cp);	/* set output string */
+	strlcpy(ib->info_start,cp,sizeof(ib->info_start));	/* set output string */
 	ib->next = NULL;
 	spin_lock_irqsave( &divert_info_lock, flags );
 	ib->usage_cnt = if_used;
@@ -206,7 +206,7 @@ static int isdn_divert_ioctl_unlocked(struct file *file, uint cmd, ulong arg)
 				return (-EINVAL);
 			if (!*cp)
 				return (-EINVAL);
-			strcpy(dioctl.getid.drvnam, cp);
+			strlcpy(dioctl.getid.drvnam,cp,sizeof(dioctl.getid.drvnam));
 			break;
 
 		case IIOCGETRULE:
