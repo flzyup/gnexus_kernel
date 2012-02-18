@@ -1,6 +1,6 @@
 #
 # Automatically generated make config: don't edit
-# Linux/arm 3.0.18 Kernel Configuration
+# Linux/arm 3.0.22-rc1 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -2360,18 +2360,7 @@ CONFIG_MISC_FILESYSTEMS=y
 # CONFIG_PSTORE is not set
 # CONFIG_SYSV_FS is not set
 # CONFIG_UFS_FS is not set
-CONFIG_NETWORK_FILESYSTEMS=y
-# CONFIG_NFS_FS is not set
-# CONFIG_NFSD is not set
-# CONFIG_CEPH_FS is not set
-CONFIG_CIFS=y
-# CONFIG_CIFS_STATS is not set
-CONFIG_CIFS_WEAK_PW_HASH=y
-# CONFIG_CIFS_XATTR is not set
-# CONFIG_CIFS_DEBUG2 is not set
-# CONFIG_NCP_FS is not set
-# CONFIG_CODA_FS is not set
-# CONFIG_AFS_FS is not set
+# CONFIG_NETWORK_FILESYSTEMS is not set
 
 #
 # Partition Types
