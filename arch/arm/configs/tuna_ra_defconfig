@@ -1,6 +1,6 @@
 #
 # Automatically generated make config: don't edit
-# Linux/arm 3.0.23 Kernel Configuration
+# Linux/arm 3.0.23-rc1 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -1206,7 +1206,7 @@ CONFIG_WIFI_CONTROL_FUNC=y
 CONFIG_BCMDHD=y
 CONFIG_BCMDHD_FW_PATH="/system/vendor/firmware/fw_bcmdhd.bin"
 CONFIG_BCMDHD_NVRAM_PATH="/system/etc/wifi/bcmdhd.cal"
-CONFIG_DHD_USE_STATIC_BUF=y
+# CONFIG_DHD_USE_STATIC_BUF is not set
 # CONFIG_HOSTAP is not set
 # CONFIG_IWM is not set
 # CONFIG_LIBERTAS is not set
