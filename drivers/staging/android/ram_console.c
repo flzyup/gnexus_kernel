@@ -421,7 +421,7 @@ static int __init ram_console_late_init(void)
 	memcpy(ram_console_old_log,
 	       ram_console_old_log_init_buffer, ram_console_old_log_size);
 #endif
-#ifdef SECURITY_DMESG_RESTRICT
+#ifdef CONFIG_SECURITY_DMESG_RESTRICT
 	entry = create_proc_entry("last_kmsg", S_IFREG | S_IRUSR, NULL);
 #else
 	entry = create_proc_entry("last_kmsg", S_IFREG | S_IRUGO, NULL);
