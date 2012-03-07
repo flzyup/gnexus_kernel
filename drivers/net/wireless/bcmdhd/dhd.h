@@ -326,8 +326,8 @@ inline static void MUTEX_UNLOCK_SOFTAP_SET(dhd_pub_t * dhdp)
 #define DHD_OS_WAKE_LOCK_TIMEOUT(pub)		dhd_os_wake_lock_timeout(pub)
 #define DHD_OS_WAKE_LOCK_TIMEOUT_ENABLE(pub, val)	dhd_os_wake_lock_timeout_enable(pub, val)
 
-#define DHD_PACKET_TIMEOUT_MS	1000
-#define DHD_EVENT_TIMEOUT_MS	1500
+#define DHD_PACKET_TIMEOUT_MS	 750
+#define DHD_EVENT_TIMEOUT_MS	1000
 
 /* interface operations (register, remove) should be atomic, use this lock to prevent race
  * condition among wifi on/off and interface operation functions
