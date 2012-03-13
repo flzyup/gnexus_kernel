@@ -12,12 +12,11 @@ else
 	find . | cpio -o -H newc | gzip > ../new_initramfs.cpio.gz
 	cd ..
 	abootimg --create /devel/kernel${RELV}.img -k ../arch/arm/boot/zImage -r new_initramfs.cpio.gz
-	sha256sum /devel/kernel${RELV}.img > /devel/kernel${RELV}.sha256sum
 
 	git tag -a r${KVER} -m r${KVER}
 
 	cd cwm
-	cp /devel/kernel${RELV}.img boot.img
+	mv /devel/kernel${RELV}.img boot.img
         zip -q -r /devel/kernel${RELV}.zip boot.img META-INF || exit 1
         sha256sum /devel/kernel${RELV}.zip > /devel/kernel${RELV}.zip.sha256sum
 
