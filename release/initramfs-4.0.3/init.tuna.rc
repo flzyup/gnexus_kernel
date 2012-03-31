@@ -84,7 +84,7 @@ on fs
         symlink /factory/hdcp.keys /system/vendor/firmware/hdcp.keys
 
 # allow to modify Wifi power behaviour in terms of battery/speed at sleep time
-	chown root system /sys/module/bcmdhd/parameters/uiFastWifi
+	chown root system /sys/module/bcmdhd/parameters/wifi_pm
 
 # nfc
     setprop ro.nfc.port "COM4"
