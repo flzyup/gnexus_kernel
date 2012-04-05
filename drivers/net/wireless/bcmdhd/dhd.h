@@ -24,7 +24,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: dhd.h 323282 2012-03-23 19:41:57Z $
+ * $Id: dhd.h 325862 2012-04-04 22:59:48Z $
  */
 
 
@@ -82,6 +82,8 @@ enum dhd_bus_state {
 #define P2P_GC_ENABLED		0x0020
 #define CONCURENT_MASK		0x00F0
 
+#define MANUFACTRING_FW 	"WLTEST"
+
 /* max sequential rxcntl timeouts to set HANG event */
 #define MAX_CNTL_TIMEOUT  2
 
@@ -119,7 +121,6 @@ typedef enum  {
 	DHD_IF_CHANGE,
 	DHD_IF_DELETING
 } dhd_if_state_t;
-
 
 #if defined(CONFIG_DHD_USE_STATIC_BUF)
 
