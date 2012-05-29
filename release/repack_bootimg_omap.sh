@@ -20,7 +20,7 @@ else
         zip -q -r /devel/kernel${RELV}.zip boot.img META-INF || exit 1
         sha256sum /devel/kernel${RELV}.zip > /devel/kernel${RELV}.zip.sha256sum
 
-	scp /devel/kernel* faramir.eriador.org:public_html/galaxy_nexus/testing-${RAMV}/
+	scp /devel/kernel* elendil.arnor.org:public_html/galaxy_nexus/testing-${RAMV}/
 
 	cd ..
 	rm new_initramfs.cpio.gz cwm/boot.img /devel/kernel*
