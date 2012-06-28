@@ -1,6 +1,6 @@
 #
 # Automatically generated make config: don't edit
-# Linux/arm 3.0.28 Kernel Configuration
+# Linux/arm 3.0.35 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -1213,7 +1213,6 @@ CONFIG_BCMDHD_FW_PATH="/system/vendor/firmware/fw_bcmdhd.bin"
 CONFIG_BCMDHD_NVRAM_PATH="/system/etc/wifi/bcmdhd.cal"
 # CONFIG_DHD_USE_STATIC_BUF is not set
 CONFIG_DHD_USE_SCHED_SCAN=y
-CONFIG_DHD_ENABLE_P2P=y
 # CONFIG_HOSTAP is not set
 # CONFIG_IWM is not set
 # CONFIG_LIBERTAS is not set
@@ -1682,6 +1681,8 @@ CONFIG_PVR_OMAP_DSS2=y
 # CONFIG_SGX_DVFS_MODE_LINEAR is not set
 CONFIG_SGX_DVFS_MODE_OPTIMIZED=y
 CONFIG_SGX_DVFS_IDLE_TIMEOUT=1000
+CONFIG_PVR_LINUX_MEM_AREA_POOL=y
+CONFIG_PVR_LINUX_MEM_AREA_POOL_MAX_PAGES=10800
 CONFIG_ION=y
 CONFIG_ION_OMAP=y
 # CONFIG_VGASTATE is not set
