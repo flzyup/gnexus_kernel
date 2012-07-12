@@ -4,14 +4,13 @@
 
 # Common support
 obj-y := io.o id.o sram.o time.o irq.o mux.o flash.o serial.o devices.o dma.o
-obj-y += clock.o clock_data.o opp_data.o reset.o pm_bus.o dmtimer.o
+obj-y += clock.o clock_data.o opp_data.o reset.o pm_bus.o timer.o
 
-obj-$(CONFIG_OMAP_MCBSP) += mcbsp.o
+ifneq ($(CONFIG_SND_OMAP_SOC_MCBSP),)
+obj-y += mcbsp.o
+endif
 
 obj-$(CONFIG_OMAP_32K_TIMER)	+= timer32k.o
-
-# CPUFREQ driver
-obj-$(CONFIG_CPU_FREQ) += omap1-cpufreq.o
 
 # Power Management
 obj-$(CONFIG_PM) += pm.o sleep.o

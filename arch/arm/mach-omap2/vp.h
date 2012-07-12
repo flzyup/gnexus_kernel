@@ -21,8 +21,17 @@
 
 struct voltagedomain;
 
+/*
+ * Voltage Processor (VP) identifiers
+ */
+#define OMAP3_VP_VDD_MPU_ID 0
+#define OMAP3_VP_VDD_CORE_ID 1
+#define OMAP4_VP_VDD_CORE_ID 0
+#define OMAP4_VP_VDD_IVA_ID 1
+#define OMAP4_VP_VDD_MPU_ID 2
+
 /* XXX document */
-#define VP_IDLE_TIMEOUT		500
+#define VP_IDLE_TIMEOUT		200
 #define VP_TRANXDONE_TIMEOUT	300
 
 /**
@@ -33,7 +42,6 @@ struct voltagedomain;
 struct omap_vp_ops {
 	u32 (*check_txdone)(u8 vp_id);
 	void (*clear_txdone)(u8 vp_id);
-	void (*recover)(u8 vp_id);
 };
 
 /**
@@ -65,7 +73,6 @@ struct omap_vp_common {
 	u8 vpconfig_initvdd;
 	u8 vpconfig_forceupdate;
 	u8 vpconfig_vpenable;
-	u8 vstatus_vpidle;
 	u8 vstepmin_stepmin_shift;
 	u8 vstepmin_smpswaittimemin_shift;
 	u8 vstepmax_stepmax_shift;
@@ -86,6 +93,7 @@ struct omap_vp_common {
  * @vlimitto: PRM_VP*_VLIMITTO reg offset from PRM start
  * @vstatus: PRM_VP*_VSTATUS reg offset from PRM start
  * @voltage: PRM_VP*_VOLTAGE reg offset from PRM start
+ * @id: Unique identifier for VP instance.
  * @enabled: flag to keep track of whether vp is enabled or not
  *
  * XXX vp_common is probably not needed since it is per-SoC
@@ -112,12 +120,9 @@ extern struct omap_vp_instance omap4_vp_core;
 void omap_vp_init(struct voltagedomain *voltdm);
 void omap_vp_enable(struct voltagedomain *voltdm);
 void omap_vp_disable(struct voltagedomain *voltdm);
-unsigned long omap_vp_get_curr_volt(struct voltagedomain *voltdm);
 int omap_vp_forceupdate_scale(struct voltagedomain *voltdm,
-			      struct omap_volt_data *target_v);
+			      unsigned long target_volt);
 int omap_vp_update_errorgain(struct voltagedomain *voltdm,
 			     unsigned long target_volt);
-bool omap_vp_is_transdone(struct voltagedomain *voltdm);
-void omap_vp_clear_transdone(struct voltagedomain *voltdm);
 
 #endif

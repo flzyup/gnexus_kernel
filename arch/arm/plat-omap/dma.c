@@ -36,7 +36,6 @@
 #include <linux/slab.h>
 #include <linux/delay.h>
 
-#include <asm/system.h>
 #include <mach/hardware.h>
 #include <plat/dma.h>
 
@@ -164,6 +163,8 @@ static inline void set_gdma_dev(int req, int dev)
 }
 #else
 #define set_gdma_dev(req, dev)	do {} while (0)
+#define omap_readl(reg)		0
+#define omap_writel(val, reg)	do {} while (0)
 #endif
 
 void omap_set_dma_priority(int lch, int dst_port, int priority)
@@ -915,6 +916,13 @@ void omap_start_dma(int lch)
 			l |= OMAP_DMA_CCR_BUFFERING_DISABLE;
 	l |= OMAP_DMA_CCR_EN;
 
+	/*
+	 * As dma_write() uses IO accessors which are weakly ordered, there
+	 * is no guarantee that data in coherent DMA memory will be visible
+	 * to the DMA device.  Add a memory barrier here to ensure that any
+	 * such data is visible prior to enabling DMA.
+	 */
+	mb();
 	p->dma_write(l, CCR, lch);
 
 	dma_chan[lch].flags |= OMAP_DMA_ACTIVE;
@@ -963,6 +971,13 @@ void omap_stop_dma(int lch)
 		l &= ~OMAP_DMA_CCR_EN;
 		p->dma_write(l, CCR, lch);
 	}
+
+	/*
+	 * Ensure that data transferred by DMA is visible to any access
+	 * after DMA has been disabled.  This is important for coherent
+	 * DMA regions.
+	 */
+	mb();
 
 	if (!omap_dma_in_1510_mode() && dma_chan[lch].next_lch != -1) {
 		int next_lch, cur_lch = lch;
@@ -1024,29 +1039,27 @@ EXPORT_SYMBOL(omap_set_dma_callback);
  */
 dma_addr_t omap_get_dma_src_pos(int lch)
 {
-	u32 cdac;
 	dma_addr_t offset = 0;
 
 	if (cpu_is_omap15xx())
 		offset = p->dma_read(CPC, lch);
-	else {
+	else
+		offset = p->dma_read(CSAC, lch);
+
+	if (IS_DMA_ERRATA(DMA_ERRATA_3_3) && offset == 0)
+		offset = p->dma_read(CSAC, lch);
+
+	if (!cpu_is_omap15xx()) {
 		/*
-		 * CDAC != 0 indicates that the DMA transfer on the channel has
-		 * been started already.
-		 * If CDAC == 0, we can not trust the CSAC value since it has
-		 * not been updated, and can contain random number.
-		 * Return the start address in case the DMA has not jet started.
-		 * This is valid since in fact the DMA has not yet progressed.
+		 * CDAC == 0 indicates that the DMA transfer on the channel has
+		 * not been started (no data has been transferred so far).
+		 * Return the programmed source start address in this case.
 		 */
-		cdac = p->dma_read(CDAC, lch);
-		if (likely(cdac))
+		if (likely(p->dma_read(CDAC, lch)))
 			offset = p->dma_read(CSAC, lch);
 		else
 			offset = p->dma_read(CSSA, lch);
 	}
-
-	if (IS_DMA_ERRATA(DMA_ERRATA_3_3) && offset == 0)
-		offset = p->dma_read(CSAC, lch);
 
 	if (cpu_class_is_omap1())
 		offset |= (p->dma_read(CSSA, lch) & 0xFFFF0000);
@@ -1076,8 +1089,16 @@ dma_addr_t omap_get_dma_dst_pos(int lch)
 	 * omap 3.2/3.3 erratum: sometimes 0 is returned if CSAC/CDAC is
 	 * read before the DMA controller finished disabling the channel.
 	 */
-	if (!cpu_is_omap15xx() && offset == 0)
+	if (!cpu_is_omap15xx() && offset == 0) {
 		offset = p->dma_read(CDAC, lch);
+		/*
+		 * CDAC == 0 indicates that the DMA transfer on the channel has
+		 * not been started (no data has been transferred so far).
+		 * Return the programmed destination start address in this case.
+		 */
+		if (unlikely(!offset))
+			offset = p->dma_read(CDSA, lch);
+	}
 
 	if (cpu_class_is_omap1())
 		offset |= (p->dma_read(CDSA, lch) & 0xFFFF0000);
@@ -2119,7 +2140,7 @@ static int __devexit omap_system_dma_remove(struct platform_device *pdev)
 
 static struct platform_driver omap_system_dma_driver = {
 	.probe		= omap_system_dma_probe,
-	.remove		= omap_system_dma_remove,
+	.remove		= __devexit_p(omap_system_dma_remove),
 	.driver		= {
 		.name	= "omap_dma_system"
 	},

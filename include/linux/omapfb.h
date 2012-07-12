@@ -58,7 +58,6 @@
 #define OMAPFB_GET_VRAM_INFO	OMAP_IOR(61, struct omapfb_vram_info)
 #define OMAPFB_SET_TEARSYNC	OMAP_IOW(62, struct omapfb_tearsync_info)
 #define OMAPFB_GET_DISPLAY_INFO	OMAP_IOR(63, struct omapfb_display_info)
-#define OMAPFB_ENABLEVSYNC	OMAP_IOW(64, int)
 
 #define OMAPFB_CAPS_GENERIC_MASK	0x00000fff
 #define OMAPFB_CAPS_LCDC_MASK		0x00fff000
@@ -223,51 +222,11 @@ struct omapfb_display_info {
 
 #include <plat/board.h>
 
-#ifdef CONFIG_ARCH_OMAP1
-#define OMAPFB_PLANE_NUM		1
-#else
-#define OMAPFB_PLANE_NUM		3
-#endif
-
-struct omapfb_mem_region {
-	u32		paddr;
-	void __iomem	*vaddr;
-	unsigned long	size;
-	u8		type;		/* OMAPFB_PLANE_MEM_* */
-	enum omapfb_color_format format;/* OMAPFB_COLOR_* */
-	unsigned	format_used:1;	/* Must be set when format is set.
-					 * Needed b/c of the badly chosen 0
-					 * base for OMAPFB_COLOR_* values
-					 */
-	unsigned	alloc:1;	/* allocated by the driver */
-	unsigned	map:1;		/* kernel mapped by the driver */
-};
-
-struct omapfb_mem_desc {
-	int				region_cnt;
-	struct omapfb_mem_region	region[OMAPFB_PLANE_NUM];
-};
-
 struct omapfb_platform_data {
 	struct omap_lcd_config		lcd;
-	struct omapfb_mem_desc		mem_desc;
-	void				*ctrl_platform_data;
 };
 
-/* in arch/arm/plat-omap/fb.c */
-extern void omapfb_set_platform_data(struct omapfb_platform_data *data);
-extern void omapfb_set_ctrl_platform_data(void *pdata);
-extern void omapfb_reserve_sdram_memblock(void);
-
-/* helper methods that may be used by other modules */
-enum omap_color_mode;
-struct omap_video_timings;
-int omapfb_mode_to_dss_mode(struct fb_var_screeninfo *var,
-			enum omap_color_mode *mode);
-void omapfb_fb2dss_timings(struct fb_videomode *fb_timings,
-			struct omap_video_timings *dss_timings);
-void omapfb_dss2fb_timings(struct omap_video_timings *dss_timings,
-			struct fb_videomode *fb_timings);
+void __init omapfb_set_lcd_config(const struct omap_lcd_config *config);
 
 #endif
 

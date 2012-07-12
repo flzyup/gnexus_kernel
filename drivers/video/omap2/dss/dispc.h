@@ -35,7 +35,6 @@
 #define DISPC_GLOBAL_ALPHA		0x0074
 #define DISPC_CONTROL2			0x0238
 #define DISPC_CONFIG2			0x0620
-#define DISPC_GAMMA_TABLE		0x0630
 #define DISPC_DIVISOR			0x0804
 
 /* DISPC overlay registers */
@@ -97,6 +96,17 @@
 					DISPC_FIR_COEF_V2_OFFSET(n, i))
 #define DISPC_OVL_PRELOAD(n)		(DISPC_OVL_BASE(n) + \
 					DISPC_PRELOAD_OFFSET(n))
+
+/* DISPC up/downsampling FIR filter coefficient structure */
+struct dispc_coef {
+	s8 hc4_vc22;
+	s8 hc3_vc2;
+	u8 hc2_vc1;
+	s8 hc1_vc0;
+	s8 hc0_vc00;
+};
+
+const struct dispc_coef *dispc_ovl_get_scale_coef(int inc, int five_taps);
 
 /* DISPC manager/channel specific registers */
 static inline u16 DISPC_DEFAULT_COLOR(enum omap_channel channel)
@@ -175,8 +185,7 @@ static inline u16 DISPC_DIVISORo(enum omap_channel channel)
 	case OMAP_DSS_CHANNEL_LCD:
 		return 0x0070;
 	case OMAP_DSS_CHANNEL_DIGIT:
-		/* FIXME venc pclk? */
-		return 0x0070;
+		BUG();
 	case OMAP_DSS_CHANNEL_LCD2:
 		return 0x040C;
 	default:

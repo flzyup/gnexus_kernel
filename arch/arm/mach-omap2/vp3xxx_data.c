@@ -19,7 +19,7 @@
 #include <linux/err.h>
 #include <linux/init.h>
 
-#include <plat/common.h>
+#include "common.h"
 
 #include "prm-regbits-34xx.h"
 #include "voltage.h"
@@ -44,7 +44,6 @@ static const struct omap_vp_common omap3_vp_common = {
 	.vpconfig_initvdd = OMAP3430_INITVDD_MASK,
 	.vpconfig_forceupdate = OMAP3430_FORCEUPDATE_MASK,
 	.vpconfig_vpenable = OMAP3430_VPENABLE_MASK,
-	.vstatus_vpidle = OMAP3430_VPINIDLE_MASK,
 	.vstepmin_smpswaittimemin_shift = OMAP3430_SMPSWAITTIMEMIN_SHIFT,
 	.vstepmax_smpswaittimemax_shift = OMAP3430_SMPSWAITTIMEMAX_SHIFT,
 	.vstepmin_stepmin_shift = OMAP3430_VSTEPMIN_SHIFT,
@@ -58,7 +57,7 @@ static const struct omap_vp_common omap3_vp_common = {
 };
 
 struct omap_vp_instance omap3_vp_mpu = {
-	.id = OMAP3_PRM_IRQ_VDD_MPU_ID,
+	.id = OMAP3_VP_VDD_MPU_ID,
 	.common = &omap3_vp_common,
 	.vpconfig = OMAP3_PRM_VP1_CONFIG_OFFSET,
 	.vstepmin = OMAP3_PRM_VP1_VSTEPMIN_OFFSET,
@@ -69,7 +68,7 @@ struct omap_vp_instance omap3_vp_mpu = {
 };
 
 struct omap_vp_instance omap3_vp_core = {
-	.id = OMAP3_PRM_IRQ_VDD_CORE_ID,
+	.id = OMAP3_VP_VDD_CORE_ID,
 	.common = &omap3_vp_common,
 	.vpconfig = OMAP3_PRM_VP2_CONFIG_OFFSET,
 	.vstepmin = OMAP3_PRM_VP2_VSTEPMIN_OFFSET,

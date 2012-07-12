@@ -17,24 +17,24 @@
  */
 #include <linux/init.h>
 #include <linux/device.h>
-#include <linux/delay.h>
 #include <linux/smp.h>
-#include <linux/hrtimer.h>
 #include <linux/io.h>
 
 #include <asm/cacheflush.h>
 #include <asm/hardware/gic.h>
 #include <asm/smp_scu.h>
-#include <mach/hardware.h>
-#include <mach/omap4-common.h>
 
+#include <mach/hardware.h>
+#include <mach/omap-secure.h>
+
+#include "iomap.h"
+#include "common.h"
 #include "clockdomain.h"
 
 /* SCU base address */
 static void __iomem *scu_base;
 
 static DEFINE_SPINLOCK(boot_lock);
-
 
 void __iomem *omap4_get_scu_base(void)
 {
@@ -43,11 +43,17 @@ void __iomem *omap4_get_scu_base(void)
 
 void __cpuinit platform_secondary_init(unsigned int cpu)
 {
-	/* Enable NS access to SMP bit for this CPU on HS devices */
+	/*
+	 * Configure ACTRL and enable NS SMP bit access on CPU1 on HS device.
+	 * OMAP44XX EMU/HS devices - CPU0 SMP bit access is enabled in PPA
+	 * init and for CPU1, a secure PPA API provided. CPU0 must be ON
+	 * while executing NS_SMP API on CPU1 and PPA version must be 1.4.0+.
+	 * OMAP443X GP devices- SMP bit isn't accessible.
+	 * OMAP446X GP devices - SMP bit access is enabled on both CPUs.
+	 */
 	if (cpu_is_omap443x() && (omap_type() != OMAP2_DEVICE_TYPE_GP))
-		omap4_secure_dispatcher(PPA_SERVICE_DEFAULT_POR_NS_SMP,
-					FLAG_START_CRITICAL,
-					0, 0, 0, 0, 0);
+		omap_secure_dispatcher(OMAP4_PPA_CPU_ACTRL_SMP_INDEX,
+							4, 0, 0, 0, 0, 0);
 
 	/*
 	 * If any interrupts are already enabled for the primary
@@ -67,7 +73,6 @@ int __cpuinit boot_secondary(unsigned int cpu, struct task_struct *idle)
 {
 	static struct clockdomain *cpu1_clkdm;
 	static bool booted;
-
 	/*
 	 * Set synchronisation state between this boot processor
 	 * and the secondary one
@@ -92,48 +97,21 @@ int __cpuinit boot_secondary(unsigned int cpu, struct task_struct *idle)
 	 * from low power states. This is known limitation on OMAP4 and
 	 * needs to be worked around by using software forced clockdomain
 	 * wake-up. To wakeup CPU1, CPU0 forces the CPU1 clockdomain to
-	 * software force wakeup. After the wakeup, CPU1 restores its
-	 * clockdomain hardware supervised mode.
+	 * software force wakeup. The clockdomain is then put back to
+	 * hardware supervised mode.
 	 * More details can be found in OMAP4430 TRM - Version J
 	 * Section :
 	 *	4.3.4.2 Power States of CPU0 and CPU1
 	 */
 	if (booted) {
-		/*
-		 * GIC distributor control register has changed between
-		 * CortexA9 r1pX and r2pX. The Control Register secure
-		 * banked version is now composed of 2 bits:
-		 * bit 0 == Secure Enable
-		 * bit 1 == Non-Secure Enable
-		 * The Non-Secure banked register has not changed
-		 * Because the ROM Code is based on the r1pX GIC, the CPU1
-		 * GIC restoration will cause a problem to CPU0 Non-Secure SW.
-		 * The workaround must be:
-		 * 1) Before doing the CPU1 wakeup, CPU0 must disable
-		 * the GIC distributor
-		 * 2) CPU1 must re-enable the GIC distributor on
-		 * it's wakeup path.
-		 */
-		if (!cpu_is_omap443x()) {
-			local_irq_disable();
-			gic_dist_disable();
-		}
-
 		clkdm_wakeup(cpu1_clkdm);
-
-		if (!cpu_is_omap443x()) {
-			while (gic_dist_disabled()) {
-				udelay(1);
-				cpu_relax();
-			}
-			gic_timer_retrigger();
-			local_irq_enable();
-		}
-
+		clkdm_allow_idle(cpu1_clkdm);
 	} else {
 		dsb_sev();
 		booted = true;
 	}
+
+	gic_raise_softirq(cpumask_of(cpu), 1);
 
 	/*
 	 * Now the secondary core is starting up let it run its
@@ -171,19 +149,20 @@ void __init smp_init_cpus(void)
 {
 	unsigned int i, ncores;
 
-	/* Never released */
-	scu_base = ioremap(OMAP44XX_SCU_BASE, SZ_256);
+	/*
+	 * Currently we can't call ioremap here because
+	 * SoC detection won't work until after init_early.
+	 */
+	scu_base =  OMAP2_L4_IO_ADDRESS(OMAP44XX_SCU_BASE);
 	BUG_ON(!scu_base);
 
 	ncores = scu_get_core_count(scu_base);
 
 	/* sanity check */
-	if (ncores > NR_CPUS) {
-		printk(KERN_WARNING
-		       "OMAP4: no. of cores (%d) greater than configured "
-		       "maximum of %d - clipping\n",
-		       ncores, NR_CPUS);
-		ncores = NR_CPUS;
+	if (ncores > nr_cpu_ids) {
+		pr_warn("SMP: %u cores greater than maximum (%u), clipping\n",
+			ncores, nr_cpu_ids);
+		ncores = nr_cpu_ids;
 	}
 
 	for (i = 0; i < ncores; i++)
@@ -194,14 +173,6 @@ void __init smp_init_cpus(void)
 
 void __init platform_smp_prepare_cpus(unsigned int max_cpus)
 {
-	int i;
-
-	/*
-	 * Initialise the present map, which describes the set of CPUs
-	 * actually populated at the present time.
-	 */
-	for (i = 0; i < max_cpus; i++)
-		set_cpu_present(i, true);
 
 	/*
 	 * Initialise the SCU and wake up the secondary core using

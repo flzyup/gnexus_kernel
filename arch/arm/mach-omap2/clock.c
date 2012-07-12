@@ -32,22 +32,24 @@
 
 #include "clock.h"
 #include "cm2xxx_3xxx.h"
-#include "cm44xx.h"
 #include "cm-regbits-24xx.h"
 #include "cm-regbits-34xx.h"
 
-u8 cpu_mask;
+u16 cpu_mask;
+
+/*
+ * clkdm_control: if true, then when a clock is enabled in the
+ * hardware, its clockdomain will first be enabled; and when a clock
+ * is disabled in the hardware, its clockdomain will be disabled
+ * afterwards.
+ */
+static bool clkdm_control = true;
 
 /*
  * OMAP2+ specific clock functions
  */
 
 /* Private functions */
-
-static void _omap4_module_wait_ready(struct clk *clk)
-{
-	omap4_cm_wait_module_ready(clk->enable_reg);
-}
 
 /**
  * _omap2_module_wait_ready - wait for an OMAP module to leave IDLE
@@ -103,6 +105,19 @@ void omap2_init_clk_clkdm(struct clk *clk)
 		pr_debug("clock: could not associate clk %s to "
 			 "clkdm %s\n", clk->name, clk->clkdm_name);
 	}
+}
+
+/**
+ * omap2_clk_disable_clkdm_control - disable clkdm control on clk enable/disable
+ *
+ * Prevent the OMAP clock code from calling into the clockdomain code
+ * when a hardware clock in that clockdomain is enabled or disabled.
+ * Intended to be called at init time from omap*_clk_init().  No
+ * return value.
+ */
+void __init omap2_clk_disable_clkdm_control(void)
+{
+	clkdm_control = false;
 }
 
 /**
@@ -196,12 +211,8 @@ int omap2_dflt_clk_enable(struct clk *clk)
 	__raw_writel(v, clk->enable_reg);
 	v = __raw_readl(clk->enable_reg); /* OCP barrier */
 
-	if (clk->ops->find_idlest) {
-		if (cpu_is_omap44xx())
-			_omap4_module_wait_ready(clk);
-		else
-			_omap2_module_wait_ready(clk);
-	}
+	if (clk->ops->find_idlest)
+		_omap2_module_wait_ready(clk);
 
 	return 0;
 }
@@ -228,12 +239,6 @@ void omap2_dflt_clk_disable(struct clk *clk)
 	__raw_writel(v, clk->enable_reg);
 	/* No OCP barrier needed here since it is a disable operation */
 }
-
-const struct clkops clkops_omap4_dflt_wait = {
-	.enable		= omap2_dflt_clk_enable,
-	.disable	= omap2_dflt_clk_disable,
-	.find_idlest	= omap2_clk_dflt_find_idlest,
-};
 
 const struct clkops clkops_omap2_dflt_wait = {
 	.enable		= omap2_dflt_clk_enable,
@@ -284,7 +289,7 @@ void omap2_clk_disable(struct clk *clk)
 		clk->ops->disable(clk);
 	}
 
-	if (clk->clkdm)
+	if (clkdm_control && clk->clkdm)
 		clkdm_clk_disable(clk->clkdm, clk);
 
 	if (clk->parent)
@@ -324,7 +329,7 @@ int omap2_clk_enable(struct clk *clk)
 		}
 	}
 
-	if (clk->clkdm) {
+	if (clkdm_control && clk->clkdm) {
 		ret = clkdm_clk_enable(clk->clkdm, clk);
 		if (ret) {
 			WARN(1, "clock: %s: could not enable clockdomain %s: "
@@ -343,14 +348,10 @@ int omap2_clk_enable(struct clk *clk)
 		}
 	}
 
-	/* If clockdomain supports hardware control, enable it */
-	if (clk->clkdm)
-		clkdm_allow_idle(clk->clkdm);
-
 	return 0;
 
 oce_err3:
-	if (clk->clkdm)
+	if (clkdm_control && clk->clkdm)
 		clkdm_clk_disable(clk->clkdm, clk);
 oce_err2:
 	if (clk->parent)
@@ -473,6 +474,7 @@ int __init omap2_clk_switch_mpurate_at_boot(const char *mpurate_ck_name)
 	if (IS_ERR_VALUE(r)) {
 		WARN(1, "clock: %s: unable to set MPU rate to %d: %d\n",
 		     mpurate_ck->name, mpurate, r);
+		clk_put(mpurate_ck);
 		return -EINVAL;
 	}
 
@@ -534,10 +536,5 @@ struct clk_functions omap2_clk_functions = {
 	.clk_set_rate		= omap2_clk_set_rate,
 	.clk_set_parent		= omap2_clk_set_parent,
 	.clk_disable_unused	= omap2_clk_disable_unused,
-#ifdef CONFIG_CPU_FREQ
-	/* These will be removed when the OPP code is integrated */
-	.clk_init_cpufreq_table	= omap2_clk_init_cpufreq_table,
-	.clk_exit_cpufreq_table	= omap2_clk_exit_cpufreq_table,
-#endif
 };
 

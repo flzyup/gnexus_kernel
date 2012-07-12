@@ -28,7 +28,6 @@
 
 /*-------------------------------------------------------------------------*/
 #include <linux/usb/otg.h>
-#include <linux/gpio.h>
 
 #define	PORT_WAKE_BITS	(PORT_WKOC_E|PORT_WKDISC_E|PORT_WKCONN_E)
 
@@ -108,7 +107,7 @@ static void ehci_handover_companion_ports(struct ehci_hcd *ehci)
 	ehci->owned_ports = 0;
 }
 
-static int ehci_port_change(struct ehci_hcd *ehci)
+static int __maybe_unused ehci_port_change(struct ehci_hcd *ehci)
 {
 	int i = HCS_N_PORTS(ehci->hcs_params);
 
@@ -224,23 +223,16 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 	 * remote wakeup, we must fail the suspend.
 	 */
 	if (hcd->self.root_hub->do_remote_wakeup) {
-		port = HCS_N_PORTS(ehci->hcs_params);
-		while (port--) {
-			if (ehci->reset_done[port] != 0) {
-				spin_unlock_irq(&ehci->lock);
-				ehci_dbg(ehci, "suspend failed because "
-						"port %d is resuming\n",
-						port + 1);
-				return -EBUSY;
-			}
+		if (ehci->resuming_ports) {
+			spin_unlock_irq(&ehci->lock);
+			ehci_dbg(ehci, "suspend failed because a port is resuming\n");
+			return -EBUSY;
 		}
 	}
 
 	/* stop schedules, clean any completed work */
-	if (HC_IS_RUNNING(hcd->state)) {
+	if (ehci->rh_state == EHCI_RH_RUNNING)
 		ehci_quiesce (ehci);
-		hcd->state = HC_STATE_QUIESCING;
-	}
 	ehci->command = ehci_readl(ehci, &ehci->regs->command);
 	ehci_work(ehci);
 
@@ -314,7 +306,7 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 
 	/* turn off now-idle HC */
 	ehci_halt (ehci);
-	hcd->state = HC_STATE_SUSPENDED;
+	ehci->rh_state = EHCI_RH_SUSPENDED;
 
 	if (ehci->reclaim)
 		end_unlink_async(ehci);
@@ -383,6 +375,7 @@ static int ehci_bus_resume (struct usb_hcd *hcd)
 
 	/* restore CMD_RUN, framelist size, and irq threshold */
 	ehci_writel(ehci, ehci->command, &ehci->regs->command);
+	ehci->rh_state = EHCI_RH_RUNNING;
 
 	/* Some controller/firmware combinations need a delay during which
 	 * they set up the port statuses.  See Bugzilla #8190. */
@@ -452,7 +445,6 @@ static int ehci_bus_resume (struct usb_hcd *hcd)
 	}
 
 	ehci->next_statechange = jiffies + msecs_to_jiffies(5);
-	hcd->state = HC_STATE_RUNNING;
 
 	/* Now we can safely re-enable irqs */
 	ehci_writel(ehci, INTR_MASK, &ehci->regs->intr_enable);
@@ -470,29 +462,6 @@ static int ehci_bus_resume (struct usb_hcd *hcd)
 #endif	/* CONFIG_PM */
 
 /*-------------------------------------------------------------------------*/
-
-/* Display the ports dedicated to the companion controller */
-static ssize_t show_companion(struct device *dev,
-			      struct device_attribute *attr,
-			      char *buf)
-{
-	struct ehci_hcd		*ehci;
-	int			nports, index, n;
-	int			count = PAGE_SIZE;
-	char			*ptr = buf;
-
-	ehci = hcd_to_ehci(bus_to_hcd(dev_get_drvdata(dev)));
-	nports = HCS_N_PORTS(ehci->hcs_params);
-
-	for (index = 0; index < nports; ++index) {
-		if (test_bit(index, &ehci->companion_ports)) {
-			n = scnprintf(ptr, count, "%d\n", index + 1);
-			ptr += n;
-			count -= n;
-		}
-	}
-	return ptr - buf;
-}
 
 /*
  * Sets the owner of a port
@@ -528,58 +497,6 @@ static void set_owner(struct ehci_hcd *ehci, int portnum, int new_owner)
 	}
 }
 
-/*
- * Dedicate or undedicate a port to the companion controller.
- * Syntax is "[-]portnum", where a leading '-' sign means
- * return control of the port to the EHCI controller.
- */
-static ssize_t store_companion(struct device *dev,
-			       struct device_attribute *attr,
-			       const char *buf, size_t count)
-{
-	struct ehci_hcd		*ehci;
-	int			portnum, new_owner;
-
-	ehci = hcd_to_ehci(bus_to_hcd(dev_get_drvdata(dev)));
-	new_owner = PORT_OWNER;		/* Owned by companion */
-	if (sscanf(buf, "%d", &portnum) != 1)
-		return -EINVAL;
-	if (portnum < 0) {
-		portnum = - portnum;
-		new_owner = 0;		/* Owned by EHCI */
-	}
-	if (portnum <= 0 || portnum > HCS_N_PORTS(ehci->hcs_params))
-		return -ENOENT;
-	portnum--;
-	if (new_owner)
-		set_bit(portnum, &ehci->companion_ports);
-	else
-		clear_bit(portnum, &ehci->companion_ports);
-	set_owner(ehci, portnum, new_owner);
-	return count;
-}
-static DEVICE_ATTR(companion, 0644, show_companion, store_companion);
-
-static inline int create_companion_file(struct ehci_hcd *ehci)
-{
-	int	i = 0;
-
-	/* with integrated TT there is no companion! */
-	if (!ehci_is_TDI(ehci))
-		i = device_create_file(ehci_to_hcd(ehci)->self.controller,
-				       &dev_attr_companion);
-	return i;
-}
-
-static inline void remove_companion_file(struct ehci_hcd *ehci)
-{
-	/* with integrated TT there is no companion! */
-	if (!ehci_is_TDI(ehci))
-		device_remove_file(ehci_to_hcd(ehci)->self.controller,
-				   &dev_attr_companion);
-}
-
-
 /*-------------------------------------------------------------------------*/
 
 static int check_reset_complete (
@@ -599,13 +516,6 @@ static int check_reset_complete (
 			ehci_dbg (ehci,
 				"Failed to enable port %d on root hub TT\n",
 				index+1);
-			return port_status;
-		}
-
-		if (ehci->no_companion_port_handoff) {
-			/* on omap, we can't hand off companion port */
-			ehci_dbg(ehci, "port %d FS device detected - cannot handoff port\n",
-				index + 1);
 			return port_status;
 		}
 
@@ -639,15 +549,11 @@ static int
 ehci_hub_status_data (struct usb_hcd *hcd, char *buf)
 {
 	struct ehci_hcd	*ehci = hcd_to_ehci (hcd);
-	u32		temp, status = 0;
+	u32		temp, status;
 	u32		mask;
 	int		ports, i, retval = 1;
 	unsigned long	flags;
 	u32		ppcd = 0;
-
-	/* if !USB_SUSPEND, root hub timers won't get shut down ... */
-	if (!HC_IS_RUNNING(hcd->state))
-		return 0;
 
 	/* init status to no-changes */
 	buf [0] = 0;
@@ -656,6 +562,11 @@ ehci_hub_status_data (struct usb_hcd *hcd, char *buf)
 		buf [1] = 0;
 		retval++;
 	}
+
+	/* Inform the core about resumes-in-progress by returning
+	 * a non-zero value even if there are no status changes.
+	 */
+	status = ehci->resuming_ports;
 
 	/* Some boards (mostly VIA?) report bogus overcurrent indications,
 	 * causing massive log spam unless we completely ignore them.  It
@@ -743,106 +654,6 @@ ehci_hub_descriptor (
 
 /*-------------------------------------------------------------------------*/
 
-int omap_ehci_ulpi_write(const struct usb_hcd *hcd, u8 val, u8 reg, u8 retry_times);
-#define CM_L3INIT_HSUSBHOST_CLKCTRL	(0x4A009358)
-#define L3INIT_HSUSBHOST_CLKCTRL	(0x4A009358)
-#define OMAP_UHH_SYSCONFIG		(0x4a064010)
-#define OMAP_UHH_SYSSTATUS		(0x4a064014)
-#define OMAP_UHH_HOSTCONFIG		(0x4a064040)
-
-void uhh_omap_reset_link(struct ehci_hcd *ehci)
-{
-	u32 usbcmd_backup;
-	u32 usbintr_backup;
-	u32 asynclistaddr_backup, periodiclistbase_backup;
-	u32 portsc0_backup;
-	u32 uhh_sysconfig_backup, uhh_hostconfig_backup;
-	u32 temp_reg;
-	u8 count;
-	u16 orig_val, val;
-
-	/* switch to internal 60Mhz clock */
-	temp_reg = omap_readl(L3INIT_HSUSBHOST_CLKCTRL);
-	temp_reg |= 1 << 8;
-	temp_reg &= ~(1 << 24);
-	omap_writel(temp_reg, L3INIT_HSUSBHOST_CLKCTRL);
-
-	/* Backup current registers of EHCI */
-	usbcmd_backup = ehci_readl(ehci, &ehci->regs->command);
-	ehci_writel(ehci,
-		usbcmd_backup & ~(CMD_IAAD | CMD_ASE | CMD_PSE | CMD_RUN),
-		&ehci->regs->command);
-	mdelay(3);
-	/* check controller stopped */
-	handshake(ehci, &ehci->regs->status, STS_HALT, 1, 150);
-	asynclistaddr_backup = ehci_readl(ehci, &ehci->regs->async_next);
-	periodiclistbase_backup = ehci_readl(ehci, &ehci->regs->frame_list);
-	portsc0_backup = ehci_readl(ehci, &ehci->regs->port_status[0]);
-	usbintr_backup = ehci_readl(ehci, &ehci->regs->intr_enable);
-	uhh_sysconfig_backup = omap_readl(OMAP_UHH_SYSCONFIG);
-	uhh_hostconfig_backup = omap_readl(OMAP_UHH_HOSTCONFIG);
-
-	/* Soft reset EHCI controller */
-	omap_writel(omap_readl(OMAP_UHH_SYSCONFIG) | (1<<0),
-				OMAP_UHH_SYSCONFIG);
-	/* wait for reset done */
-	count = 10;
-	while ((omap_readl(OMAP_UHH_SYSCONFIG) & (1<<0)) && count--)
-		mdelay(1);
-	if (!count)
-		pr_err("ehci:link_reset: soft-reset fail\n");
-
-	/* PHY reset via RESETB pin */
-	gpio_set_value(159, 0);
-	mdelay(2);
-	gpio_set_value(159, 1);
-	mdelay(2);
-
-	/* switch back to external 60Mhz clock */
-	temp_reg &= ~(1 << 8);
-	temp_reg |= 1 << 24;
-	omap_writel(temp_reg, L3INIT_HSUSBHOST_CLKCTRL);
-	mdelay(5);
-
-	/*soft reset ehci registers */
-	ehci_writel(ehci, (1<<1), &ehci->regs->command);
-	count = 10;
-	while ((ehci_readl(ehci, &ehci->regs->command) & (1<<1)) && count--)
-		mdelay(1);
-	if (!count)
-		pr_err("ehci:link_reset: soft-reset fail\n");
-
-	/* Restore registers after reset */
-	omap_writel(uhh_sysconfig_backup, OMAP_UHH_SYSCONFIG);
-	omap_writel(uhh_hostconfig_backup, OMAP_UHH_HOSTCONFIG);
-	ehci_writel(ehci, periodiclistbase_backup, &ehci->regs->frame_list);
-	ehci_writel(ehci, asynclistaddr_backup, &ehci->regs->async_next);
-	ehci_writel(ehci, FLAG_CF, &ehci->regs->configured_flag);
-	ehci_writel(ehci, 0, &ehci->regs->intr_enable);
-	ehci_writel(ehci, usbcmd_backup, &ehci->regs->command);
-	mdelay(2);
-	ehci_writel(ehci, PORT_POWER, &ehci->regs->port_status[0]);
-
-	/* Put PHY in good default state */
-	if (omap_ehci_ulpi_write(ehci_to_hcd(ehci), 0x20, 0x5, 20) < 0) {
-		/* Toggle STP line */
-		orig_val = val = omap_readw(0x4A1000C4);
-		val |= 0x1F;
-		omap_writew(val, 0x4A1000C4);
-		mdelay(3);
-		omap_writew(orig_val, 0x4A1000C4);
-		omap_ehci_ulpi_write(ehci_to_hcd(ehci), 0x20, 0x5, 20);
-	}
-
-	omap_ehci_ulpi_write(ehci_to_hcd(ehci), 0x41, 0x4, 20);
-	omap_ehci_ulpi_write(ehci_to_hcd(ehci), 0x18, 0x7, 20);
-	omap_ehci_ulpi_write(ehci_to_hcd(ehci), 0x66, 0xA, 20);
-	omap_ehci_ulpi_write(ehci_to_hcd(ehci), 0x45, 0x4, 20);
-
-	handshake(ehci, &ehci->regs->port_status[0], PORT_CONNECT, 1, 2000);
-	ehci_writel(ehci, usbintr_backup, &ehci->regs->intr_enable);
-}
-
 static int ehci_hub_control (
 	struct usb_hcd	*hcd,
 	u16		typeReq,
@@ -912,7 +723,7 @@ static int ehci_hub_control (
 #ifdef CONFIG_USB_OTG
 			if ((hcd->self.otg_port == (wIndex + 1))
 			    && hcd->self.b_hnp_enable) {
-				otg_start_hnp(ehci->transceiver);
+				otg_start_hnp(ehci->transceiver->otg);
 				break;
 			}
 #endif
@@ -1022,7 +833,6 @@ static int ehci_hub_control (
 			/* resume completed? */
 			else if (time_after_eq(jiffies,
 					ehci->reset_done[wIndex])) {
-
 				clear_bit(wIndex, &ehci->suspended_ports);
 				set_bit(wIndex, &ehci->port_c_suspend);
 				ehci->reset_done[wIndex] = 0;
@@ -1032,26 +842,15 @@ static int ehci_hub_control (
 				ehci_writel(ehci,
 					temp & ~(PORT_RWC_BITS | PORT_RESUME),
 					status_reg);
+				clear_bit(wIndex, &ehci->resuming_ports);
 				retval = handshake(ehci, status_reg,
 					   PORT_RESUME, 0, 2000 /* 2msec */);
 				if (retval != 0) {
 					ehci_err(ehci,
 						"port %d resume error %d\n",
 						wIndex + 1, retval);
-
-						if (ehci->has_smsc_ulpi_bug)
-							ehci->resume_error_flag = 1;
-
-						uhh_omap_reset_link(ehci);
-						goto error;
+					goto error;
 				}
-
-				/* restore registers value to its original state*/
-				if (ehci->resume_error_flag) {
-					omap_ehci_ulpi_write(hcd, 0x00, 0x32, 20);
-					omap_ehci_ulpi_write(hcd, 0x04, 0x39, 20);
-				}
-
 				temp &= ~(PORT_SUSPEND|PORT_RESUME|(3<<10));
 			}
 		}
@@ -1062,6 +861,7 @@ static int ehci_hub_control (
 					ehci->reset_done[wIndex])) {
 			status |= USB_PORT_STAT_C_RESET << 16;
 			ehci->reset_done [wIndex] = 0;
+			clear_bit(wIndex, &ehci->resuming_ports);
 
 			/* force reset to complete */
 			ehci_writel(ehci, temp & ~(PORT_RWC_BITS | PORT_RESET),
@@ -1082,8 +882,10 @@ static int ehci_hub_control (
 					ehci_readl(ehci, status_reg));
 		}
 
-		if (!(temp & (PORT_RESUME|PORT_RESET)))
+		if (!(temp & (PORT_RESUME|PORT_RESET))) {
 			ehci->reset_done[wIndex] = 0;
+			clear_bit(wIndex, &ehci->resuming_ports);
+		}
 
 		/* transfer dedicated ports to the companion hc */
 		if ((temp & PORT_CONNECT) &&
@@ -1118,6 +920,7 @@ static int ehci_hub_control (
 			status |= USB_PORT_STAT_SUSPEND;
 		} else if (test_bit(wIndex, &ehci->suspended_ports)) {
 			clear_bit(wIndex, &ehci->suspended_ports);
+			clear_bit(wIndex, &ehci->resuming_ports);
 			ehci->reset_done[wIndex] = 0;
 			if (temp & PORT_PE)
 				set_bit(wIndex, &ehci->port_c_suspend);
@@ -1176,16 +979,6 @@ static int ehci_hub_control (
 					|| (temp & PORT_RESET) != 0)
 				goto error;
 
-			/*
-			* Special workaround for resume error
-			*  - Write 04h to register 32h : inserts a 2uA source current on DP
-			*  - Write 14h to register 39h : enables 125kohm pull up resistors on DP
-			*/
-			if (ehci->resume_error_flag) {
-				omap_ehci_ulpi_write(hcd, 0x04, 0x32, 20);
-				omap_ehci_ulpi_write(hcd, 0x14, 0x39, 20);
-			}
-
 			/* After above check the port must be connected.
 			 * Set appropriate bit thus could put phy into low power
 			 * mode if we have hostpc feature
@@ -1193,31 +986,6 @@ static int ehci_hub_control (
 			temp &= ~PORT_WKCONN_E;
 			temp |= PORT_WKDISC_E | PORT_WKOC_E;
 			ehci_writel(ehci, temp | PORT_SUSPEND, status_reg);
-
-			/*
-			 * Special workaround sequence:
-			 * - Set suspend bit
-			 * - Wait 4ms for suspend to take effect
-			 *   - alternatively read the line state
-			 *     in PORTSC
-			 * - switch to internal 60 MHz clock
-			 * - wait 1ms
-			 * - switch back to external clock
-			 */
-			{
-				u32 temp_reg;
-				mdelay(4);
-				temp_reg = omap_readl(L3INIT_HSUSBHOST_CLKCTRL);
-				temp_reg |= 1 << 8;
-				temp_reg &= ~(1 << 24);
-				omap_writel(temp_reg, L3INIT_HSUSBHOST_CLKCTRL);
-
-				mdelay(1);
-				temp_reg &= ~(1 << 8);
-				temp_reg |= 1 << 24;
-				omap_writel(temp_reg, L3INIT_HSUSBHOST_CLKCTRL);
-			}
-
 			if (hostpc_reg) {
 				spin_unlock_irqrestore(&ehci->lock, flags);
 				msleep(5);/* 5ms for HCD enter low pwr mode */
@@ -1309,7 +1077,8 @@ error_exit:
 	return retval;
 }
 
-static void ehci_relinquish_port(struct usb_hcd *hcd, int portnum)
+static void __maybe_unused ehci_relinquish_port(struct usb_hcd *hcd,
+		int portnum)
 {
 	struct ehci_hcd		*ehci = hcd_to_ehci(hcd);
 
@@ -1318,7 +1087,8 @@ static void ehci_relinquish_port(struct usb_hcd *hcd, int portnum)
 	set_owner(ehci, --portnum, PORT_OWNER);
 }
 
-static int ehci_port_handed_over(struct usb_hcd *hcd, int portnum)
+static int __maybe_unused ehci_port_handed_over(struct usb_hcd *hcd,
+		int portnum)
 {
 	struct ehci_hcd		*ehci = hcd_to_ehci(hcd);
 	u32 __iomem		*reg;

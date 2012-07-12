@@ -36,7 +36,6 @@
 #define MMU_READ_CAM		0x68
 #define MMU_READ_RAM		0x6c
 #define MMU_EMU_FAULT_AD	0x70
-#define MMU_GP_REG			0x88
 
 #define MMU_REG_SIZE		256
 
@@ -84,12 +83,12 @@
 /*
  * register accessors
  */
-static inline u32 iommu_read_reg(struct iommu *obj, size_t offs)
+static inline u32 iommu_read_reg(struct omap_iommu *obj, size_t offs)
 {
 	return __raw_readl(obj->regbase + offs);
 }
 
-static inline void iommu_write_reg(struct iommu *obj, u32 val, size_t offs)
+static inline void iommu_write_reg(struct omap_iommu *obj, u32 val, size_t offs)
 {
 	__raw_writel(val, obj->regbase + offs);
 }

@@ -19,9 +19,6 @@
 
 #include <linux/types.h>
 #include <linux/list.h>
-#include <linux/plist.h>
-#include <linux/mutex.h>
-#include <linux/spinlock.h>
 
 #include <linux/atomic.h>
 
@@ -48,18 +45,6 @@
 #define PWRSTS_RET_ON		(PWRSTS_RET | PWRSTS_ON)
 #define PWRSTS_OFF_RET_ON	(PWRSTS_OFF_RET | PWRSTS_ON)
 
-#define PWRSTS_RET_INA_ON	((1 << PWRDM_POWER_RET) | \
-				 (1 << PWRDM_POWER_INACTIVE)  | \
-				 (1 << PWRDM_POWER_ON))
-
-#define PWRSTS_OFF_INA_ON	((1 << PWRDM_POWER_OFF) | \
-				 (1 << PWRDM_POWER_INACTIVE)  | \
-				 (1 << PWRDM_POWER_ON))
-
-#define PWRSTS_OFF_RET_INA_ON	((1 << PWRDM_POWER_OFF) | \
-				 (1 << PWRDM_POWER_RET) | \
-				 (1 << PWRDM_POWER_INACTIVE)  | \
-				 (1 << PWRDM_POWER_ON))
 
 /* Powerdomain flags */
 #define PWRDM_HAS_HDWR_SAR	(1 << 0) /* hardware save-and-restore support */
@@ -89,34 +74,13 @@
 /* XXX A completely arbitrary number. What is reasonable here? */
 #define PWRDM_TRANSITION_BAILOUT 100000
 
-/* Powerdomain functional power states */
-#define PWRDM_FUNC_PWRST_OFF	0x0
-#define PWRDM_FUNC_PWRST_OSWR	0x1
-#define PWRDM_FUNC_PWRST_CSWR	0x2
-#define PWRDM_FUNC_PWRST_ON	0x3
-
-#define PWRDM_MAX_FUNC_PWRSTS	4
-
-#define UNSUP_STATE -1
-
 struct clockdomain;
 struct powerdomain;
-
-struct powerdomain_count_stats {
-	unsigned state[PWRDM_MAX_PWRSTS];
-	unsigned ret_logic_off;
-	unsigned ret_mem_off[PWRDM_MAX_MEM_BANKS];
-};
-
-struct powerdomain_time_stats {
-	s64 state[PWRDM_MAX_PWRSTS];
-};
 
 /**
  * struct powerdomain - OMAP powerdomain
  * @name: Powerdomain name
  * @voltdm: voltagedomain containing this powerdomain
- * @omap_chip: represents the OMAP chip types containing this pwrdm
  * @prcm_offs: the address offset from CM_BASE/PRM_BASE
  * @prcm_partition: (OMAP4 only) the PRCM partition ID containing @prcm_offs
  * @pwrsts: Possible powerdomain power states
@@ -132,10 +96,8 @@ struct powerdomain_time_stats {
  * @state_counter:
  * @timer:
  * @state_timer:
- * @wakeup_lat: Wakeup latencies for possible powerdomain power states
- * @wakeuplat_lock: spinlock for plist
- * @wakeuplat_dev_list: plist_head linking all devices placing constraint
- * @wa * @prcm_partition possible values are defined in mach-omap2/prcm44xx.h.
+ *
+ * @prcm_partition possible values are defined in mach-omap2/prcm44xx.h.
  */
 struct powerdomain {
 	const char *name;
@@ -143,7 +105,6 @@ struct powerdomain {
 		const char *name;
 		struct voltagedomain *ptr;
 	} voltdm;
-	const struct omap_chip_id omap_chip;
 	const s16 prcm_offs;
 	const u8 pwrsts;
 	const u8 pwrsts_logic_ret;
@@ -156,25 +117,14 @@ struct powerdomain {
 	struct list_head node;
 	struct list_head voltdm_node;
 	int state;
-
-	struct powerdomain_count_stats count;
-	struct powerdomain_count_stats last_count;
+	unsigned state_counter[PWRDM_MAX_PWRSTS];
+	unsigned ret_logic_off_counter;
+	unsigned ret_mem_off_counter[PWRDM_MAX_MEM_BANKS];
 
 #ifdef CONFIG_PM_DEBUG
 	s64 timer;
-	struct powerdomain_time_stats time;
-	struct powerdomain_time_stats last_time;
+	s64 state_timer[PWRDM_MAX_PWRSTS];
 #endif
-	const u32 wakeup_lat[PWRDM_MAX_FUNC_PWRSTS];
-	spinlock_t wakeuplat_lock;
-	struct plist_head wakeuplat_dev_list;
-	struct mutex wakeuplat_mutex;
-};
-
-struct wakeuplat_dev_list {
-	struct device *dev;
-	unsigned long constraint_us;
-	struct plist_node node;
 };
 
 /**
@@ -219,7 +169,9 @@ struct pwrdm_ops {
 	int	(*pwrdm_wait_transition)(struct powerdomain *pwrdm);
 };
 
-void pwrdm_init(struct powerdomain **pwrdm_list, struct pwrdm_ops *custom_funcs);
+int pwrdm_register_platform_funcs(struct pwrdm_ops *custom_funcs);
+int pwrdm_register_pwrdms(struct powerdomain **pwrdm_list);
+int pwrdm_complete_init(void);
 
 struct powerdomain *pwrdm_lookup(const char *name);
 
@@ -268,7 +220,8 @@ int pwrdm_set_lowpwrstchange(struct powerdomain *pwrdm);
 int pwrdm_get_context_loss_count(struct powerdomain *pwrdm);
 bool pwrdm_can_ever_lose_context(struct powerdomain *pwrdm);
 
-extern void omap2xxx_powerdomains_init(void);
+extern void omap242x_powerdomains_init(void);
+extern void omap243x_powerdomains_init(void);
 extern void omap3xxx_powerdomains_init(void);
 extern void omap44xx_powerdomains_init(void);
 
@@ -284,10 +237,5 @@ extern u32 omap2_pwrdm_get_mem_bank_stst_mask(u8 bank);
 extern struct powerdomain wkup_omap2_pwrdm;
 extern struct powerdomain gfx_omap2_pwrdm;
 
-int pwrdm_wakeuplat_set_constraint(struct powerdomain *pwrdm,
-				   struct device *dev, unsigned long t);
-int pwrdm_wakeuplat_release_constraint(struct powerdomain *pwrdm,
-				       struct device *dev);
-int pwrdm_wakeuplat_update_pwrst(struct powerdomain *pwrdm);
 
 #endif

@@ -19,7 +19,6 @@
 #include <linux/stringify.h>
 
 #include <plat/iommu.h>
-#include <plat/omap_device.h>
 
 /*
  * omap2 architecture specific register bit definitions
@@ -67,7 +66,7 @@
 	 ((pgsz) == MMU_CAM_PGSZ_4K)  ? 0xfffff000 : 0)
 
 
-static void __iommu_set_twl(struct iommu *obj, bool on)
+static void __iommu_set_twl(struct omap_iommu *obj, bool on)
 {
 	u32 l = iommu_read_reg(obj, MMU_CNTL);
 
@@ -85,25 +84,18 @@ static void __iommu_set_twl(struct iommu *obj, bool on)
 	iommu_write_reg(obj, l, MMU_CNTL);
 }
 
-static int omap2_iommu_enable(struct iommu *obj)
+
+static int omap2_iommu_enable(struct omap_iommu *obj)
 {
 	u32 l, pa;
 	unsigned long timeout;
-	int ret = 0;
 
-	if (!obj->secure_mode) {
-		if (!obj->iopgd || !IS_ALIGNED((u32)obj->iopgd,  SZ_16K))
-			return -EINVAL;
+	if (!obj->iopgd || !IS_ALIGNED((u32)obj->iopgd,  SZ_16K))
+		return -EINVAL;
 
-		pa = virt_to_phys(obj->iopgd);
-		if (!IS_ALIGNED(pa, SZ_16K))
-			return -EINVAL;
-	} else
-		pa = (u32)obj->secure_ttb;
-
-	ret = omap_device_enable(obj->pdev);
-	if (ret)
-		return ret;
+	pa = virt_to_phys(obj->iopgd);
+	if (!IS_ALIGNED(pa, SZ_16K))
+		return -EINVAL;
 
 	iommu_write_reg(obj, MMU_SYS_SOFTRESET, MMU_SYSCONFIG);
 
@@ -132,16 +124,11 @@ static int omap2_iommu_enable(struct iommu *obj)
 
 	__iommu_set_twl(obj, true);
 
-	if (cpu_is_omap44xx())
-		iommu_write_reg(obj, 0x1, MMU_GP_REG);
-
 	return 0;
 }
 
-static void omap2_iommu_disable(struct iommu *obj)
+static void omap2_iommu_disable(struct omap_iommu *obj)
 {
-	int ret = 0;
-
 	u32 l = iommu_read_reg(obj, MMU_CNTL);
 
 	l &= ~MMU_CNTL_MASK;
@@ -149,16 +136,14 @@ static void omap2_iommu_disable(struct iommu *obj)
 	iommu_write_reg(obj, MMU_SYS_IDLE_FORCE, MMU_SYSCONFIG);
 
 	dev_dbg(obj->dev, "%s is shutting down\n", obj->name);
-	if (omap_device_shutdown(obj->pdev))
-		dev_err(obj->dev, "%s err 0x%x\n", __func__, ret);
 }
 
-static void omap2_iommu_set_twl(struct iommu *obj, bool on)
+static void omap2_iommu_set_twl(struct omap_iommu *obj, bool on)
 {
 	__iommu_set_twl(obj, false);
 }
 
-static u32 omap2_iommu_fault_isr(struct iommu *obj, u32 *ra)
+static u32 omap2_iommu_fault_isr(struct omap_iommu *obj, u32 *ra)
 {
 	u32 stat, da;
 	u32 errs = 0;
@@ -183,17 +168,18 @@ static u32 omap2_iommu_fault_isr(struct iommu *obj, u32 *ra)
 		errs |= OMAP_IOMMU_ERR_TBLWALK_FAULT;
 	if (stat & MMU_IRQ_MULTIHITFAULT)
 		errs |= OMAP_IOMMU_ERR_MULTIHIT_FAULT;
+	iommu_write_reg(obj, stat, MMU_IRQSTATUS);
 
 	return errs;
 }
 
-static void omap2_tlb_read_cr(struct iommu *obj, struct cr_regs *cr)
+static void omap2_tlb_read_cr(struct omap_iommu *obj, struct cr_regs *cr)
 {
 	cr->cam = iommu_read_reg(obj, MMU_READ_CAM);
 	cr->ram = iommu_read_reg(obj, MMU_READ_RAM);
 }
 
-static void omap2_tlb_load_cr(struct iommu *obj, struct cr_regs *cr)
+static void omap2_tlb_load_cr(struct omap_iommu *obj, struct cr_regs *cr)
 {
 	iommu_write_reg(obj, cr->cam | MMU_CAM_V, MMU_CAM);
 	iommu_write_reg(obj, cr->ram, MMU_RAM);
@@ -207,7 +193,8 @@ static u32 omap2_cr_to_virt(struct cr_regs *cr)
 	return cr->cam & mask;
 }
 
-static struct cr_regs *omap2_alloc_cr(struct iommu *obj, struct iotlb_entry *e)
+static struct cr_regs *omap2_alloc_cr(struct omap_iommu *obj,
+						struct iotlb_entry *e)
 {
 	struct cr_regs *cr;
 
@@ -241,11 +228,11 @@ static u32 omap2_get_pte_attr(struct iotlb_entry *e)
 	attr |= e->elsz >> 3;
 	attr <<= (((e->pgsz == MMU_CAM_PGSZ_4K) ||
 			(e->pgsz == MMU_CAM_PGSZ_64K)) ? 0 : 6);
-
 	return attr;
 }
 
-static ssize_t omap2_dump_cr(struct iommu *obj, struct cr_regs *cr, char *buf)
+static ssize_t
+omap2_dump_cr(struct omap_iommu *obj, struct cr_regs *cr, char *buf)
 {
 	char *p = buf;
 
@@ -269,7 +256,8 @@ static ssize_t omap2_dump_cr(struct iommu *obj, struct cr_regs *cr, char *buf)
 			goto out;					\
 	} while (0)
 
-static ssize_t omap2_iommu_dump_ctx(struct iommu *obj, char *buf, ssize_t len)
+static ssize_t
+omap2_iommu_dump_ctx(struct omap_iommu *obj, char *buf, ssize_t len)
 {
 	char *p = buf;
 
@@ -295,7 +283,7 @@ out:
 	return p - buf;
 }
 
-static void omap2_iommu_save_ctx(struct iommu *obj)
+static void omap2_iommu_save_ctx(struct omap_iommu *obj)
 {
 	int i;
 	u32 *p = obj->ctx;
@@ -308,7 +296,7 @@ static void omap2_iommu_save_ctx(struct iommu *obj)
 	BUG_ON(p[0] != IOMMU_ARCH_VERSION);
 }
 
-static void omap2_iommu_restore_ctx(struct iommu *obj)
+static void omap2_iommu_restore_ctx(struct omap_iommu *obj)
 {
 	int i;
 	u32 *p = obj->ctx;
@@ -358,13 +346,13 @@ static const struct iommu_functions omap2_iommu_ops = {
 
 static int __init omap2_iommu_init(void)
 {
-	return install_iommu_arch(&omap2_iommu_ops);
+	return omap_install_iommu_arch(&omap2_iommu_ops);
 }
 module_init(omap2_iommu_init);
 
 static void __exit omap2_iommu_exit(void)
 {
-	uninstall_iommu_arch(&omap2_iommu_ops);
+	omap_uninstall_iommu_arch(&omap2_iommu_ops);
 }
 module_exit(omap2_iommu_exit);
 

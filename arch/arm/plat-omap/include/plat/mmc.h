@@ -15,7 +15,6 @@
 #include <linux/device.h>
 #include <linux/mmc/host.h>
 
-#include <asm/mach/mmc.h>
 #include <plat/board.h>
 
 #define OMAP15XX_NR_MMC		1
@@ -32,7 +31,24 @@
 
 #define OMAP_MMC_MAX_SLOTS	2
 
-#define OMAP_HSMMC_SUPPORTS_DUAL_VOLT	BIT(1)
+/*
+ * struct omap_mmc_dev_attr.flags possibilities
+ *
+ * OMAP_HSMMC_SUPPORTS_DUAL_VOLT: Some HSMMC controller instances can
+ *    operate with either 1.8Vdc or 3.0Vdc card voltages; this flag
+ *    should be set if this is the case.  See for example Section 22.5.3
+ *    "MMC/SD/SDIO1 Bus Voltage Selection" of the OMAP34xx Multimedia
+ *    Device Silicon Revision 3.1.x Revision ZR (July 2011) (SWPU223R).
+ *
+ * OMAP_HSMMC_BROKEN_MULTIBLOCK_READ: Multiple-block read transfers
+ *    don't work correctly on some MMC controller instances on some
+ *    OMAP3 SoCs; this flag should be set if this is the case.  See
+ *    for example Advisory 2.1.1.128 "MMC: Multiple Block Read
+ *    Operation Issue" in _OMAP3530/3525/3515/3503 Silicon Errata_
+ *    Revision F (October 2010) (SPRZ278F).
+ */
+#define OMAP_HSMMC_SUPPORTS_DUAL_VOLT		BIT(0)
+#define OMAP_HSMMC_BROKEN_MULTIBLOCK_READ	BIT(1)
 
 struct omap_mmc_dev_attr {
 	u8 flags;
@@ -61,6 +77,9 @@ struct omap_mmc_platform_data {
 	int (*suspend)(struct device *dev, int slot);
 	int (*resume)(struct device *dev, int slot);
 
+	/* Return context loss count due to PM states changing */
+	int (*get_context_loss_count)(struct device *dev);
+
 	u64 dma_mask;
 
 	/* Integrating attributes from the omap_hwmod layer */
@@ -77,6 +96,7 @@ struct omap_mmc_platform_data {
 		 */
 		u8  wires;	/* Used for the MMC driver on omap1 and 2420 */
 		u32 caps;	/* Used for the MMC driver on 2430 and later */
+		u32 pm_caps;	/* PM capabilities of the mmc */
 
 		/*
 		 * nomux means "standard" muxing is wrong on this board, and
@@ -106,9 +126,8 @@ struct omap_mmc_platform_data {
 		unsigned vcc_aux_disable_is_sleep:1;
 
 		/* we can put the features above into this variable */
-#define HSMMC_HAS_PBIAS			(1 << 0)
-#define HSMMC_HAS_UPDATED_RESET		(1 << 1)
-#define HSMMC_HAS_48MHZ_MASTER_CLK	(1 << 2)
+#define HSMMC_HAS_PBIAS		(1 << 0)
+#define HSMMC_HAS_UPDATED_RESET	(1 << 1)
 		unsigned features;
 
 		int switch_pin;			/* gpio (card detect) */
@@ -118,8 +137,6 @@ struct omap_mmc_platform_data {
 		int (*set_power)(struct device *dev, int slot,
 				 int power_on, int vdd);
 		int (*get_ro)(struct device *dev, int slot);
-		int (*set_sleep)(struct device *dev, int slot, int sleep,
-				 int vdd, int cardsleep);
 		void (*remux)(struct device *dev, int slot, int power_on);
 		/* Call back before enabling / disabling regulators */
 		void (*before_set_reg)(struct device *dev, int slot,
@@ -144,9 +161,6 @@ struct omap_mmc_platform_data {
 		/* Card detection IRQs */
 		int card_detect_irq;
 		int (*card_detect)(struct device *dev, int slot);
-
-		/* Additional mmc configuration */
-		struct mmc_platform_data mmc_data;
 
 		unsigned int ban_openended:1;
 

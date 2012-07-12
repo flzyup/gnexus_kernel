@@ -19,25 +19,17 @@
 #include <linux/err.h>
 #include <linux/init.h>
 
-#include <plat/common.h>
+#include "common.h"
 
-#include "pm.h"
 #include "prm44xx.h"
 #include "prm-regbits-44xx.h"
 #include "voltage.h"
 
 #include "vp.h"
 
-/* OMAP4 is hooked such that only a cold reset will reset VP */
-static void omap4_vp_recover(u8 vp_id)
-{
-	omap4_pm_cold_reset("Voltage Processor Recovery");
-}
-
 static const struct omap_vp_ops omap4_vp_ops = {
 	.check_txdone = omap4_prm_vp_check_txdone,
 	.clear_txdone = omap4_prm_vp_clear_txdone,
-	.recover = omap4_vp_recover,
 };
 
 /*
@@ -52,7 +44,6 @@ static const struct omap_vp_common omap4_vp_common = {
 	.vpconfig_initvdd = OMAP4430_INITVDD_MASK,
 	.vpconfig_forceupdate = OMAP4430_FORCEUPDATE_MASK,
 	.vpconfig_vpenable = OMAP4430_VPENABLE_MASK,
-	.vstatus_vpidle = OMAP4430_VPINIDLE_MASK,
 	.vstepmin_smpswaittimemin_shift = OMAP4430_SMPSWAITTIMEMIN_SHIFT,
 	.vstepmax_smpswaittimemax_shift = OMAP4430_SMPSWAITTIMEMAX_SHIFT,
 	.vstepmin_stepmin_shift = OMAP4430_VSTEPMIN_SHIFT,
@@ -65,7 +56,7 @@ static const struct omap_vp_common omap4_vp_common = {
 };
 
 struct omap_vp_instance omap4_vp_mpu = {
-	.id = OMAP4_PRM_IRQ_VDD_MPU_ID,
+	.id = OMAP4_VP_VDD_MPU_ID,
 	.common = &omap4_vp_common,
 	.vpconfig = OMAP4_PRM_VP_MPU_CONFIG_OFFSET,
 	.vstepmin = OMAP4_PRM_VP_MPU_VSTEPMIN_OFFSET,
@@ -76,7 +67,7 @@ struct omap_vp_instance omap4_vp_mpu = {
 };
 
 struct omap_vp_instance omap4_vp_iva = {
-	.id = OMAP4_PRM_IRQ_VDD_IVA_ID,
+	.id = OMAP4_VP_VDD_IVA_ID,
 	.common = &omap4_vp_common,
 	.vpconfig = OMAP4_PRM_VP_IVA_CONFIG_OFFSET,
 	.vstepmin = OMAP4_PRM_VP_IVA_VSTEPMIN_OFFSET,
@@ -87,7 +78,7 @@ struct omap_vp_instance omap4_vp_iva = {
 };
 
 struct omap_vp_instance omap4_vp_core = {
-	.id = OMAP4_PRM_IRQ_VDD_CORE_ID,
+	.id = OMAP4_VP_VDD_CORE_ID,
 	.common = &omap4_vp_common,
 	.vpconfig = OMAP4_PRM_VP_CORE_CONFIG_OFFSET,
 	.vstepmin = OMAP4_PRM_VP_CORE_VSTEPMIN_OFFSET,

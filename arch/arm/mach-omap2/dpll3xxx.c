@@ -32,10 +32,8 @@
 #include <plat/clock.h>
 
 #include "clock.h"
-#include "cm2_44xx.h"
 #include "cm2xxx_3xxx.h"
 #include "cm-regbits-34xx.h"
-#include "cm-regbits-44xx.h"
 
 /* CM_AUTOIDLE_PLL*.AUTO_* bit values */
 #define DPLL_AUTOIDLE_DISABLE			0x0
@@ -63,86 +61,22 @@ static void _omap3_dpll_write_clken(struct clk *clk, u8 clken_bits)
 static int _omap3_wait_dpll_status(struct clk *clk, u8 state)
 {
 	const struct dpll_data *dd;
-	int i;
+	int i = 0;
 	int ret = -EINVAL;
-	bool first_time = true;
-	u32 reg;
-	u32 orig_cm_div_m2_dpll_usb;
-	u32 orig_cm_clkdcoldo_dpll_usb;
 
-retry:
 	dd = clk->dpll_data;
 
 	state <<= __ffs(dd->idlest_mask);
 
-	i = 0;
 	while (((__raw_readl(dd->idlest_reg) & dd->idlest_mask) != state) &&
 	       i < MAX_DPLL_WAIT_TRIES) {
 		i++;
 		udelay(1);
 	}
 
-	/* restore back old values if hit work-around */
-	if (!first_time) {
-		__raw_writel(orig_cm_div_m2_dpll_usb,
-				OMAP4430_CM_DIV_M2_DPLL_USB);
-		__raw_writel(orig_cm_clkdcoldo_dpll_usb,
-				OMAP4430_CM_CLKDCOLDO_DPLL_USB);
-	}
-
 	if (i == MAX_DPLL_WAIT_TRIES) {
 		printk(KERN_ERR "clock: %s failed transition to '%s'\n",
 		       clk->name, (state) ? "locked" : "bypassed");
-
-		/* Try Error Recovery: for failing usbdpll locking */
-		if (!strcmp(clk->name, "dpll_usb_ck")) {
-			reg = __raw_readl(dd->mult_div1_reg);
-
-			/* Put in MN bypass */
-			_omap3_dpll_write_clken(clk, DPLL_MN_BYPASS);
-			i = 0;
-			while (!(__raw_readl(dd->idlest_reg) & (1 << OMAP4430_ST_MN_BYPASS_SHIFT)) &&
-					i < MAX_DPLL_WAIT_TRIES) {
-				i++;
-				udelay(1);
-			}
-
-			/* MN bypass looses contents of CM_CLKSEL_DPLL_USB */
-			__raw_writel(reg, dd->mult_div1_reg);
-
-			/* Force generate request to PRCM: put in Force mode */
-
-			/* a) CM_DIV_M2_DPLL_USB.DPLL_CLKOUT_GATE_CTRL = 1 */
-			orig_cm_div_m2_dpll_usb = __raw_readl(OMAP4430_CM_DIV_M2_DPLL_USB);
-			__raw_writel(orig_cm_div_m2_dpll_usb |
-					(1 << OMAP4430_DPLL_CLKOUT_GATE_CTRL_SHIFT),
-					OMAP4430_CM_DIV_M2_DPLL_USB);
-
-			/* b) CM_CLKDCOLDO_DPLL_USB.DPLL_CLKDCOLDO_GATE_CTRL = 1 */
-			orig_cm_clkdcoldo_dpll_usb = __raw_readl(OMAP4430_CM_CLKDCOLDO_DPLL_USB);
-			__raw_writel(orig_cm_clkdcoldo_dpll_usb |
-					(1 << OMAP4430_DPLL_CLKDCOLDO_GATE_CTRL_SHIFT),
-					OMAP4430_CM_CLKDCOLDO_DPLL_USB);
-
-			/* Put back to locked mode */
-			_omap3_dpll_write_clken(clk, DPLL_LOCKED);
-
-			if (first_time) {
-				first_time = false;
-				goto retry;
-			}
-
-			pr_info("\n========== USB DPLL DUMP ===========\n");
-			pr_info("CM_CLKMODE_DPLL_USB         :%08x\n", omap_readl(0x4A008180));
-			pr_info("CM_IDLEST_DPLL_USB          :%08x\n", omap_readl(0x4A008184));
-			pr_info("CM_AUTOIDLE_DPLL_USB        :%08x\n", omap_readl(0x4A008188));
-			pr_info("CM_CLKSEL_DPLL_USB          :%08x\n", omap_readl(0x4A00818C));
-			pr_info("CM_DIV_M2_DPLL_USB          :%08x\n", omap_readl(0x4A008190));
-			pr_info("CM_SSC_DELTAMSTEP_DPLL_USB  :%08x\n", omap_readl(0x4A0081A8));
-			pr_info("CM_SSC_MODFREQDIV_DPLL_USB  :%08x\n", omap_readl(0x4A0081AC));
-			pr_info("CM_CLKDCOLDO_DPLL_USB       :%08x\n", omap_readl(0x4A0081B4));
-			pr_info("========== USB DPLL DUMP: End ===========\n");
-		}
 	} else {
 		pr_debug("clock: %s transition to '%s' in %d loops\n",
 			 clk->name, (state) ? "locked" : "bypassed", i);
@@ -201,19 +135,10 @@ static u16 _omap3_dpll_compute_freqsel(struct clk *clk, u8 n)
  */
 static int _omap3_noncore_dpll_lock(struct clk *clk)
 {
-	const struct dpll_data *dd;
 	u8 ai;
-	u8 state = 1;
-	int r = 0;
+	int r;
 
 	pr_debug("clock: locking DPLL %s\n", clk->name);
-
-	dd = clk->dpll_data;
-	state <<= __ffs(dd->idlest_mask);
-
-	/* Check if already locked */
-	if ((__raw_readl(dd->idlest_reg) & dd->idlest_mask) == state)
-		goto done;
 
 	ai = omap3_dpll_autoidle_read(clk);
 
@@ -226,7 +151,6 @@ static int _omap3_noncore_dpll_lock(struct clk *clk)
 	if (ai)
 		omap3_dpll_allow_idle(clk);
 
-done:
 	return r;
 }
 
@@ -466,7 +390,8 @@ int omap3_noncore_dpll_enable(struct clk *clk)
 	 * propagating?
 	 */
 	if (!r)
-		clk->rate = omap2_get_dpll_rate(clk);
+		clk->rate = (clk->recalc) ? clk->recalc(clk) :
+			omap2_get_dpll_rate(clk);
 
 	return r;
 }
@@ -500,6 +425,7 @@ void omap3_noncore_dpll_disable(struct clk *clk)
 int omap3_noncore_dpll_set_rate(struct clk *clk, unsigned long rate)
 {
 	struct clk *new_parent = NULL;
+	unsigned long hw_rate;
 	u16 freqsel = 0;
 	struct dpll_data *dd;
 	int ret;
@@ -511,7 +437,8 @@ int omap3_noncore_dpll_set_rate(struct clk *clk, unsigned long rate)
 	if (!dd)
 		return -EINVAL;
 
-	if (rate == omap2_get_dpll_rate(clk))
+	hw_rate = (clk->recalc) ? clk->recalc(clk) : omap2_get_dpll_rate(clk);
+	if (rate == hw_rate)
 		return 0;
 
 	/*

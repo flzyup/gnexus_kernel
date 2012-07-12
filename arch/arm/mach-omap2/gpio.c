@@ -27,17 +27,9 @@
 
 #include "powerdomain.h"
 
-static struct omap_device_pm_latency omap_gpio_latency[] = {
-	[0] = {
-		.deactivate_func = omap_device_idle_hwmods,
-		.activate_func   = omap_device_enable_hwmods,
-		.flags		 = OMAP_DEVICE_LATENCY_AUTO_ADJUST,
-	},
-};
-
-static int omap2_gpio_dev_init(struct omap_hwmod *oh, void *unused)
+static int __init omap2_gpio_dev_init(struct omap_hwmod *oh, void *unused)
 {
-	struct omap_device *od;
+	struct platform_device *pdev;
 	struct omap_gpio_platform_data *pdata;
 	struct omap_gpio_dev_attr *dev_attr;
 	char *name = "omap_gpio";
@@ -62,19 +54,14 @@ static int omap2_gpio_dev_init(struct omap_hwmod *oh, void *unused)
 
 	dev_attr = (struct omap_gpio_dev_attr *)oh->dev_attr;
 	pdata->bank_width = dev_attr->bank_width;
-	pdata->suspend_support = true;
 	pdata->dbck_flag = dev_attr->dbck_flag;
 	pdata->virtual_irq_start = IH_GPIO_BASE + 32 * (id - 1);
-
+	pdata->get_context_loss_count = omap_pm_get_dev_context_loss_count;
 	pdata->regs = kzalloc(sizeof(struct omap_gpio_reg_offs), GFP_KERNEL);
 	if (!pdata) {
 		pr_err("gpio%d: Memory allocation failed\n", id);
 		return -ENOMEM;
 	}
-
-	pdata->regs->irqctrl = USHRT_MAX;
-	pdata->regs->edgectrl1 = USHRT_MAX;
-	pdata->regs->edgectrl2 = USHRT_MAX;
 
 	switch (oh->class->rev) {
 	case 0:
@@ -102,9 +89,7 @@ static int omap2_gpio_dev_init(struct omap_hwmod *oh, void *unused)
 		pdata->regs->debounce = OMAP24XX_GPIO_DEBOUNCE_VAL;
 		pdata->regs->debounce_en = OMAP24XX_GPIO_DEBOUNCE_EN;
 		pdata->regs->ctrl = OMAP24XX_GPIO_CTRL;
-		pdata->regs->wkup_status = OMAP24XX_GPIO_WAKE_EN;
-		pdata->regs->wkup_clear = OMAP24XX_GPIO_CLEARWKUENA;
-		pdata->regs->wkup_set = OMAP24XX_GPIO_SETWKUENA;
+		pdata->regs->wkup_en = OMAP24XX_GPIO_WAKE_EN;
 		pdata->regs->leveldetect0 = OMAP24XX_GPIO_LEVELDETECT0;
 		pdata->regs->leveldetect1 = OMAP24XX_GPIO_LEVELDETECT1;
 		pdata->regs->risingdetect = OMAP24XX_GPIO_RISINGDETECT;
@@ -126,9 +111,7 @@ static int omap2_gpio_dev_init(struct omap_hwmod *oh, void *unused)
 		pdata->regs->debounce = OMAP4_GPIO_DEBOUNCINGTIME;
 		pdata->regs->debounce_en = OMAP4_GPIO_DEBOUNCENABLE;
 		pdata->regs->ctrl = OMAP4_GPIO_CTRL;
-		pdata->regs->wkup_status = OMAP4_GPIO_IRQWAKEN0;
-		pdata->regs->wkup_clear = OMAP4_GPIO_IRQWAKEN0;
-		pdata->regs->wkup_set = OMAP4_GPIO_IRQWAKEN0;
+		pdata->regs->wkup_en = OMAP4_GPIO_IRQWAKEN0;
 		pdata->regs->leveldetect0 = OMAP4_GPIO_LEVELDETECT0;
 		pdata->regs->leveldetect1 = OMAP4_GPIO_LEVELDETECT1;
 		pdata->regs->risingdetect = OMAP4_GPIO_RISINGDETECT;
@@ -143,16 +126,14 @@ static int omap2_gpio_dev_init(struct omap_hwmod *oh, void *unused)
 	pwrdm = omap_hwmod_get_pwrdm(oh);
 	pdata->loses_context = pwrdm_can_ever_lose_context(pwrdm);
 
-	od = omap_device_build(name, id - 1, oh, pdata,
-				sizeof(*pdata),	omap_gpio_latency,
-				ARRAY_SIZE(omap_gpio_latency),
-				false);
+	pdev = omap_device_build(name, id - 1, oh, pdata,
+				sizeof(*pdata),	NULL, 0, false);
 	kfree(pdata);
 
-	if (IS_ERR(od)) {
+	if (IS_ERR(pdev)) {
 		WARN(1, "Can't build omap_device for %s:%s.\n",
 					name, oh->name);
-		return PTR_ERR(od);
+		return PTR_ERR(pdev);
 	}
 
 	return 0;

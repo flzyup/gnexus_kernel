@@ -2,6 +2,8 @@
 # Generic framework for controlling remote processors
 #
 
-obj-$(CONFIG_REMOTE_PROC)		+= remoteproc.o
-obj-$(CONFIG_OMAP_REMOTE_PROC)		+= omap_remoteproc.o
-obj-$(CONFIG_OMAP_RPRES)		+= rpres.o rpres_dev.o
+obj-$(CONFIG_REMOTEPROC)		+= remoteproc.o
+remoteproc-y				:= remoteproc_core.o
+remoteproc-y				+= remoteproc_debugfs.o
+remoteproc-y				+= remoteproc_virtio.o
+obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o

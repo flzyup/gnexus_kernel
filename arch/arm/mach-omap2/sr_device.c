@@ -31,14 +31,6 @@
 
 static bool sr_enable_on_init;
 
-static struct omap_device_pm_latency omap_sr_latency[] = {
-	{
-		.deactivate_func = omap_device_idle_hwmods,
-		.activate_func	 = omap_device_enable_hwmods,
-		.flags = OMAP_DEVICE_LATENCY_AUTO_ADJUST
-	},
-};
-
 /* Read EFUSE values from control registers for OMAP3430 */
 static void __init sr_set_nvalues(struct omap_volt_data *volt_data,
 				struct omap_sr_data *sr_data)
@@ -77,10 +69,10 @@ static void __init sr_set_nvalues(struct omap_volt_data *volt_data,
 	sr_data->nvalue_count = count;
 }
 
-static int sr_dev_init(struct omap_hwmod *oh, void *user)
+static int __init sr_dev_init(struct omap_hwmod *oh, void *user)
 {
 	struct omap_sr_data *sr_data;
-	struct omap_device *od;
+	struct platform_device *pdev;
 	struct omap_volt_data *volt_data;
 	struct omap_smartreflex_dev_attr *sr_dev_attr;
 	char *name = "smartreflex";
@@ -123,10 +115,9 @@ static int sr_dev_init(struct omap_hwmod *oh, void *user)
 
 	sr_data->enable_on_init = sr_enable_on_init;
 
-	od = omap_device_build(name, i, oh, sr_data, sizeof(*sr_data),
-			       omap_sr_latency,
-			       ARRAY_SIZE(omap_sr_latency), 0);
-	if (IS_ERR(od))
+	pdev = omap_device_build(name, i, oh, sr_data, sizeof(*sr_data),
+				 NULL, 0, 0);
+	if (IS_ERR(pdev))
 		pr_warning("%s: Could not build omap_device for %s: %s.\n\n",
 			__func__, name, oh->name);
 exit:

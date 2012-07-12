@@ -19,13 +19,10 @@
 #include <linux/smp.h>
 
 #include <asm/cacheflush.h>
-#include <asm/hardware/gic.h>
 
-#include <mach/omap4-common.h>
-#include <mach/omap-wakeupgen.h>
+#include "common.h"
 
 #include "powerdomain.h"
-#include "clockdomain.h"
 
 int platform_cpu_kill(unsigned int cpu)
 {
@@ -36,13 +33,9 @@ int platform_cpu_kill(unsigned int cpu)
  * platform-specific code to shutdown a CPU
  * Called with IRQs disabled
  */
-void platform_cpu_die(unsigned int cpu)
+void __ref platform_cpu_die(unsigned int cpu)
 {
 	unsigned int this_cpu;
-	static struct clockdomain *cpu1_clkdm;
-
-	if (!cpu1_clkdm)
-		cpu1_clkdm = clkdm_lookup("mpu1_clkdm");
 
 	flush_cache_all();
 	dsb();
@@ -56,21 +49,13 @@ void platform_cpu_die(unsigned int cpu)
 	for (;;) {
 		/*
 		 * Enter into low power state
-		 * clear all interrupt wakeup sources
 		 */
-		omap_wakeupgen_irqmask_all(cpu, 1);
-		gic_cpu_disable();
-		omap4_enter_lowpower(cpu, PWRDM_POWER_OFF);
-		this_cpu = hard_smp_processor_id();
+		omap4_hotplug_cpu(cpu, PWRDM_POWER_OFF);
+		this_cpu = smp_processor_id();
 		if (omap_read_auxcoreboot0() == this_cpu) {
 			/*
 			 * OK, proper wakeup, we're done
 			 */
-			omap_wakeupgen_irqmask_all(this_cpu, 0);
-			gic_cpu_enable();
-
-			/* Restore clockdomain to hardware supervised */
-			clkdm_allow_idle(cpu1_clkdm);
 			break;
 		}
 		pr_debug("CPU%u: spurious wakeup call\n", cpu);

@@ -22,27 +22,12 @@
 #ifndef __MACH_BARRIERS_H
 #define __MACH_BARRIERS_H
 
-#include <linux/types.h>
+#include <asm/outercache.h>
 
-/* provide func ptr so to allow safe calling at any point */
-struct omap_bus_post_fns {
-	void (*sync)(void);
-};
-
-extern struct omap_bus_post_fns omap_bus_post;
-
-#ifdef CONFIG_ARCH_OMAP4
-static inline void bus_sync(void)
-{
-	omap_bus_post.sync();
-}
-#else
-static inline void bus_sync(void)
-{ }
-#endif
+extern void omap_bus_sync(void);
 
 #define rmb()		dsb()
-#define wmb()		do { dsb(); outer_sync(); bus_sync(); } while (0)
+#define wmb()		do { dsb(); outer_sync(); omap_bus_sync(); } while (0)
 #define mb()		wmb()
 
 #endif	/* __MACH_BARRIERS_H */

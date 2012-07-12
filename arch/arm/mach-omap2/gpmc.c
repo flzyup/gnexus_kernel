@@ -78,9 +78,9 @@ struct gpmc_cs_config {
 
 /*
  * Structure to save/restore gpmc context
- * to support core off.
+ * to support core off on OMAP3
  */
-struct omap_gpmc_regs {
+struct omap3_gpmc_regs {
 	u32 sysconfig;
 	u32 irqenable;
 	u32 timeout_ctrl;
@@ -776,9 +776,10 @@ static irqreturn_t gpmc_handle_irq(int irq, void *dev)
 	return IRQ_HANDLED;
 }
 
-static struct omap_gpmc_regs gpmc_context;
+#ifdef CONFIG_ARCH_OMAP3
+static struct omap3_gpmc_regs gpmc_context;
 
-void omap_gpmc_save_context(void)
+void omap3_gpmc_save_context(void)
 {
 	int i;
 
@@ -810,7 +811,7 @@ void omap_gpmc_save_context(void)
 	}
 }
 
-void omap_gpmc_restore_context(void)
+void omap3_gpmc_restore_context(void)
 {
 	int i;
 
@@ -840,6 +841,7 @@ void omap_gpmc_restore_context(void)
 		}
 	}
 }
+#endif /* CONFIG_ARCH_OMAP3 */
 
 /**
  * gpmc_enable_hwecc - enable hardware ecc functionality
@@ -886,6 +888,7 @@ int gpmc_enable_hwecc(int cs, int mode, int dev_width, int ecc_size)
 	gpmc_write_reg(GPMC_ECC_CONFIG, val);
 	return 0;
 }
+EXPORT_SYMBOL_GPL(gpmc_enable_hwecc);
 
 /**
  * gpmc_calculate_ecc - generate non-inverted ecc bytes
@@ -916,3 +919,4 @@ int gpmc_calculate_ecc(int cs, const u_char *dat, u_char *ecc_code)
 	gpmc_ecc_used = -EINVAL;
 	return 0;
 }
+EXPORT_SYMBOL_GPL(gpmc_calculate_ecc);

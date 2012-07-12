@@ -21,12 +21,13 @@
 
 #include <linux/delay.h>
 #include <linux/io.h>
-#include <linux/clk.h>
 #include <linux/err.h>
+#include <linux/export.h>
 #include <linux/debugfs.h>
 #include <linux/slab.h>
+#include <linux/clk.h>
 
-#include <plat/common.h>
+#include "common.h"
 
 #include "prm-regbits-34xx.h"
 #include "prm-regbits-44xx.h"
@@ -43,64 +44,22 @@
 
 static LIST_HEAD(voltdm_list);
 
-static int __init _config_common_vdd_data(struct voltagedomain *voltdm)
-{
-	struct clk *sys_ck;
-
-	/*
-	 * Sys clk rate is require to calculate vp timeout value and
-	 * smpswaittimemin and smpswaittimemax.
-	 */
-	sys_ck = clk_get(NULL, voltdm->sys_clk.name);
-	if (IS_ERR(sys_ck)) {
-		pr_warning("%s: Could not get the sys clk to calculate"
-			"various vdd_%s params\n", __func__, voltdm->name);
-		return -EINVAL;
-	}
-	voltdm->sys_clk.rate = clk_get_rate(sys_ck);
-	WARN_ON(!voltdm->sys_clk.rate);
-
-	/* Generic voltage parameters */
-	voltdm->scale = omap_vp_forceupdate_scale;
-
-	return 0;
-}
-
-static int __init omap_vdd_data_configure(struct voltagedomain *voltdm)
-{
-	int ret = -EINVAL;
-
-	if (!voltdm->pmic) {
-		pr_err("%s: PMIC info requried to configure vdd_%s not"
-			"populated.Hence cannot initialize vdd_%s\n",
-			__func__, voltdm->name, voltdm->name);
-		goto ovdc_out;
-	}
-
-	if (IS_ERR_VALUE(_config_common_vdd_data(voltdm)))
-		goto ovdc_out;
-
-	ret = 0;
-
-ovdc_out:
-	return ret;
-}
-
 /* Public functions */
 /**
- * omap_voltage_get_curr_vdata() - Gets the current voltage data
- * @voltdm:	pointer to the VDD for which current voltage info is needed
+ * voltdm_get_voltage() - Gets the current non-auto-compensated voltage
+ * @voltdm:	pointer to the voltdm for which current voltage info is needed
  *
- * API to get the current voltage data pointer for a VDD, returns NULL on error
+ * API to get the current non-auto-compensated voltage for a voltage domain.
+ * Returns 0 in case of error else returns the current voltage.
  */
-struct omap_volt_data *omap_voltage_get_curr_vdata(struct voltagedomain *voltdm)
+unsigned long voltdm_get_voltage(struct voltagedomain *voltdm)
 {
 	if (!voltdm || IS_ERR(voltdm)) {
 		pr_warning("%s: VDD specified does not exist!\n", __func__);
-		return NULL;
+		return 0;
 	}
 
-	return voltdm->curr_volt;
+	return voltdm->nominal_volt;
 }
 
 /**
@@ -112,11 +71,9 @@ struct omap_volt_data *omap_voltage_get_curr_vdata(struct voltagedomain *voltdm)
  * for a particular voltage domain during DVFS.
  */
 int voltdm_scale(struct voltagedomain *voltdm,
-		 struct omap_volt_data *target_v)
+		 unsigned long target_volt)
 {
-	int ret = 0;
-	struct omap_voltage_notifier notify;
-	unsigned long target_volt = omap_get_operation_voltage(target_v);
+	int ret;
 
 	if (!voltdm || IS_ERR(voltdm)) {
 		pr_warning("%s: VDD specified does not exist!\n", __func__);
@@ -129,67 +86,32 @@ int voltdm_scale(struct voltagedomain *voltdm,
 		return -ENODATA;
 	}
 
-	notify.voltdm = voltdm;
-	notify.target_volt = target_volt;
-
-	srcu_notifier_call_chain(&voltdm->change_notify_list,
-			OMAP_VOLTAGE_PRECHANGE,
-			(void *)&notify);
-
-	if (voltdm->abb) {
-		ret = omap_ldo_abb_pre_scale(voltdm, target_volt);
-		if (ret)
-			pr_err("%s: ABB prescale failed for vdd%s: %d\n",
-				__func__, voltdm->name, ret);
-		/* Fall through */
-	}
-
-	if (!ret) {
-		ret = voltdm->scale(voltdm, target_v);
-		if (ret)
-			pr_err("%s: voltage scale failed for vdd%s: %d\n",
-				__func__, voltdm->name, ret);
-
-		if (voltdm->abb) {
-			unsigned long cv;
-			cv = omap_get_operation_voltage(voltdm->curr_volt);
-			ret = omap_ldo_abb_post_scale(voltdm, cv);
-			if (ret)
-				pr_err("%s: ABB postscale fail for vdd%s:%d\n",
-					__func__, voltdm->name, ret);
-		}
-		/* Fall through */
-	}
-
-	notify.op_result = ret;
-	srcu_notifier_call_chain(&voltdm->change_notify_list,
-			OMAP_VOLTAGE_POSTCHANGE,
-			(void *)&notify);
+	ret = voltdm->scale(voltdm, target_volt);
+	if (!ret)
+		voltdm->nominal_volt = target_volt;
 
 	return ret;
 }
 
 /**
  * voltdm_reset() - Resets the voltage of a particular voltage domain
- * 	            to that of the current OPP.
+ *		    to that of the current OPP.
  * @voltdm: pointer to the voltage domain whose voltage is to be reset.
  *
  * This API finds out the correct voltage the voltage domain is supposed
  * to be at and resets the voltage to that level. Should be used especially
  * while disabling any voltage compensation modules.
- *
- * NOTE: appropriate locks should be held for mutual exclusivity.
  */
 void voltdm_reset(struct voltagedomain *voltdm)
 {
-	struct omap_volt_data *target_volt;
+	unsigned long target_volt;
 
 	if (!voltdm || IS_ERR(voltdm)) {
 		pr_warning("%s: VDD specified does not exist!\n", __func__);
 		return;
 	}
 
-	target_volt = omap_voltage_get_curr_vdata(voltdm);
+	target_volt = voltdm_get_voltage(voltdm);
 	if (!target_volt) {
 		pr_err("%s: unable to find current voltage for vdd_%s\n",
 			__func__, voltdm->name);
@@ -212,18 +134,14 @@ void voltdm_reset(struct voltagedomain *voltdm)
  *
  */
 void omap_voltage_get_volttable(struct voltagedomain *voltdm,
-		struct omap_volt_data **volt_data)
+				struct omap_volt_data **volt_data)
 {
-	struct omap_vdd_info *vdd;
-
 	if (!voltdm || IS_ERR(voltdm)) {
 		pr_warning("%s: VDD specified does not exist!\n", __func__);
 		return;
 	}
 
-	vdd = voltdm->vdd;
-
-	*volt_data = vdd->volt_data;
+	*volt_data = voltdm->volt_data;
 }
 
 /**
@@ -242,9 +160,8 @@ void omap_voltage_get_volttable(struct voltagedomain *voltdm,
  * domain or if there is no matching entry.
  */
 struct omap_volt_data *omap_voltage_get_voltdata(struct voltagedomain *voltdm,
-		unsigned long volt)
+						 unsigned long volt)
 {
-	struct omap_vdd_info *vdd;
 	int i;
 
 	if (!voltdm || IS_ERR(voltdm)) {
@@ -252,22 +169,19 @@ struct omap_volt_data *omap_voltage_get_voltdata(struct voltagedomain *voltdm,
 		return ERR_PTR(-EINVAL);
 	}
 
-	vdd = voltdm->vdd;
-
-	if (!vdd->volt_data) {
+	if (!voltdm->volt_data) {
 		pr_warning("%s: voltage table does not exist for vdd_%s\n",
 			__func__, voltdm->name);
 		return ERR_PTR(-ENODATA);
 	}
 
-	for (i = 0; vdd->volt_data[i].volt_nominal != 0; i++) {
-		if (vdd->volt_data[i].volt_nominal == volt ||
-		   omap_get_operation_voltage(&vdd->volt_data[i]) == volt)
-			return &vdd->volt_data[i];
+	for (i = 0; voltdm->volt_data[i].volt_nominal != 0; i++) {
+		if (voltdm->volt_data[i].volt_nominal == volt)
+			return &voltdm->volt_data[i];
 	}
 
-	pr_notice("%s: Unable to match the current voltage %lu with the voltage"
-		"table for vdd_%s\n", __func__, volt, voltdm->name);
+	pr_notice("%s: Unable to match the current voltage with the voltage"
+		"table for vdd_%s\n", __func__, voltdm->name);
 
 	return ERR_PTR(-ENODATA);
 }
@@ -317,155 +231,12 @@ void omap_change_voltscale_method(struct voltagedomain *voltdm,
 		voltdm->scale = omap_vp_forceupdate_scale;
 		return;
 	case VOLTSCALE_VCBYPASS:
-		voltdm->scale = omap_vc_bypass_scale_voltage;
+		voltdm->scale = omap_vc_bypass_scale;
 		return;
 	default:
 		pr_warning("%s: Trying to change the method of voltage scaling"
 			"to an unsupported one!\n", __func__);
 	}
-}
-
-/* Voltage debugfs support */
-static int vp_volt_debug_get(void *data, u64 *val)
-{
-	struct voltagedomain *voltdm = (struct voltagedomain *)data;
-
-	if (!voltdm) {
-		pr_warning("Wrong paramater passed\n");
-		return -EINVAL;
-	}
-	*val = omap_vp_get_curr_volt(voltdm);
-
-	return 0;
-}
-DEFINE_SIMPLE_ATTRIBUTE(vp_volt_debug_fops, vp_volt_debug_get, NULL, "%llu\n");
-
-static int dyn_volt_debug_get(void *data, u64 *val)
-{
-	struct voltagedomain *voltdm = (struct voltagedomain *)data;
-	struct omap_volt_data *volt_data;
-
-	if (!voltdm) {
-		pr_warning("%s: Wrong paramater passed\n", __func__);
-		return -EINVAL;
-	}
-
-	volt_data = omap_voltage_get_curr_vdata(voltdm);
-	if (IS_ERR_OR_NULL(volt_data)) {
-		pr_warning("%s: No voltage/domain?\n", __func__);
-		return -ENODEV;
-	}
-
-	*val = volt_data->volt_dynamic_nominal;
-
-	return 0;
-}
-DEFINE_SIMPLE_ATTRIBUTE(dyn_volt_debug_fops, dyn_volt_debug_get, NULL,
-								"%llu\n");
-
-static int calib_volt_debug_get(void *data, u64 *val)
-{
-	struct voltagedomain *voltdm = (struct voltagedomain *)data;
-	struct omap_volt_data *volt_data;
-
-	if (!voltdm) {
-		pr_warning("%s: Wrong paramater passed\n", __func__);
-		return -EINVAL;
-	}
-
-	volt_data = omap_voltage_get_curr_vdata(voltdm);
-	if (IS_ERR_OR_NULL(volt_data)) {
-		pr_warning("%s: No voltage/domain?\n", __func__);
-		return -ENODEV;
-	}
-
-	*val = volt_data->volt_calibrated;
-
-	return 0;
-}
-DEFINE_SIMPLE_ATTRIBUTE(calib_volt_debug_fops, calib_volt_debug_get, NULL,
-								"%llu\n");
-static int margin_volt_debug_get(void *data, u64 *val)
-{
-	struct voltagedomain *voltdm = (struct voltagedomain *) data;
-	struct omap_volt_data *vdata;
-
-	if (!voltdm) {
-		pr_warning("Wrong paramater passed\n");
-		return -EINVAL;
-	}
-
-	vdata = omap_voltage_get_curr_vdata(voltdm);
-	if (IS_ERR_OR_NULL(vdata)) {
-		pr_warning("%s: unable to get volt for vdd_%s\n",
-			   __func__, voltdm->name);
-		return -ENODEV;
-	}
-	*val = vdata->volt_margin;
-
-	return 0;
-}
-DEFINE_SIMPLE_ATTRIBUTE(margin_volt_debug_fops, margin_volt_debug_get, NULL,
-								"%llu\n");
-
-static int nom_volt_debug_get(void *data, u64 *val)
-{
-	struct voltagedomain *voltdm = (struct voltagedomain *) data;
-	struct omap_volt_data *vdata;
-
-	if (!voltdm) {
-		pr_warning("Wrong paramater passed\n");
-		return -EINVAL;
-	}
-
-	vdata = omap_voltage_get_curr_vdata(voltdm);
-	if (IS_ERR_OR_NULL(vdata)) {
-		pr_warning("%s: unable to get volt for vdd_%s\n",
-			   __func__, voltdm->name);
-		return -ENODEV;
-	}
-	*val = vdata->volt_nominal;
-
-	return 0;
-}
-DEFINE_SIMPLE_ATTRIBUTE(nom_volt_debug_fops, nom_volt_debug_get, NULL,
-								"%llu\n");
-
-static void __init voltdm_debugfs_init(struct dentry *voltage_dir,
-					struct voltagedomain *voltdm)
-{
-	char *name;
-
-	name = kasprintf(GFP_KERNEL, "vdd_%s", voltdm->name);
-	if (!name) {
-		pr_warning("%s:vdd_%s: no mem for debugfs\n", __func__,
-				voltdm->name);
-		return;
-	}
-
-	voltdm->debug_dir = debugfs_create_dir(name, voltage_dir);
-	kfree(name);
-	if (IS_ERR_OR_NULL(voltdm->debug_dir)) {
-		pr_warning("%s: Unable to create debugfs directory for"
-			" vdd_%s\n", __func__, voltdm->name);
-		voltdm->debug_dir = NULL;
-		return;
-	}
-
-	(void) debugfs_create_file("curr_vp_volt", S_IRUGO, voltdm->debug_dir,
-				(void *) voltdm, &vp_volt_debug_fops);
-	(void) debugfs_create_file("curr_nominal_volt", S_IRUGO,
-				voltdm->debug_dir, (void *) voltdm,
-				&nom_volt_debug_fops);
-	(void) debugfs_create_file("curr_dyn_nominal_volt", S_IRUGO,
-				voltdm->debug_dir, (void *) voltdm,
-				&dyn_volt_debug_fops);
-	(void) debugfs_create_file("curr_calibrated_volt", S_IRUGO,
-				voltdm->debug_dir, (void *) voltdm,
-				&calib_volt_debug_fops);
-	(void) debugfs_create_file("curr_margin_volt", S_IRUGO,
-				voltdm->debug_dir, (void *) voltdm,
-				&margin_volt_debug_fops);
 }
 
 /**
@@ -478,7 +249,6 @@ static void __init voltdm_debugfs_init(struct dentry *voltage_dir,
 int __init omap_voltage_late_init(void)
 {
 	struct voltagedomain *voltdm;
-	struct dentry *voltage_dir;
 
 	if (list_empty(&voltdm_list)) {
 		pr_err("%s: Voltage driver support not added\n",
@@ -486,28 +256,30 @@ int __init omap_voltage_late_init(void)
 		return -EINVAL;
 	}
 
-	voltage_dir = debugfs_create_dir("voltage", NULL);
-
 	list_for_each_entry(voltdm, &voltdm_list, node) {
+		struct clk *sys_ck;
+
 		if (!voltdm->scalable)
 			continue;
 
-		if (voltdm->vdd) {
-			if (omap_vdd_data_configure(voltdm))
-				continue;
-			omap_vp_init(voltdm);
+		sys_ck = clk_get(NULL, voltdm->sys_clk.name);
+		if (IS_ERR(sys_ck)) {
+			pr_warning("%s: Could not get sys clk.\n", __func__);
+			return -EINVAL;
+		}
+		voltdm->sys_clk.rate = clk_get_rate(sys_ck);
+		WARN_ON(!voltdm->sys_clk.rate);
+		clk_put(sys_ck);
+
+		if (voltdm->vc) {
+			voltdm->scale = omap_vc_bypass_scale;
+			omap_vc_init_channel(voltdm);
 		}
 
-		if (voltdm->vc)
-			omap_vc_init_channel(voltdm);
-
-		if (voltdm->abb)
-			omap_ldo_abb_init(voltdm);
-
-		if (voltage_dir)
-			voltdm_debugfs_init(voltage_dir, voltdm);
-
-		srcu_init_notifier_head(&voltdm->change_notify_list);
+		if (voltdm->vp) {
+			voltdm->scale = omap_vp_forceupdate_scale;
+			omap_vp_init(voltdm);
+		}
 	}
 
 	return 0;
@@ -527,35 +299,6 @@ static struct voltagedomain *_voltdm_lookup(const char *name)
 	}
 
 	return voltdm;
-}
-
-/**
- * omap_voltage_calib_reset() - reset the calibrated voltage entries
- * @voltdm: voltage domain to reset the entries for
- *
- * when the calibrated entries are no longer valid, this api allows
- * the calibrated voltages to be reset.
- *
- * NOTE: Appropriate locks must be held by calling path to ensure mutual
- * exclusivity
- */
-int omap_voltage_calib_reset(struct voltagedomain *voltdm)
-{
-	struct omap_volt_data *volt_data;
-
-	if (!voltdm) {
-		pr_warning("%s: voltdm NULL!\n", __func__);
-		return -EINVAL;
-	}
-
-	volt_data = voltdm->vdd->volt_data;
-
-	/* reset the calibrated voltages as 0 */
-	while (volt_data->volt_nominal) {
-		volt_data->volt_calibrated = 0;
-		volt_data++;
-	}
-	return 0;
 }
 
 /**

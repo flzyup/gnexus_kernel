@@ -1,7 +1,9 @@
 /*
  * Remote Processor Framework
  *
- * Copyright(c) 2011 Texas Instruments. All rights reserved.
+ * Copyright(c) 2011 Texas Instruments, Inc.
+ * Copyright(c) 2011 Google, Inc.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,280 +35,444 @@
 #ifndef REMOTEPROC_H
 #define REMOTEPROC_H
 
+#include <linux/types.h>
+#include <linux/kref.h>
+#include <linux/klist.h>
 #include <linux/mutex.h>
+#include <linux/virtio.h>
 #include <linux/completion.h>
-#include <linux/workqueue.h>
-#include <linux/notifier.h>
-#include <linux/pm_qos_params.h>
-
-/* Must match the BIOS version embeded in the BIOS firmware image */
-#define RPROC_BIOS_VERSION	2
-
-/* Maximum number of entries that can be added for lookup */
-#define RPROC_MAX_MEM_ENTRIES	20
+#include <linux/idr.h>
 
 /**
- * The following enums and structures define the binary format of the images
- * we load and run the remote processors with.
+ * struct resource_table - firmware resource table header
+ * @ver: version number
+ * @num: number of resource entries
+ * @reserved: reserved (must be zero)
+ * @offset: array of offsets pointing at the various resource entries
  *
- * The binary format is as follows:
+ * A resource table is essentially a list of system resources required
+ * by the remote processor. It may also include configuration entries.
+ * If needed, the remote processor firmware should contain this table
+ * as a dedicated ".resource_table" ELF section.
  *
- * struct {
- *     char magic[4] = { 'R', 'P', 'R', 'C' };
- *     u32 version;
- *     u32 header_len;
- *     char header[...] = { header_len bytes of unformatted, textual header };
- *     struct section {
- *         u32 type;
- *         u64 da;
- *         u32 len;
- *         u8 content[...] = { len bytes of binary data };
- *     } [ no limit on number of sections ];
- * } __packed;
+ * Some resources entries are mere announcements, where the host is informed
+ * of specific remoteproc configuration. Other entries require the host to
+ * do something (e.g. allocate a system resource). Sometimes a negotiation
+ * is expected, where the firmware requests a resource, and once allocated,
+ * the host should provide back its details (e.g. address of an allocated
+ * memory region).
+ *
+ * The header of the resource table, as expressed by this structure,
+ * contains a version number (should we need to change this format in the
+ * future), the number of available resource entries, and their offsets
+ * in the table.
+ *
+ * Immediately following this header are the resource entries themselves,
+ * each of which begins with a resource entry header (as described below).
  */
-struct fw_header {
-	char magic[4];
-	u32 version;
-	u32 header_len;
-	char header[0];
+struct resource_table {
+	u32 ver;
+	u32 num;
+	u32 reserved[2];
+	u32 offset[0];
 } __packed;
 
-struct fw_section {
+/**
+ * struct fw_rsc_hdr - firmware resource entry header
+ * @type: resource type
+ * @data: resource data
+ *
+ * Every resource entry begins with a 'struct fw_rsc_hdr' header providing
+ * its @type. The content of the entry itself will immediately follow
+ * this header, and it should be parsed according to the resource type.
+ */
+struct fw_rsc_hdr {
 	u32 type;
-	u64 da;
-	u32 len;
-	char content[0];
+	u8 data[0];
 } __packed;
 
-enum fw_section_type {
-	FW_RESOURCE	= 0,
-	FW_TEXT		= 1,
-	FW_DATA		= 2,
-	FW_MMU		= 3,
-	FW_SIGNATURE	= 4,
-};
-
-struct fw_resource {
-	u32 type;
-	u64 da;
-	u64 pa;
-	u32 len;
-	u32 reserved;
-	u8 name[48];
-} __packed;
-
+/**
+ * enum fw_resource_type - types of resource entries
+ *
+ * @RSC_CARVEOUT:   request for allocation of a physically contiguous
+ *		    memory region.
+ * @RSC_DEVMEM:     request to iommu_map a memory-based peripheral.
+ * @RSC_TRACE:	    announces the availability of a trace buffer into which
+ *		    the remote processor will be writing logs.
+ * @RSC_VDEV:       declare support for a virtio device, and serve as its
+ *		    virtio header.
+ * @RSC_LAST:       just keep this one at the end
+ *
+ * For more details regarding a specific resource type, please see its
+ * dedicated structure below.
+ *
+ * Please note that these values are used as indices to the rproc_handle_rsc
+ * lookup table, so please keep them sane. Moreover, @RSC_LAST is used to
+ * check the validity of an index before the lookup table is accessed, so
+ * please update it as needed.
+ */
 enum fw_resource_type {
 	RSC_CARVEOUT	= 0,
 	RSC_DEVMEM	= 1,
-	RSC_DEVICE	= 2,
-	RSC_IRQ		= 3,
-	RSC_TRACE	= 4,
-	RSC_BOOTADDR	= 5,
-	RSC_CRASHDUMP	= 6,
-	RSC_END		= 7,
+	RSC_TRACE	= 2,
+	RSC_VDEV	= 3,
+	RSC_LAST	= 4,
 };
 
+#define FW_RSC_ADDR_ANY (0xFFFFFFFFFFFFFFFF)
+
 /**
- * struct rproc_mem_pool - descriptor for the rproc's contiguous memory pool data
+ * struct fw_rsc_carveout - physically contiguous memory request
+ * @da: device address
+ * @pa: physical address
+ * @len: length (in bytes)
+ * @flags: iommu protection flags
+ * @reserved: reserved (must be zero)
+ * @name: human-readable name of the requested memory region
  *
- * @mem_base: starting physical address of the dynamic pool
- * @mem_size: size of the initial dynamic pool
- * @cur_base: current available physical address in the pool
- * @cur_size: remaining available memory in the pool
- * @st_base:  starting physical address of the static pool
- * @st_size:  size of the static pool
+ * This resource entry requests the host to allocate a physically contiguous
+ * memory region.
+ *
+ * These request entries should precede other firmware resource entries,
+ * as other entries might request placing other data objects inside
+ * these memory regions (e.g. data/code segments, trace resource entries, ...).
+ *
+ * Allocating memory this way helps utilizing the reserved physical memory
+ * (e.g. CMA) more efficiently, and also minimizes the number of TLB entries
+ * needed to map it (in case @rproc is using an IOMMU). Reducing the TLB
+ * pressure is important; it may have a substantial impact on performance.
+ *
+ * If the firmware is compiled with static addresses, then @da should specify
+ * the expected device address of this memory region. If @da is set to
+ * FW_RSC_ADDR_ANY, then the host will dynamically allocate it, and then
+ * overwrite @da with the dynamically allocated address.
+ *
+ * We will always use @da to negotiate the device addresses, even if it
+ * isn't using an iommu. In that case, though, it will obviously contain
+ * physical addresses.
+ *
+ * Some remote processors needs to know the allocated physical address
+ * even if they do use an iommu. This is needed, e.g., if they control
+ * hardware accelerators which access the physical memory directly (this
+ * is the case with OMAP4 for instance). In that case, the host will
+ * overwrite @pa with the dynamically allocated physical address.
+ * Generally we don't want to expose physical addresses if we don't have to
+ * (remote processors are generally _not_ trusted), so we might want to
+ * change this to happen _only_ when explicitly required by the hardware.
+ *
+ * @flags is used to provide IOMMU protection flags, and @name should
+ * (optionally) contain a human readable name of this carveout region
+ * (mainly for debugging purposes).
  */
-struct rproc_mem_pool {
-	phys_addr_t mem_base;
-	u32 mem_size;
-	phys_addr_t cur_base;
-	u32 cur_size;
-	phys_addr_t st_base;
-	u32 st_size;
-};
+struct fw_rsc_carveout {
+	u32 da;
+	u32 pa;
+	u32 len;
+	u32 flags;
+	u32 reserved;
+	u8 name[32];
+} __packed;
 
 /**
- * struct rproc_mem_entry - descriptor of a remote memory region
+ * struct fw_rsc_devmem - iommu mapping request
+ * @da: device address
+ * @pa: physical address
+ * @len: length (in bytes)
+ * @flags: iommu protection flags
+ * @reserved: reserved (must be zero)
+ * @name: human-readable name of the requested region to be mapped
  *
- * @da:		virtual address as seen by the device (aka device address)
- * @pa:		physical address
- * @size:	size of this memory region
+ * This resource entry requests the host to iommu map a physically contiguous
+ * memory region. This is needed in case the remote processor requires
+ * access to certain memory-based peripherals; _never_ use it to access
+ * regular memory.
+ *
+ * This is obviously only needed if the remote processor is accessing memory
+ * via an iommu.
+ *
+ * @da should specify the required device address, @pa should specify
+ * the physical address we want to map, @len should specify the size of
+ * the mapping and @flags is the IOMMU protection flags. As always, @name may
+ * (optionally) contain a human readable name of this mapping (mainly for
+ * debugging purposes).
+ *
+ * Note: at this point we just "trust" those devmem entries to contain valid
+ * physical addresses, but this isn't safe and will be changed: eventually we
+ * want remoteproc implementations to provide us ranges of physical addresses
+ * the firmware is allowed to request, and not allow firmwares to request
+ * access to physical addresses that are outside those ranges.
+ */
+struct fw_rsc_devmem {
+	u32 da;
+	u32 pa;
+	u32 len;
+	u32 flags;
+	u32 reserved;
+	u8 name[32];
+} __packed;
+
+/**
+ * struct fw_rsc_trace - trace buffer declaration
+ * @da: device address
+ * @len: length (in bytes)
+ * @reserved: reserved (must be zero)
+ * @name: human-readable name of the trace buffer
+ *
+ * This resource entry provides the host information about a trace buffer
+ * into which the remote processor will write log messages.
+ *
+ * @da specifies the device address of the buffer, @len specifies
+ * its size, and @name may contain a human readable name of the trace buffer.
+ *
+ * After booting the remote processor, the trace buffers are exposed to the
+ * user via debugfs entries (called trace0, trace1, etc..).
+ */
+struct fw_rsc_trace {
+	u32 da;
+	u32 len;
+	u32 reserved;
+	u8 name[32];
+} __packed;
+
+/**
+ * struct fw_rsc_vdev_vring - vring descriptor entry
+ * @da: device address
+ * @align: the alignment between the consumer and producer parts of the vring
+ * @num: num of buffers supported by this vring (must be power of two)
+ * @notifyid is a unique rproc-wide notify index for this vring. This notify
+ * index is used when kicking a remote processor, to let it know that this
+ * vring is triggered.
+ * @reserved: reserved (must be zero)
+ *
+ * This descriptor is not a resource entry by itself; it is part of the
+ * vdev resource type (see below).
+ *
+ * Note that @da should either contain the device address where
+ * the remote processor is expecting the vring, or indicate that
+ * dynamically allocation of the vring's device address is supported.
+ */
+struct fw_rsc_vdev_vring {
+	u32 da;
+	u32 align;
+	u32 num;
+	u32 notifyid;
+	u32 reserved;
+} __packed;
+
+/**
+ * struct fw_rsc_vdev - virtio device header
+ * @id: virtio device id (as in virtio_ids.h)
+ * @notifyid is a unique rproc-wide notify index for this vdev. This notify
+ * index is used when kicking a remote processor, to let it know that the
+ * status/features of this vdev have changes.
+ * @dfeatures specifies the virtio device features supported by the firmware
+ * @gfeatures is a place holder used by the host to write back the
+ * negotiated features that are supported by both sides.
+ * @config_len is the size of the virtio config space of this vdev. The config
+ * space lies in the resource table immediate after this vdev header.
+ * @status is a place holder where the host will indicate its virtio progress.
+ * @num_of_vrings indicates how many vrings are described in this vdev header
+ * @reserved: reserved (must be zero)
+ * @vring is an array of @num_of_vrings entries of 'struct fw_rsc_vdev_vring'.
+ *
+ * This resource is a virtio device header: it provides information about
+ * the vdev, and is then used by the host and its peer remote processors
+ * to negotiate and share certain virtio properties.
+ *
+ * By providing this resource entry, the firmware essentially asks remoteproc
+ * to statically allocate a vdev upon registration of the rproc (dynamic vdev
+ * allocation is not yet supported).
+ *
+ * Note: unlike virtualization systems, the term 'host' here means
+ * the Linux side which is running remoteproc to control the remote
+ * processors. We use the name 'gfeatures' to comply with virtio's terms,
+ * though there isn't really any virtualized guest OS here: it's the host
+ * which is responsible for negotiating the final features.
+ * Yeah, it's a bit confusing.
+ *
+ * Note: immediately following this structure is the virtio config space for
+ * this vdev (which is specific to the vdev; for more info, read the virtio
+ * spec). the size of the config space is specified by @config_len.
+ */
+struct fw_rsc_vdev {
+	u32 id;
+	u32 notifyid;
+	u32 dfeatures;
+	u32 gfeatures;
+	u32 config_len;
+	u8 status;
+	u8 num_of_vrings;
+	u8 reserved[2];
+	struct fw_rsc_vdev_vring vring[0];
+} __packed;
+
+/**
+ * struct rproc_mem_entry - memory entry descriptor
+ * @va:	virtual address
+ * @dma: dma address
+ * @len: length, in bytes
+ * @da: device address
+ * @priv: associated data
+ * @node: list node
  */
 struct rproc_mem_entry {
-	u64 da;
-	phys_addr_t pa;
-	u32 size;
-	bool core;
-};
-
-enum rproc_constraint {
-	RPROC_CONSTRAINT_SCALE,
-	RPROC_CONSTRAINT_LATENCY,
-	RPROC_CONSTRAINT_BANDWIDTH,
+	void *va;
+	dma_addr_t dma;
+	int len;
+	u32 da;
+	void *priv;
+	struct list_head node;
 };
 
 struct rproc;
 
+/**
+ * struct rproc_ops - platform-specific device handlers
+ * @start:	power on the device and boot it
+ * @stop:	power off the device
+ * @kick:	kick a virtqueue (virtqueue id given as a parameter)
+ */
 struct rproc_ops {
-	int (*start)(struct rproc *rproc, u64 bootaddr);
+	int (*start)(struct rproc *rproc);
 	int (*stop)(struct rproc *rproc);
-	int (*suspend)(struct rproc *rproc, bool force);
-	int (*resume)(struct rproc *rproc);
-	int (*iommu_init)(struct rproc *, int (*)(struct rproc *, u64, u32));
-	int (*iommu_exit)(struct rproc *);
-	int (*set_lat)(struct rproc *rproc, long v);
-	int (*set_bw)(struct rproc *rproc, long v);
-	int (*scale)(struct rproc *rproc, long v);
-	int (*watchdog_init)(struct rproc *, int (*)(struct rproc *));
-	int (*watchdog_exit)(struct rproc *);
-	void (*dump_registers)(struct rproc *);
+	void (*kick)(struct rproc *rproc, int vqid);
 };
 
-/*
+/**
  * enum rproc_state - remote processor states
+ * @RPROC_OFFLINE:	device is powered off
+ * @RPROC_SUSPENDED:	device is suspended; needs to be woken up to receive
+ *			a message.
+ * @RPROC_RUNNING:	device is up and running
+ * @RPROC_CRASHED:	device has crashed; need to start recovery
+ * @RPROC_LAST:		just keep this one at the end
  *
- * @RPROC_OFFLINE: needs firmware load and init to exit this state.
- *
- * @RPROC_SUSPENDED: needs to be woken up to receive a message.
- *
- * @RPROC_RUNNING: up and running.
- *
- * @RPROC_LOADING: asynchronous firmware loading has started
- *
- * @RPROC_CRASHED: needs to be logged, connections torn down, resources
- * released, and returned to OFFLINE.
+ * Please note that the values of these states are used as indices
+ * to rproc_state_string, a state-to-name lookup table,
+ * so please keep the two synchronized. @RPROC_LAST is used to check
+ * the validity of an index before the lookup table is accessed, so
+ * please update it as needed too.
  */
 enum rproc_state {
-	RPROC_OFFLINE,
-	RPROC_SUSPENDED,
-	RPROC_RUNNING,
-	RPROC_LOADING,
-	RPROC_CRASHED,
+	RPROC_OFFLINE	= 0,
+	RPROC_SUSPENDED	= 1,
+	RPROC_RUNNING	= 2,
+	RPROC_CRASHED	= 3,
+	RPROC_LAST	= 4,
 };
 
-/*
- * enum rproc_event - remote processor events
- *
- * @RPROC_ERROR: Fatal error has happened on the remote processor.
- *
- * @RPROC_PRE_SUSPEND: users can register for that event in order to cancel
- *		       autosuspend, they just need to return an error in the
- *		       callback function.
- *
- * @RPROC_POS_SUSPEND: users can register for that event in order to release
- *		       resources not needed when the remote processor is
- *		       sleeping or if they need to save some context.
- *
- * @RPROC_RESUME: users should use this event to revert what was done in the
- *		  POS_SUSPEND event.
- *
- * @RPROC_SECURE: remote processor secure mode has changed.
- */
-enum rproc_event {
-	RPROC_ERROR,
-	RPROC_PRE_SUSPEND,
-	RPROC_POS_SUSPEND,
-	RPROC_RESUME,
-	RPROC_SECURE,
-};
-
-#define RPROC_MAX_NAME	100
-
-/*
- * struct rproc - a physical remote processor device
- *
- * @next: next rproc entry in the list
- * @name: human readable name of the rproc, cannot exceed RPROC_MAX_NAME bytes
- * @memory_maps: table of da-to-pa memory maps (relevant if device is behind
- *               an iommu)
- * @memory_pool: platform-specific contiguous memory pool data (relevant for
- *               allocating memory needed for the remote processor image)
+/**
+ * struct rproc - represents a physical remote processor device
+ * @node: klist node of this rproc object
+ * @domain: iommu domain
+ * @name: human readable name of the rproc
  * @firmware: name of firmware file to be loaded
- * @owner: reference to the platform-specific rproc module
  * @priv: private data which belongs to the platform-specific rproc module
  * @ops: platform-specific start/stop rproc handlers
- * @dev: reference to the platform-specific rproc dev
- * @count: usage refcount
- * @state: rproc_state enum value representing the state of the device
+ * @dev: underlying device
+ * @refcount: refcount of users that have a valid pointer to this rproc
+ * @power: refcount of users who need this rproc powered up
+ * @state: state of the device
  * @lock: lock which protects concurrent manipulations of the rproc
  * @dbg_dir: debugfs directory of this rproc device
- * @trace_buf0: main trace buffer of the remote processor
- * @trace_buf1: second, optional, trace buffer of the remote processor
- * @trace_len0: length of main trace buffer of the remote processor
- * @trace_len1: length of the second (and optional) trace buffer
- * @cdump_buf0: main exception/crash dump buffer of the remote processor
- * @cdump_buf1: second exception/crash dump buffer of the remote processor
- * @cdump_len0: length of main crash dump buffer of the remote processor
- * @cdump_len1: length of the second (and optional) crash dump buffer
- * @firmware_loading_complete: flags e/o asynchronous firmware loading
- * @mmufault_work: work in charge of notifing mmufault
- * @nb_error: notify block for fatal errors
- * @error_comp: completion used when an error happens
- * @secure_ttb: private data for configuring iommu in secure mode
- * @secure_restart: completion event notifier for the secure restart process
- * @secure_mode: flag to dictate whether to enable secure loading
- * @secure_ok: restart status flag to be looked up upon the event's completion
- * @secure_reset: flag to uninstall the firewalls
+ * @traces: list of trace buffers
+ * @num_traces: number of trace buffers
+ * @carveouts: list of physically contiguous memory allocations
+ * @mappings: list of iommu mappings we initiated, needed on shutdown
+ * @firmware_loading_complete: marks e/o asynchronous firmware loading
+ * @bootaddr: address of first instruction to boot rproc with (optional)
+ * @rvdevs: list of remote virtio devices
+ * @notifyids: idr for dynamically assigning rproc-wide unique notify ids
  */
 struct rproc {
-	struct list_head next;
+	struct klist_node node;
+	struct iommu_domain *domain;
 	const char *name;
-	struct rproc_mem_entry memory_maps[RPROC_MAX_MEM_ENTRIES];
-	struct rproc_mem_pool *memory_pool;
 	const char *firmware;
-	struct module *owner;
 	void *priv;
 	const struct rproc_ops *ops;
 	struct device *dev;
-	int count;
-	int state;
+	struct kref refcount;
+	atomic_t power;
+	unsigned int state;
 	struct mutex lock;
 	struct dentry *dbg_dir;
-	char *trace_buf0, *trace_buf1;
-	char *last_trace_buf0, *last_trace_buf1;
-	int trace_len0, trace_len1;
-	int last_trace_len0, last_trace_len1;
-	void *cdump_buf0, *cdump_buf1;
-	int cdump_len0, cdump_len1;
+	struct list_head traces;
+	int num_traces;
+	struct list_head carveouts;
+	struct list_head mappings;
 	struct completion firmware_loading_complete;
-	struct work_struct error_work;
-	struct blocking_notifier_head nbh;
-	struct completion error_comp;
-#ifdef CONFIG_REMOTE_PROC_AUTOSUSPEND
-	unsigned sus_timeout;
-	bool force_suspend;
-	bool need_resume;
-	struct mutex pm_lock;
-#endif
-	struct pm_qos_request_list *qos_request;
-	void *secure_ttb;
-	struct completion secure_restart;
-	struct mutex secure_lock;
-	bool secure_mode;
-	bool secure_ok;
-	bool secure_reset;
-	bool halt_on_crash;
-	char *header;
-	int header_len;
+	u32 bootaddr;
+	struct list_head rvdevs;
+	struct idr notifyids;
 };
 
-int rproc_set_secure(const char *, bool);
-struct rproc *rproc_get(const char *);
-void rproc_put(struct rproc *);
-int rproc_event_register(struct rproc *, struct notifier_block *);
-int rproc_event_unregister(struct rproc *, struct notifier_block *);
-int rproc_register(struct device *, const char *, const struct rproc_ops *,
-		const char *, struct rproc_mem_pool *, struct module *,
-		unsigned int timeout);
-int rproc_unregister(const char *);
-void rproc_last_busy(struct rproc *);
-#ifdef CONFIG_REMOTE_PROC_AUTOSUSPEND
-extern const struct dev_pm_ops rproc_gen_pm_ops;
-#define GENERIC_RPROC_PM_OPS	(&rproc_gen_pm_ops)
-#else
-#define GENERIC_RPROC_PM_OPS	NULL
-#endif
-int rproc_set_constraints(struct rproc *, enum rproc_constraint type, long v);
-int rproc_error_notify(struct rproc *rproc);
+/* we currently support only two vrings per rvdev */
+#define RVDEV_NUM_VRINGS 2
+
+/**
+ * struct rproc_vring - remoteproc vring state
+ * @va:	virtual address
+ * @dma: dma address
+ * @len: length, in bytes
+ * @da: device address
+ * @align: vring alignment
+ * @notifyid: rproc-specific unique vring index
+ * @rvdev: remote vdev
+ * @vq: the virtqueue of this vring
+ */
+struct rproc_vring {
+	void *va;
+	dma_addr_t dma;
+	int len;
+	u32 da;
+	u32 align;
+	int notifyid;
+	struct rproc_vdev *rvdev;
+	struct virtqueue *vq;
+};
+
+/**
+ * struct rproc_vdev - remoteproc state for a supported virtio device
+ * @node: list node
+ * @rproc: the rproc handle
+ * @vdev: the virio device
+ * @vring: the vrings for this vdev
+ * @dfeatures: virtio device features
+ * @gfeatures: virtio guest features
+ */
+struct rproc_vdev {
+	struct list_head node;
+	struct rproc *rproc;
+	struct virtio_device vdev;
+	struct rproc_vring vring[RVDEV_NUM_VRINGS];
+	unsigned long dfeatures;
+	unsigned long gfeatures;
+};
+
+struct rproc *rproc_get_by_name(const char *name);
+void rproc_put(struct rproc *rproc);
+
+struct rproc *rproc_alloc(struct device *dev, const char *name,
+				const struct rproc_ops *ops,
+				const char *firmware, int len);
+void rproc_free(struct rproc *rproc);
+int rproc_register(struct rproc *rproc);
+int rproc_unregister(struct rproc *rproc);
+
+int rproc_boot(struct rproc *rproc);
+void rproc_shutdown(struct rproc *rproc);
+
+static inline struct rproc_vdev *vdev_to_rvdev(struct virtio_device *vdev)
+{
+	return container_of(vdev, struct rproc_vdev, vdev);
+}
+
+static inline struct rproc *vdev_to_rproc(struct virtio_device *vdev)
+{
+	struct rproc_vdev *rvdev = vdev_to_rvdev(vdev);
+
+	return rvdev->rproc;
+}
 
 #endif /* REMOTEPROC_H */

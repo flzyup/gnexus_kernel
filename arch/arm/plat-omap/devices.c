@@ -8,7 +8,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
-
+#include <linux/gpio.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/init.h>
@@ -16,67 +16,17 @@
 #include <linux/io.h>
 #include <linux/slab.h>
 #include <linux/memblock.h>
-#include <linux/err.h>
 
 #include <mach/hardware.h>
 #include <asm/mach-types.h>
 #include <asm/mach/map.h>
+#include <asm/memblock.h>
 
-#include <plat/omap_hwmod.h>
-#include <plat/omap_device.h>
 #include <plat/tc.h>
 #include <plat/board.h>
 #include <plat/mmc.h>
-#include <mach/gpio.h>
 #include <plat/menelaus.h>
-#include <plat/mcbsp.h>
-#include <plat/remoteproc.h>
 #include <plat/omap44xx.h>
-
-/*-------------------------------------------------------------------------*/
-
-#if defined(CONFIG_OMAP_MCBSP) || defined(CONFIG_OMAP_MCBSP_MODULE)
-
-static struct platform_device **omap_mcbsp_devices;
-
-void omap_mcbsp_register_board_cfg(struct resource *res, int res_count,
-			struct omap_mcbsp_platform_data *config, int size)
-{
-	int i;
-
-	omap_mcbsp_devices = kzalloc(size * sizeof(struct platform_device *),
-				     GFP_KERNEL);
-	if (!omap_mcbsp_devices) {
-		printk(KERN_ERR "Could not register McBSP devices\n");
-		return;
-	}
-
-	for (i = 0; i < size; i++) {
-		struct platform_device *new_mcbsp;
-		int ret;
-
-		new_mcbsp = platform_device_alloc("omap-mcbsp", i + 1);
-		if (!new_mcbsp)
-			continue;
-		platform_device_add_resources(new_mcbsp, &res[i * res_count],
-					res_count);
-		new_mcbsp->dev.platform_data = &config[i];
-		ret = platform_device_add(new_mcbsp);
-		if (ret) {
-			platform_device_put(new_mcbsp);
-			continue;
-		}
-		omap_mcbsp_devices[i] = new_mcbsp;
-	}
-}
-
-#else
-void omap_mcbsp_register_board_cfg(struct resource *res, int res_count,
-			struct omap_mcbsp_platform_data *config, int size)
-{  }
-#endif
-
-/*-------------------------------------------------------------------------*/
 
 #if defined(CONFIG_MMC_OMAP) || defined(CONFIG_MMC_OMAP_MODULE) || \
 	defined(CONFIG_MMC_OMAP_HS) || defined(CONFIG_MMC_OMAP_HS_MODULE)
@@ -159,6 +109,8 @@ static void omap_init_rng(void)
 static inline void omap_init_rng(void) {}
 #endif
 
+/*-------------------------------------------------------------------------*/
+
 /* Numbering for the SPI-capable controllers when used for SPI:
  * spi		= 1
  * uwire	= 2
@@ -204,7 +156,6 @@ static inline void omap_init_uwire(void) {}
 #if defined(CONFIG_TIDSPBRIDGE) || defined(CONFIG_TIDSPBRIDGE_MODULE)
 
 static phys_addr_t omap_dsp_phys_mempool_base;
-static phys_addr_t omap_dsp_phys_mempool_size;
 
 void __init omap_dsp_reserve_sdram_memblock(void)
 {
@@ -214,17 +165,14 @@ void __init omap_dsp_reserve_sdram_memblock(void)
 	if (!size)
 		return;
 
-	paddr = memblock_alloc(size, SZ_1M);
+	paddr = arm_memblock_steal(size, SZ_1M);
 	if (!paddr) {
 		pr_err("%s: failed to reserve %x bytes\n",
 				__func__, size);
 		return;
 	}
-	memblock_free(paddr, size);
-	memblock_remove(paddr, size);
 
 	omap_dsp_phys_mempool_base = paddr;
-	omap_dsp_phys_mempool_size = size;
 }
 
 phys_addr_t omap_dsp_get_mempool_base(void)
@@ -232,73 +180,6 @@ phys_addr_t omap_dsp_get_mempool_base(void)
 	return omap_dsp_phys_mempool_base;
 }
 EXPORT_SYMBOL(omap_dsp_get_mempool_base);
-
-phys_addr_t omap_dsp_get_mempool_size(void)
-{
-	return omap_dsp_phys_mempool_size;
-}
-EXPORT_SYMBOL(omap_dsp_get_mempool_size);
-#endif
-
-#if defined(CONFIG_OMAP_REMOTE_PROC)
-static phys_addr_t omap_ipu_phys_mempool_base;
-static u32 omap_ipu_phys_mempool_size;
-static phys_addr_t omap_ipu_phys_st_mempool_base;
-static u32 omap_ipu_phys_st_mempool_size;
-
-void __init omap_ipu_reserve_sdram_memblock(void)
-{
-	/* currently handles only ipu. dsp will be handled later...*/
-	u32 size = CONFIG_OMAP_REMOTEPROC_MEMPOOL_SIZE;
-	phys_addr_t paddr;
-
-	if (!size)
-		return;
-
-	paddr = memblock_alloc(size, SZ_1M);
-	if (!paddr) {
-		pr_err("%s: failed to reserve %x bytes\n",
-				__func__, size);
-		return;
-	}
-	memblock_free(paddr, size);
-	memblock_remove(paddr, size);
-
-	omap_ipu_phys_mempool_base = paddr;
-	omap_ipu_phys_mempool_size = size;
-}
-
-void __init omap_ipu_set_static_mempool(u32 start, u32 size)
-{
-	omap_ipu_phys_st_mempool_base = start;
-	omap_ipu_phys_st_mempool_size = size;
-}
-
-phys_addr_t omap_ipu_get_mempool_base(enum omap_rproc_mempool_type type)
-{
-	switch (type) {
-	case OMAP_RPROC_MEMPOOL_STATIC:
-		return omap_ipu_phys_st_mempool_base;
-	case OMAP_RPROC_MEMPOOL_DYNAMIC:
-		return omap_ipu_phys_mempool_base;
-	default:
-		return 0;
-	}
-}
-EXPORT_SYMBOL(omap_ipu_get_mempool_base);
-
-u32 omap_ipu_get_mempool_size(enum omap_rproc_mempool_type type)
-{
-	switch (type) {
-	case OMAP_RPROC_MEMPOOL_STATIC:
-		return omap_ipu_phys_st_mempool_size;
-	case OMAP_RPROC_MEMPOOL_DYNAMIC:
-		return omap_ipu_phys_mempool_size;
-	default:
-		return 0;
-	}
-}
-EXPORT_SYMBOL(omap_ipu_get_mempool_size);
 #endif
 
 /*

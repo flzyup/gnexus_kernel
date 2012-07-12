@@ -31,7 +31,6 @@
 
 #include <linux/platform_device.h>
 #include <plat/usb.h>
-#include <plat/omap_hwmod.h>
 #include <linux/pm_runtime.h>
 
 /*-------------------------------------------------------------------------*/
@@ -42,51 +41,6 @@ static int ohci_omap3_init(struct usb_hcd *hcd)
 
 	return ohci_init(hcd_to_ohci(hcd));
 }
-
-static int ohci_omap3_bus_suspend(struct usb_hcd *hcd)
-{
-	struct device *dev = hcd->self.controller;
-	struct omap_hwmod	*oh;
-	int ret = 0;
-
-	dev_dbg(dev, "ohci_omap3_bus_suspend\n");
-
-	ret = ohci_bus_suspend(hcd);
-
-	/* Delay required so that after ohci suspend
-	 * smart stand by can be set in the driver.
-	 * required for power mangament
-	 */
-	msleep(5);
-
-	if (ret != 0) {
-		dev_dbg(dev, "ohci_omap3_bus_suspend failed %d\n", ret);
-		return ret;
-	}
-
-	oh = omap_hwmod_lookup(USBHS_OHCI_HWMODNAME);
-
-	omap_hwmod_enable_ioring_wakeup(oh);
-
-	if (dev->parent)
-		pm_runtime_put_sync(dev->parent);
-
-	return ret;
-}
-
-
-static int ohci_omap3_bus_resume(struct usb_hcd *hcd)
-{
-	struct device *dev = hcd->self.controller;
-
-	dev_dbg(dev, "ohci_omap3_bus_resume\n");
-
-	if (dev->parent)
-		pm_runtime_get_sync(dev->parent);
-
-	return ohci_bus_resume(hcd);
-}
-
 
 /*-------------------------------------------------------------------------*/
 
@@ -151,8 +105,8 @@ static const struct hc_driver ohci_omap3_hc_driver = {
 	.hub_status_data =	ohci_hub_status_data,
 	.hub_control =		ohci_hub_control,
 #ifdef	CONFIG_PM
-	.bus_suspend =		ohci_omap3_bus_suspend,
-	.bus_resume =		ohci_omap3_bus_resume,
+	.bus_suspend =		ohci_bus_suspend,
+	.bus_resume =		ohci_bus_resume,
 #endif
 	.start_port_reset =	ohci_start_port_reset,
 };
@@ -181,7 +135,7 @@ static int __devinit ohci_hcd_omap3_probe(struct platform_device *pdev)
 	int			irq;
 
 	if (usb_disabled())
-		goto err_end;
+		return -ENODEV;
 
 	if (!dev->parent) {
 		dev_err(dev, "Missing parent device\n");
@@ -196,7 +150,7 @@ static int __devinit ohci_hcd_omap3_probe(struct platform_device *pdev)
 
 	res = platform_get_resource_byname(pdev,
 				IORESOURCE_MEM, "ohci");
-	if (!ret) {
+	if (!res) {
 		dev_err(dev, "UHH OHCI get resource failed\n");
 		return -ENOMEM;
 	}
@@ -219,11 +173,12 @@ static int __devinit ohci_hcd_omap3_probe(struct platform_device *pdev)
 	hcd->rsrc_len = resource_size(res);
 	hcd->regs =  regs;
 
-	pm_runtime_get_sync(dev->parent);
+	pm_runtime_enable(dev);
+	pm_runtime_get_sync(dev);
 
 	ohci_hcd_init(hcd_to_ohci(hcd));
 
-	ret = usb_add_hcd(hcd, irq, IRQF_DISABLED);
+	ret = usb_add_hcd(hcd, irq, 0);
 	if (ret) {
 		dev_dbg(dev, "failed to add hcd with err %d\n", ret);
 		goto err_add_hcd;
@@ -232,9 +187,7 @@ static int __devinit ohci_hcd_omap3_probe(struct platform_device *pdev)
 	return 0;
 
 err_add_hcd:
-	pm_runtime_get_sync(dev->parent);
-
-err_end:
+	pm_runtime_put_sync(dev);
 	usb_put_hcd(hcd);
 
 err_io:
@@ -263,7 +216,8 @@ static int __devexit ohci_hcd_omap3_remove(struct platform_device *pdev)
 
 	iounmap(hcd->regs);
 	usb_remove_hcd(hcd);
-	pm_runtime_put_sync(dev->parent);
+	pm_runtime_put_sync(dev);
+	pm_runtime_disable(dev);
 	usb_put_hcd(hcd);
 	return 0;
 }

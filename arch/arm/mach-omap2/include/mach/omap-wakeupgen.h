@@ -2,7 +2,7 @@
  * OMAP WakeupGen header file
  *
  * Copyright (C) 2011 Texas Instruments, Inc.
- * Written by Santosh Shilimkar <santosh.shilimkar@ti.com>
+ *	Santosh Shilimkar <santosh.shilimkar@ti.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -36,6 +36,4 @@
 #define OMAP_TIMESTAMPCYCLEHI			0xc0c
 
 extern int __init omap_wakeupgen_init(void);
-extern void omap_wakeupgen_irqmask_all(unsigned int cpu, unsigned int set);
-extern void omap_wakeupgen_save(void);
 #endif

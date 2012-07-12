@@ -24,6 +24,9 @@
 #define OMAP1610_GPIO4_BASE		0xfffbbc00
 #define OMAP1_MPUIO_VBASE		OMAP1_MPUIO_BASE
 
+/* smart idle, enable wakeup */
+#define SYSCONFIG_WORD			0x14
+
 /* mpu gpio */
 static struct __initdata resource omap16xx_mpu_gpio_resources[] = {
 	{
@@ -53,7 +56,6 @@ static struct __initdata omap_gpio_platform_data omap16xx_mpu_gpio_config = {
 	.is_mpuio		= true,
 	.bank_width		= 16,
 	.bank_stride		= 1,
-	.suspend_support	= true,
 	.regs                   = &omap16xx_mpuio_regs,
 };
 
@@ -91,18 +93,14 @@ static struct omap_gpio_reg_offs omap16xx_gpio_regs = {
 	.irqenable	= OMAP1610_GPIO_IRQENABLE1,
 	.set_irqenable	= OMAP1610_GPIO_SET_IRQENABLE1,
 	.clr_irqenable	= OMAP1610_GPIO_CLEAR_IRQENABLE1,
-	.wkup_status	= OMAP1610_GPIO_WAKEUPENABLE,
-	.wkup_clear	= OMAP1610_GPIO_CLEAR_WAKEUPENA,
-	.wkup_set	= OMAP1610_GPIO_SET_WAKEUPENA,
+	.wkup_en	= OMAP1610_GPIO_WAKEUPENABLE,
 	.edgectrl1	= OMAP1610_GPIO_EDGE_CTRL1,
 	.edgectrl2	= OMAP1610_GPIO_EDGE_CTRL2,
-	.sysconfig	= OMAP1610_GPIO_SYSCONFIG,
 };
 
 static struct __initdata omap_gpio_platform_data omap16xx_gpio1_config = {
 	.virtual_irq_start	= IH_GPIO_BASE,
 	.bank_width		= 16,
-	.suspend_support	= true,
 	.regs                   = &omap16xx_gpio_regs,
 };
 
@@ -132,7 +130,6 @@ static struct __initdata resource omap16xx_gpio2_resources[] = {
 static struct __initdata omap_gpio_platform_data omap16xx_gpio2_config = {
 	.virtual_irq_start	= IH_GPIO_BASE + 16,
 	.bank_width		= 16,
-	.suspend_support	= true,
 	.regs                   = &omap16xx_gpio_regs,
 };
 
@@ -162,7 +159,6 @@ static struct __initdata resource omap16xx_gpio3_resources[] = {
 static struct __initdata omap_gpio_platform_data omap16xx_gpio3_config = {
 	.virtual_irq_start	= IH_GPIO_BASE + 32,
 	.bank_width		= 16,
-	.suspend_support	= true,
 	.regs                   = &omap16xx_gpio_regs,
 };
 
@@ -192,7 +188,6 @@ static struct __initdata resource omap16xx_gpio4_resources[] = {
 static struct __initdata omap_gpio_platform_data omap16xx_gpio4_config = {
 	.virtual_irq_start	= IH_GPIO_BASE + 48,
 	.bank_width		= 16,
-	.suspend_support	= true,
 	.regs                   = &omap16xx_gpio_regs,
 };
 
@@ -222,12 +217,42 @@ static struct __initdata platform_device * omap16xx_gpio_dev[] = {
 static int __init omap16xx_gpio_init(void)
 {
 	int i;
+	void __iomem *base;
+	struct resource *res;
+	struct platform_device *pdev;
+	struct omap_gpio_platform_data *pdata;
 
 	if (!cpu_is_omap16xx())
 		return -EINVAL;
 
-	for (i = 0; i < ARRAY_SIZE(omap16xx_gpio_dev); i++)
+	/*
+	 * Enable system clock for GPIO module.
+	 * The CAM_CLK_CTRL *is* really the right place.
+	 */
+	omap_writel(omap_readl(ULPD_CAM_CLK_CTRL) | 0x04,
+					ULPD_CAM_CLK_CTRL);
+
+	for (i = 0; i < ARRAY_SIZE(omap16xx_gpio_dev); i++) {
+		pdev = omap16xx_gpio_dev[i];
+		pdata = pdev->dev.platform_data;
+
+		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+		if (unlikely(!res)) {
+			dev_err(&pdev->dev, "Invalid mem resource.\n");
+			return -ENODEV;
+		}
+
+		base = ioremap(res->start, resource_size(res));
+		if (unlikely(!base)) {
+			dev_err(&pdev->dev, "ioremap failed.\n");
+			return -ENOMEM;
+		}
+
+		__raw_writel(SYSCONFIG_WORD, base + OMAP1610_GPIO_SYSCONFIG);
+		iounmap(base);
+
 		platform_device_register(omap16xx_gpio_dev[i]);
+	}
 
 	return 0;
 }

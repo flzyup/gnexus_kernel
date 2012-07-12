@@ -1,7 +1,7 @@
 /*
  * OMAP powerdomain control
  *
- * Copyright (C) 2007-2008 Texas Instruments, Inc.
+ * Copyright (C) 2007-2008, 2011 Texas Instruments, Inc.
  * Copyright (C) 2007-2011 Nokia Corporation
  *
  * Written by Paul Walmsley
@@ -19,8 +19,6 @@
 #include <linux/list.h>
 #include <linux/errno.h>
 #include <linux/string.h>
-#include <linux/slab.h>
-
 #include <trace/events/power.h>
 
 #include "cm2xxx_3xxx.h"
@@ -78,12 +76,10 @@ static struct powerdomain *_pwrdm_lookup(const char *name)
  */
 static int _pwrdm_register(struct powerdomain *pwrdm)
 {
+	int i;
 	struct voltagedomain *voltdm;
 
 	if (!pwrdm || !pwrdm->name)
-		return -EINVAL;
-
-	if (!omap_chip_is(pwrdm->omap_chip))
 		return -EINVAL;
 
 	if (cpu_is_omap44xx() &&
@@ -108,32 +104,17 @@ static int _pwrdm_register(struct powerdomain *pwrdm)
 
 	list_add(&pwrdm->node, &pwrdm_list);
 
-	/*
-	* Program all powerdomain target state as ON; This is to
-	* prevent domains from hitting low power states (if bootloader
-	* has target states set to something other than ON) and potentially
-	* even losing context while PM is not fully initilized.
-	* The PM late init code can then program the desired target
-	* state for all the power domains.
-	*/
-	pwrdm_set_next_pwrst(pwrdm, PWRDM_POWER_ON);
-
 	/* Initialize the powerdomain's state counter */
-	memset(&pwrdm->count, 0, sizeof(pwrdm->count));
-	memset(&pwrdm->last_count, 0, sizeof(pwrdm->last_count));
-	memset(&pwrdm->time, 0, sizeof(pwrdm->time));
-	memset(&pwrdm->last_time, 0, sizeof(pwrdm->last_time));
+	for (i = 0; i < PWRDM_MAX_PWRSTS; i++)
+		pwrdm->state_counter[i] = 0;
+
+	pwrdm->ret_logic_off_counter = 0;
+	for (i = 0; i < pwrdm->banks; i++)
+		pwrdm->ret_mem_off_counter[i] = 0;
 
 	pwrdm_wait_transition(pwrdm);
 	pwrdm->state = pwrdm_read_pwrst(pwrdm);
-	pwrdm->count.state[pwrdm->state] = 1;
-
-	/* Initialize priority ordered list for wakeup latency constraint */
-	spin_lock_init(&pwrdm->wakeuplat_lock);
-	plist_head_init(&pwrdm->wakeuplat_dev_list);
-
-	/* res_mutex protects res_list add and del ops */
-	mutex_init(&pwrdm->wakeuplat_mutex);
+	pwrdm->state_counter[pwrdm->state] = 1;
 
 	pr_debug("powerdomain: registered %s\n", pwrdm->name);
 
@@ -146,18 +127,16 @@ static void _update_logic_membank_counters(struct powerdomain *pwrdm)
 	u8 prev_logic_pwrst, prev_mem_pwrst;
 
 	prev_logic_pwrst = pwrdm_read_prev_logic_pwrst(pwrdm);
-
-	/* Fake logic off counter */
 	if ((pwrdm->pwrsts_logic_ret == PWRSTS_OFF_RET) &&
-		(pwrdm_read_logic_retst(pwrdm) == PWRDM_POWER_OFF))
-		pwrdm->count.ret_logic_off++;
+	    (prev_logic_pwrst == PWRDM_POWER_OFF))
+		pwrdm->ret_logic_off_counter++;
 
 	for (i = 0; i < pwrdm->banks; i++) {
 		prev_mem_pwrst = pwrdm_read_prev_mem_pwrst(pwrdm, i);
 
 		if ((pwrdm->pwrsts_mem_ret[i] == PWRSTS_OFF_RET) &&
 		    (prev_mem_pwrst == PWRDM_POWER_OFF))
-			pwrdm->count.ret_mem_off[i]++;
+			pwrdm->ret_mem_off_counter[i]++;
 	}
 }
 
@@ -178,7 +157,7 @@ static int _pwrdm_state_switch(struct powerdomain *pwrdm, int flag)
 	case PWRDM_STATE_PREV:
 		prev = pwrdm_read_prev_pwrst(pwrdm);
 		if (pwrdm->state != prev)
-			pwrdm->count.state[prev]++;
+			pwrdm->state_counter[prev]++;
 		if (prev == PWRDM_POWER_RET)
 			_update_logic_membank_counters(pwrdm);
 		/*
@@ -198,7 +177,7 @@ static int _pwrdm_state_switch(struct powerdomain *pwrdm, int flag)
 	}
 
 	if (state != prev)
-		pwrdm->count.state[state]++;
+		pwrdm->state_counter[state]++;
 
 	pm_dbg_update_time(pwrdm, prev);
 
@@ -223,30 +202,76 @@ static int _pwrdm_post_transition_cb(struct powerdomain *pwrdm, void *unused)
 /* Public functions */
 
 /**
- * pwrdm_init - set up the powerdomain layer
- * @pwrdm_list: array of struct powerdomain pointers to register
- * @custom_funcs: func pointers for arch specfic implementations
+ * pwrdm_register_platform_funcs - register powerdomain implementation fns
+ * @po: func pointers for arch specific implementations
  *
- * Loop through the array of powerdomains @pwrdm_list, registering all
- * that are available on the current CPU. If pwrdm_list is supplied
- * and not null, all of the referenced powerdomains will be
- * registered.  No return value.  XXX pwrdm_list is not really a
- * "list"; it is an array.  Rename appropriately.
+ * Register the list of function pointers used to implement the
+ * powerdomain functions on different OMAP SoCs.  Should be called
+ * before any other pwrdm_register*() function.  Returns -EINVAL if
+ * @po is null, -EEXIST if platform functions have already been
+ * registered, or 0 upon success.
  */
-void pwrdm_init(struct powerdomain **pwrdm_list, struct pwrdm_ops *custom_funcs)
+int pwrdm_register_platform_funcs(struct pwrdm_ops *po)
+{
+	if (!po)
+		return -EINVAL;
+
+	if (arch_pwrdm)
+		return -EEXIST;
+
+	arch_pwrdm = po;
+
+	return 0;
+}
+
+/**
+ * pwrdm_register_pwrdms - register SoC powerdomains
+ * @ps: pointer to an array of struct powerdomain to register
+ *
+ * Register the powerdomains available on a particular OMAP SoC.  Must
+ * be called after pwrdm_register_platform_funcs().  May be called
+ * multiple times.  Returns -EACCES if called before
+ * pwrdm_register_platform_funcs(); -EINVAL if the argument @ps is
+ * null; or 0 upon success.
+ */
+int pwrdm_register_pwrdms(struct powerdomain **ps)
 {
 	struct powerdomain **p = NULL;
 
+	if (!arch_pwrdm)
+		return -EEXIST;
 
-	if (!custom_funcs)
-		WARN(1, "powerdomain: No custom pwrdm functions registered\n");
-	else
-		arch_pwrdm = custom_funcs;
+	if (!ps)
+		return -EINVAL;
 
-	if (pwrdm_list) {
-		for (p = pwrdm_list; *p; p++)
-			_pwrdm_register(*p);
-	}
+	for (p = ps; *p; p++)
+		_pwrdm_register(*p);
+
+	return 0;
+}
+
+/**
+ * pwrdm_complete_init - set up the powerdomain layer
+ *
+ * Do whatever is necessary to initialize registered powerdomains and
+ * powerdomain code.  Currently, this programs the next power state
+ * for each powerdomain to ON.  This prevents powerdomains from
+ * unexpectedly losing context or entering high wakeup latency modes
+ * with non-power-management-enabled kernels.  Must be called after
+ * pwrdm_register_pwrdms().  Returns -EACCES if called before
+ * pwrdm_register_pwrdms(), or 0 upon success.
+ */
+int pwrdm_complete_init(void)
+{
+	struct powerdomain *temp_p;
+
+	if (list_empty(&pwrdm_list))
+		return -EACCES;
+
+	list_for_each_entry(temp_p, &pwrdm_list, node)
+		pwrdm_set_next_pwrst(temp_p, PWRDM_POWER_ON);
+
+	return 0;
 }
 
 /**
@@ -947,7 +972,13 @@ int pwrdm_wait_transition(struct powerdomain *pwrdm)
 
 int pwrdm_state_switch(struct powerdomain *pwrdm)
 {
-	return _pwrdm_state_switch(pwrdm, PWRDM_STATE_NOW);
+	int ret;
+
+	ret = pwrdm_wait_transition(pwrdm);
+	if (!ret)
+		ret = _pwrdm_state_switch(pwrdm, PWRDM_STATE_NOW);
+
+	return ret;
 }
 
 int pwrdm_clkdm_state_switch(struct clockdomain *clkdm)
@@ -989,11 +1020,11 @@ int pwrdm_get_context_loss_count(struct powerdomain *pwrdm)
 		return -ENODEV;
 	}
 
-	count = pwrdm->count.state[PWRDM_POWER_OFF];
-	count += pwrdm->count.ret_logic_off;
+	count = pwrdm->state_counter[PWRDM_POWER_OFF];
+	count += pwrdm->ret_logic_off_counter;
 
 	for (i = 0; i < pwrdm->banks; i++)
-		count += pwrdm->count.ret_mem_off[i];
+		count += pwrdm->ret_mem_off_counter[i];
 
 	/*
 	 * Context loss count has to be a non-negative value. Clear the sign
@@ -1046,164 +1077,4 @@ bool pwrdm_can_ever_lose_context(struct powerdomain *pwrdm)
 			return 1;
 
 	return 0;
-}
-
-
-/**
- * pwrdm_wakeuplat_set_constraint - Set powerdomain wakeup latency constraint
- * @pwrdm: struct powerdomain * to which requesting device belongs to
- * @dev: struct device * of requesting device
- * @t: wakeup latency constraint in microseconds
- *
- * Adds new entry to powerdomain's wakeup latency constraint list.
- * If the requesting device already exists in the list, old value is
- * overwritten. Checks whether current power state is still adequate.
- * Returns -EINVAL if the powerdomain or device pointer is NULL,
- * or -ENOMEM if kmalloc fails, or -ERANGE if constraint can't be met,
- * or returns 0 upon success.
- */
-int pwrdm_wakeuplat_set_constraint (struct powerdomain *pwrdm,
-				    struct device *dev, unsigned long t)
-{
-	struct  wakeuplat_dev_list *user;
-	int found = 0, ret = 0;
-
-	if (!pwrdm || !dev) {
-		WARN(1, "OMAP PM: %s: invalid parameter(s)", __func__);
-		return -EINVAL;
-	}
-
-	mutex_lock(&pwrdm->wakeuplat_mutex);
-
-	plist_for_each_entry(user, &pwrdm->wakeuplat_dev_list, node) {
-		if (user->dev == dev) {
-			found = 1;
-			break;
-		}
-	}
-
-	/* Add new entry to the list or update existing request */
-	if (found && user->constraint_us == t) {
-		goto exit_set;
-	} else if (!found) {
-		user = kzalloc(sizeof(struct wakeuplat_dev_list), GFP_KERNEL);
-		if (!user) {
-			pr_err("OMAP PM: FATAL ERROR: kzalloc failed\n");
-			ret = -ENOMEM;
-			goto exit_set;
-		}
-		user->dev = dev;
-	} else {
-		plist_del(&user->node, &pwrdm->wakeuplat_dev_list);
-	}
-
-	plist_node_init(&user->node, t);
-	spin_lock(&pwrdm->wakeuplat_lock);
-	plist_add(&user->node, &pwrdm->wakeuplat_dev_list);
-	spin_unlock(&pwrdm->wakeuplat_lock);
-	user->node.prio = user->constraint_us = t;
-
-	ret = pwrdm_wakeuplat_update_pwrst(pwrdm);
-
-exit_set:
-	mutex_unlock(&pwrdm->wakeuplat_mutex);
-
-	return ret;
-}
-
-/**
- * pwrdm_wakeuplat_release_constraint - Release powerdomain wkuplat constraint
- * @pwrdm: struct powerdomain * to which requesting device belongs to
- * @dev: struct device * of requesting device
- *
- * Removes device's entry from powerdomain's wakeup latency constraint list.
- * Checks whether current power state is still adequate.
- * Returns -EINVAL if the powerdomain or device pointer is NULL or
- * no such entry exists in the list, or returns 0 upon success.
- */
-int pwrdm_wakeuplat_release_constraint (struct powerdomain *pwrdm,
-					struct device *dev)
-{
-	struct wakeuplat_dev_list *user;
-	int found = 0, ret = 0;
-
-	if (!pwrdm || !dev) {
-		WARN(1, "OMAP PM: %s: invalid parameter(s)", __func__);
-		return -EINVAL;
-	}
-
-	mutex_lock(&pwrdm->wakeuplat_mutex);
-
-	plist_for_each_entry(user, &pwrdm->wakeuplat_dev_list, node) {
-		if (user->dev == dev) {
-			found = 1;
-			break;
-		}
-	}
-
-	if (!found) {
-		pr_err("OMAP PM: Error: no prior constraint to release\n");
-		ret = -EINVAL;
-		goto exit_rls;
-	}
-
-	spin_lock(&pwrdm->wakeuplat_lock);
-	plist_del(&user->node, &pwrdm->wakeuplat_dev_list);
-	spin_unlock(&pwrdm->wakeuplat_lock);
-	kfree(user);
-
-	ret = pwrdm_wakeuplat_update_pwrst(pwrdm);
-
-exit_rls:
-	mutex_unlock(&pwrdm->wakeuplat_mutex);
-
-	return ret;
-}
-
-/**
- * pwrdm_wakeuplat_update_pwrst - Update power domain power state if needed
- * @pwrdm: struct powerdomain * to which requesting device belongs to
- *
- * Finds minimum latency value from all entries in the list and
- * the power domain power state neeting the constraint. Programs
- * new state if it is different from next power state.
- * Returns -EINVAL if the powerdomain or device pointer is NULL or
- * no such entry exists in the list, or -ERANGE if constraint can't be met,
- * or returns 0 upon success.
- */
-int pwrdm_wakeuplat_update_pwrst(struct powerdomain *pwrdm)
-{
-	struct plist_node *node;
-	int ret = 0, new_state;
-	unsigned long min_latency = -1;
-
-	if (!plist_head_empty(&pwrdm->wakeuplat_dev_list)) {
-		node = plist_last(&pwrdm->wakeuplat_dev_list);
-		min_latency = node->prio;
-	}
-
-	/* Find power state with wakeup latency < minimum constraint. */
-	for (new_state = 0x0; new_state < PWRDM_MAX_PWRSTS; new_state++) {
-		if (min_latency == -1 ||
-			pwrdm->wakeup_lat[new_state] < min_latency)
-			break;
-	}
-
-	/* No power state wkuplat met constraint. Keep power domain ON. */
-	if (new_state == PWRDM_MAX_PWRSTS) {
-		new_state = PWRDM_FUNC_PWRST_ON;
-		ret = -ERANGE;
-	}
-
-	if (pwrdm_read_next_pwrst(pwrdm) != new_state) {
-		if (cpu_is_omap44xx() || cpu_is_omap34xx())
-			omap_set_pwrdm_state(pwrdm, new_state);
-	}
-
-	pr_debug("OMAP PM: %s pwrst: curr= %d, prev= %d next= %d "
-			"wkuplat_min= %lu, state= %d\n", pwrdm->name,
-		pwrdm_read_pwrst(pwrdm), pwrdm_read_prev_pwrst(pwrdm),
-		pwrdm_read_next_pwrst(pwrdm), min_latency, new_state);
-
-	return ret;
 }

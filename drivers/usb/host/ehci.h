@@ -62,6 +62,12 @@ struct ehci_stats {
 
 #define	EHCI_MAX_ROOT_PORTS	15		/* see HCS_N_PORTS */
 
+enum ehci_rh_state {
+	EHCI_RH_HALTED,
+	EHCI_RH_SUSPENDED,
+	EHCI_RH_RUNNING
+};
+
 struct ehci_hcd {			/* one per controller */
 	/* glue to PCI and HCD framework */
 	struct ehci_caps __iomem *caps;
@@ -70,6 +76,7 @@ struct ehci_hcd {			/* one per controller */
 
 	__u32			hcs_params;	/* cached register copy */
 	spinlock_t		lock;
+	enum ehci_rh_state	rh_state;
 
 	/* async schedule support */
 	struct ehci_qh		*async;
@@ -88,6 +95,8 @@ struct ehci_hcd {			/* one per controller */
 	union ehci_shadow	*pshadow;	/* mirror hw periodic table */
 	int			next_uframe;	/* scan periodic, start here */
 	unsigned		periodic_sched;	/* periodic activity count */
+	unsigned		uframe_periodic_max; /* max periodic time per uframe */
+
 
 	/* list of itds & sitds completed while clock_frame was still active */
 	struct list_head	cached_itd_list;
@@ -108,6 +117,8 @@ struct ehci_hcd {			/* one per controller */
 			the change-suspend feature turned on */
 	unsigned long		suspended_ports;	/* which ports are
 			suspended */
+	unsigned long		resuming_ports;		/* which ports have
+			started to resume */
 
 	/* per-HC memory pools (could be per-bus, but ...) */
 	struct dma_pool		*qh_pool;	/* qh per active urb */
@@ -137,11 +148,7 @@ struct ehci_hcd {			/* one per controller */
 	unsigned		fs_i_thresh:1;	/* Intel iso scheduling */
 	unsigned		use_dummy_qh:1;	/* AMD Frame List table quirk*/
 	unsigned		has_synopsys_hc_bug:1; /* Synopsys HC */
-	unsigned		no_companion_port_handoff:1; /* Omap */
-
-	/* Transceiver QUIRKS */
-	unsigned		has_smsc_ulpi_bug:1; /* Smsc */
-	unsigned		resume_error_flag:1; /* Smsc */
+	unsigned		frame_index_bug:1; /* MosChip (AKA NetMos) */
 
 	/* required for usb32 quirk */
 	#define OHCI_CTRL_HCFS          (3 << 6)
@@ -165,13 +172,13 @@ struct ehci_hcd {			/* one per controller */
 #endif
 
 	/* debug files */
-/* #ifdef DEBUG */
+#ifdef DEBUG
 	struct dentry		*debug_dir;
-/* #endif */
+#endif
 	/*
 	 * OTG controllers and transceivers need software interaction
 	 */
-	struct otg_transceiver	*transceiver;
+	struct usb_phy	*transceiver;
 };
 
 /* convert between an HCD pointer and the corresponding EHCI_HCD */
@@ -757,30 +764,11 @@ static inline unsigned ehci_read_frame_index(struct ehci_hcd *ehci)
 
 #endif
 
-/*
- * Writing to dma coherent memory on ARM may be delayed via L2
- * writing buffer, so introduce the helper which can flush L2 writing
- * buffer into memory immediately, especially used to flush ehci
- * descriptor to memory.
- */
-#ifdef	CONFIG_ARM_DMA_MEM_BUFFERABLE
-static inline void ehci_sync_mem()
-{
-	mb();
-}
-#else
-static inline void ehci_sync_mem()
-{
-}
-#endif
-
 /*-------------------------------------------------------------------------*/
 
-#if 0
 #ifndef DEBUG
 #define STUB_DEBUG_FILES
 #endif	/* DEBUG */
-#endif
 
 /*-------------------------------------------------------------------------*/
 

@@ -62,10 +62,6 @@
 #define MUSB_INTR_SESSREQ	0x40
 #define MUSB_INTR_VBUSERROR	0x80	/* For SESSION end */
 
-#define MUSB_INTR_ENABLED \
-		(MUSB_INTR_SUSPEND | MUSB_INTR_RESUME | MUSB_INTR_RESET | \
-		 MUSB_INTR_CONNECT | MUSB_INTR_DISCONNECT)
-
 /* DEVCTL */
 #define MUSB_DEVCTL_BDEVICE	0x80
 #define MUSB_DEVCTL_FSDEV	0x40
@@ -238,7 +234,8 @@
 #define MUSB_TESTMODE		0x0F	/* 8 bit */
 
 /* Get offset for a given FIFO from musb->mregs */
-#ifdef	CONFIG_USB_MUSB_TUSB6010
+#if defined(CONFIG_USB_MUSB_TUSB6010) ||	\
+	defined(CONFIG_USB_MUSB_TUSB6010_MODULE)
 #define MUSB_FIFO_OFFSET(epnum)	(0x200 + ((epnum) * 0x20))
 #else
 #define MUSB_FIFO_OFFSET(epnum)	(0x20 + ((epnum) * 4))
@@ -299,7 +296,8 @@
 #define MUSB_FLAT_OFFSET(_epnum, _offset)	\
 	(0x100 + (0x10*(_epnum)) + (_offset))
 
-#ifdef CONFIG_USB_MUSB_TUSB6010
+#if defined(CONFIG_USB_MUSB_TUSB6010) ||	\
+	defined(CONFIG_USB_MUSB_TUSB6010_MODULE)
 /* TUSB6010 EP0 configuration register is special */
 #define MUSB_TUSB_OFFSET(_epnum, _offset)	\
 	(0x10 + _offset)
