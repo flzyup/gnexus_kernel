@@ -71,6 +71,7 @@ obj-$(CONFIG_ARCH_OMAP4)		+= pm44xx.o omap-mpuss-lowpower.o \
 obj-$(CONFIG_PM_DEBUG)			+= pm-debug.o
 obj-$(CONFIG_OMAP_SMARTREFLEX)          += sr_device.o smartreflex.o
 obj-$(CONFIG_OMAP_SMARTREFLEX_CLASS3)	+= smartreflex-class3.o
+obj-$(CONFIG_OMAP_SMARTREFLEX_CLASS1P5)	+= smartreflex-class1p5.o
 
 AFLAGS_sleep24xx.o			:=-Wa,-march=armv6
 AFLAGS_sleep34xx.o			:=-Wa,-march=armv7-a$(plus_sec)
@@ -226,6 +227,23 @@ obj-$(CONFIG_MACH_IGEP0020)		+= board-igep0020.o
 obj-$(CONFIG_MACH_OMAP3_TOUCHBOOK)	+= board-omap3touchbook.o
 obj-$(CONFIG_MACH_OMAP_4430SDP)		+= board-4430sdp.o
 obj-$(CONFIG_MACH_OMAP4_PANDA)		+= board-omap4panda.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna.o \
+					   hsmmc.o \
+					   omap_phy_internal.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-display.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-input.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-jack.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-nfc.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-power.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-sensors.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-vibrator.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-wifi.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-bluetooth.o \
+					   board-tuna-emif.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-connector.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-pogo.o
+obj-$(CONFIG_MACH_TUNA)			+= board-tuna-usbhost.o
+
 
 obj-$(CONFIG_MACH_PCM049)		+= board-omap4pcm049.o
 

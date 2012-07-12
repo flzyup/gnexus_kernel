@@ -343,6 +343,15 @@ config MACH_OMAP4_PANDA
 	select OMAP_PACKAGE_CBS
 	select REGULATOR_FIXED_VOLTAGE if REGULATOR
 
+config MACH_TUNA
+	bool "Tuna Board"
+	default y
+	depends on ARCH_OMAP4
+	select OMAP_PACKAGE_CBL
+	select OMAP_PACKAGE_CBS
+	select REGULATOR_FIXED_VOLTAGE
+	select OMAP_TPS6236X
+
 config OMAP3_EMU
 	bool "OMAP3 debugging peripherals"
 	depends on ARCH_OMAP3
@@ -350,6 +359,18 @@ config OMAP3_EMU
 	select OC_ETM
 	help
 	  Say Y here to enable debugging hardware of omap3
+
+config OMAP_TPS6236X
+	bool
+
+config OMAP_ALLOW_OSWR
+	bool  "Enable Open Switch Retention"
+	depends on ARCH_OMAP4
+	default n
+	help
+	  Select this option to enable OSWR support.
+	  Which means the Logic of power domains can be lost now
+	  unlike the CSWR wherein the logic is retained
 
 config OMAP3_SDRC_AC_TIMING
 	bool "Enable SDRC AC timing register changes"

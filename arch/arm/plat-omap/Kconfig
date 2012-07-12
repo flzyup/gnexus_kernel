@@ -45,6 +45,29 @@ config OMAP_DEBUG_LEDS
 	depends on OMAP_DEBUG_DEVICES
 	default y if LEDS_CLASS
 
+config OMAP_RPMSG
+	tristate "OMAP Virtio-based remote processor messaging support"
+	depends on ARCH_OMAP4
+	default y
+	select VIRTIO
+	select VIRTIO_RING
+	select OMAP_MBOX_FWK
+	help
+	  Say Y if you want to enable OMAP virtio-based remote-processor
+	  communication, currently only available with OMAP4. This is required
+	  for offloading tasks to the remote on-chip M3s or C64x+ dsp,
+	  usually used by multimedia frameworks to offload cpu-intensive and/or
+	   latency-sensitive tasks.
+
+config OMAP_RPMSG_RECOVERY
+	bool "OMAP RPMSG recovery"
+	default y
+	depends on OMAP_RPMSG
+	help
+	  Say Y if you want RPMSG to reset the rpmsg channels after a fatal
+	  error in remote proc. That way it will restart all the channels and
+	  the remote processor, causing a clean restart.
+
 config OMAP_SMARTREFLEX
 	bool "SmartReflex support"
 	depends on (ARCH_OMAP3 || ARCH_OMAP4) && PM
@@ -66,6 +89,26 @@ config OMAP_SMARTREFLEX
 	  Optionally autocompensation can be enabled in the kernel
 	  by default during system init via the enable_on_init flag
 	  which an be passed as platform data to the smartreflex driver.
+
+config OMAP_SMARTREFLEX_CLASS1P5
+       bool "Class 1.5 mode of Smartreflex Implementation"
+       depends on OMAP_SMARTREFLEX
+       help
+         Say Y to enable Class 1.5 implementation of Smartreflex.
+
+         Class 1.5 implementation of Smartreflex employs software controlled
+         hardware voltage calibration.
+
+config OMAP_SR_CLASS1P5_RECALIBRATION_DELAY
+       int "Class 1.5 mode recalibration recalibration delay(ms)"
+       depends on OMAP_SMARTREFLEX_CLASS1P5
+       default 86400000
+       help
+         Setup the recalibration delay in milliseconds.
+
+         Use 0 for never doing a recalibration (operates in AVS Class 1 mode).
+         Defaults to recommended recalibration every 24hrs.
+         If you do not understand this, use the default.
 
 config OMAP_SMARTREFLEX_CLASS3
 	bool "Class 3 mode of Smartreflex Implementation"
