@@ -16,7 +16,7 @@ export PATH=$PATH:${TOOLCHAIN}/lib
 export CFLAGS="-static -Os -fstack-protector -fstack-protector-all -std=c99 -mfpu=neon -mcpu=cortex-a9"
 export LDFLAGS="-static -Os"
 export CPPFLAGS="-static -Os"
-export HOSTNAME=fugu
-export LOGNAME=r
+export KBUILD_BUILD_HOST=fugu
+export KBUILD_BUILD_USER=r
 
 echo "ARM environment set"
