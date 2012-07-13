@@ -1,7 +1,8 @@
 #!/bin/sh
+export VENDOR=fugu
 export ARCH=arm 
-export TOOLCHAIN=~/x-tools/arm-unknown-linux-gnueabi
-export TOOLPREFIX=arm-unknown-linux-gnueabi
+export TOOLCHAIN=~/x-tools/arm-${VENDOR}-linux-gnueabi
+export TOOLPREFIX=arm-${VENDOR}-linux-gnueabi
 export PATH=$PATH:${TOOLCHAIN}/bin:/usr/java/jdk1.6.0_21/bin
 export CROSS_COMPILE=${TOOLCHAIN}/bin/${TOOLPREFIX}-
 export CC=${TOOLCHAIN}/bin/${TOOLPREFIX}-gcc
@@ -15,5 +16,7 @@ export PATH=$PATH:${TOOLCHAIN}/lib
 export CFLAGS="-static -Os -fstack-protector -fstack-protector-all -std=c99 -mfpu=neon -mcpu=cortex-a9"
 export LDFLAGS="-static -Os"
 export CPPFLAGS="-static -Os"
+export HOSTNAME=fugu
+export LOGNAME=r
 
 echo "ARM environment set"
