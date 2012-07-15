@@ -365,13 +365,6 @@ uint dhd_console_ms = 0;
 module_param(dhd_console_ms, uint, 0644);
 #endif /* defined(DHD_DEBUG) */
 
-/* Controls Status off wiffi Power on SleepMode
-sys/module/bcmdhd/parameters/wifi_pm */
-#if defined(CONFIG_HAS_EARLYSUSPEND)
-uint wifi_pm = 0;
-module_param(wifi_pm, uint, 0664);
-#endif /* defined(CONFIG_HAS_EARLYSUSPEND) */
-
 uint dhd_slpauto = TRUE;
 module_param(dhd_slpauto, uint, 0);
 
@@ -543,7 +536,6 @@ static int dhd_sleep_pm_callback(struct notifier_block *nfb, unsigned long actio
 	}
 	smp_mb();
 #endif
-
 	return ret;
 }
 
@@ -680,11 +672,6 @@ static int dhd_set_suspend(int value, dhd_pub_t *dhd)
 
 			}
 	}
-
-	/* Don't allow low power is wifi_pm is set */
-	if (wifi_pm == 1)
-		power_mode = PM_FAST;
-
 	dhd_suspend_unlock(dhd);
 	return 0;
 }
