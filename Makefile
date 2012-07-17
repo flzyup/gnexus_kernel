@@ -369,6 +369,8 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -mno-unaligned-access \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
+                   -fstack-protector -fstack-protector-all \
+                   -mfpu=neon -mcpu=cortex-a9 -fPIE -pie -D_FORTIFY_SOURCE=2 \
 		   -fno-delete-null-pointer-checks
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
