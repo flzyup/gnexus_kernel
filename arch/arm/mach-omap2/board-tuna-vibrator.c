@@ -39,7 +39,7 @@ struct vibe {
 static struct vibe vibeattr = {
     .attr.name="pwmduty",
     .attr.mode = 0644,
-    .max_pwmduty = 1250,
+    .max_pwmduty = 1450,
 };
 
 static struct attribute * myattr[] = {
