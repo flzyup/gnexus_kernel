@@ -92,6 +92,11 @@ static inline int fxrstor_checking(struct i387_fxsave_struct *fx)
 {
 	int err;
 
+#if defined(CONFIG_X86_64) && defined(CONFIG_PAX_MEMORY_UDEREF)
+	if ((unsigned long)fx < PAX_USER_SHADOW_BASE)
+		fx = (struct i387_fxsave_struct __user *)((void *)fx + PAX_USER_SHADOW_BASE);
+#endif
+
 	/* See comment in fxsave() below. */
 #ifdef CONFIG_AS_FXSAVEQ
 	asm volatile("1:  fxrstorq %[fx]\n\t"
@@ -120,6 +125,11 @@ static inline int fxrstor_checking(struct i387_fxsave_struct *fx)
 static inline int fxsave_user(struct i387_fxsave_struct __user *fx)
 {
 	int err;
+
+#if defined(CONFIG_X86_64) && defined(CONFIG_PAX_MEMORY_UDEREF)
+	if ((unsigned long)fx < PAX_USER_SHADOW_BASE)
+		fx = (struct i387_fxsave_struct __user *)((void __user *)fx + PAX_USER_SHADOW_BASE);
+#endif
 
 	/*
 	 * Clear the bytes not touched by the fxsave and reserved
@@ -210,6 +220,14 @@ static inline void fpu_fxsave(struct fpu *fpu)
 		     : [fx] "=m" (fpu->state->fxsave));
 }
 
+#endif	/* CONFIG_X86_64 */
+
+/* We need a safe address that is cheap to find and that is already
+   in L1 during context switch. */
+#define safe_address (init_tss[smp_processor_id()].x86_tss.sp0)
+
+/*
+ * These must be called with preempt disabled
 #endif	/* CONFIG_X86_64 */
 
 /*
@@ -309,6 +327,11 @@ static inline void __thread_fpu_end(struct task_struct *tsk)
 
 static inline void __thread_fpu_begin(struct task_struct *tsk)
 {
+	struct thread_info *me = current_thread_info();
+	preempt_disable();
+	if (me->status & TS_USEDFPU)
+		__save_init_fpu(current);
+	else
 	clts();
 	__thread_set_has_fpu(tsk);
 }

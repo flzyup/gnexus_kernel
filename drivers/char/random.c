@@ -909,7 +909,7 @@ static ssize_t extract_entropy_user(struct entropy_store *r, void __user *buf,
 
 		extract_buf(r, tmp);
 		i = min_t(int, nbytes, EXTRACT_SIZE);
-		if (copy_to_user(buf, tmp, i)) {
+		if (i > sizeof(tmp) || copy_to_user(buf, tmp, i)) {
 			ret = -EFAULT;
 			break;
 		}

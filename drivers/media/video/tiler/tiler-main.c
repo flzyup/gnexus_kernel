@@ -41,7 +41,7 @@
 
 static bool ssptr_id = CONFIG_TILER_SSPTR_ID;
 static uint granularity = CONFIG_TILER_GRANULARITY;
-static uint tiler_alloc_debug;
+static noinline uint tiler_alloc_debug;
 
 /*
  * We can only change ssptr_id if there are no blocks allocated, so that
@@ -237,7 +237,7 @@ static void map_2d_info(char **map, int xdiv, int ydiv, char *nice,
 							a->p0.x, a->p1.x);
 }
 
-static void debug_allocation_map(struct seq_file *s, u32 arg)
+static noinline void debug_allocation_map(struct seq_file *s, u32 arg)
 {
 	int xdiv = (arg >> 8) & 0xFF;
 	int ydiv = arg & 0xFF;

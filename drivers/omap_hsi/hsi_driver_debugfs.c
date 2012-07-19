@@ -28,7 +28,7 @@
 
 static struct dentry *hsi_dir;
 
-static int hsi_debug_show(struct seq_file *m, void *p)
+static noinline int hsi_debug_show(struct seq_file *m, void *p)
 {
 	struct hsi_dev *hsi_ctrl = m->private;
 	struct platform_device *pdev = to_platform_device(hsi_ctrl->dev);
@@ -324,7 +324,7 @@ static int hsi_debug_tokenize(char *buf, char *words[], int maxwords)
 	return nwords;
 }
 
-static ssize_t hsi_port_counters_write(struct file *filep,
+static noinline ssize_t hsi_port_counters_write(struct file *filep,
 				       const char __user *buff, size_t count,
 				       loff_t *offp)
 {
