@@ -2114,7 +2114,7 @@ dhd_ethtool_get_drvinfo(struct net_device *net, struct ethtool_drvinfo *info)
 
 	snprintf(info->driver, sizeof(info->driver), "wl");
 	snprintf(info->version, sizeof(info->version), "%lu", dhd->pub.drv_version);
-}
+};
 
 struct ethtool_ops dhd_ethtool_ops = {
 	.get_drvinfo = dhd_ethtool_get_drvinfo
