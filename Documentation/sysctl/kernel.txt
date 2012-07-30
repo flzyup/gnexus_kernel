@@ -51,7 +51,10 @@ show up in /proc/sys/kernel:
 - pid_max
 - powersave-nap               [ PPC only ]
 - panic_on_unrecovered_nmi
-- printk
+- printk_delay
+- printk_ratelimit
+- printk_ratelimit_burst
+- protected-sticky-symlinks
 - randomize_va_space
 - real-root-dev               ==> Documentation/initrd.txt
 - reboot-cmd                  [ SPARC only ]
@@ -403,6 +406,31 @@ Value from 0 - 10000 is allowed.
 
 ==============================================================
 
+<<<<<<<
+=======
+printk_delay:
+
+Delay each printk message in printk_delay milliseconds
+
+Value from 0 - 10000 is allowed.
+
+==============================================================
+
+protected-sticky-symlinks:
+
+Following symlinks in sticky world-writable directories (like /tmp) can
+be dangerous due to time-of-check-time-of-use races that frequently result
+in security vulnerabilities.
+
+The default value is "0", leaving the behavior of symlink following
+unchanged from POSIX.  A value of "1" will enable the protection, causing
+symlinks to be followable only if outside a sticky world-writable directory,
+or if the symlink and the follower's uid match, or if the symlink and its
+directory are owned by the same uid.
+
+==============================================================
+
+>>>>>>>
 randomize-va-space:
 
 This option can be used to select the type of process address

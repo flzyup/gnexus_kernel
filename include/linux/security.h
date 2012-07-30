@@ -45,6 +45,9 @@
 #define SECURITY_CAP_NOAUDIT 0
 #define SECURITY_CAP_AUDIT 1
 
+/* sysctl for protection of symlink following in sticky world-writable dirs */
+extern int protected_sticky_symlinks;
+
 struct ctl_table;
 struct audit_krule;
 struct user_namespace;
@@ -70,6 +73,7 @@ extern int cap_inode_setxattr(struct dentry *dentry, const char *name,
 extern int cap_inode_removexattr(struct dentry *dentry, const char *name);
 extern int cap_inode_need_killpriv(struct dentry *dentry);
 extern int cap_inode_killpriv(struct dentry *dentry);
+extern int cap_inode_follow_link(struct dentry *dentry, struct nameidata *nd);
 extern int cap_file_mmap(struct file *file, unsigned long reqprot,
 			 unsigned long prot, unsigned long flags,
 			 unsigned long addr, unsigned long addr_only);

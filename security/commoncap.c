@@ -30,6 +30,8 @@
 #include <linux/user_namespace.h>
 #include <linux/personality.h>
 
+int protected_sticky_symlinks = CONFIG_PROTECTED_STICKY_SYMLINKS;
+
 /*
  * If a non-root user executes a setuid-root binary in
  * !secure(SECURE_NOROOT) mode, then we raise capabilities.
@@ -325,6 +327,58 @@ int cap_inode_killpriv(struct dentry *dentry)
 	       return 0;
 
 	return inode->i_op->removexattr(dentry, XATTR_NAME_CAPS);
+}
+
+/**
+ * cap_inode_follow_link - Check symlink following for unsafe situations
+ * @dentry: The inode/dentry of the symlink
+ * @nameidata: The path data of the symlink
+ *
+ * In the case of the protected_sticky_symlinks sysctl being enabled,
+ * CAP_DAC_OVERRIDE needs to be specifically ignored if the symlink is
+ * in a sticky world-writable directory.  This is to protect privileged
+ * processes from failing races against path names that may change out
+ * from under them by way of other users creating malicious symlinks.
+ * It will permit symlinks to only be followed when outside a sticky
+ * world-writable directory, or when the uid of the symlink and follower
+ * match, or when the directory owner matches the symlink's owner.
+ *
+ * Returns 0 if following the symlink is allowed, -ve on error.
+ */
+int cap_inode_follow_link(struct dentry *dentry,
+			  struct nameidata *nameidata)
+{
+	int rc = 0;
+	const struct inode *parent;
+	const struct inode *inode;
+	const struct cred *cred;
+
+	if (!protected_sticky_symlinks)
+		return 0;
+
+	/* owner and follower match? */
+	cred = current_cred();
+	inode = dentry->d_inode;
+	if (cred->fsuid == inode->i_uid)
+		return 0;
+
+	/* check parent directory mode and owner */
+	spin_lock(&dentry->d_lock);
+	parent = dentry->d_parent->d_inode;
+	if ((parent->i_mode & (S_ISVTX|S_IWOTH)) == (S_ISVTX|S_IWOTH) &&
+	    parent->i_uid != inode->i_uid) {
+		rc = -EACCES;
+	}
+	spin_unlock(&dentry->d_lock);
+
+	if (rc) {
+		char name[sizeof(current->comm)];
+		printk(KERN_NOTICE "non-matching-uid symlink "
+			"following attempted in sticky world-writable "
+			"directory by %s (fsuid %d)\n",
+			get_task_comm(name, current), cred->fsuid);
+	}
+	return rc;
 }
 
 /*

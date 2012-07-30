@@ -1,6 +1,6 @@
 #
 # Automatically generated make config: don't edit
-# Linux/arm 3.0.38 Kernel Configuration
+# Linux/arm 3.0.39-rc1 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -2570,6 +2570,7 @@ CONFIG_PAX_CONSTIFY_PLUGIN=y
 CONFIG_SECURITY_DMESG_RESTRICT=y
 # CONFIG_SECURITY is not set
 # CONFIG_SECURITYFS is not set
+CONFIG_PROTECTED_STICKY_SYMLINKS=y
 CONFIG_DEFAULT_SECURITY_DAC=y
 CONFIG_DEFAULT_SECURITY=""
 CONFIG_CRYPTO=y

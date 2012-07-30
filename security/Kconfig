@@ -733,6 +733,21 @@ config LSM_MMAP_MIN_ADDR
 	  this low address space will need the permission specific to the
 	  systems running LSM.
 
+config PROTECTED_STICKY_SYMLINKS
+	bool "Protect symlink following in sticky world-writable directories"
+	help
+	  A long-standing class of security issues is the symlink-based
+	  time-of-check-time-of-use race, most commonly seen in
+	  world-writable directories like /tmp. The common method of
+	  exploitation of this flaw is to cross privilege boundaries
+	  when following a given symlink (i.e. a root process follows
+	  a malicious symlink belonging to another user).
+
+	  Enabling this solves the problem by permitting symlinks to only
+	  be followed when outside a sticky world-writable directory,
+	  or when the uid of the symlink and follower match, or when
+	  the directory and symlink owners match.
+
 source security/selinux/Kconfig
 source security/smack/Kconfig
 source security/tomoyo/Kconfig
