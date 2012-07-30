@@ -55,6 +55,7 @@ show up in /proc/sys/kernel:
 - printk_ratelimit
 - printk_ratelimit_burst
 - protected-sticky-symlinks
+- ptrace_scope
 - randomize_va_space
 - real-root-dev               ==> Documentation/initrd.txt
 - reboot-cmd                  [ SPARC only ]
@@ -406,16 +407,6 @@ Value from 0 - 10000 is allowed.
 
 ==============================================================
 
-<<<<<<<
-=======
-printk_delay:
-
-Delay each printk message in printk_delay milliseconds
-
-Value from 0 - 10000 is allowed.
-
-==============================================================
-
 protected-sticky-symlinks:
 
 Following symlinks in sticky world-writable directories (like /tmp) can
@@ -430,7 +421,6 @@ directory are owned by the same uid.
 
 ==============================================================
 
->>>>>>>
 randomize-va-space:
 
 This option can be used to select the type of process address
@@ -460,6 +450,21 @@ that support this feature.
     Systems with ancient and/or broken binaries should be configured
     with CONFIG_COMPAT_BRK enabled, which excludes the heap from process
     address space randomization.
+
+==============================================================
+
+ptrace_scope:
+
+This option can used to select the scope of PTRACE functionality.
+
+0 - Standard scope.  PTRACE can be used by any process on any other
+    process that shares the same uid and is dumpable (i.e. hasn't been
+    setuid, or has prctl(PR_SET_DUMPABLE) called on it).  CAP_SYS_PTRACE
+    overrides any limitations.  (This is the default option.)
+
+1 - Child-only.  PTRACE can be used by any process on any child process
+    that shares the same uid and is dumpable.  CAP_SYS_PTRACE overrides
+    any limitations.
 
 ==============================================================
 
