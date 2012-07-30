@@ -329,6 +329,10 @@ on boot
     setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
 
+# enable syn cookies
+    write /proc/sys/net/ipv4/tcp_syncookies 1
+    write /proc/sys/net/ipv4/tcp_max_syn_backlog 4096
+
 # allow system to modify ksm control files
     chown root system /sys/kernel/mm/ksm/pages_to_scan
     chmod 0664 /sys/kernel/mm/ksm/pages_to_scan
