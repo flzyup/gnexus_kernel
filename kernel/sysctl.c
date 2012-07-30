@@ -92,6 +92,7 @@ extern int sysctl_overcommit_ratio;
 extern int max_threads;
 extern int core_uses_pid;
 extern int suid_dumpable;
+extern int weak_nonaccess_hardlinks;
 extern char core_pattern[];
 extern unsigned int core_pipe_limit;
 extern int pid_max;
@@ -1539,6 +1540,17 @@ static struct ctl_table fs_table[] = {
 		.extra1		= &zero,
 		.extra2		= &one,
 	},
+#ifdef CONFIG_SECURITY_PATH
+	{
+		.procname	= "weak-nonaccess-hardlinks",
+		.data		= &weak_nonaccess_hardlinks,
+		.maxlen		= sizeof(int),
+		.mode		= 0644,
+		.proc_handler	= proc_dointvec_minmax,
+		.extra1		= &zero,
+		.extra2		= &one,
+	},
+#endif
 #if defined(CONFIG_BINFMT_MISC) || defined(CONFIG_BINFMT_MISC_MODULE)
 	{
 		.procname	= "binfmt_misc",
