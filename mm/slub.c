@@ -1582,7 +1582,6 @@ static struct page *get_any_partial(struct kmem_cache *s, gfp_t flags)
 			}
 		}
 	} while (!put_mems_allowed(cpuset_mems_cookie));
-	put_mems_allowed();
 #endif
 	return NULL;
 }

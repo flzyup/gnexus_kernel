@@ -113,7 +113,9 @@ static inline bool put_mems_allowed(unsigned int seq)
 static inline void set_mems_allowed(nodemask_t nodemask)
 {
 	task_lock(current);
+	write_seqcount_begin(&current->mems_allowed_seq);
 	current->mems_allowed = nodemask;
+	write_seqcount_end(&current->mems_allowed_seq);
 	task_unlock(current);
 }
 
