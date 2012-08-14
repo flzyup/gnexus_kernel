@@ -527,8 +527,8 @@ static void _mix_pool_bytes(struct entropy_store *r, const void *in,
 		input_rotate += i ? 7 : 14;
 	}
 
-	*(volatile unsigned int *)&r->input_rotate = input_rotate;
-	*(volatile unsigned int *)&r->add_ptr = i;
+	r->input_rotate = input_rotate;
+	r->add_ptr = i;
 	smp_wmb();
 
 	if (out)
