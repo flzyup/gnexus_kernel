@@ -1,4 +1,17 @@
 ui_print("Installing FuguMod kernel.");
 set_progress(1.000000);
 package_extract_file("boot.img", "/dev/block/platform/omap/omap_hsmmc.0/by-name/boot");
+ui_print("Performing Wipe...");
+ui_print("Mounting mount points...");
+run_program("/system/bin/mount", "/dev/block/platform/omap/omap_hsmmc.0/by-name/userdata", "/data");
+run_program("/system/bin/mount", "/dev/block/platform/omap/omap_hsmmc.0/by-name/cache", "/cache");
+show_progress(0.1, 0);
+ui_print("Wiping Cache and Dalvik-cache");
+delete_recursive("/cache");
+delete_recursive("/data/dalvik-cache");
+show_progress(0.1, 10);
+ui_print("Unmounting mount points...");
+run_program("/system/bin/umount", "/data");
+run_program("/system/bin/umount", "/cache");
+ui_print("Wipe Complete.");
 ui_print("Install Finished.");
