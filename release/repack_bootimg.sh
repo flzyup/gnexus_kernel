@@ -9,9 +9,9 @@ then
 	exit 1
 else
 	cd initramfs-${RAMV} || exit 1
-	find . | cpio -o -H newc | gzip > ../new_initramfs.cpio.gz
+	find . | cpio -o -H newc | lzop > ../new_initramfs.cpio.lzo
 	cd ..
-	abootimg --create ${HOME}/kernel${RELV}.img -k ../arch/arm/boot/zImage -r new_initramfs.cpio.gz
+	abootimg --create ${HOME}/kernel${RELV}.img -k ../arch/arm/boot/zImage -r new_initramfs.cpio.lzo
 
 	git tag -a r${KVER} -m r${KVER}
 
@@ -23,7 +23,7 @@ else
 	scp ${HOME}/kernel* elendil.arnor.org:public_html/galaxy_nexus/testing-${RAMV}/
 
 	cd ..
-	rm new_initramfs.cpio.gz cwm/boot.img ${HOME}/kernel*
+	rm new_initramfs.cpio.lzo cwm/boot.img ${HOME}/kernel*
 	
 fi
 
